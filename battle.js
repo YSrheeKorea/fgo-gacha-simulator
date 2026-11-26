@@ -27,6 +27,8 @@ window.FgoBattle = (() => {
     AlterEgo: 1.00,
     Pretender: 1.00,
     Foreigner: 1.00,
+    Beast: 1.00,
+    UnBeast: 1.00,
     BeastI: 1.00,
     BeastIIIR: 1.00
   };
@@ -58,6 +60,8 @@ window.FgoBattle = (() => {
       Berserker: 2.0, AlterEgo: 2.0, Foreigner: 0.5
     },
     Foreigner:  { Berserker: 2.0, AlterEgo: 0.5, Pretender: 2.0, Foreigner: 2.0 },
+    Beast:      { Saber: 1.5, Archer: 1.5, Lancer: 1.5, Rider: 1.5, Caster: 1.5, Assassin: 1.5, Berserker: 1.5, Ruler: 0.5, Avenger: 0.5, MoonCancer: 0.5, AlterEgo: 0.5, Pretender: 0.5, Foreigner: 0.5 },
+    UnBeast:    { Saber: 1.5, Archer: 1.5, Lancer: 1.5, Rider: 1.5, Caster: 1.5, Assassin: 1.5, Berserker: 1.5, Ruler: 0.5, Avenger: 0.5, MoonCancer: 0.5, AlterEgo: 0.5, Pretender: 0.5, Foreigner: 0.5 },
     BeastI:     { Saber: 2.0, Archer: 2.0, Lancer: 2.0, Berserker: 2.0, Avenger: 0.5 },
     BeastIIIR:  {}
   };
@@ -106,7 +110,9 @@ window.FgoBattle = (() => {
     Caster: 50,
     MoonCancer: 50,
     Avenger: 30,
-    Berserker: 10
+    Berserker: 10,
+    Beast: 150,
+    UnBeast: 150
   };
 
   // 적 클래스별 피격 시 아군 NP 획득률 보정 (원작 FGO 시스템 3연사 핵심 계수!)
@@ -143,6 +149,7 @@ window.FgoBattle = (() => {
   const SINGLE_NPS  = new Set(['sv_melusine', 'sv_enkidu', 'sv_ozymandias', 'sv_jack', 'sv_cu_alter', 'sv_heracles', 'sv_baobhan', 'sv_tristan', 'sv_cu', 'sv_ushiwaka', 'sv_robin', 'sv_bedivere', 'sv_euryale', 'sv_izok', 'sv_mandricardo']);
 
   function getNpCategory(sv) {
+    if (sv.npCat) return sv.npCat;
     if (SUPPORT_NPS.has(sv.id)) return 'support';
     if (SINGLE_NPS.has(sv.id)) return 'single';
     return 'aoe';
@@ -635,7 +642,7 @@ window.FgoBattle = (() => {
       const own = (slot.isSupport || slot.isRental)
         ? { level: slot.isSupport ? 90 : 50, npLevel: slot.isSupport ? 2 : 1, viewAsc: slot.isSupport ? 4 : 1 }
         : st.servants[slot.id];
-      const baseMaxLv = sv.rarity === 5 ? 90 : (sv.rarity === 4 ? 80 : 70);
+      const baseMaxLv = sv.rarity === 5 ? 90 : (sv.rarity === 4 ? 80 : (sv.rarity === 3 ? 70 : (sv.rarity === 1 ? 60 : 65)));
       const scale = 0.65 + (own.level / baseMaxLv) * 0.45;
       const maxHp = Math.round(sv.hp * scale);
       const atk = Math.round(sv.atk * scale);
@@ -1629,14 +1636,15 @@ window.FgoBattle = (() => {
     if (victory) {
       SoundEngine.reveal(5, true);
       const ownedInParty = battle.roster.filter(m => !m.isSupport && !m.isRental).map(m => m.id);
-      getBridge().grantBattleRewards(q.rewards, ownedInParty);
+      const fpBonus = q.rewards.fp || 2000;
+      getBridge().grantBattleRewards({ ...q.rewards, fp: fpBonus }, ownedInParty);
       titleEl.textContent = '🏆 QUEST CLEAR!!';
       bodyEl.innerHTML = `
         <div class="br-quest">${q.name}</div>
         <div class="br-meta">${battle.turn}턴 만에 클리어 성공!</div>
         <div class="br-rewards-box">
           <div class="br-rw-title">✨ 획득 보상 (자동 지급 완료)</div>
-          <div>${q.rewardText}</div>
+          <div>${q.rewardText} · 🤝 FP +${fpBonus.toLocaleString()}</div>
           <div style="font-size:12px;color:#9cb2d9;margin-top:4px">출격한 보유 서번트 전원(전열+후열)의 인연 포인트가 상승했습니다!</div>
         </div>
       `;

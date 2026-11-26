@@ -59,6 +59,7 @@
       tickets: 15,       // 호부
       mp: 300,           // 마나프리즘
       rp: 5,             // 레어프리즘
+      fp: 20000,         // 프렌드 포인트 (프렌드 가챠 100연분)
       uso: 0,            // 무기명 영기
       grails: 3,         // 성배
       embers: 40,        // 종화 (예지의 맹화)
@@ -66,6 +67,7 @@
       commandSpells: 3,  // 영주 (최대 3획, 매일 0시 전회복)
       lastSpellResetDate: '', // YYYY-MM-DD (로컬 날짜 기준)
       activeBannerId: BANNERS[0].id,
+      customPickup: { sv5: 'sv_no_444', sv4: 'sv_no_003' },
       bannerState: {},   // { [bannerId]: { pity: 0, singleBonus: 0, totalPulls: 0 } }
       servants: {},      // { [id]: { copies, extraCopies, npLevel, level, ascension, grailsUsed, bond, bondExp, viewAsc } }
       ces: {},           // { [id]: { copies, extraCopies } }
@@ -79,6 +81,7 @@
       },
       stats: {
         totalPulls: 0,
+        fpPulls: 0,
         sqSpent: 0,
         ticketsSpent: 0,
         simPaidKrw: 0,
@@ -104,8 +107,31 @@
     };
   }
 
-  let state = loadState();
-  let codexFilter = { type: 'servant', rarity: 'all', owned: 'all', cls: 'all' };
+  function ensureStarterAndCustom(st) {
+    // No.001 기본 서번트 마슈 키리에라이트 자동 지급 (원작 고증!)
+    if (SERVANT_MAP.sv_no_001 && !st.servants.sv_no_001) {
+      st.servants.sv_no_001 = {
+        copies: 1, extraCopies: 0, npLevel: 1, level: 1,
+        ascension: 1, grailsUsed: 0, bond: 1, bondExp: 0, viewAsc: 1
+      };
+      if (!st.myRoomServantId) st.myRoomServantId = 'sv_no_001';
+    }
+    if (typeof st.fp !== 'number') st.fp = 20000;
+    if (!st.customPickup) st.customPickup = { sv5: 'sv_no_444', sv4: 'sv_no_003' };
+    if (!SERVANT_MAP[st.customPickup.sv5]) st.customPickup.sv5 = 'sv_castoria';
+    if (!SERVANT_MAP[st.customPickup.sv4]) st.customPickup.sv4 = 'sv_emiya';
+    if (BANNER_MAP.bn_custom) {
+      BANNER_MAP.bn_custom.pickup5 = [st.customPickup.sv5];
+      BANNER_MAP.bn_custom.pickup4 = [st.customPickup.sv4];
+    }
+    return st;
+  }
+
+  let state = ensureStarterAndCustom(loadState());
+  let codexFilter = { type: 'servant', rarity: 'all', owned: 'all', cls: 'all', pool: 'all', sort: 'id_asc', query: '' };
+  let codexLimit = 60;
+  let myroomQuery = '';
+  let welfareQuery = '';
   let lastPullMode = 'multi';
 
   function loadState() {
@@ -117,6 +143,7 @@
       return {
         ...def,
         ...parsed,
+        customPickup: { ...def.customPickup, ...(parsed.customPickup || {}) },
         options: { ...def.options, ...(parsed.options || {}) },
         stats: { ...def.stats, ...(parsed.stats || {}) }
       };
@@ -163,11 +190,12 @@
     bState.totalPulls++;
 
     // 원작 FGO 고증 풀 분리:
-    // - 픽업 배너 비픽업(픽뚫) 풀: 순수 상시(!limited && !storyLocked)만 등장
-    // - 스토리 소환 풀: 상시 + 스토리 해금(!limited) 전부 등장 (환상종 획득 가능!)
-    const poolSv5 = SERVANTS.filter(s => s.rarity === 5 && !s.limited && (banner.isStory || !s.storyLocked));
-    const poolSv4 = SERVANTS.filter(s => s.rarity === 4 && !s.limited && (banner.isStory || !s.storyLocked));
-    const poolSv3 = SERVANTS.filter(s => s.rarity === 3 && !s.limited && (banner.isStory || !s.storyLocked));
+    // - 픽업 배너 비픽업(픽뚫) 풀: 순수 상시(pool === 'permanent')만 등장 (배포·프렌드·한정·기본 캐릭터 제외!)
+    // - 스토리 소환 풀: 상시 + 스토리 해금(pool === 'story') 전원 등장 (환상종 42기 획득 가능!)
+    const inSqPool = (s) => s.pool === 'permanent' || (banner.isStory && s.pool === 'story');
+    const poolSv5 = SERVANTS.filter(s => s.rarity === 5 && inSqPool(s));
+    const poolSv4 = SERVANTS.filter(s => s.rarity === 4 && inSqPool(s));
+    const poolSv3 = SERVANTS.filter(s => s.rarity === 3 && inSqPool(s));
     const allCe5  = CRAFT_ESSENCES.filter(c => c.rarity === 5);
     const allCe4  = CRAFT_ESSENCES.filter(c => c.rarity === 4);
     const allCe3  = CRAFT_ESSENCES.filter(c => c.rarity === 3);
@@ -423,6 +451,76 @@
     return rolls;
   }
 
+  // 프렌드 포인트 소환 1회 (★0 앙리마유 0.05% · ★4 세이버 릴리/하베트롯 0.5% · ★1~★3 프렌드 풀 + ★3 예장)
+  function rollFriendPointCard() {
+    const fp4 = SERVANTS.filter(s => s.fp && s.rarity === 4);
+    const fp3 = SERVANTS.filter(s => s.fp && s.rarity === 3);
+    const fp2 = SERVANTS.filter(s => s.fp && s.rarity === 2);
+    const fp1 = SERVANTS.filter(s => s.fp && s.rarity === 1);
+    const allCe3 = CRAFT_ESSENCES.filter(c => c.rarity === 3);
+
+    const r = Math.random();
+    let type = 'servant';
+    let item = null;
+    let animTier = 'normal';
+
+    if (r < 0.0005 && SERVANT_MAP.sv_no_107) {
+      item = SERVANT_MAP.sv_no_107; // ★0 앙리마유!
+      animTier = 'rainbow';
+    } else if (r < 0.0055 && fp4.length) {
+      item = pickRandom(fp4); // ★4 세이버 릴리 / 하베트롯
+      animTier = 'gold';
+    } else if (r < 0.1055 && fp3.length) {
+      item = pickRandom(fp3);
+    } else if (r < 0.3455 && fp2.length) {
+      item = pickRandom(fp2);
+    } else if (r < 0.7455 && fp1.length) {
+      item = pickRandom(fp1);
+    } else {
+      type = 'ce';
+      item = pickRandom(allCe3);
+    }
+
+    state.stats.fpPulls = (state.stats.fpPulls || 0) + 1;
+    let isNew = false;
+    let npLevelAfter = 0;
+
+    if (type === 'servant') {
+      if (!state.servants[item.id]) {
+        isNew = true;
+        state.servants[item.id] = {
+          copies: 1, extraCopies: 0, npLevel: 1, level: 1,
+          ascension: 1, grailsUsed: 0, bond: 1, bondExp: 0, viewAsc: 1
+        };
+      } else {
+        const owned = state.servants[item.id];
+        owned.copies++;
+        if (owned.npLevel < 5) owned.npLevel++;
+        else owned.extraCopies++;
+      }
+      npLevelAfter = state.servants[item.id].npLevel;
+    } else {
+      if (!state.ces[item.id]) {
+        isNew = true;
+        state.ces[item.id] = { copies: 1, extraCopies: 0 };
+      } else {
+        state.ces[item.id].copies++;
+        if (state.ces[item.id].copies > 5) state.ces[item.id].extraCopies++;
+      }
+    }
+
+    state.stats.recentPulls.unshift({
+      type, id: item.id, name: item.name, rarity: item.rarity,
+      isPickup: item.rarity === 0 || item.rarity === 4, isSpook: false, isPity: false
+    });
+    if (state.stats.recentPulls.length > 20) state.stats.recentPulls.pop();
+
+    return {
+      type, item, isNew, isPickup: item.rarity === 0, isSpook: false, isPity: false,
+      npLevelAfter, usoGained: false, animTier
+    };
+  }
+
   // ================= 소환 액션 핸들러 =================
   function executeSummon(mode) {
     const banner = BANNER_MAP[state.activeBannerId] || BANNERS[0];
@@ -431,6 +529,36 @@
 
     let results = [];
     let modalTitle = '✨ 소환 결과';
+
+    if (mode === 'fp1' || mode === 'fp10' || mode === 'fp100') {
+      const count = mode === 'fp1' ? 1 : (mode === 'fp10' ? 10 : 100);
+      const cost = count * 200;
+      if (state.fp < cost) {
+        SoundEngine.error();
+        toast(`프렌드 포인트가 ${cost.toLocaleString()} FP 필요합니다! 배틀 클리어 또는 다 빈치 공방에서 무료 보급받으세요.`);
+        return;
+      }
+      state.fp -= cost;
+      for (let i = 0; i < count; i++) results.push(rollFriendPointCard());
+      modalTitle = `🤝 프렌드 포인트 ${count}회 소환 결과`;
+      saveState();
+      renderAll();
+      if (mode === 'fp100' || state.options.skipFx) {
+        const hasRare = results.some(r => r.type === 'servant' && (r.item.rarity === 0 || r.item.rarity >= 4));
+        SoundEngine.reveal(hasRare ? 5 : 3, hasRare);
+        showResultModal(results, modalTitle);
+      } else {
+        SummonFX.playSequence(results, (doneRolls) => {
+          showResultModal(doneRolls, modalTitle);
+        }, {
+          fastMode: state.options.fastFx,
+          autoSkipCommon: state.options.autoSkipCommon,
+          highParticles: state.options.highParticles !== false,
+          textSpeed: state.options.textSpeed || 'normal'
+        });
+      }
+      return;
+    }
 
     if (mode === 'ticket') {
       if (state.tickets < 1) {
@@ -524,15 +652,17 @@
 
     const sv5Count = results.filter(r => r.type === 'servant' && r.item.rarity === 5).length;
     const sv4Count = results.filter(r => r.type === 'servant' && r.item.rarity === 4).length;
+    const sv0Count = results.filter(r => r.type === 'servant' && r.item.rarity === 0).length;
     const ce5Count = results.filter(r => r.type === 'ce' && r.item.rarity === 5).length;
     const mapoCount = results.filter(r => r.item.id === 'ce_mapo_tofu').length;
 
     let comment = '';
-    if (sv5Count >= 2) comment = '🔥 미친 비틱!! 5성 다중 출현!!';
+    if (sv0Count >= 1) comment = '🖤 기적의 ★0 앙리마유 강림!! (전설의 0.05%!!)';
+    else if (sv5Count >= 2) comment = '🔥 미친 비틱!! 5성 다중 출현!!';
     else if (sv5Count === 1) comment = '🎉 축하합니다! ★5 서번트 강림!';
     else if (sv4Count >= 1) comment = '✨ 금테 서번트 확보!';
     else if (mapoCount >= 2) comment = '🌶️ 신부의 은총이 가득합니다… (대폭사)';
-    else comment = '💀 최소 보장… 다음 11연엔 뜰 겁니다!';
+    else comment = '💀 최소 보장… 다음 소환엔 뜰 겁니다!';
 
     sumEl.innerHTML = `
       <span>총 ${results.length}장</span>
@@ -567,7 +697,11 @@
 
     againBtn.textContent = lastPullMode === 'sim110'
       ? '🔥 한 번 더 110연 고속 시뮬 (💎300)'
-      : '✨ 한 번 더 11회 소환 (💎30)';
+      : (lastPullMode === 'fp100'
+        ? '🔥 한 번 더 프렌드 100회 (🤝20,000)'
+        : (lastPullMode === 'fp10' || lastPullMode === 'fp1'
+          ? '🤝 한 번 더 프렌드 10회 (🤝2,000)'
+          : '✨ 한 번 더 11회 소환 (💎30)'));
 
     modal.classList.remove('hidden');
   }
@@ -578,6 +712,8 @@
     document.getElementById('res-ticket').textContent = state.tickets.toLocaleString();
     document.getElementById('res-mp').textContent = state.mp.toLocaleString();
     document.getElementById('res-rp').textContent = state.rp.toLocaleString();
+    const fpEl = document.getElementById('res-fp');
+    if (fpEl) fpEl.textContent = (state.fp || 0).toLocaleString();
     document.getElementById('res-grail').textContent = state.grails.toLocaleString();
     document.getElementById('btn-mute').textContent = SoundEngine.isMuted() ? '🔇' : '🔊';
     const artBtn = document.getElementById('btn-art-mode');
@@ -635,16 +771,35 @@
     const pityLeft = Math.max(0, 330 - bState.pity);
     const pityBadge = document.getElementById('banner-pity-badge');
     const pityWrap = document.getElementById('pity-bar-wrap');
-    if (activeBanner.isStory) {
-      pityBadge.textContent = '천장 없음 (상시)';
+    const bonusBadge = document.getElementById('banner-bonus-badge');
+    if (activeBanner.isFP) {
+      pityBadge.textContent = `보유 FP ${(state.fp || 0).toLocaleString()}`;
       pityWrap.style.display = 'none';
+      bonusBadge.textContent = '★0 앙리마유 0.05%';
+    } else if (activeBanner.isStory) {
+      pityBadge.textContent = '천장 없음 (상시 · 스토리 42기)';
+      pityWrap.style.display = 'none';
+      bonusBadge.textContent = `단차 보너스 ${bState.singleBonus}/10`;
     } else {
       pityBadge.textContent = `천장까지 ${pityLeft}회`;
       pityWrap.style.display = 'block';
       document.getElementById('pity-bar-text').textContent = `${bState.pity} / 330 회 (${Math.floor((bState.pity / 330) * 100)}%)`;
       document.getElementById('pity-bar-fill').style.width = `${Math.min(100, (bState.pity / 330) * 100)}%`;
+      bonusBadge.textContent = `단차 보너스 ${bState.singleBonus}/10`;
     }
-    document.getElementById('banner-bonus-badge').textContent = `단차 보너스 ${bState.singleBonus}/10`;
+
+    // 커스텀 픽업 선택 UI & FP/성정석 버튼 전환
+    const customBox = document.getElementById('custom-pickup-box');
+    if (customBox) {
+      customBox.classList.toggle('hidden', !activeBanner.isCustom);
+      if (activeBanner.isCustom) populateCustomPickupSelectors();
+    }
+    const sqPanel = document.getElementById('sq-summon-actions');
+    const fpPanel = document.getElementById('fp-summon-actions');
+    if (sqPanel && fpPanel) {
+      sqPanel.classList.toggle('hidden', !!activeBanner.isFP);
+      fpPanel.classList.toggle('hidden', !activeBanner.isFP);
+    }
 
     // 픽업 칩
     const pickupsEl = document.getElementById('banner-pickups');
@@ -713,19 +868,43 @@
         else if (r.type === 'ce' && r.rarity === 5) cls = 'r5-ce';
         else if (r.id === 'ce_mapo_tofu') cls = 'r3-meme';
         const tag = r.isPity ? '[천장]' : (r.isSpook ? '[픽뚫]' : '');
-        return `<span class="recent-pill ${cls}">${'★'.repeat(r.rarity)} ${r.name} ${tag}</span>`;
+        const stars = r.rarity === 0 ? '☆0' : '★'.repeat(r.rarity);
+        return `<span class="recent-pill ${cls}">${stars} ${r.name} ${tag}</span>`;
       }).join('');
     }
   }
 
-  // ================= 렌더링: 영기 일람 (도감) =================
+  function populateCustomPickupSelectors() {
+    const q5 = (document.getElementById('custom-pu5-search')?.value || '').trim().toLowerCase();
+    const q4 = (document.getElementById('custom-pu4-search')?.value || '').trim().toLowerCase();
+    const sel5 = document.getElementById('custom-pu5-sel');
+    const sel4 = document.getElementById('custom-pu4-sel');
+    if (!sel5 || !sel4) return;
+
+    const matchSv = (s, q) => !q || s.name.toLowerCase().includes(q) || String(s.collectionNo || '').includes(q) || (CLASS_INFO[s.cls]?.name || '').includes(q);
+    const list5 = SERVANTS.filter(s => s.rarity === 5 && matchSv(s, q5));
+    const list4 = SERVANTS.filter(s => s.rarity === 4 && matchSv(s, q4));
+
+    sel5.innerHTML = list5.map(s =>
+      `<option value="${s.id}" ${s.id === state.customPickup.sv5 ? 'selected' : ''}>No.${String(s.collectionNo).padStart(3, '0')} · ${s.name} (${CLASS_INFO[s.cls]?.name || s.cls})</option>`
+    ).join('');
+    sel4.innerHTML = list4.map(s =>
+      `<option value="${s.id}" ${s.id === state.customPickup.sv4 ? 'selected' : ''}>No.${String(s.collectionNo).padStart(3, '0')} · ${s.name} (${CLASS_INFO[s.cls]?.name || s.cls})</option>`
+    ).join('');
+  }
+
+  // ================= 렌더링: 영기 일람 (도감 — 공식 ID No.001~487 순) =================
   function renderCodexTab() {
     const grid = document.getElementById('codex-grid');
+    const pager = document.getElementById('codex-pager');
     const clsSelect = document.getElementById('codex-class-filter');
+    const poolSelect = document.getElementById('codex-pool-filter');
+    const sortSelect = document.getElementById('codex-sort-filter');
 
     // 클래스 필터 드롭다운 1회 채우기
     if (clsSelect.options.length <= 1) {
       Object.entries(CLASS_INFO).forEach(([k, v]) => {
+        if (k.startsWith('BeastI')) return;
         const opt = document.createElement('option');
         opt.value = k;
         opt.textContent = v.name;
@@ -733,8 +912,38 @@
       });
     }
 
-    const isServant = codexFilter.type === 'servant';
-    clsSelect.style.display = isServant ? 'inline-block' : 'none';
+    const mode = codexFilter.type; // 'servant' | 'ce' | 'npc'
+    const isServant = mode === 'servant';
+    const isNpc = mode === 'npc';
+    clsSelect.style.display = (isServant || isNpc) ? 'inline-block' : 'none';
+    if (poolSelect) poolSelect.style.display = isServant ? 'inline-block' : 'none';
+    if (sortSelect) sortSelect.style.display = isServant ? 'inline-block' : 'none';
+
+    if (isNpc) {
+      document.getElementById('codex-progress-box').textContent = `미실장 프로필 ${NPC_PROFILES.length}기 (소환 불가 · 마테리얼 등록)`;
+      const q = (codexFilter.query || '').trim().toLowerCase();
+      const npcs = NPC_PROFILES.filter(n => {
+        if (codexFilter.cls !== 'all' && n.cls !== codexFilter.cls) return false;
+        if (q && !n.name.toLowerCase().includes(q) && !String(n.no).includes(q)) return false;
+        return true;
+      });
+      grid.innerHTML = '';
+      if (pager) pager.innerHTML = '';
+      npcs.forEach(n => {
+        const fakeSv = {
+          id: `npc_${n.no}`, name: n.name, rarity: n.rarity, cls: n.cls,
+          atlasId: n.atlasId, region: n.reg, customAsc: n.img ? [n.img] : [],
+          art: { bg1: '#1a0a16', bg2: '#7a1c38', hair: '#fff', eye: '#ff5277', outfit: '#1b1024', accent: '#ff5c8a' }
+        };
+        const div = document.createElement('div');
+        div.className = 'codex-item';
+        div.innerHTML = ArtRenderer.renderCardSVG(fakeSv, true, { ascension: 1, compact: true }) +
+          `<span class="codex-no-badge">No.${String(n.no).padStart(3, '0')}</span>` +
+          `<span class="codex-pool-tag pool-npc">${n.note || '프로필 한정'}</span>`;
+        grid.appendChild(div);
+      });
+      return;
+    }
 
     const list = isServant ? SERVANTS : CRAFT_ESSENCES;
     const ownedMap = isServant ? state.servants : state.ces;
@@ -743,61 +952,118 @@
     document.getElementById('codex-progress-box').textContent =
       `${isServant ? '서번트' : '개념예장'} 수집률 ${ownedTotal}/${list.length} (${pct}%)`;
 
-    const filtered = list.filter(item => {
+    const q = (codexFilter.query || '').trim().toLowerCase();
+    let filtered = list.filter(item => {
       if (codexFilter.rarity !== 'all' && String(item.rarity) !== codexFilter.rarity) return false;
       const isOwned = !!ownedMap[item.id];
       if (codexFilter.owned === 'owned' && !isOwned) return false;
       if (codexFilter.owned === 'unowned' && isOwned) return false;
       if (isServant && codexFilter.cls !== 'all' && item.cls !== codexFilter.cls) return false;
+      if (isServant && codexFilter.pool !== 'all' && item.pool !== codexFilter.pool) return false;
+      if (q) {
+        const noStr = String(item.collectionNo || '').padStart(3, '0');
+        const hit = item.name.toLowerCase().includes(q)
+          || (item.nickname && item.nickname.toLowerCase().includes(q))
+          || noStr.includes(q)
+          || String(item.collectionNo || '').includes(q);
+        if (!hit) return false;
+      }
       return true;
     });
 
+    if (isServant) {
+      filtered = [...filtered];
+      if (codexFilter.sort === 'id_desc') filtered.sort((a, b) => (b.collectionNo || 0) - (a.collectionNo || 0));
+      else if (codexFilter.sort === 'rarity_desc') filtered.sort((a, b) => (b.rarity - a.rarity) || ((a.collectionNo || 0) - (b.collectionNo || 0)));
+      else filtered.sort((a, b) => (a.collectionNo || 0) - (b.collectionNo || 0));
+    }
+
     grid.innerHTML = '';
+    if (pager) pager.innerHTML = '';
     if (filtered.length === 0) {
       grid.innerHTML = '<div class="empty-hint">조건에 맞는 영기가 없습니다.</div>';
       return;
     }
 
-    filtered.forEach(item => {
+    const visibleList = filtered.slice(0, codexLimit);
+    const poolShort = { starter: '기본', permanent: '상시', limited: '한정', story: '스토리', fp: '프렌드', welfare: '배포' };
+
+    visibleList.forEach(item => {
       const owned = ownedMap[item.id];
       const div = document.createElement('div');
       div.className = 'codex-item' + (owned ? '' : ' unowned');
+      const noBadge = isServant && item.collectionNo
+        ? `<span class="codex-no-badge">No.${String(item.collectionNo).padStart(3, '0')}</span>`
+        : '';
+      const poolBadge = isServant && item.pool
+        ? `<span class="codex-pool-tag pool-${item.pool}">${poolShort[item.pool] || item.pool}</span>`
+        : '';
       div.innerHTML = ArtRenderer.renderCardSVG(item, isServant, {
         ascension: isServant && owned ? owned.viewAsc : 1,
         npLevel: isServant && owned ? owned.npLevel : 0,
         compact: true
-      }) + (owned ? `<span class="codex-item-count">${isServant ? `Lv.${owned.level}` : `x${owned.copies}`}</span>` : '');
+      }) + noBadge + poolBadge + (owned ? `<span class="codex-item-count">${isServant ? `Lv.${owned.level}` : `x${owned.copies}`}</span>` : '');
       div.addEventListener('click', () => openDetailModal(codexFilter.type, item.id));
       grid.appendChild(div);
     });
+
+    if (pager && filtered.length > visibleList.length) {
+      pager.innerHTML = `
+        <span class="codex-pager-info">표시 중 ${visibleList.length} / ${filtered.length}기</span>
+        <button class="small-outline-btn" id="btn-codex-more">➕ 60기 더 보기</button>
+        <button class="small-outline-btn" id="btn-codex-all">전체 ${filtered.length}기 표시</button>
+      `;
+      document.getElementById('btn-codex-more').addEventListener('click', () => {
+        codexLimit += 60;
+        renderCodexTab();
+      });
+      document.getElementById('btn-codex-all').addEventListener('click', () => {
+        codexLimit = filtered.length;
+        renderCodexTab();
+      });
+    } else if (pager && filtered.length > 0) {
+      pager.innerHTML = `<span class="codex-pager-info">총 ${filtered.length}기 표시 완료</span>`;
+    }
   }
 
   // ================= 렌더링: 마이룸 & 육성 =================
+  function getBaseMaxLevel(rarity) {
+    if (rarity === 5) return 90;
+    if (rarity === 4) return 80;
+    if (rarity === 3) return 70;
+    if (rarity === 2 || rarity === 0) return 65;
+    return 60; // ★1
+  }
+
   function getMaxLevelCap(sv, owned) {
-    const baseMax = sv.rarity === 5 ? 90 : (sv.rarity === 4 ? 80 : 70);
-    const ascCap = Math.min(baseMax, (baseMax - 30) + (owned.ascension - 1) * 10);
+    const baseMax = getBaseMaxLevel(sv.rarity);
+    const ascCap = Math.min(baseMax, Math.max(20, (baseMax - 30) + (owned.ascension - 1) * 10));
     if (owned.ascension < 4) return ascCap;
     // 성배전림으로 최대 Lv.120까지 확장!
     return Math.min(120, baseMax + owned.grailsUsed * 2);
   }
 
-  // ================= 공식 FGO 강화 QP 비용표 (나무위키 기준) =================
-  // 영기재림: 1차→2차, 2차→3차, 3차→최종재림
+  // ================= 공식 FGO 강화 QP 비용표 (★0~★5 나무위키 기준) =================
   const ASCENSION_QP = {
     5: [300000, 1000000, 3000000],
     4: [150000, 500000, 1500000],
-    3: [100000, 300000, 900000]
+    3: [100000, 300000, 900000],
+    2: [45000, 150000, 450000],
+    1: [30000, 100000, 300000],
+    0: [45000, 150000, 450000]
   };
-  // 스킬 강화: Lv.1→2 .. Lv.9→10 (5성 합계 5,440만 / 4성 2,710만 / 3성 1,360만 QP)
   const SKILL_QP = {
     5: [200000, 400000, 1200000, 1600000, 4000000, 5000000, 10000000, 12000000, 20000000],
     4: [100000, 200000, 600000, 800000, 2000000, 2500000, 5000000, 6000000, 10000000],
-    3: [50000, 100000, 300000, 400000, 1000000, 1250000, 2500000, 3000000, 5000000]
+    3: [50000, 100000, 300000, 400000, 1000000, 1250000, 2500000, 3000000, 5000000],
+    2: [20000, 40000, 120000, 160000, 400000, 500000, 1000000, 1200000, 2000000],
+    1: [10000, 20000, 60000, 80000, 200000, 250000, 500000, 600000, 1000000],
+    0: [20000, 40000, 120000, 160000, 400000, 500000, 1000000, 1200000, 2000000]
   };
-  // 서번트 레벨업 종화 1장당 QP: ★5(420+180Lv), ★4(280+120Lv), ★3(140+60Lv) × 5장
   function getLevelUpQp(rarity, level) {
-    const perCard = rarity === 5 ? (420 + 180 * level) : (rarity === 4 ? (280 + 120 * level) : (140 + 60 * level));
-    return perCard * 5;
+    const mult = rarity === 5 ? 180 : (rarity === 4 ? 120 : (rarity === 3 ? 60 : (rarity === 1 ? 20 : 40)));
+    const base = rarity === 5 ? 420 : (rarity === 4 ? 280 : (rarity === 3 ? 140 : (rarity === 1 ? 60 : 100)));
+    return (base + mult * level) * 5;
   }
   function getAscensionQp(rarity, curAsc) {
     const table = ASCENSION_QP[rarity] || ASCENSION_QP[3];
@@ -835,23 +1101,30 @@
       state.myRoomServantId = ownedIds[0];
     }
 
-    // 레어도 높은 순 정렬
-    ownedIds.sort((a, b) => (SERVANT_MAP[b].rarity - SERVANT_MAP[a].rarity) || (state.servants[b].level - state.servants[a].level));
-    ownedIds.forEach(id => {
+    // 레어도 높은 순 정렬 + 검색 필터
+    ownedIds.sort((a, b) => (SERVANT_MAP[b].rarity - SERVANT_MAP[a].rarity) || (state.servants[b].level - state.servants[a].level) || ((SERVANT_MAP[a].collectionNo || 0) - (SERVANT_MAP[b].collectionNo || 0)));
+    const mq = myroomQuery.trim().toLowerCase();
+    const visibleOwned = mq
+      ? ownedIds.filter(id => {
+          const s = SERVANT_MAP[id];
+          return s && (s.name.toLowerCase().includes(mq) || String(s.collectionNo || '').includes(mq));
+        })
+      : ownedIds;
+    visibleOwned.forEach(id => {
       const sv = SERVANT_MAP[id];
       const own = state.servants[id];
       const chip = document.createElement('button');
       chip.className = 'roster-chip' + (id === state.myRoomServantId ? ' active' : '');
       const faceUrl = ArtRenderer.getFaceUrl(id);
       const faceHtml = faceUrl
-        ? `<img class="roster-face" src="${faceUrl}" alt="" referrerpolicy="no-referrer" onerror="this.remove()">`
+        ? `<img class="roster-face" src="${faceUrl}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`
         : '';
       chip.innerHTML = `
         <div class="roster-chip-row">
           ${faceHtml}
           <div style="flex:1;min-width:0">
-            <div class="roster-chip-top"><span>${sv.nickname || sv.name}</span><span style="color:#ffe666">★${sv.rarity}</span></div>
-            <div class="roster-chip-sub">Lv.${own.level} · 보${own.npLevel} · 인연${own.bond}</div>
+            <div class="roster-chip-top"><span>${sv.nickname || sv.name}</span><span style="color:#ffe666">${sv.rarity === 0 ? '☆0' : `★${sv.rarity}`}</span></div>
+            <div class="roster-chip-sub">No.${String(sv.collectionNo || 0).padStart(3, '0')} · Lv.${own.level} · 보${own.npLevel}</div>
           </div>
         </div>
       `;
@@ -861,6 +1134,7 @@
         saveState();
         renderMyRoomTab();
         triggerMyRoomLine(false);
+        fetchOfficialServantLore(sv);
       });
       rosterEl.appendChild(chip);
     });
@@ -883,11 +1157,11 @@
     });
 
     // 스탯 계산
-    const lvRatio = 0.35 + (own.level / (sv.rarity === 5 ? 90 : (sv.rarity === 4 ? 80 : 70))) * 0.65;
+    const lvRatio = 0.35 + (own.level / getBaseMaxLevel(sv.rarity)) * 0.65;
     const curAtk = Math.round(sv.atk * lvRatio);
     const curHp = Math.round(sv.hp * lvRatio);
 
-    document.getElementById('mr-name').textContent = `${'★'.repeat(sv.rarity)} ${sv.name}`;
+    document.getElementById('mr-name').textContent = `${sv.rarity === 0 ? '☆0' : '★'.repeat(sv.rarity)} ${sv.name}`;
     const creditParts = [
       CLASS_INFO[sv.cls]?.name || sv.cls,
       sv.cv ? `CV. ${sv.cv}` : sv.title,
@@ -1079,15 +1353,67 @@
   const EXCHANGE_ITEMS = [
     { id: 'ex_ticket1', title: '🎫 호부 1장', desc: '단차 1회 소환권 (단차 보너스 적용)', costType: 'mp', cost: 20, reward: () => { state.tickets += 1; } },
     { id: 'ex_ticket5', title: '🎫 호부 5장 세트', desc: '매달 갱신되는 다 빈치 공방의 보물!', costType: 'mp', cost: 100, reward: () => { state.tickets += 5; } },
+    { id: 'ex_fp10k', title: '🤝 프렌드 포인트 +10,000 FP', desc: '프렌드 가챠 50연분 (앙리마유·세이버 릴리 도전!)', costType: 'mp', cost: 20, reward: () => { state.fp = (state.fp || 0) + 10000; } },
+    { id: 'ex_fp_free', title: '🎁 프렌드 포인트 무료 보급 (+20,000 FP)', desc: '마스터 지원 보급품! 무료로 20,000 FP 즉시 지급', costType: 'mp', cost: 0, reward: () => { state.fp = (state.fp || 0) + 20000; } },
     { id: 'ex_ember', title: '🔥 예지의 맹화(종화) 20개', desc: '마이룸 서번트 레벨업 재료', costType: 'mp', cost: 40, reward: () => { state.embers += 20; } },
     { id: 'ex_sq_rp', title: '💎 성정석 30개 교환', desc: '레어프리즘으로 성정석 11연치 확보', costType: 'rp', cost: 2, reward: () => { state.sq += 30; } },
     { id: 'ex_grail', title: '🏆 성배 1개 주조', desc: '레어프리즘으로 최애 서번트용 성배 획득', costType: 'rp', cost: 3, reward: () => { state.grails += 1; } },
-    { id: 'ex_uso', title: '✨ 무기명 영기 → 원하는 ★5 교환', desc: '무기명 영기 10개로 미보유/최애 5성 즉시 소환!', costType: 'uso', cost: 10, reward: null }
+    { id: 'ex_uso', title: '✨ 무기명 영기 → 원하는 ★5 교환', desc: '무기명 영기 10개로 현재 픽업 5성 즉시 소환!', costType: 'uso', cost: 10, reward: null }
   ];
+
+  function renderWelfareShop() {
+    const grid = document.getElementById('welfare-grid');
+    if (!grid) return;
+    const q = welfareQuery.trim().toLowerCase();
+    const list = SERVANTS.filter(s => s.pool === 'welfare' && (!q || s.name.toLowerCase().includes(q) || String(s.collectionNo).includes(q)));
+    grid.innerHTML = '';
+    if (list.length === 0) {
+      grid.innerHTML = '<div class="empty-hint">검색 조건에 맞는 배포 서번트가 없습니다.</div>';
+      return;
+    }
+    list.forEach(sv => {
+      const own = state.servants[sv.id];
+      const cost = own ? 50 : 100;
+      const isMaxNp = own && own.npLevel >= 5;
+      const faceUrl = ArtRenderer.getFaceUrl(sv.id);
+      const card = document.createElement('div');
+      card.className = 'welfare-card';
+      card.innerHTML = `
+        ${faceUrl ? `<img class="welfare-face" src="${faceUrl}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
+        <div class="welfare-info">
+          <div class="welfare-name">No.${String(sv.collectionNo).padStart(3, '0')} ${sv.name}</div>
+          <div class="welfare-meta">${'★'.repeat(sv.rarity)} ${CLASS_INFO[sv.cls]?.name || sv.cls} · ${own ? `보구 Lv.${own.npLevel}` : '미보유'}</div>
+          <button class="small-outline-btn welfare-btn" ${isMaxNp ? 'disabled' : ''}>
+            ${isMaxNp ? '✅ 보구 Lv.5 완료' : (own ? `보구 Lv.${own.npLevel + 1} (🟢마프 ${cost})` : `영입하기 (🟢마프 ${cost})`)}
+          </button>
+        </div>
+      `;
+      card.querySelector('button').addEventListener('click', () => {
+        if (isMaxNp) return;
+        if (state.mp < cost) {
+          SoundEngine.error();
+          toast(`마나프리즘이 ${cost}개 필요합니다!`);
+          return;
+        }
+        state.mp -= cost;
+        if (!state.servants[sv.id]) {
+          state.servants[sv.id] = { copies: 1, extraCopies: 0, npLevel: 1, level: 1, ascension: 1, grailsUsed: 0, bond: 1, bondExp: 0, viewAsc: 1 };
+        } else {
+          state.servants[sv.id].copies++;
+          state.servants[sv.id].npLevel = Math.min(5, state.servants[sv.id].npLevel + 1);
+        }
+        SoundEngine.reveal(sv.rarity, true);
+        saveState();
+        renderAll();
+        toast(`🏆 순례의 축제: [${sv.name}] 보구 Lv.${state.servants[sv.id].npLevel} 영입 완료!`);
+      });
+      grid.appendChild(card);
+    });
+  }
 
   function renderShopTab() {
     document.getElementById('shop-currency-summary').innerHTML =
-      `🟢 마프 <strong>${state.mp.toLocaleString()}</strong> · 🟡 레프 <strong>${state.rp.toLocaleString()}</strong> · 💠 무기명 영기 <strong>${state.uso}</strong>`;
+      `🟢 마프 <strong>${state.mp.toLocaleString()}</strong> · 🟡 레프 <strong>${state.rp.toLocaleString()}</strong> · 🤝 FP <strong>${(state.fp || 0).toLocaleString()}</strong> · 💠 무기명 영기 <strong>${state.uso}</strong>`;
 
     const chargeEl = document.getElementById('charge-grid');
     chargeEl.innerHTML = '';
@@ -1159,6 +1485,7 @@
       });
       exEl.appendChild(card);
     });
+    renderWelfareShop();
   }
 
   // ================= 렌더링: 가챠 통계 & 폭사력 분석 =================
@@ -1258,6 +1585,41 @@
     }
   }
 
+  // ================= 온디맨드 Atlas Academy 공식 KR/JP 로어 로드 =================
+  async function fetchOfficialServantLore(sv, onLoaded) {
+    if (!sv || !sv.atlasId || sv._loreLoaded || sv.profileSummary) return;
+    sv._loreLoaded = true;
+    try {
+      const reg = sv.region || 'KR';
+      const resp = await fetch(`https://api.atlasacademy.io/nice/${reg}/servant/${sv.atlasId}?lore=true`);
+      if (!resp.ok) return;
+      const data = await resp.json();
+      const prof = data.profile || {};
+      if (prof.cv) sv.cv = prof.cv;
+      if (prof.illustrator) sv.illustrator = prof.illustrator;
+      if (Array.isArray(prof.comments) && prof.comments.length) {
+        sv.profileSummary = prof.comments[0].comment || '';
+        sv.profileBond = prof.comments.slice(1, 5).map(c => c.comment).filter(Boolean);
+      }
+      if (Array.isArray(prof.voices)) {
+        const lines = [];
+        for (const vg of prof.voices) {
+          for (const v of (vg.voiceLines || [])) {
+            if (!v.subtitle) continue;
+            if (v.type === 'firstGet' && !sv._hasOfficialSummon) {
+              sv.summonQuote = v.subtitle;
+              sv._hasOfficialSummon = true;
+            } else if (vg.type === 'home' && lines.length < 8) {
+              lines.push({ label: v.name || '마이룸', text: v.subtitle });
+            }
+          }
+        }
+        if (lines.length) sv.officialLines = lines;
+      }
+      if (typeof onLoaded === 'function') onLoaded();
+    } catch (_) {}
+  }
+
   // ================= 상세 모달 =================
   function openDetailModal(type, id) {
     SoundEngine.click();
@@ -1268,7 +1630,13 @@
     if (!item) return;
 
     const owned = isServant ? state.servants[id] : state.ces[id];
-    document.getElementById('detail-modal-title').textContent = `${'★'.repeat(item.rarity)} ${item.name}`;
+    document.getElementById('detail-modal-title').textContent = `${item.rarity === 0 ? '☆0' : '★'.repeat(item.rarity)} ${item.name}`;
+
+    if (isServant && !item.profileSummary && !item._loreLoaded) {
+      fetchOfficialServantLore(item, () => {
+        if (!modal.classList.contains('hidden')) openDetailModal('servant', id);
+      });
+    }
 
     const customUploadHtml = `
       <div class="custom-img-row">
@@ -1281,7 +1649,8 @@
     `;
 
     if (isServant) {
-      const colNo = (typeof ATLAS_IMAGES !== 'undefined' && ATLAS_IMAGES.servants[id]?.collectionNo) || '-';
+      const colNo = item.collectionNo || (typeof ATLAS_IMAGES !== 'undefined' && ATLAS_IMAGES.servants[id]?.collectionNo) || '-';
+      const poolText = item.poolNote || POOL_LABELS[item.pool] || (item.limited ? '기간 한정' : (item.storyLocked ? '스토리 해금' : '상시'));
       const loreBlocks = [item.profileSummary, ...(item.profileBond || [])].filter(Boolean).join('\n\n──────────\n\n');
       body.innerHTML = `
         <div class="detail-card-wrap">
@@ -1289,7 +1658,7 @@
         </div>
         <div class="detail-info">
           <h3>${item.name}</h3>
-          <div class="detail-meta">No.${colNo} · ${CLASS_INFO[item.cls]?.name || item.cls} · ${item.attribute ? item.attribute + ' 속성 · ' : ''}${item.limited ? '기간 한정' : (item.storyLocked ? '스토리 해금' : '상시')}</div>
+          <div class="detail-meta">No.${String(colNo).padStart(3, '0')} · ${CLASS_INFO[item.cls]?.name || item.cls} · ${item.attribute ? item.attribute + ' 속성 · ' : ''}${poolText}</div>
           <div class="detail-credit-row">
             ${item.cv ? `<span>CV: <strong>${item.cv}</strong></span>` : ''}
             ${item.illustrator ? `<span>Illust: <strong>${item.illustrator}</strong></span>` : ''}
@@ -1521,11 +1890,32 @@
       toast(mode === 'official' ? '🖼️ 공식 일러스트 모드 (Atlas Academy)' : '🎨 프로시저럴 SVG 팬아트 모드');
     });
 
-    // 소환 버튼 4종
+    // 소환 버튼 4종 (성정석/호부) + 프렌드 포인트 3종
     document.getElementById('btn-pull-ticket').addEventListener('click', () => executeSummon('ticket'));
     document.getElementById('btn-pull-1').addEventListener('click', () => executeSummon('single'));
     document.getElementById('btn-pull-11').addEventListener('click', () => executeSummon('multi'));
     document.getElementById('btn-pull-110').addEventListener('click', () => executeSummon('sim110'));
+    document.getElementById('btn-pull-fp1')?.addEventListener('click', () => executeSummon('fp1'));
+    document.getElementById('btn-pull-fp10')?.addEventListener('click', () => executeSummon('fp10'));
+    document.getElementById('btn-pull-fp100')?.addEventListener('click', () => executeSummon('fp100'));
+
+    // 커스텀 픽업 선택기
+    document.getElementById('custom-pu5-search')?.addEventListener('input', populateCustomPickupSelectors);
+    document.getElementById('custom-pu4-search')?.addEventListener('input', populateCustomPickupSelectors);
+    document.getElementById('custom-pu5-sel')?.addEventListener('change', (e) => {
+      state.customPickup.sv5 = e.target.value;
+      if (BANNER_MAP.bn_custom) BANNER_MAP.bn_custom.pickup5 = [state.customPickup.sv5];
+      saveState();
+      renderSummonTab();
+      toast(`🎯 커스텀 ★5 픽업 변경: [${SERVANT_MAP[state.customPickup.sv5]?.name}]`);
+    });
+    document.getElementById('custom-pu4-sel')?.addEventListener('change', (e) => {
+      state.customPickup.sv4 = e.target.value;
+      if (BANNER_MAP.bn_custom) BANNER_MAP.bn_custom.pickup4 = [state.customPickup.sv4];
+      saveState();
+      renderSummonTab();
+      toast(`🎯 커스텀 ★4 픽업 변경: [${SERVANT_MAP[state.customPickup.sv4]?.name}]`);
+    });
 
     // 소환 옵션
     document.getElementById('opt-fast-fx').addEventListener('change', (e) => {
@@ -1563,7 +1953,10 @@
     document.getElementById('btn-result-close-2').addEventListener('click', closeResult);
     document.getElementById('btn-result-again').addEventListener('click', () => {
       closeResult();
-      executeSummon(lastPullMode === 'sim110' ? 'sim110' : 'multi');
+      const nextMode = lastPullMode === 'sim110'
+        ? 'sim110'
+        : (lastPullMode === 'fp100' ? 'fp100' : ((lastPullMode === 'fp10' || lastPullMode === 'fp1') ? 'fp10' : 'multi'));
+      executeSummon(nextMode);
     });
 
     // 상세 / 확률 모달 닫기
@@ -1580,6 +1973,7 @@
       btn.addEventListener('click', () => {
         SoundEngine.click();
         codexFilter.type = btn.dataset.type;
+        codexLimit = 60;
         document.querySelectorAll('#codex-type-filter .filter-btn').forEach(b => b.classList.toggle('active', b === btn));
         renderCodexTab();
       });
@@ -1588,6 +1982,7 @@
       btn.addEventListener('click', () => {
         SoundEngine.click();
         codexFilter.rarity = btn.dataset.rarity;
+        codexLimit = 60;
         document.querySelectorAll('#codex-rarity-filter .filter-btn').forEach(b => b.classList.toggle('active', b === btn));
         renderCodexTab();
       });
@@ -1596,13 +1991,38 @@
       btn.addEventListener('click', () => {
         SoundEngine.click();
         codexFilter.owned = btn.dataset.owned;
+        codexLimit = 60;
         document.querySelectorAll('#codex-owned-filter .filter-btn').forEach(b => b.classList.toggle('active', b === btn));
         renderCodexTab();
       });
     });
     document.getElementById('codex-class-filter').addEventListener('change', (e) => {
       codexFilter.cls = e.target.value;
+      codexLimit = 60;
       renderCodexTab();
+    });
+    document.getElementById('codex-pool-filter')?.addEventListener('change', (e) => {
+      codexFilter.pool = e.target.value;
+      codexLimit = 60;
+      renderCodexTab();
+    });
+    document.getElementById('codex-sort-filter')?.addEventListener('change', (e) => {
+      codexFilter.sort = e.target.value;
+      codexLimit = 60;
+      renderCodexTab();
+    });
+    document.getElementById('codex-search')?.addEventListener('input', (e) => {
+      codexFilter.query = e.target.value;
+      codexLimit = 60;
+      renderCodexTab();
+    });
+    document.getElementById('myroom-roster-search')?.addEventListener('input', (e) => {
+      myroomQuery = e.target.value;
+      renderMyRoomTab();
+    });
+    document.getElementById('welfare-search')?.addEventListener('input', (e) => {
+      welfareQuery = e.target.value;
+      renderWelfareShop();
     });
 
     // 마이룸 상호작용 & 육성
@@ -1804,10 +2224,10 @@
 
     document.getElementById('btn-reset-save').addEventListener('click', () => {
       if (!confirm('정말 모든 가챠 기록, 보유 서번트, 통계를 초기화하시겠습니까?')) return;
-      state = createDefaultState();
+      state = ensureStarterAndCustom(createDefaultState());
       saveState();
       renderAll();
-      toast('🗑️ 칼데아 데이터가 초기화되었습니다.');
+      toast('🗑️ 칼데아 데이터가 초기화되었습니다. (기본 서번트 마슈 지급)');
     });
 
     // ================= 설정 탭 이벤트 바인딩 =================
@@ -1885,12 +2305,13 @@
             throw new Error('invalid save');
           }
           const def = createDefaultState();
-          state = {
+          state = ensureStarterAndCustom({
             ...def,
             ...parsed,
+            customPickup: { ...def.customPickup, ...(parsed.customPickup || {}) },
             options: { ...def.options, ...(parsed.options || {}) },
             stats: { ...def.stats, ...(parsed.stats || {}) }
-          };
+          });
           saveState();
           renderAll();
           SoundEngine.levelUp();
@@ -1965,6 +2386,7 @@
       if (rewards.qp) state.qp += rewards.qp;
       if (rewards.mp) state.mp += rewards.mp;
       if (rewards.rp) state.rp += rewards.rp;
+      if (rewards.fp) state.fp = (state.fp || 0) + rewards.fp;
       if (rewards.tickets) state.tickets += rewards.tickets;
       if (rewards.grails) state.grails += rewards.grails;
 

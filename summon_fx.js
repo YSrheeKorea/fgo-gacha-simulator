@@ -428,12 +428,16 @@ const SummonFX = (() => {
       eager: true
     });
 
-    // 승격 연출이면 일단 은테 카드 뒷면으로 시작!
-    const startSilver = (roll.animTier === 'spark_gold' || roll.animTier === 'spark_rainbow' || roll.item.rarity <= 3);
-    const backTier = startSilver ? 'silver' : 'gold';
+    // 승격 연출이면 일단 은테 카드 뒷면으로 시작! (★0 흑테 / ★1~2 동테 / ★3 은테 / ★4~5 금테)
+    const startSilver = (roll.animTier === 'spark_gold' || roll.animTier === 'spark_rainbow');
+    let backTier = 'gold';
+    if (startSilver) backTier = 'silver';
+    else if (roll.item.rarity === 0) backTier = 'black';
+    else if (roll.item.rarity <= 2) backTier = 'bronze';
+    else if (roll.item.rarity === 3) backTier = 'silver';
     backEl.innerHTML = isServant
       ? ArtRenderer.renderCardBackSVG(roll.item.cls, backTier)
-      : ArtRenderer.renderCEBackSVG(backTier);
+      : ArtRenderer.renderCEBackSVG(roll.item.rarity >= 4 ? 'gold' : 'silver');
 
     // 1단계: 3광구 3중 회전 (은/금/무지개)
     stageVisual = 'orbs';
@@ -533,7 +537,7 @@ const SummonFX = (() => {
     // 상단 서번트 진명/클래스 타이틀 배너 (원작 FGO 스타일)
     if (headerInfo) {
       const clsName = isServant ? (CLASS_INFO[roll.item.cls]?.en || roll.item.cls) : 'CRAFT ESSENCE';
-      const stars = '★'.repeat(roll.item.rarity);
+      const stars = roll.item.rarity === 0 ? '☆0 (ANGRA)' : '★'.repeat(roll.item.rarity);
       headerInfo.innerHTML = `
         <div class="ssb-left">
           ${isServant ? ArtRenderer.getClassIconSVG(roll.item.cls, '#ffe680', 34) : '<span style="font-size:24px">✦</span>'}

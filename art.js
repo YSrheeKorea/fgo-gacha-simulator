@@ -48,12 +48,26 @@ const ArtRenderer = (() => {
 
   function getCardArtUrl(item, isServant = true, ascension = 1) {
     if (customImages[item.id]) return customImages[item.id];
-    if (artMode !== 'official' || typeof ATLAS_IMAGES === 'undefined') return null;
+    if (artMode !== 'official') return null;
     if (isServant) {
-      const entry = ATLAS_IMAGES.servants && ATLAS_IMAGES.servants[item.id];
-      if (!entry || !entry.ascension) return null;
-      return entry.ascension[ascension] || entry.ascension[1] || null;
+      if (typeof ATLAS_IMAGES !== 'undefined') {
+        const entry = ATLAS_IMAGES.servants && ATLAS_IMAGES.servants[item.id];
+        if (entry && entry.ascension) {
+          return entry.ascension[ascension] || entry.ascension[1] || null;
+        }
+      }
+      if (item.customAsc && item.customAsc.length) {
+        return item.customAsc[Math.min(ascension, item.customAsc.length) - 1] || item.customAsc[0];
+      }
+      if (item.atlasId) {
+        const reg = item.region || 'KR';
+        const suffixMap = { 1: 'a@1', 2: 'a@2', 3: 'b@1', 4: 'b@2' };
+        const suf = suffixMap[ascension] || 'a@1';
+        return `https://static.atlasacademy.io/${reg}/CharaGraph/${item.atlasId}/${item.atlasId}${suf}.png`;
+      }
+      return null;
     } else {
+      if (typeof ATLAS_IMAGES === 'undefined') return null;
       const entry = ATLAS_IMAGES.ces && ATLAS_IMAGES.ces[item.id];
       return (entry && entry.card) || null;
     }
@@ -61,9 +75,19 @@ const ArtRenderer = (() => {
 
   function getFaceUrl(servantId) {
     if (customImages[servantId]) return customImages[servantId];
-    if (artMode !== 'official' || typeof ATLAS_IMAGES === 'undefined') return null;
-    const entry = ATLAS_IMAGES.servants && ATLAS_IMAGES.servants[servantId];
-    return (entry && entry.face) || null;
+    if (artMode !== 'official') return null;
+    if (typeof ATLAS_IMAGES !== 'undefined') {
+      const entry = ATLAS_IMAGES.servants && ATLAS_IMAGES.servants[servantId];
+      if (entry && entry.face) return entry.face;
+    }
+    const sv = (typeof SERVANT_MAP !== 'undefined') && SERVANT_MAP[servantId];
+    if (sv) {
+      if (sv.customFace) return sv.customFace;
+      if (sv.atlasId) {
+        return `https://static.atlasacademy.io/${sv.region || 'KR'}/Faces/f_${sv.atlasId}0.png`;
+      }
+    }
+    return null;
   }
 
   function preloadUrls(urls) {
@@ -91,20 +115,23 @@ const ArtRenderer = (() => {
       Foreigner: `<circle cx="32" cy="32" r="9" fill="${color}"/><ellipse cx="32" cy="32" rx="24" ry="9" fill="none" stroke="${color}" stroke-width="3" transform="rotate(30 32 32)"/><ellipse cx="32" cy="32" rx="24" ry="9" fill="none" stroke="${color}" stroke-width="3" transform="rotate(-30 32 32)"/>`,
       Pretender: `<path d="M14 22 Q23 12 32 22 Q41 12 50 22 L46 44 Q32 54 18 44 Z" fill="none" stroke="${color}" stroke-width="3.5"/><path d="M22 30 Q26 26 30 30 M34 30 Q38 34 42 30" stroke="${color}" stroke-width="3" fill="none"/><circle cx="32" cy="40" r="3" fill="${color}"/>`,
       MoonCancer: `<path d="M40 12 A20 20 0 1 0 40 52 A14 14 0 1 1 40 12 Z" fill="${color}"/><circle cx="44" cy="24" r="3.5" fill="${color}"/><circle cx="49" cy="34" r="2.5" fill="${color}"/>`,
-      Shielder: `<path d="M14 14 L32 8 L50 14 L48 36 C46 46 32 56 32 56 C32 56 18 46 16 36 Z" fill="none" stroke="${color}" stroke-width="4"/><path d="M32 16 L32 48 M20 28 L44 28" stroke="${color}" stroke-width="3.5"/>`
+      Shielder: `<path d="M14 14 L32 8 L50 14 L48 36 C46 46 32 56 32 56 C32 56 18 46 16 36 Z" fill="none" stroke="${color}" stroke-width="4"/><path d="M32 16 L32 48 M20 28 L44 28" stroke="${color}" stroke-width="3.5"/>`,
+      Beast: `<path d="M16 14 L26 24 L32 8 L38 24 L48 14 L52 38 L32 56 L12 38 Z" fill="none" stroke="${color}" stroke-width="3.8"/><circle cx="24" cy="34" r="3.5" fill="${color}"/><circle cx="40" cy="34" r="3.5" fill="${color}"/><path d="M26 44 L32 49 L38 44" stroke="${color}" stroke-width="3" fill="none"/>`,
+      UnBeast: `<circle cx="32" cy="32" r="20" fill="none" stroke="${color}" stroke-width="3.5"/><polygon points="32,10 38,26 54,32 38,38 32,54 26,38 10,32 26,26" fill="${color}" opacity="0.88"/>`
     };
     const inner = shapes[cls] || shapes.Saber;
     return `<svg class="class-icon-svg" width="${size}" height="${size}" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
   }
 
-  // 서번트 카드 뒷면 (소환 연출용: 은테/금테 클래스 카드 백)
+  // 서번트 카드 뒷면 (소환 연출용: 흑테/동테/은테/금테 클래스 카드 백)
   function renderCardBackSVG(cls, tier = 'gold') {
-    const isGold = tier === 'gold';
-    const frameOuter = isGold ? '#f7d96c' : '#cfd9e6';
-    const frameMid = isGold ? '#b8861e' : '#7b8a9e';
-    const frameDark = isGold ? '#422c07' : '#252e3a';
-    const bg1 = isGold ? '#2a1d08' : '#18202c';
-    const bg2 = isGold ? '#5c4110' : '#334257';
+    const palettes = {
+      gold:   ['#f7d96c', '#b8861e', '#422c07', '#2a1d08', '#5c4110'],
+      silver: ['#cfd9e6', '#7b8a9e', '#252e3a', '#18202c', '#334257'],
+      bronze: ['#e0a16b', '#8f5228', '#331a09', '#241208', '#4d2a12'],
+      black:  ['#ff5c77', '#6b1426', '#16050a', '#090308', '#290814']
+    };
+    const [frameOuter, frameMid, frameDark, bg1, bg2] = palettes[tier] || palettes.silver;
     const clsName = (CLASS_INFO[cls] && CLASS_INFO[cls].en) || 'SERVANT';
     const iconSvg = getClassIconSVG(cls, frameOuter, 92)
       .replace('<svg class="class-icon-svg" width="92" height="92" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">', '')
@@ -212,13 +239,19 @@ const ArtRenderer = (() => {
 
   // 카드 프레임 오버레이 SVG (공식 일러스트 위에 씌우거나 단독 SVG에 합성)
   function renderFrameOverlaySVG(item, isServant, options, includePortraitFallback) {
-    const { ascension = 1, npLevel = 0, isNew = false, compact = false } = options;
-    const isGold = item.rarity >= 4;
-    const frameLight = isGold ? '#ffe380' : '#d5e0ec';
-    const frameMid = isGold ? '#c49124' : '#7f90a6';
-    const frameDark = isGold ? '#3b2808' : '#1f2836';
-    const stars = '★'.repeat(item.rarity);
-    const starsColor = item.rarity === 5 ? '#ffe666' : (item.rarity === 4 ? '#ffd24d' : '#d5e0ec');
+    const { ascension = 1, npLevel = 0, isNew = false, compact = false, showNo = false } = options;
+    let frameLight = '#d5e0ec', frameMid = '#7f90a6', frameDark = '#1f2836', starsColor = '#d5e0ec';
+    if (item.rarity >= 4) {
+      frameLight = '#ffe380'; frameMid = '#c49124'; frameDark = '#3b2808';
+      starsColor = item.rarity === 5 ? '#ffe666' : '#ffd24d';
+    } else if (item.rarity === 0) {
+      frameLight = '#ff5c77'; frameMid = '#5c1122'; frameDark = '#140408';
+      starsColor = '#ff708d';
+    } else if (item.rarity <= 2) {
+      frameLight = '#e5a874'; frameMid = '#8c4f24'; frameDark = '#2e1808';
+      starsColor = '#f2b880';
+    }
+    const stars = item.rarity === 0 ? '☆ 0 ☆' : '★'.repeat(item.rarity);
     const uid = `${item.id}_${ascension}_${includePortraitFallback ? 'fb' : 'ov'}`;
 
     const clsBadge = isServant ? (() => {

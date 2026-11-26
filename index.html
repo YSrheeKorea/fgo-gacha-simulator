@@ -11,7 +11,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <title>CHALDEA SUMMON SIMULATOR — 페그오 2차 창작 가챠 시뮬레이터</title>
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
   <div class="cosmos-bg" aria-hidden="true"></div>
@@ -47,6 +47,11 @@
         <span class="res-icon">🟡</span>
         <span class="res-label">레프</span>
         <strong id="res-rp">5</strong>
+      </div>
+      <div class="res-pill hide-sm" title="프렌드 포인트 (프렌드 소환용)">
+        <span class="res-icon">🤝</span>
+        <span class="res-label">FP</span>
+        <strong id="res-fp">20,000</strong>
       </div>
       <div class="res-pill hide-sm" title="성배 (마이룸 성배전림)">
         <span class="res-icon">🏆</span>
@@ -95,6 +100,20 @@
           <!-- 픽업 대상 미니 칩 -->
           <div class="banner-pickups" id="banner-pickups"></div>
 
+          <!-- 커스텀 픽업 선택기 (bn_custom 선택 시 표시) -->
+          <div class="custom-pickup-box hidden" id="custom-pickup-box">
+            <div class="cpu-row">
+              <label for="custom-pu5-sel">★5 픽업 지정</label>
+              <input type="search" class="fgo-search-input cpu-search" id="custom-pu5-search" placeholder="★5 검색 (예: 올가마리, 캐밥)...">
+              <select class="filter-select cpu-sel" id="custom-pu5-sel"></select>
+            </div>
+            <div class="cpu-row">
+              <label for="custom-pu4-sel">★4 픽업 지정</label>
+              <input type="search" class="fgo-search-input cpu-search" id="custom-pu4-search" placeholder="★4 검색 (예: 얼터, 에미야)...">
+              <select class="filter-select cpu-sel" id="custom-pu4-sel"></select>
+            </div>
+          </div>
+
           <!-- 천장 프로그레스 바 -->
           <div class="pity-bar-wrap" id="pity-bar-wrap">
             <div class="pity-bar-header">
@@ -125,8 +144,8 @@
         </div>
       </div>
 
-      <!-- 소환 버튼 패널 -->
-      <div class="summon-actions-panel">
+      <!-- 소환 버튼 패널 (성정석 / 호부) -->
+      <div class="summon-actions-panel" id="sq-summon-actions">
         <button class="summon-btn btn-ticket" id="btn-pull-ticket">
           <div class="sbtn-top">🎫 호부 1회 소환</div>
           <div class="sbtn-cost">호부 1장 소모</div>
@@ -146,6 +165,23 @@
         <button class="summon-btn btn-sim110" id="btn-pull-110" title="연출 없이 즉시 110연차(10세트) 시뮬레이션">
           <div class="sbtn-top">🔥 110연 고속 시뮬</div>
           <div class="sbtn-cost">성정석 300개 (즉시 결과)</div>
+        </button>
+      </div>
+
+      <!-- 프렌드 포인트 소환 버튼 패널 (bn_fp 선택 시 표시) -->
+      <div class="summon-actions-panel fp-actions-panel hidden" id="fp-summon-actions">
+        <button class="summon-btn btn-fp-1" id="btn-pull-fp1">
+          <div class="sbtn-top">🤝 1회 프렌드 소환</div>
+          <div class="sbtn-cost">200 FP 소모</div>
+        </button>
+        <button class="summon-btn btn-fp-10" id="btn-pull-fp10">
+          <div class="sbtn-badge">★0 앙리마유 · 세이버 릴리 · 하베트롯!</div>
+          <div class="sbtn-top">🤝 10회 프렌드 소환</div>
+          <div class="sbtn-cost">2,000 FP 소모</div>
+        </button>
+        <button class="summon-btn btn-fp-100" id="btn-pull-fp100">
+          <div class="sbtn-top">🔥 100회 고속 시뮬</div>
+          <div class="sbtn-cost">20,000 FP (즉시 결과)</div>
         </button>
       </div>
 
@@ -266,27 +302,47 @@
       </div>
 
       <div class="filter-bar">
+        <input type="search" class="fgo-search-input codex-search" id="codex-search" placeholder="이름 / No. 검색 (예: 마슈, 444)...">
         <div class="filter-group" id="codex-type-filter">
-          <button class="filter-btn active" data-type="servant">서번트</button>
+          <button class="filter-btn active" data-type="servant">서번트 (475)</button>
           <button class="filter-btn" data-type="ce">개념예장</button>
+          <button class="filter-btn" data-type="npc">미실장 프로필 (12)</button>
         </div>
         <div class="filter-group" id="codex-rarity-filter">
           <button class="filter-btn active" data-rarity="all">전체</button>
           <button class="filter-btn" data-rarity="5">★5</button>
           <button class="filter-btn" data-rarity="4">★4</button>
           <button class="filter-btn" data-rarity="3">★3</button>
+          <button class="filter-btn" data-rarity="2">★2</button>
+          <button class="filter-btn" data-rarity="1">★1</button>
+          <button class="filter-btn" data-rarity="0">★0</button>
         </div>
         <div class="filter-group" id="codex-owned-filter">
           <button class="filter-btn active" data-owned="all">전체 보기</button>
           <button class="filter-btn" data-owned="owned">보유만</button>
           <button class="filter-btn" data-owned="unowned">미보유만</button>
         </div>
+        <select class="filter-select" id="codex-pool-filter">
+          <option value="all">모든 획득처</option>
+          <option value="starter">기본 캐릭터</option>
+          <option value="permanent">상시 가챠</option>
+          <option value="limited">한정 가챠</option>
+          <option value="story">스토리 해금</option>
+          <option value="fp">프렌드 가챠</option>
+          <option value="welfare">이벤트 배포</option>
+        </select>
         <select class="filter-select" id="codex-class-filter">
           <option value="all">모든 클래스</option>
+        </select>
+        <select class="filter-select" id="codex-sort-filter">
+          <option value="id_asc">ID No. 순 (001→487)</option>
+          <option value="id_desc">ID No. 역순 (487→001)</option>
+          <option value="rarity_desc">레어도 높은 순</option>
         </select>
       </div>
 
       <div class="codex-grid" id="codex-grid"></div>
+      <div class="codex-pager" id="codex-pager"></div>
     </section>
 
     <!-- ===== TAB 3: 마이룸 & 보유 서번트 육성 ===== -->
@@ -375,6 +431,7 @@
               <h3>👥 마이룸 파트너 변경 (보유 서번트)</h3>
               <span id="mr-owned-count">0기 보유</span>
             </div>
+            <input type="search" class="fgo-search-input" id="myroom-roster-search" placeholder="보유 서번트 검색 (이름 / No.)..." style="margin-bottom:8px">
             <div class="myroom-roster-list" id="myroom-roster-list"></div>
           </div>
         </div>
@@ -402,6 +459,18 @@
       <div class="panel-card shop-section">
         <h3>🟢 마나프리즘 · 🟡 레어프리즘 교환소</h3>
         <div class="exchange-grid" id="exchange-grid"></div>
+      </div>
+
+      <!-- 순례의 축제 (이벤트 배포 서번트 교환소) -->
+      <div class="panel-card shop-section">
+        <div class="section-head-sm" style="flex-wrap:wrap;gap:8px;margin-bottom:10px">
+          <div>
+            <h3>🏆 순례의 축제 — 이벤트 배포 서번트 교환소 (59기)</h3>
+            <p class="panel-desc">원작 FGO의 모든 이벤트 배포 서번트를 마나프리즘(첫 영입 100 / 보구업 50)으로 영입할 수 있습니다!</p>
+          </div>
+          <input type="search" class="fgo-search-input" id="welfare-search" placeholder="배포 서번트 검색 (예: BB, 산타, 이오리)..." style="max-width:250px">
+        </div>
+        <div class="welfare-grid" id="welfare-grid"></div>
       </div>
 
       <!-- 영기 변환 (일괄 매각) -->
@@ -744,14 +813,15 @@
   <!-- ================= 토스트 알림 ================= -->
   <div id="toast-container" class="toast-container"></div>
 
-  <script src="data.js?v=5"></script>
+  <script src="servant_catalog.js?v=7"></script>
+  <script src="data.js?v=7"></script>
   <script src="atlas_images.js"></script>
   <script src="kr_lore.js?v=6"></script>
   <script src="audio.js"></script>
-  <script src="art.js"></script>
-  <script src="summon_fx.js?v=2"></script>
-  <script src="game.js?v=6"></script>
-  <script src="battle.js?v=6"></script>
+  <script src="art.js?v=7"></script>
+  <script src="summon_fx.js?v=7"></script>
+  <script src="game.js?v=7"></script>
+  <script src="battle.js?v=7"></script>
   <script src="pwa.js"></script>
 </body>
 </html>

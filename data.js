@@ -17,9 +17,21 @@ const CLASS_INFO = {
   Pretender:  { name: '프리텐더',   en: 'PRETENDER',  color: '#7d8cff', accent: '#dbe0ff' },
   MoonCancer: { name: '문캔서',     en: 'MOONCANCER', color: '#ffeaa7', accent: '#fff9e6' },
   Shielder:   { name: '실더',       en: 'SHIELDER',   color: '#a29bfe', accent: '#e2dfff' },
+  Beast:      { name: '비스트',     en: 'BEAST',      color: '#ff385c', accent: '#ffc2d1' },
+  UnBeast:    { name: '언비스트',   en: 'UNBEAST',    color: '#ff6ec7', accent: '#ffd6f0' },
   BeastI:     { name: '비스트Ⅰ',    en: 'BEAST I',    color: '#ff385c', accent: '#ffc2d1' },
   BeastII:    { name: '비스트Ⅱ',    en: 'BEAST II',   color: '#ff6b9d', accent: '#ffd6e6' },
   BeastIIIR:  { name: '비스트Ⅲ/R',  en: 'BEAST III/R',color: '#e056fd', accent: '#f5ccff' }
+};
+
+const POOL_LABELS = {
+  starter:   '기본 캐릭터',
+  permanent: '상시 가챠',
+  limited:   '한정 가챠',
+  story:     '스토리 해금',
+  fp:        '프렌드 가챠',
+  welfare:   '이벤트 배포',
+  npc:       '미실장 (프로필 한정)'
 };
 
 // 서번트 데이터베이스 (5성 한정/상시, 4성, 3성)
@@ -1404,9 +1416,35 @@ const BANNERS = [
     quote: '「일생일대의 한 자루, 지금 여기서 벼려주지!」'
   },
   {
+    id: 'bn_custom',
+    title: '커스텀 픽업 소환 (최애 저격)',
+    subtitle: '전체 475기 중 원하는 ★5 & ★4 서번트를 직접 지정해 330연 천장으로 소환!',
+    tag: '커스텀 픽업',
+    theme: ['#2b1046', '#7b2cbf', '#ffd166'],
+    pickup5: ['sv_no_444'],
+    pickup4: ['sv_no_003'],
+    pickupCE5: ['ce_kscope'],
+    isStory: false,
+    isCustom: true,
+    quote: '「칼데아 소환식 커스텀 모드 — 당신이 원하는 영령의 좌를 직접 조준하십시오.」'
+  },
+  {
+    id: 'bn_fp',
+    title: '프렌드 포인트 소환 (★0~★3 · 앙리마유)',
+    subtitle: '프렌드 포인트로 ★1~★3 영령·세이버 릴리·하베트롯·전설의 ★0 앙리마유 소환!',
+    tag: '프렌드 가챠',
+    theme: ['#122922', '#2d6a4f', '#95d5b2'],
+    pickup5: ['sv_no_107'],
+    pickup4: ['sv_no_004', 'sv_no_315'],
+    pickupCE5: [],
+    isStory: false,
+    isFP: true,
+    quote: '「인연이 이어주는 소환 — 극소 확률로 별이 없는 흑성배의 저주(★0)가 강림합니다.」'
+  },
+  {
     id: 'bn_story',
     title: '스토리 소환 (상시 · 스토리 해금)',
-    subtitle: '쿠 훌린(얼터)·네로·베디비어·살리에리 등 스토리 해금 환상종 포함',
+    subtitle: '쿠 훌린(얼터)·네로·베디비어·살리에리 등 스토리 해금 환상종 42기 전원 포함!',
     tag: '스토리 소환',
     theme: ['#101830', '#293d6b', '#a8c4ff'],
     pickup5: [],
@@ -1416,6 +1454,92 @@ const BANNERS = [
     quote: '「경고: 스토리 소환에는 픽업도 천장도 없습니다. 진정한 용자만 도전하십시오.」'
   }
 ];
+
+// ================= FGO 전체 마테리얼 서번트(No.001~487) 통합 하이드레이션 =================
+(() => {
+  if (typeof SERVANT_CATALOG_COMPACT === 'undefined' || !Array.isArray(SERVANT_CATALOG_COMPACT)) return;
+
+  const legacyById = Object.fromEntries(SERVANTS.map(s => [s.id, s]));
+  const cardFull = { Q: 'Quick', A: 'Arts', B: 'Buster' };
+
+  function makeFallbackArt(cls, seed) {
+    const info = CLASS_INFO[cls] || CLASS_INFO.Saber;
+    const h = (seed * 47) % 360;
+    return {
+      bg1: '#0e172e',
+      bg2: info.color || `hsl(${h}, 55%, 38%)`,
+      hair: `hsl(${(h + 140) % 360}, 65%, 78%)`,
+      eye: info.accent || '#70e0ff',
+      outfit: '#1c2541',
+      accent: info.color || '#ffe680',
+      weapon: 'sword',
+      motif: 'stars'
+    };
+  }
+
+  const expanded = SERVANT_CATALOG_COMPACT.map(c => {
+    const legacy = legacyById[c.id];
+    const cards = c.cards.split('').map(ch => cardFull[ch] || 'Arts');
+    const npType = cardFull[c.npT] || 'Buster';
+    const clsKr = CLASS_INFO[c.cls]?.name || c.cls;
+    const baseObj = legacy ? { ...legacy } : {
+      id: c.id,
+      name: c.name,
+      nickname: c.name.length > 10 ? c.name.slice(0, 9) : c.name,
+      title: c.note || POOL_LABELS[c.pool] || clsKr,
+      rarity: c.r,
+      cls: c.cls,
+      npType,
+      npName: c.npN || '보구',
+      npSub: c.npS || '',
+      atk: c.atk,
+      hp: c.hp,
+      art: makeFallbackArt(c.cls, c.no),
+      summonQuote: `서번트 ${clsKr}, ${c.name}. 소환에 응해 칼데아에 찾아왔습니다. 잘 부탁드립니다, 마스터!`,
+      lines: [
+        `마스터, 오늘도 인리 수복을 위해 출격할 준비가 되어 있습니다.`,
+        `칼데아에는 정말 많은 영령들이 모여 있군요. 흥미롭습니다.`,
+        `보구 [${c.npN || '보구'}]의 진가는 전장에서 보여드리겠습니다.`,
+        `인연이 깊어질수록 당신을 향한 신뢰도 커져갑니다, 마스터.`
+      ]
+    };
+
+    baseObj.collectionNo = c.no;
+    baseObj.atlasId = c.aid;
+    baseObj.region = c.reg;
+    baseObj.rarity = c.r;
+    baseObj.cls = c.cls;
+    baseObj.pool = c.pool;
+    baseObj.fp = !!c.fp;
+    baseObj.poolNote = c.note || POOL_LABELS[c.pool] || '';
+    baseObj.limited = (c.pool === 'limited');
+    baseObj.storyLocked = (c.pool === 'story');
+    baseObj.atk = c.atk;
+    baseObj.hp = c.hp;
+    baseObj.attribute = c.attr;
+    baseObj.cards = cards;
+    baseObj.npType = npType;
+    baseObj.npCat = c.npC;
+    if (!legacy) {
+      baseObj.npName = c.npN || baseObj.npName;
+      baseObj.npSub = c.npS || '';
+      baseObj.skills = c.sk;
+    } else if (!baseObj.skills && c.sk) {
+      baseObj.skills = c.sk;
+    }
+    if (c.asc) baseObj.customAsc = c.asc;
+    if (c.face) baseObj.customFace = c.face;
+    return baseObj;
+  });
+
+  // 공식 마테리얼 ID No. 순(001 → 487)으로 SERVANTS 교체!
+  SERVANTS.length = 0;
+  expanded.sort((a, b) => a.collectionNo - b.collectionNo).forEach(s => SERVANTS.push(s));
+})();
+
+const NPC_PROFILES = (typeof NPC_PROFILE_CATALOG !== 'undefined' && Array.isArray(NPC_PROFILE_CATALOG))
+  ? NPC_PROFILE_CATALOG
+  : [];
 
 // 빠른 조회용 맵
 const SERVANT_MAP = Object.fromEntries(SERVANTS.map(s => [s.id, s]));
