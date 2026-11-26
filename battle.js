@@ -10,34 +10,85 @@
 window.FgoBattle = (() => {
   const ACTIVE_BATTLE_KEY = 'fgo_gacha_active_battle_v1';
 
-  // ================= 클래스 상성표 (상성 시 공 2.0x / 피격 0.5x) =================
-  const ADVANTAGE = {
-    Saber:      ['Lancer'],
-    Archer:     ['Saber'],
-    Lancer:     ['Archer'],
-    Rider:      ['Caster'],
-    Caster:     ['Assassin'],
-    Assassin:   ['Rider'],
-    Ruler:      ['MoonCancer'],
-    Avenger:    ['Ruler'],
-    MoonCancer: ['Avenger'],
-    AlterEgo:   ['Rider', 'Caster', 'Assassin', 'Foreigner'],
-    Foreigner:  ['Berserker', 'Foreigner'],
-    Pretender:  ['Saber', 'Archer', 'Lancer', 'AlterEgo']
+  // ================= 원작 FGO 16×16 클래스 상성표 + 공격측 보정치 + 5×5 히든 속성 =================
+  const CLASS_ATK_MOD = {
+    Saber: 1.00,
+    Archer: 0.95,
+    Lancer: 1.05,
+    Rider: 1.00,
+    Caster: 0.90,
+    Assassin: 0.90,
+    Berserker: 1.10,
+    Shielder: 1.00,
+    BeastII: 1.00,
+    Ruler: 1.10,
+    Avenger: 1.10,
+    MoonCancer: 1.00,
+    AlterEgo: 1.00,
+    Pretender: 1.00,
+    Foreigner: 1.00,
+    BeastI: 1.00,
+    BeastIIIR: 1.00
   };
 
+  // CLASS_AFFINITY[공격군][피격군] (표에 없는 조합은 기본 1.0x 무상성)
+  const CLASS_AFFINITY = {
+    Saber:      { Archer: 0.5, Lancer: 2.0, Berserker: 2.0, Ruler: 0.5 },
+    Archer:     { Saber: 2.0, Lancer: 0.5, Berserker: 2.0, Ruler: 0.5 },
+    Lancer:     { Saber: 0.5, Archer: 2.0, Berserker: 2.0, Ruler: 0.5 },
+    Rider:      { Caster: 2.0, Assassin: 0.5, Berserker: 2.0, Ruler: 0.5, BeastI: 2.0 },
+    Caster:     { Rider: 0.5, Assassin: 2.0, Berserker: 2.0, Ruler: 0.5, BeastI: 2.0 },
+    Assassin:   { Rider: 2.0, Caster: 0.5, Berserker: 2.0, Ruler: 0.5, BeastI: 2.0 },
+    Berserker:  {
+      Saber: 1.5, Archer: 1.5, Lancer: 1.5, Rider: 1.5, Caster: 1.5, Assassin: 1.5,
+      Berserker: 1.5, Ruler: 1.5, Avenger: 1.5, MoonCancer: 1.5, AlterEgo: 1.5,
+      Pretender: 1.5, Foreigner: 0.5, BeastI: 1.5
+    },
+    Shielder:   {},
+    BeastII:    {},
+    Ruler:      { Berserker: 2.0, Avenger: 0.5, MoonCancer: 2.0 },
+    Avenger:    { Berserker: 2.0, Ruler: 2.0, MoonCancer: 0.5 },
+    MoonCancer: { Berserker: 2.0, Ruler: 0.5, Avenger: 2.0, BeastIIIR: 1.2 },
+    AlterEgo:   {
+      Saber: 0.5, Archer: 0.5, Lancer: 0.5, Rider: 1.5, Caster: 1.5, Assassin: 1.5,
+      Berserker: 2.0, Pretender: 0.5, Foreigner: 2.0, BeastIIIR: 1.2
+    },
+    Pretender:  {
+      Saber: 1.5, Archer: 1.5, Lancer: 1.5, Rider: 0.5, Caster: 0.5, Assassin: 0.5,
+      Berserker: 2.0, AlterEgo: 2.0, Foreigner: 0.5
+    },
+    Foreigner:  { Berserker: 2.0, AlterEgo: 0.5, Pretender: 2.0, Foreigner: 2.0 },
+    BeastI:     { Saber: 2.0, Archer: 2.0, Lancer: 2.0, Berserker: 2.0, Avenger: 0.5 },
+    BeastIIIR:  {}
+  };
+
+  // 5×5 히든 속성 상성 (인간→하늘→땅→인간 1.1x/0.9x, 별↔짐승 1.1x)
+  const ATTR_AFFINITY = {
+    '인(人)': { '천(天)': 1.1, '지(地)': 0.9 },
+    '천(天)': { '인(人)': 0.9, '지(地)': 1.1 },
+    '지(地)': { '인(人)': 1.1, '천(天)': 0.9 },
+    '성(星)': { '수(獸)': 1.1 },
+    '수(獸)': { '성(星)': 1.1 }
+  };
+
+  function getClassAtkMod(cls) {
+    return CLASS_ATK_MOD[cls] ?? 1.0;
+  }
+
   function getClassMultiplier(atkCls, defCls) {
-    if (atkCls === 'Berserker') return defCls === 'Foreigner' ? 0.5 : 1.5;
-    if (defCls === 'Berserker') return 2.0;
-    if (atkCls === 'Shielder' || defCls === 'Shielder') return 1.0;
-    if (atkCls === 'AlterEgo' && ['Rider', 'Caster', 'Assassin'].includes(defCls)) return 1.5;
-    if (atkCls === 'AlterEgo' && ['Saber', 'Archer', 'Lancer'].includes(defCls)) return 0.5;
-    if (atkCls === 'Pretender' && ['Saber', 'Archer', 'Lancer'].includes(defCls)) return 1.5;
-    if (atkCls === 'Pretender' && ['Rider', 'Caster', 'Assassin'].includes(defCls)) return 0.5;
-    if (defCls === 'Ruler' && !['Avenger', 'Berserker', 'MoonCancer'].includes(atkCls)) return 0.5;
-    if (ADVANTAGE[atkCls]?.includes(defCls)) return 2.0;
-    if (ADVANTAGE[defCls]?.includes(atkCls)) return 0.5;
-    return 1.0;
+    const row = CLASS_AFFINITY[atkCls];
+    if (!row) return 1.0;
+    return row[defCls] ?? 1.0;
+  }
+
+  function getAttrMultiplier(atkAttr, defAttr) {
+    if (!atkAttr || !defAttr) return 1.0;
+    const row = ATTR_AFFINITY[atkAttr];
+    return (row && row[defAttr]) || 1.0;
+  }
+
+  function getCombinedDamageMod(atkCls, defCls, atkAttr, defAttr) {
+    return getClassAtkMod(atkCls) * getClassMultiplier(atkCls, defCls) * getAttrMultiplier(atkAttr, defAttr);
   }
 
   // 원작 FGO 클래스별 기본 스타 집중도 (Star Weight)
@@ -228,105 +279,132 @@ window.FgoBattle = (() => {
     return { startNp: 0, npDmg: 0, buster: 0, arts: 0, quick: 0, starsPerTurn: 0, npPerTurn: 0, crit: 0, hpDrain: 0, ...base };
   }
 
-  // ================= 퀘스트 5종 =================
+  // ================= 퀘스트 7종 (종화·QP·특이점·바빌로니아·비스트Ⅰ·비스트Ⅲ/R·EX 챌린지) =================
   const QUESTS = [
     {
       id: 'q_embers',
       name: '🔥 칼데아 게이트 — 종화 수집 (초급)',
-      desc: '3웨이브 주회 던전! 대군 보구 3연사와 오버킬 리차지를 체험해 보세요.',
+      desc: '3웨이브 주회 던전! 경험치 손은 모두 [하늘(天)] 속성 → 인간(人) 속성 서번트가 1.1배 유리!',
       difficulty: '초급 · 추천 Lv.30',
       rewardText: '💎 성정석 +3 · 🔥 종화 +15 · 🪙 QP +500,000',
       rewards: { sq: 3, embers: 15, qp: 500000 },
       waves: [
         [
-          { name: '불꽃의 팔', cls: 'Saber', hp: 14500, atk: 1200, maxCharge: 4, emoji: '🔥' },
-          { name: '창의 팔', cls: 'Lancer', hp: 15500, atk: 1250, maxCharge: 4, emoji: '⚡' },
-          { name: '활의 팔', cls: 'Archer', hp: 14000, atk: 1200, maxCharge: 3, emoji: '🏹' }
+          { name: '불꽃의 팔', cls: 'Saber', attr: '천(天)', hp: 14500, atk: 1200, maxCharge: 4, emoji: '🔥' },
+          { name: '창의 팔', cls: 'Lancer', attr: '천(天)', hp: 15500, atk: 1250, maxCharge: 4, emoji: '⚡' },
+          { name: '활의 팔', cls: 'Archer', attr: '천(天)', hp: 14000, atk: 1200, maxCharge: 3, emoji: '🏹' }
         ],
         [
-          { name: '황금의 팔', cls: 'Rider', hp: 22000, atk: 1500, maxCharge: 4, emoji: '✨' },
-          { name: '황금의 팔', cls: 'Caster', hp: 23500, atk: 1500, maxCharge: 4, emoji: '🔮' },
-          { name: '황금의 팔', cls: 'Assassin', hp: 21500, atk: 1500, maxCharge: 3, emoji: '🗡️' }
+          { name: '황금의 팔', cls: 'Rider', attr: '천(天)', hp: 22000, atk: 1500, maxCharge: 4, emoji: '✨' },
+          { name: '황금의 팔', cls: 'Caster', attr: '천(天)', hp: 23500, atk: 1500, maxCharge: 4, emoji: '🔮' },
+          { name: '황금의 팔', cls: 'Assassin', attr: '천(天)', hp: 21500, atk: 1500, maxCharge: 3, emoji: '🗡️' }
         ],
         [
-          { name: '초월의 팔', cls: 'Berserker', hp: 36000, atk: 1900, maxCharge: 4, emoji: '💀' },
-          { name: '예지의 대팔', cls: 'Saber', hp: 52000, atk: 2100, maxCharge: 4, emoji: '👑', isBoss: true },
-          { name: '초월의 팔', cls: 'Lancer', hp: 34000, atk: 1900, maxCharge: 4, emoji: '💀' }
+          { name: '초월의 팔', cls: 'Berserker', attr: '천(天)', hp: 36000, atk: 1900, maxCharge: 4, emoji: '💀' },
+          { name: '예지의 대팔', cls: 'Saber', attr: '천(天)', hp: 52000, atk: 2100, maxCharge: 4, emoji: '👑', isBoss: true },
+          { name: '초월의 팔', cls: 'Lancer', attr: '천(天)', hp: 34000, atk: 1900, maxCharge: 4, emoji: '💀' }
         ]
       ]
     },
     {
       id: 'q_qp',
       name: '💰 보물고의 문 — QP 대수집 (중급)',
-      desc: '캐스터 적들이 대거 출현! 라이더(스타집중 200)와 버서커로 쓸어버리세요.',
+      desc: '캐스터 [하늘(天)] 문 대거 출현! 라이더(2.0x · 스타집중 200)와 얼터에고(1.5x)로 주회하세요.',
       difficulty: '중급 · 추천 Lv.50',
       rewardText: '💎 성정석 +5 · 🪙 QP +2,000,000 · 🟢 마프 +20',
       rewards: { sq: 5, qp: 2000000, mp: 20 },
       waves: [
         [
-          { name: '청동의 문', cls: 'Caster', hp: 24000, atk: 1500, maxCharge: 5, emoji: '🚪' },
-          { name: '백은의 문', cls: 'Caster', hp: 28000, atk: 1600, maxCharge: 5, emoji: '🏛️' },
-          { name: '청동의 문', cls: 'Caster', hp: 24000, atk: 1500, maxCharge: 5, emoji: '🚪' }
+          { name: '청동의 문', cls: 'Caster', attr: '천(天)', hp: 24000, atk: 1500, maxCharge: 5, emoji: '🚪' },
+          { name: '백은의 문', cls: 'Caster', attr: '천(天)', hp: 28000, atk: 1600, maxCharge: 5, emoji: '🏛️' },
+          { name: '청동의 문', cls: 'Caster', attr: '천(天)', hp: 24000, atk: 1500, maxCharge: 5, emoji: '🚪' }
         ],
         [
-          { name: '황금의 문', cls: 'Caster', hp: 42000, atk: 1850, maxCharge: 5, emoji: '💰' },
-          { name: '황금의 문', cls: 'Caster', hp: 45000, atk: 1850, maxCharge: 5, emoji: '💰' },
-          { name: '황금의 문', cls: 'Caster', hp: 42000, atk: 1850, maxCharge: 5, emoji: '💰' }
+          { name: '황금의 문', cls: 'Caster', attr: '천(天)', hp: 42000, atk: 1850, maxCharge: 5, emoji: '💰' },
+          { name: '황금의 문', cls: 'Caster', attr: '천(天)', hp: 45000, atk: 1850, maxCharge: 5, emoji: '💰' },
+          { name: '황금의 문', cls: 'Caster', attr: '천(天)', hp: 42000, atk: 1850, maxCharge: 5, emoji: '💰' }
         ],
         [
-          { name: '황금의 문', cls: 'Caster', hp: 48000, atk: 2000, maxCharge: 5, emoji: '💰' },
-          { name: '여왕의 보물고', cls: 'Caster', hp: 96000, atk: 2400, maxCharge: 4, emoji: '👑', isBoss: true },
-          { name: '황금의 문', cls: 'Caster', hp: 48000, atk: 2000, maxCharge: 5, emoji: '💰' }
+          { name: '황금의 문', cls: 'Caster', attr: '천(天)', hp: 48000, atk: 2000, maxCharge: 5, emoji: '💰' },
+          { name: '여왕의 보물고', cls: 'Caster', attr: '천(天)', hp: 96000, atk: 2400, maxCharge: 4, emoji: '👑', isBoss: true },
+          { name: '황금의 문', cls: 'Caster', attr: '천(天)', hp: 48000, atk: 2000, maxCharge: 5, emoji: '💰' }
         ]
       ]
     },
     {
       id: 'q_salter',
       name: '⚔️ 특이점 F — 흑화 세이버 결전 (상급)',
-      desc: '강력한 세이버 얼터 보스전! 전열이 쓰러져도 후열 증원과 영주로 버텨내세요.',
+      desc: '세이버 [인간(人)] 보스전! 아처(2.0x)·프리텐더(1.5x)와 땅(地) 속성 상성으로 제압하세요.',
       difficulty: '상급 · 추천 Lv.70',
       rewardText: '💎 성정석 +10 · 🔥 종화 +25 · 🟢 마프 +35',
       rewards: { sq: 10, embers: 25, mp: 35 },
       waves: [
         [
-          { name: '스켈레톤 검사', cls: 'Saber', hp: 38000, atk: 1900, maxCharge: 4, emoji: '☠️' },
-          { name: '섀도우 랜서', cls: 'Lancer', hp: 46000, atk: 2100, maxCharge: 4, emoji: '👤' },
-          { name: '스켈레톤 검사', cls: 'Saber', hp: 38000, atk: 1900, maxCharge: 4, emoji: '☠️' }
+          { name: '스켈레톤 검사', cls: 'Saber', attr: '지(地)', hp: 38000, atk: 1900, maxCharge: 4, emoji: '☠️' },
+          { name: '섀도우 랜서', cls: 'Lancer', attr: '지(地)', hp: 46000, atk: 2100, maxCharge: 4, emoji: '👤' },
+          { name: '스켈레톤 검사', cls: 'Saber', attr: '지(地)', hp: 38000, atk: 1900, maxCharge: 4, emoji: '☠️' }
         ],
         [
-          { name: '흑화 기사왕 [얼터]', cls: 'Saber', hp: 145000, breakBars: [175000], atk: 3200, maxCharge: 4, emoji: '🖤', isBoss: true, npName: '엑스칼리버 모르간' }
+          { name: '흑화 기사왕 [얼터]', cls: 'Saber', attr: '인(人)', hp: 145000, breakBars: [175000], atk: 3200, maxCharge: 4, emoji: '🖤', isBoss: true, npName: '엑스칼리버 모르간' }
         ]
       ]
     },
     {
       id: 'q_babylonia',
-      name: '🐉 바빌로니아 — 라흐무 & 흑성배의 용 (고난이도)',
-      desc: '브레이크 게이지 보스전! 보구 체인 오버차지(200~300%)와 마이티 체인을 활용하세요.',
+      name: '🐉 바빌로니아 — 티아마트 유체 격퇴전 (고난이도)',
+      desc: '비스트Ⅱ [짐승(獸)] 완전 무상성 보스! 별(星) 속성 서번트가 히든 상성 1.1배 유리합니다.',
       difficulty: '고난이도 · 추천 Lv.85',
       rewardText: '💎 성정석 +20 · 🟡 레프 +1 · 🔥 종화 +35',
       rewards: { sq: 20, rp: 1, embers: 35 },
       waves: [
         [
-          { name: '라흐무', cls: 'Lancer', hp: 62000, atk: 2400, maxCharge: 4, emoji: '👾' },
-          { name: '라흐무', cls: 'Archer', hp: 62000, atk: 2400, maxCharge: 3, emoji: '👾' },
-          { name: '라흐무', cls: 'Assassin', hp: 58000, atk: 2400, maxCharge: 3, emoji: '👾' }
+          { name: '라흐무', cls: 'Lancer', attr: '지(地)', hp: 62000, atk: 2400, maxCharge: 4, emoji: '👾' },
+          { name: '라흐무', cls: 'Archer', attr: '지(地)', hp: 62000, atk: 2400, maxCharge: 3, emoji: '👾' },
+          { name: '라흐무', cls: 'Assassin', attr: '지(地)', hp: 58000, atk: 2400, maxCharge: 3, emoji: '👾' }
         ],
         [
-          { name: '벨 라흐무', cls: 'Berserker', hp: 110000, atk: 2900, maxCharge: 4, emoji: '😈' },
-          { name: '흑성배의 마룡', cls: 'Rider', hp: 165000, breakBars: [195000], atk: 3400, maxCharge: 4, emoji: '🐉', isBoss: true, npName: '심연의 브레스' }
+          { name: '벨 라흐무', cls: 'Berserker', attr: '지(地)', hp: 105000, atk: 2800, maxCharge: 4, emoji: '😈' },
+          { name: '비스트Ⅱ 티아마트', cls: 'BeastII', attr: '수(獸)', hp: 170000, breakBars: [200000], atk: 3400, maxCharge: 4, emoji: '🐉', isBoss: true, npName: '네가 제네시스' }
+        ]
+      ]
+    },
+    {
+      id: 'q_goetia',
+      name: '🔥 관위시간신전 — 마신왕 게티아 (비스트Ⅰ)',
+      desc: '3술사(라·캐·어)에게 2.0x 약점, 3기사에게 2.0x 반격, 어벤저에게 0.5x 반감! 별(星) 속성 1.1x!',
+      difficulty: '비스트Ⅰ · 추천 Lv.90',
+      rewardText: '💎 성정석 +25 · 🟡 레프 +2 · 🔥 종화 +40',
+      rewards: { sq: 25, rp: 2, embers: 40 },
+      waves: [
+        [
+          { name: '마신주 플라우로스', cls: 'Caster', attr: '천(天)', hp: 85000, atk: 2600, maxCharge: 4, emoji: '👁️' },
+          { name: '마신왕 게티아', cls: 'BeastI', attr: '수(獸)', hp: 200000, breakBars: [240000], atk: 3600, maxCharge: 4, emoji: '🔥', isBoss: true, npName: '아르스 알마델 살로모니스' }
+        ]
+      ]
+    },
+    {
+      id: 'q_kiara',
+      name: '🌸 SE.RA.PH — 마성보살 키아라 (비스트Ⅲ/R)',
+      desc: '얼터에고·문캔서에게 1.2x 약점, 나머지 전 클래스 무상성! 별(星) 속성 아키타입:어스가 빛납니다.',
+      difficulty: '비스트Ⅲ/R · 추천 Lv.90',
+      rewardText: '💎 성정석 +25 · 🎫 호부 +1 · 🟡 레프 +1',
+      rewards: { sq: 25, tickets: 1, rp: 1 },
+      waves: [
+        [
+          { name: '마성보살 셋쇼인 키아라', cls: 'BeastIIIR', attr: '수(獸)', hp: 215000, breakBars: [255000], atk: 3500, maxCharge: 4, emoji: '🌸', isBoss: true, npName: '아미타 아미달라 · 헤븐즈 홀' }
         ]
       ]
     },
     {
       id: 'q_challenge',
       name: '👑 이문대 챌린지 — 거신 케르눈노스 (EX)',
-      desc: '6인 총력전! 2중 브레이크 최종 보스. 위기 시 영주 3획 영기복원까지 총동원하세요!',
+      desc: '6인 총력전! 버서커 [땅(地)] 2중 브레이크 최종 보스. 포리너·하늘(天) 속성과 영주를 총동원하세요!',
       difficulty: 'EX 챌린지 · 추천 Lv.90+',
       rewardText: '💎 성정석 +30 · 🎫 호부 +1 · 🟡 레프 +2',
       rewards: { sq: 30, tickets: 1, rp: 2 },
       waves: [
         [
-          { name: '재액의 거신 케르눈노스', cls: 'Berserker', hp: 220000, breakBars: [260000, 310000], atk: 3900, maxCharge: 4, emoji: '👁️', isBoss: true, npName: '칼라미티 커스' }
+          { name: '재액의 거신 케르눈노스', cls: 'Berserker', attr: '지(地)', hp: 220000, breakBars: [260000, 310000], atk: 3900, maxCharge: 4, emoji: '👁️', isBoss: true, npName: '칼라미티 커스' }
         ]
       ]
     }
@@ -488,7 +566,7 @@ window.FgoBattle = (() => {
           <div style="flex:1;min-width:0">
             <div class="party-slot-badge">${lineTag} · ${CLASS_INFO[sv.cls]?.name}</div>
             <div class="party-slot-name">${'★'.repeat(sv.rarity)} ${sv.name}</div>
-            <div class="party-slot-meta">Lv.${own.level} · 보${own.npLevel} · 스타집중 ${STAR_WEIGHT[sv.cls] || 100}</div>
+            <div class="party-slot-meta">Lv.${own.level} · 보${own.npLevel} · ${sv.attribute || '인(人)'} · 보정 ${getClassAtkMod(sv.cls).toFixed(2)}</div>
           </div>
         </div>
         <div class="party-deck-dots">
@@ -616,6 +694,7 @@ window.FgoBattle = (() => {
       idx: i,
       name: e.name,
       cls: e.cls,
+      attr: e.attr || '인(人)',
       maxHp: e.hp,
       hp: e.hp,
       breakBars: [...(e.breakBars || [])],
@@ -781,7 +860,7 @@ window.FgoBattle = (() => {
       card.innerHTML = `
         ${isTarget ? '<div class="target-reticle">🎯 TARGET</div>' : ''}
         <div class="enemy-head">
-          <span class="enemy-cls-badge">${CLASS_INFO[en.cls]?.name || en.cls}</span>
+          <span class="enemy-cls-badge">${CLASS_INFO[en.cls]?.name || en.cls} · ${en.attr || '인(人)'}</span>
           <span class="enemy-breaks">${breakDots}</span>
         </div>
         <div class="enemy-sprite">${en.emoji}</div>
@@ -988,10 +1067,12 @@ window.FgoBattle = (() => {
         <div class="ba-pop-title">☰ 배틀 메뉴</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="small-outline-btn" id="btn-pop-close">전투 계속하기</button>
+          <button class="small-outline-btn" id="btn-pop-affinity">📊 상성표 보기</button>
           <button class="small-outline-btn danger" id="btn-pop-flee">🏃 도주하기 (보상 없음)</button>
         </div>
       `;
       document.getElementById('btn-pop-close').addEventListener('click', () => { openPopup = null; renderArena(); });
+      document.getElementById('btn-pop-affinity').addEventListener('click', () => { openPopup = null; renderArena(); openAffinityModal(); });
       document.getElementById('btn-pop-flee').addEventListener('click', () => {
         if (!confirm('전투에서 도주하시겠습니까? (경험치와 보상을 얻을 수 없습니다)')) return;
         openPopup = null;
@@ -1049,7 +1130,13 @@ window.FgoBattle = (() => {
       const sv = SERVANT_MAP[m.id];
       const selIdx = battle.selectedCards.findIndex(c => c.kind === 'cmd' && c.handIdx === card.handIdx);
       const mult = target ? getClassMultiplier(sv.cls, target.cls) : 1.0;
-      const affTag = mult > 1 ? '<span class="aff-weak">WEAK</span>' : (mult < 1 ? '<span class="aff-resist">RESIST</span>' : '');
+      const attrMult = target ? getAttrMultiplier(sv.attribute, target.attr) : 1.0;
+      const affTag = mult > 1
+        ? `<span class="aff-weak">WEAK ${mult}×</span>`
+        : (mult < 1 ? `<span class="aff-resist">RESIST ${mult}×</span>` : '');
+      const attrTag = attrMult > 1
+        ? `<span class="aff-attr-up" title="히든 속성 유리 (${sv.attribute} → ${target.attr} 1.1x)">속성↑</span>`
+        : (attrMult < 1 ? `<span class="aff-attr-dn" title="히든 속성 불리 (${sv.attribute} → ${target.attr} 0.9x)">속성↓</span>` : '');
       const faceUrl = ArtRenderer.getFaceUrl(m.id);
       const koType = card.type === 'Buster' ? '버스터' : (card.type === 'Arts' ? '아츠' : '퀵');
 
@@ -1062,7 +1149,7 @@ window.FgoBattle = (() => {
       btn.innerHTML = `
         ${selIdx !== -1 ? `<span class="cmd-order-badge">${selIdx + 1}</span>` : ''}
         <div class="cmd-card-top">
-          ${affTag}
+          ${affTag}${attrTag}
           ${displayCrit > 0 ? `<span class="cmd-crit-badge">★${displayCrit}%</span>` : ''}
         </div>
         <div class="cmd-face-wrap">
@@ -1258,7 +1345,8 @@ window.FgoBattle = (() => {
           battle.enemies.forEach(en => {
             if (en.hp <= 0) return;
             const clsMult = getClassMultiplier(sv.cls, en.cls);
-            const dmg = m.atk * baseMult * npLvMult * (1 + m.buffs.atk) * (1 + cardBuff) * npDmgMult * clsMult * ocMult * (0.95 + Math.random() * 0.1);
+            const totalAff = getCombinedDamageMod(sv.cls, en.cls, sv.attribute, en.attr);
+            const dmg = m.atk * baseMult * npLvMult * (1 + m.buffs.atk) * (1 + cardBuff) * npDmgMult * totalAff * ocMult * (0.95 + Math.random() * 0.1);
             const ok = damageEnemy(en, dmg, clsMult > 1 ? 'dmg-weak' : 'dmg-np');
             const okNpMult = ok ? 1.5 : 1.0;
             const okStarMult = ok ? 1.3 : 1.0;
@@ -1272,7 +1360,8 @@ window.FgoBattle = (() => {
         } else if (currentTarget) {
           const baseMult = c.type === 'Buster' ? 6.2 : (c.type === 'Arts' ? 5.6 : 5.9);
           const clsMult = getClassMultiplier(sv.cls, currentTarget.cls);
-          const dmg = m.atk * baseMult * npLvMult * (1 + m.buffs.atk) * (1 + cardBuff) * npDmgMult * clsMult * ocMult * (0.95 + Math.random() * 0.1);
+          const totalAff = getCombinedDamageMod(sv.cls, currentTarget.cls, sv.attribute, currentTarget.attr);
+          const dmg = m.atk * baseMult * npLvMult * (1 + m.buffs.atk) * (1 + cardBuff) * npDmgMult * totalAff * ocMult * (0.95 + Math.random() * 0.1);
           const ok = damageEnemy(currentTarget, dmg, clsMult > 1 ? 'dmg-weak' : 'dmg-np');
           const okNpMult = ok ? 1.5 : 1.0;
           const okStarMult = ok ? 1.3 : 1.0;
@@ -1285,7 +1374,7 @@ window.FgoBattle = (() => {
         // 원작 FGO 일반 커맨드 카드 계산:
         // - 기본 비율: Buster 1.5, Arts 1.0, Quick 0.8
         // - 순서 배율: 1st 1.0, 2nd 1.2, 3rd 1.4 (예: 버스터 1.5 / 1.8 / 2.1배!)
-        // - 버스터 자체 NP 획득량 = 0 (단, 1번 아츠 or 마이티 체인 시 아츠 퍼스트 보너스로 NP 획득!)
+        // - 클래스 공격 보정치(0.90~1.10) × 클래스 상성(0.5~2.0) × 히든 속성 상성(0.9~1.1)
         const orderMult = [1.0, 1.2, 1.4][step];
         const typeDmgBase = c.type === 'Buster' ? 1.5 : (c.type === 'Arts' ? 1.0 : 0.8);
         const hasFirstBuster = (firstType === 'Buster' || chain.mighty);
@@ -1297,13 +1386,14 @@ window.FgoBattle = (() => {
 
         const cardBuff = (c.type === 'Buster' ? m.buffs.buster + ce.buster : (c.type === 'Arts' ? m.buffs.arts + ce.arts : m.buffs.quick + ce.quick));
         const clsMult = getClassMultiplier(sv.cls, currentTarget.cls);
+        const totalAff = getCombinedDamageMod(sv.cls, currentTarget.cls, sv.attribute, currentTarget.attr);
 
         // 퀵 퍼스트 / 마이티 체인: 체인 내 카드 크리티컬 확률 +20%!
         const critChance = Math.min(100, c.critPct + (hasFirstQuick ? 20 : 0));
         const isCrit = Math.random() * 100 < critChance;
         const critDmgMult = isCrit ? (2.0 + m.buffs.crit + ce.crit) : 1.0;
 
-        const dmg = m.atk * (typeDmgBase * orderMult * (1 + cardBuff) + firstBusterAdd) * (1 + m.buffs.atk) * busterChainMult * clsMult * critDmgMult * (0.92 + Math.random() * 0.16);
+        const dmg = m.atk * (typeDmgBase * orderMult * (1 + cardBuff) + firstBusterAdd) * (1 + m.buffs.atk) * busterChainMult * totalAff * critDmgMult * (0.92 + Math.random() * 0.16);
         const isOverkill = damageEnemy(currentTarget, dmg, isCrit ? 'dmg-crit' : (clsMult > 1 ? 'dmg-weak' : ''));
 
         // 크리티컬 × 오버킬 곱연산! (NP: ×2.0 ×1.5, 스타: ×1.2 ×1.3)
@@ -1340,8 +1430,8 @@ window.FgoBattle = (() => {
       const target = currentTarget || pickAliveTarget();
       if (m && m.hp > 0 && target) {
         const extraMult = chain.colorChain ? 3.5 : 2.0; // 동일색 브레이브 시 3.5배!
-        const clsMult = getClassMultiplier(sv.cls, target.cls);
-        const dmg = m.atk * extraMult * (1 + m.buffs.atk) * clsMult;
+        const totalAff = getCombinedDamageMod(sv.cls, target.cls, sv.attribute, target.attr);
+        const dmg = m.atk * extraMult * (1 + m.buffs.atk) * totalAff;
         const isOverkill = damageEnemy(target, dmg, 'dmg-extra');
         const npGain = Math.round(12 * (isOverkill ? 1.5 : 1.0));
         const stGain = Math.round(6 * (isOverkill ? 1.3 : 1.0));
@@ -1397,8 +1487,8 @@ window.FgoBattle = (() => {
           if (ally.buffs.invul > 0) {
             showFloatDmg(`ally-dmg-${ally.rosterIdx}`, '무적 회피!', 'dmg-block');
           } else {
-            const clsMult = getClassMultiplier(en.cls, sv.cls);
-            const dmg = Math.round(en.atk * 1.9 * clsMult * Math.max(0.3, 1 - ally.buffs.def));
+            const totalAff = getCombinedDamageMod(en.cls, sv.cls, en.attr, sv.attribute);
+            const dmg = Math.round(en.atk * 1.9 * totalAff * Math.max(0.3, 1 - ally.buffs.def));
             ally.hp = Math.max(0, ally.hp - dmg);
             ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 14);
             showFloatDmg(`ally-dmg-${ally.rosterIdx}`, `-${dmg.toLocaleString()}`, 'dmg-enemy-hit');
@@ -1410,8 +1500,8 @@ window.FgoBattle = (() => {
         if (victim.buffs.invul > 0) {
           showFloatDmg(`ally-dmg-${victim.rosterIdx}`, 'EVADE!', 'dmg-block');
         } else {
-          const clsMult = getClassMultiplier(en.cls, sv.cls);
-          const dmg = Math.round(en.atk * clsMult * Math.max(0.3, 1 - victim.buffs.def) * (0.9 + Math.random() * 0.2));
+          const totalAff = getCombinedDamageMod(en.cls, sv.cls, en.attr, sv.attribute);
+          const dmg = Math.round(en.atk * totalAff * Math.max(0.3, 1 - victim.buffs.def) * (0.9 + Math.random() * 0.2));
           victim.hp = Math.max(0, victim.hp - dmg);
           victim.np = Math.min(getMaxNp(victim.npLevel), victim.np + 8);
           showFloatDmg(`ally-dmg-${victim.rosterIdx}`, `-${dmg.toLocaleString()}`, 'dmg-enemy-hit');
@@ -1547,9 +1637,65 @@ window.FgoBattle = (() => {
     modal.classList.remove('hidden');
   }
 
+  // 상성표 모달 렌더링 (16×16 클래스 상성 + 공격 보정치 + 5×5 히든 속성)
+  function openAffinityModal() {
+    SoundEngine.click();
+    const modal = document.getElementById('affinity-modal');
+    const body = document.getElementById('affinity-modal-body');
+    const clsOrder = ['Saber', 'Archer', 'Lancer', 'Rider', 'Caster', 'Assassin', 'Berserker', 'Shielder', 'Ruler', 'Avenger', 'MoonCancer', 'AlterEgo', 'Pretender', 'Foreigner', 'BeastI', 'BeastIIIR'];
+    const shortName = {
+      Saber: '세', Archer: '아', Lancer: '랜', Rider: '라', Caster: '캐', Assassin: '어',
+      Berserker: '버', Shielder: '실/Ⅱ', Ruler: '룰', Avenger: '어벤', MoonCancer: '문',
+      AlterEgo: '얼', Pretender: '프', Foreigner: '포', BeastI: '비Ⅰ', BeastIIIR: '비Ⅲ'
+    };
+
+    const clsRows = clsOrder.map(atk => {
+      const cells = clsOrder.map(def => {
+        const m = getClassMultiplier(atk, def);
+        let c = 'aff-cell';
+        if (m >= 2.0) c += ' aff-c20';
+        else if (m >= 1.5) c += ' aff-c15';
+        else if (m > 1.0) c += ' aff-c12';
+        else if (m < 1.0) c += ' aff-c05';
+        return `<td class="${c}">${m.toFixed(1)}</td>`;
+      }).join('');
+      return `<tr><th>${shortName[atk]}</th><td class="aff-mod">${getClassAtkMod(atk).toFixed(2)}</td>${cells}</tr>`;
+    }).join('');
+
+    const attrs = ['인(人)', '천(天)', '지(地)', '성(星)', '수(獸)'];
+    const attrRows = attrs.map(a1 => {
+      const cells = attrs.map(a2 => {
+        const m = getAttrMultiplier(a1, a2);
+        const cls = m > 1 ? 'aff-cell aff-c20' : (m < 1 ? 'aff-cell aff-c05' : 'aff-cell');
+        return `<td class="${cls}">${m.toFixed(1)}x</td>`;
+      }).join('');
+      return `<tr><th>${a1}</th>${cells}</tr>`;
+    }).join('');
+
+    body.innerHTML = `
+      <h3 style="font-size:14px;margin-bottom:6px;color:#ffe680">⚔️ 클래스 상성표 & 공격측 보정치 (행: 공격군 → 열: 피격군)</h3>
+      <div class="aff-table-wrap">
+        <table class="aff-table">
+          <thead><tr><th>공\\피</th><th>보정</th>${clsOrder.map(c => `<th>${shortName[c]}</th>`).join('')}</tr></thead>
+          <tbody>${clsRows}</tbody>
+        </table>
+      </div>
+      <h3 style="font-size:14px;margin:14px 0 6px;color:#ffe680">🌌 히든 속성 상성 (인간→하늘→땅→인간 · 별↔짐승)</h3>
+      <table class="aff-table aff-attr-table">
+        <thead><tr><th>공\\피</th>${attrs.map(a => `<th>${a}</th>`).join('')}</tr></thead>
+        <tbody>${attrRows}</tbody>
+      </table>
+    `;
+    modal.classList.remove('hidden');
+  }
+
   // ================= 이벤트 바인딩 =================
   function bindEvents() {
     document.getElementById('btn-start-battle')?.addEventListener('click', startBattle);
+    document.getElementById('btn-open-affinity')?.addEventListener('click', openAffinityModal);
+    document.getElementById('btn-close-affinity')?.addEventListener('click', () => {
+      document.getElementById('affinity-modal').classList.add('hidden');
+    });
     document.getElementById('btn-ba-attack')?.addEventListener('click', () => {
       if (!battle || busy || battle.phase !== 'command') return;
       openPopup = null;

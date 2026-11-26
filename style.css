@@ -2400,3 +2400,41 @@ html, body {
   .ba-attack-bar { flex-direction: column; align-items: stretch; text-align: center; }
   .ba-bottom-right { justify-content: space-between; }
 }
+
+
+/* ===== 상성표 모달 & 히든 속성 칩 ===== */
+.aff-attr-up {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(255, 160, 40, 0.9);
+  color: #1c1000;
+  font-size: 9.5px;
+  font-weight: 900;
+}
+.aff-attr-dn {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(56, 120, 200, 0.85);
+  color: #e6f2ff;
+  font-size: 9.5px;
+  font-weight: 900;
+}
+.aff-table-wrap { overflow-x: auto; }
+.aff-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  text-align: center;
+}
+.aff-table th, .aff-table td {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 4px 3px;
+}
+.aff-table th { background: rgba(18, 32, 68, 0.95); color: var(--gold-light); font-weight: 800; }
+.aff-mod { background: rgba(12, 22, 46, 0.9); color: #dbe7ff; font-weight: 800; }
+.aff-cell { background: rgba(8, 14, 30, 0.85); color: #94a3b8; }
+.aff-c20 { background: #c91c2b; color: #fff; font-weight: 900; }
+.aff-c15 { background: #9c4a12; color: #fff4cc; font-weight: 900; }
+.aff-c12 { background: #d97706; color: #fff; font-weight: 900; }
+.aff-c05 { background: #0e6bb8; color: #e0f2ff; font-weight: 800; }
+.aff-attr-table { max-width: 440px; }

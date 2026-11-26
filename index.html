@@ -11,7 +11,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <title>CHALDEA SUMMON SIMULATOR — 페그오 2차 창작 가챠 시뮬레이터</title>
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
   <div class="cosmos-bg" aria-hidden="true"></div>
@@ -170,7 +170,10 @@
             <h2>⚔️ 칼데아 커맨드 배틀 (Buster · Arts · Quick)</h2>
             <p class="panel-desc">소환한 서번트와 개념예장으로 3인 파티를 편성해 FGO 턴제 커맨드 배틀에 출격하고 성정석·종화·QP를 획득하세요!</p>
           </div>
-          <button class="small-gold-btn btn-quest-go" id="btn-start-battle">⚔️ 퀘스트 출격!</button>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="small-outline-btn" id="btn-open-affinity">📊 상성표 · 히든속성</button>
+            <button class="small-gold-btn btn-quest-go" id="btn-start-battle">⚔️ 퀘스트 출격!</button>
+          </div>
         </div>
 
         <div class="battle-lobby-grid">
@@ -680,6 +683,17 @@
     </div>
   </div>
 
+  <!-- ================= 클래스 & 히든 속성 상성표 모달 ================= -->
+  <div id="affinity-modal" class="modal-overlay hidden">
+    <div class="modal-box modal-wide">
+      <div class="modal-header">
+        <h2>📊 FGO 클래스 상성표 (16×16) & 히든 속성 (5×5)</h2>
+        <button class="modal-close" id="btn-close-affinity">✕</button>
+      </div>
+      <div id="affinity-modal-body"></div>
+    </div>
+  </div>
+
   <!-- ================= 보구 발동 전체화면 컷인 오버레이 ================= -->
   <div id="np-cutin-overlay" class="np-cutin-overlay hidden"></div>
 
@@ -729,14 +743,14 @@
   <!-- ================= 토스트 알림 ================= -->
   <div id="toast-container" class="toast-container"></div>
 
-  <script src="data.js"></script>
+  <script src="data.js?v=5"></script>
   <script src="atlas_images.js"></script>
   <script src="kr_lore.js"></script>
   <script src="audio.js"></script>
   <script src="art.js"></script>
   <script src="summon_fx.js?v=2"></script>
   <script src="game.js?v=4"></script>
-  <script src="battle.js?v=4"></script>
+  <script src="battle.js?v=5"></script>
   <script src="pwa.js"></script>
 </body>
 </html>

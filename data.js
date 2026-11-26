@@ -16,7 +16,10 @@ const CLASS_INFO = {
   Foreigner:  { name: '포리너',     en: 'FOREIGNER',  color: '#00cec9', accent: '#c7fffe' },
   Pretender:  { name: '프리텐더',   en: 'PRETENDER',  color: '#7d8cff', accent: '#dbe0ff' },
   MoonCancer: { name: '문캔서',     en: 'MOONCANCER', color: '#ffeaa7', accent: '#fff9e6' },
-  Shielder:   { name: '실더',       en: 'SHIELDER',   color: '#a29bfe', accent: '#e2dfff' }
+  Shielder:   { name: '실더',       en: 'SHIELDER',   color: '#a29bfe', accent: '#e2dfff' },
+  BeastI:     { name: '비스트Ⅰ',    en: 'BEAST I',    color: '#ff385c', accent: '#ffc2d1' },
+  BeastII:    { name: '비스트Ⅱ',    en: 'BEAST II',   color: '#ff6b9d', accent: '#ffd6e6' },
+  BeastIIIR:  { name: '비스트Ⅲ/R',  en: 'BEAST III/R',color: '#e056fd', accent: '#f5ccff' }
 };
 
 // 서번트 데이터베이스 (5성 한정/상시, 4성, 3성)
