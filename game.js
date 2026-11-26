@@ -20,6 +20,7 @@
       if (k.npRuby) sv.npSub = k.npRuby;
       if (k.npDetail) sv.npDetail = k.npDetail;
       if (k.skills && k.skills.length) sv.skills = k.skills;
+      if (k.cards && k.cards.length === 5) sv.cards = k.cards;
       if (k.summonQuote) sv.summonQuote = k.summonQuote;
       if (k.profileSummary) sv.profileSummary = k.profileSummary;
       if (k.profileBond) sv.profileBond = k.profileBond;
@@ -780,6 +781,38 @@
     return Math.min(120, baseMax + owned.grailsUsed * 2);
   }
 
+  // ================= 공식 FGO 강화 QP 비용표 (나무위키 기준) =================
+  // 영기재림: 1차→2차, 2차→3차, 3차→최종재림
+  const ASCENSION_QP = {
+    5: [300000, 1000000, 3000000],
+    4: [150000, 500000, 1500000],
+    3: [100000, 300000, 900000]
+  };
+  // 스킬 강화: Lv.1→2 .. Lv.9→10 (5성 합계 5,440만 / 4성 2,710만 / 3성 1,360만 QP)
+  const SKILL_QP = {
+    5: [200000, 400000, 1200000, 1600000, 4000000, 5000000, 10000000, 12000000, 20000000],
+    4: [100000, 200000, 600000, 800000, 2000000, 2500000, 5000000, 6000000, 10000000],
+    3: [50000, 100000, 300000, 400000, 1000000, 1250000, 2500000, 3000000, 5000000]
+  };
+  // 서번트 레벨업 종화 1장당 QP: ★5(420+180Lv), ★4(280+120Lv), ★3(140+60Lv) × 5장
+  function getLevelUpQp(rarity, level) {
+    const perCard = rarity === 5 ? (420 + 180 * level) : (rarity === 4 ? (280 + 120 * level) : (140 + 60 * level));
+    return perCard * 5;
+  }
+  function getAscensionQp(rarity, curAsc) {
+    const table = ASCENSION_QP[rarity] || ASCENSION_QP[3];
+    return table[Math.max(0, Math.min(2, curAsc - 1))] || 300000;
+  }
+  function getSkillUpQp(rarity, curLv) {
+    const table = SKILL_QP[rarity] || SKILL_QP[3];
+    return table[curLv - 1] || 0;
+  }
+  function formatQpShort(n) {
+    if (n >= 10000000) return `${(n / 10000000).toFixed(n % 10000000 === 0 ? 0 : 1)}천만`;
+    if (n >= 10000) return `${Math.round(n / 10000)}만`;
+    return n.toLocaleString();
+  }
+
   function renderMyRoomTab() {
     const ownedIds = Object.keys(state.servants);
     document.getElementById('mr-owned-count').textContent = `${ownedIds.length}기 보유`;
@@ -874,8 +907,68 @@
     document.getElementById('mr-np-name').textContent = sv.npName;
     document.getElementById('mr-np-sub').textContent = sv.npSub || '';
     document.getElementById('mr-np-detail').textContent = sv.npDetail || '';
+
+    // 공식 5장 커맨드 카드 덱 표기
+    const deckRow = document.getElementById('mr-deck-row');
+    if (deckRow) {
+      const cards = sv.cards || ['Quick', 'Arts', 'Arts', 'Buster', 'Buster'];
+      deckRow.innerHTML = `<span style="font-size:11.5px;color:#9cb2d9;font-weight:700">커맨드 덱:</span>` +
+        cards.map(c => `<span class="deck-dot ${c}">${c}</span>`).join('') +
+        `<span style="font-size:11px;color:#dbe7ff;margin-left:auto">${sv.attribute || '인(人)'} 속성</span>`;
+    }
+
+    // 공식 스킬 강화 (Lv.1 → Lv.10, 공식 QP 비용표, Lv.6/-1T · Lv.10/-2T 쿨감)
+    if (!Array.isArray(own.skillLevels) || own.skillLevels.length !== 3) own.skillLevels = [1, 1, 1];
     const skillsRow = document.getElementById('mr-skills-row');
-    skillsRow.innerHTML = (sv.skills || []).map((sk, idx) => `<span class="skill-chip">스킬${idx + 1} · ${sk}</span>`).join('');
+    const svSkills = (sv.skills && sv.skills.length >= 3) ? sv.skills : ['스킬 1', '스킬 2', '스킬 3'];
+    skillsRow.innerHTML = svSkills.map((sk, idx) => {
+      const slv = own.skillLevels[idx] || 1;
+      const cost = slv < 10 ? getSkillUpQp(sv.rarity, slv) : 0;
+      const cdTip = slv >= 10 ? '쿨타임 -2T' : (slv >= 6 ? '쿨타임 -1T' : 'Lv.6에 쿨-1T');
+      return `
+        <div class="mr-skill-card">
+          <div class="mr-skill-info">
+            <strong>스킬${idx + 1} · ${sk}</strong>
+            <span>Lv.${slv} / 10 (${cdTip})</span>
+          </div>
+          <button class="mr-skill-up-btn" data-skidx="${idx}" ${slv >= 10 ? 'disabled' : ''}>
+            ${slv >= 10 ? 'MAX' : `강화 (${formatQpShort(cost)} QP)`}
+          </button>
+        </div>
+      `;
+    }).join('');
+    skillsRow.querySelectorAll('.mr-skill-up-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.dataset.skidx);
+        const slv = own.skillLevels[idx] || 1;
+        if (slv >= 10) return;
+        const cost = getSkillUpQp(sv.rarity, slv);
+        if (state.qp < cost) {
+          SoundEngine.error();
+          toast(`QP가 부족합니다! 필요: ${cost.toLocaleString()} QP (배틀 보물고에서 파밍하세요!)`);
+          return;
+        }
+        state.qp -= cost;
+        own.skillLevels[idx] = slv + 1;
+        SoundEngine.levelUp();
+        saveState();
+        renderMyRoomTab();
+        const extra = (slv + 1 === 6 || slv + 1 === 10) ? ' (배틀 쿨타임 -1턴 감소!)' : '';
+        toast(`⚡ ${sv.name} [${svSkills[idx]}] Lv.${slv + 1} 달성!${extra}`);
+      });
+    });
+
+    // 레벨업 / 영기재림 버튼에 공식 QP 비용 표시
+    const lvQp = getLevelUpQp(sv.rarity, own.level);
+    document.getElementById('btn-lv-up').textContent = `🔥 레벨업 (+10Lv / 종화 5 · ${formatQpShort(lvQp)} QP)`;
+    const ascBtn = document.getElementById('btn-ascend');
+    if (own.ascension >= 4) {
+      ascBtn.textContent = '✨ 최종 영기재림 완료 (4차)';
+    } else {
+      const ascQp = getAscensionQp(sv.rarity, own.ascension);
+      ascBtn.textContent = `✨ ${own.ascension + 1}차 영기재림 (${formatQpShort(ascQp)} QP)`;
+    }
+
     document.getElementById('myroom-speaker').textContent = `${sv.name} (${own.ascension}차 재림)`;
   }
 
@@ -1545,15 +1638,22 @@
       }
       if (state.embers < 5) {
         SoundEngine.error();
-        toast('종화가 부족합니다! 다 빈치 공방에서 마나프리즘으로 교환하세요.');
+        toast('종화가 부족합니다! 배틀 종화 던전이나 다 빈치 공방에서 획득하세요.');
+        return;
+      }
+      const lvQp = getLevelUpQp(sv.rarity, own.level);
+      if (state.qp < lvQp) {
+        SoundEngine.error();
+        toast(`QP가 부족합니다! (필요: ${lvQp.toLocaleString()} QP)`);
         return;
       }
       state.embers -= 5;
+      state.qp -= lvQp;
       own.level = Math.min(cap, own.level + 10);
       SoundEngine.levelUp();
       saveState();
       renderMyRoomTab();
-      toast(`🔥 ${sv.name} Lv.${own.level} 달성!`);
+      toast(`🔥 ${sv.name} Lv.${own.level} 달성! (-${lvQp.toLocaleString()} QP)`);
     });
 
     document.getElementById('btn-ascend').addEventListener('click', () => {
@@ -1564,12 +1664,13 @@
         toast('이미 최종 영기재림(4차) 상태입니다!');
         return;
       }
-      if (state.qp < 500000) {
+      const ascQp = getAscensionQp(sv.rarity, own.ascension);
+      if (state.qp < ascQp) {
         SoundEngine.error();
-        toast('QP가 부족합니다!');
+        toast(`QP가 부족합니다! 필요: ${ascQp.toLocaleString()} QP (배틀 보물고에서 파밍하세요!)`);
         return;
       }
-      state.qp -= 500000;
+      state.qp -= ascQp;
       own.ascension++;
       own.viewAsc = own.ascension;
       if (own.ascension === 4) {

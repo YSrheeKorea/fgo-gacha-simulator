@@ -109,8 +109,21 @@ window.FgoBattle = (() => {
     Berserker: 10
   };
 
-  // 서번트별 5장 커맨드 덱 (모든 서번트는 자력으로 B/A/Q 중 최소 1색 체인 가능 — 원작 고증)
+  // 적 클래스별 피격 시 아군 NP 획득률 보정 (원작 FGO 시스템 3연사 핵심 계수!)
+  const ENEMY_NP_MOD = {
+    Rider: 1.1,
+    Caster: 1.2,
+    MoonCancer: 1.2,
+    Assassin: 0.9,
+    Berserker: 0.8
+  };
+  function getEnemyNpMod(enemyCls) {
+    return ENEMY_NP_MOD[enemyCls] ?? 1.0;
+  }
+
+  // 서번트별 공식 5장 커맨드 덱 (Atlas Academy KR 공식 데이터 우선 사용!)
   function getServantDeckTypes(sv) {
+    if (Array.isArray(sv.cards) && sv.cards.length === 5) return sv.cards;
     if (sv.cls === 'Berserker') return ['Buster', 'Buster', 'Buster', 'Arts', 'Quick'];
     if (sv.cls === 'Caster') return ['Arts', 'Arts', 'Arts', 'Buster', 'Quick'];
     if (sv.cls === 'Assassin') return ['Quick', 'Quick', 'Quick', 'Arts', 'Buster'];
@@ -629,6 +642,7 @@ window.FgoBattle = (() => {
       const ce = getCePassive(slot.ceId);
       const maxNp = getMaxNp(own.npLevel);
 
+      const skLevels = (slot.isSupport) ? [10, 10, 10] : ((own.skillLevels && own.skillLevels.length === 3) ? own.skillLevels : [1, 1, 1]);
       return {
         rosterIdx: idx,
         id: sv.id,
@@ -642,7 +656,11 @@ window.FgoBattle = (() => {
         hp: maxHp,
         atk,
         np: Math.min(maxNp, ce.startNp),
-        skills: getSkillDefs(sv).map(s => ({ ...s, curCd: 0 })),
+        skills: getSkillDefs(sv).map((s, si) => {
+          const slv = skLevels[si] || 1;
+          const cdReduce = slv >= 10 ? 2 : (slv >= 6 ? 1 : 0);
+          return { ...s, level: slv, cd: Math.max(3, s.cd - cdReduce), curCd: 0 };
+        }),
         buffs: { atk: 0, atkT: 0, def: 0, defT: 0, buster: 0, arts: 0, quick: 0, cardT: 0, npDmg: 0, npDmgT: 0, npGain: 0, npGainT: 0, crit: 0, critT: 0, invul: 0, npBoost: 1 }
       };
     });
@@ -734,24 +752,29 @@ window.FgoBattle = (() => {
     const drawCount = Math.min(5, battle.deck.length);
     const hand = battle.deck.splice(0, drawCount);
     const starAlloc = Array(hand.length).fill(0);
-    let pool = Math.min(50, Math.floor(battle.stars));
+    let pool = Math.floor(battle.stars);
 
-    const weights = hand.map(c => {
-      const sv = SERVANT_MAP[c.svId];
-      // 원작 난수 보정 (+0~50 랜덤 슬롯 가중치) 포함
-      return (STAR_WEIGHT[sv.cls] || 100) + Math.floor(Math.random() * 50);
-    });
+    // 원작 FGO 고증: 스타 50개 이상 시 집중도/랜덤 무관 전 커맨드 카드 100% 고정!
+    if (pool >= 50) {
+      for (let i = 0; i < hand.length; i++) starAlloc[i] = 10;
+    } else {
+      const weights = hand.map(c => {
+        const sv = SERVANT_MAP[c.svId];
+        // 원작 난수 보정 (+0~50 랜덤 슬롯 가중치) 포함
+        return (STAR_WEIGHT[sv.cls] || 100) + Math.floor(Math.random() * 50);
+      });
 
-    while (pool > 0) {
-      const avail = weights.map((w, i) => (starAlloc[i] < 10 ? w : 0));
-      const sum = avail.reduce((a, b) => a + b, 0);
-      if (sum <= 0) break;
-      let r = Math.random() * sum;
-      for (let i = 0; i < hand.length; i++) {
-        r -= avail[i];
-        if (r <= 0) { starAlloc[i]++; break; }
+      while (pool > 0) {
+        const avail = weights.map((w, i) => (starAlloc[i] < 10 ? w : 0));
+        const sum = avail.reduce((a, b) => a + b, 0);
+        if (sum <= 0) break;
+        let r = Math.random() * sum;
+        for (let i = 0; i < hand.length; i++) {
+          r -= avail[i];
+          if (r <= 0) { starAlloc[i]++; break; }
+        }
+        pool--;
       }
-      pool--;
     }
     battle.stars = 0;
     battle.hand = hand.map((c, i) => ({ ...c, handIdx: i, critPct: starAlloc[i] * 10 }));
@@ -1350,9 +1373,10 @@ window.FgoBattle = (() => {
             const ok = damageEnemy(en, dmg, clsMult > 1 ? 'dmg-weak' : 'dmg-np');
             const okNpMult = ok ? 1.5 : 1.0;
             const okStarMult = ok ? 1.3 : 1.0;
-            if (c.type === 'Arts') m.np = Math.min(maxNp, m.np + Math.round(16 * (1 + cardBuff) * (1 + m.buffs.npGain) * okNpMult));
+            const enNpMod = getEnemyNpMod(en.cls); // 적 클래스별 NP 보정(캐1.2/라1.1/어0.9/버0.8)
+            if (c.type === 'Arts') m.np = Math.min(maxNp, m.np + Math.round(16 * (1 + cardBuff) * (1 + m.buffs.npGain) * okNpMult * enNpMod));
             if (c.type === 'Quick') {
-              m.np = Math.min(maxNp, m.np + Math.round(9 * (1 + cardBuff) * okNpMult));
+              m.np = Math.min(maxNp, m.np + Math.round(9 * (1 + cardBuff) * okNpMult * enNpMod));
               battle.stars = Math.min(99, battle.stars + Math.round(8 * okStarMult));
             }
           });
@@ -1365,7 +1389,8 @@ window.FgoBattle = (() => {
           const ok = damageEnemy(currentTarget, dmg, clsMult > 1 ? 'dmg-weak' : 'dmg-np');
           const okNpMult = ok ? 1.5 : 1.0;
           const okStarMult = ok ? 1.3 : 1.0;
-          if (c.type === 'Arts') m.np = Math.min(maxNp, m.np + Math.round(22 * (1 + cardBuff) * (1 + m.buffs.npGain) * okNpMult));
+          const enNpMod = getEnemyNpMod(currentTarget.cls);
+          if (c.type === 'Arts') m.np = Math.min(maxNp, m.np + Math.round(22 * (1 + cardBuff) * (1 + m.buffs.npGain) * okNpMult * enNpMod));
           if (c.type === 'Quick') battle.stars = Math.min(99, battle.stars + Math.round(14 * okStarMult));
           addLog(`💥 ${sv.name} 단일 보구 [${sv.npName}] (OC ${ocStage * 100}%) → ${currentTarget.name} ${Math.round(dmg).toLocaleString()}!`);
         }
@@ -1404,7 +1429,8 @@ window.FgoBattle = (() => {
 
         const npBase = c.type === 'Arts' ? 13 : (c.type === 'Quick' ? 5 : 0); // 버스터 자체 NP = 0!
         const npFirstAdd = hasFirstArts ? 6 : 0;
-        const npGain = Math.round((npBase * orderMult + npFirstAdd) * (1 + cardBuff * 0.5) * (1 + m.buffs.npGain) * npCritMult * npOkMult);
+        const enNpMod = getEnemyNpMod(currentTarget.cls);
+        const npGain = Math.round((npBase * orderMult + npFirstAdd) * (1 + cardBuff * 0.5) * (1 + m.buffs.npGain) * npCritMult * npOkMult * enNpMod);
 
         const starBase = c.type === 'Quick' ? 11 : (c.type === 'Buster' ? 3 : 1);
         const starFirstAdd = hasFirstQuick ? 4 : 0;
@@ -1433,7 +1459,7 @@ window.FgoBattle = (() => {
         const totalAff = getCombinedDamageMod(sv.cls, target.cls, sv.attribute, target.attr);
         const dmg = m.atk * extraMult * (1 + m.buffs.atk) * totalAff;
         const isOverkill = damageEnemy(target, dmg, 'dmg-extra');
-        const npGain = Math.round(12 * (isOverkill ? 1.5 : 1.0));
+        const npGain = Math.round(12 * (isOverkill ? 1.5 : 1.0) * getEnemyNpMod(target.cls));
         const stGain = Math.round(6 * (isOverkill ? 1.3 : 1.0));
         m.np = Math.min(getMaxNp(m.npLevel), m.np + npGain);
         battle.stars = Math.min(99, battle.stars + stGain);
