@@ -34,6 +34,27 @@ const POOL_LABELS = {
   npc:       '미실장 (프로필 한정)'
 };
 
+const RARITY_TIERS = {
+  5: 'SSR',
+  4: 'SR',
+  3: 'R',
+  2: 'UC',
+  1: 'C',
+  0: '★0'
+};
+
+// 레어도 가변(마슈: 1~2차 ★3 R → 3차 ★4 SR → 4차 최종 ★5 SSR 팔라딘) 반영!
+function getEffectiveRarity(sv, owned) {
+  if (!sv) return 3;
+  if (sv.variableRarity) {
+    const asc = (owned && owned.ascension) ? owned.ascension : 1;
+    if (asc >= 4) return 5;
+    if (asc >= 3) return 4;
+    return 3;
+  }
+  return sv.rarity;
+}
+
 // 서번트 데이터베이스 (5성 한정/상시, 4성, 3성)
 // limited: true면 픽업 배너에서만 등장(스토리/상시 제외), false면 상시(픽뚫 가능)
 const SERVANTS = [
@@ -1507,7 +1528,8 @@ const BANNERS = [
     baseObj.collectionNo = c.no;
     baseObj.atlasId = c.aid;
     baseObj.region = c.reg;
-    baseObj.rarity = c.r;
+    baseObj.variableRarity = (c.no === 1);
+    baseObj.rarity = (c.no === 1) ? 3 : c.r;
     baseObj.cls = c.cls;
     baseObj.pool = c.pool;
     baseObj.fp = !!c.fp;

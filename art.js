@@ -239,20 +239,21 @@ const ArtRenderer = (() => {
 
   // 카드 프레임 오버레이 SVG (공식 일러스트 위에 씌우거나 단독 SVG에 합성)
   function renderFrameOverlaySVG(item, isServant, options, includePortraitFallback) {
-    const { ascension = 1, npLevel = 0, isNew = false, compact = false, showNo = false } = options;
+    const { ascension = 1, npLevel = 0, isNew = false, compact = false, rarityOverride = null } = options;
+    const effRarity = (rarityOverride !== null && rarityOverride !== undefined) ? rarityOverride : item.rarity;
     let frameLight = '#d5e0ec', frameMid = '#7f90a6', frameDark = '#1f2836', starsColor = '#d5e0ec';
-    if (item.rarity >= 4) {
+    if (effRarity >= 4) {
       frameLight = '#ffe380'; frameMid = '#c49124'; frameDark = '#3b2808';
-      starsColor = item.rarity === 5 ? '#ffe666' : '#ffd24d';
-    } else if (item.rarity === 0) {
+      starsColor = effRarity === 5 ? '#ffe666' : '#ffd24d';
+    } else if (effRarity === 0) {
       frameLight = '#ff5c77'; frameMid = '#5c1122'; frameDark = '#140408';
       starsColor = '#ff708d';
-    } else if (item.rarity <= 2) {
+    } else if (effRarity <= 2) {
       frameLight = '#e5a874'; frameMid = '#8c4f24'; frameDark = '#2e1808';
       starsColor = '#f2b880';
     }
-    const stars = item.rarity === 0 ? '☆ 0 ☆' : '★'.repeat(item.rarity);
-    const uid = `${item.id}_${ascension}_${includePortraitFallback ? 'fb' : 'ov'}`;
+    const stars = effRarity === 0 ? '☆ 0 ☆' : '★'.repeat(effRarity);
+    const uid = `${item.id}_${ascension}_${effRarity}_${includePortraitFallback ? 'fb' : 'ov'}`;
 
     const clsBadge = isServant ? (() => {
       const iconInner = getClassIconSVG(item.cls, frameLight, 28)

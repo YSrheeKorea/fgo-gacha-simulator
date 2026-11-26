@@ -956,8 +956,14 @@
 
     const q = (codexFilter.query || '').trim().toLowerCase();
     let filtered = list.filter(item => {
-      if (codexFilter.rarity !== 'all' && String(item.rarity) !== codexFilter.rarity) return false;
-      const isOwned = !!ownedMap[item.id];
+      const owned = ownedMap[item.id];
+      const effR = isServant ? getEffectiveRarity(item, owned) : item.rarity;
+      if (codexFilter.rarity === 'variable') {
+        if (!item.variableRarity) return false;
+      } else if (codexFilter.rarity !== 'all' && String(effR) !== codexFilter.rarity) {
+        return false;
+      }
+      const isOwned = !!owned;
       if (codexFilter.owned === 'owned' && !isOwned) return false;
       if (codexFilter.owned === 'unowned' && isOwned) return false;
       if (isServant && codexFilter.cls !== 'all' && item.cls !== codexFilter.cls) return false;
@@ -1017,9 +1023,11 @@
       const poolBadge = isServant && item.pool
         ? `<span class="codex-pool-tag pool-${item.pool}">${poolShort[item.pool] || item.pool}</span>`
         : '';
+      const effR = isServant ? getEffectiveRarity(item, owned) : item.rarity;
       div.innerHTML = ArtRenderer.renderCardSVG(item, isServant, {
         ascension: isServant && owned ? owned.viewAsc : 1,
         npLevel: isServant && owned ? owned.npLevel : 0,
+        rarityOverride: effR,
         compact: true
       }) + noBadge + poolBadge + (owned ? `<span class="codex-item-count">${isServant ? `Lv.${owned.level}` : `x${owned.copies}`}</span>` : '');
       div.addEventListener('click', () => openDetailModal(codexFilter.type, item.id));
@@ -1055,7 +1063,8 @@
   }
 
   function getMaxLevelCap(sv, owned) {
-    const baseMax = getBaseMaxLevel(sv.rarity);
+    const effR = getEffectiveRarity(sv, owned);
+    const baseMax = getBaseMaxLevel(effR);
     const ascCap = Math.min(baseMax, Math.max(20, (baseMax - 30) + (owned.ascension - 1) * 10));
     if (owned.ascension < 4) return ascCap;
     // 성배전림으로 최대 Lv.120까지 확장!
@@ -1160,6 +1169,7 @@
 
     const sv = SERVANT_MAP[state.myRoomServantId];
     const own = state.servants[state.myRoomServantId];
+    const effR = getEffectiveRarity(sv, own);
     const maxCap = getMaxLevelCap(sv, own);
 
     // 영기재림 보기 탭
@@ -1172,15 +1182,17 @@
     // 대형 포트레이트
     document.getElementById('myroom-portrait-wrap').innerHTML = ArtRenderer.renderCardSVG(sv, true, {
       ascension: own.viewAsc,
-      npLevel: own.npLevel
+      npLevel: own.npLevel,
+      rarityOverride: effR
     });
 
     // 스탯 계산
-    const lvRatio = 0.35 + (own.level / getBaseMaxLevel(sv.rarity)) * 0.65;
+    const lvRatio = 0.35 + (own.level / getBaseMaxLevel(effR)) * 0.65;
     const curAtk = Math.round(sv.atk * lvRatio);
     const curHp = Math.round(sv.hp * lvRatio);
 
-    document.getElementById('mr-name').textContent = `${sv.rarity === 0 ? '☆0' : '★'.repeat(sv.rarity)} ${sv.name}`;
+    const tierLabel = RARITY_TIERS[effR] || '';
+    document.getElementById('mr-name').textContent = `${effR === 0 ? '☆0' : '★'.repeat(effR)} ${tierLabel}${sv.variableRarity ? '(가변)' : ''} ${sv.name}`;
     const creditParts = [
       CLASS_INFO[sv.cls]?.name || sv.cls,
       sv.cv ? `CV. ${sv.cv}` : sv.title,
@@ -1657,7 +1669,9 @@
     if (!item) return;
 
     const owned = isServant ? state.servants[id] : state.ces[id];
-    document.getElementById('detail-modal-title').textContent = `${item.rarity === 0 ? '☆0' : '★'.repeat(item.rarity)} ${item.name}`;
+    const effR = isServant ? getEffectiveRarity(item, owned) : item.rarity;
+    const tierTxt = RARITY_TIERS[effR] || '';
+    document.getElementById('detail-modal-title').textContent = `${effR === 0 ? '☆0' : '★'.repeat(effR)} ${tierTxt}${item.variableRarity ? '(레어도 가변)' : ''} ${item.name}`;
 
     if (isServant && !item.profileSummary && !item._loreLoaded) {
       fetchOfficialServantLore(item, () => {
@@ -1681,11 +1695,11 @@
       const loreBlocks = [item.profileSummary, ...(item.profileBond || [])].filter(Boolean).join('\n\n──────────\n\n');
       body.innerHTML = `
         <div class="detail-card-wrap">
-          ${ArtRenderer.renderCardSVG(item, true, { ascension: owned ? owned.viewAsc : 1, npLevel: owned ? owned.npLevel : 0, eager: true })}
+          ${ArtRenderer.renderCardSVG(item, true, { ascension: owned ? owned.viewAsc : 1, npLevel: owned ? owned.npLevel : 0, rarityOverride: effR, eager: true })}
         </div>
         <div class="detail-info">
           <h3>${item.name}</h3>
-          <div class="detail-meta">No.${String(colNo).padStart(3, '0')} · ${CLASS_INFO[item.cls]?.name || item.cls} · ${item.attribute ? item.attribute + ' 속성 · ' : ''}${poolText}</div>
+          <div class="detail-meta">No.${String(colNo).padStart(3, '0')} · ${tierTxt}${item.variableRarity ? ' (가변 ★3→★4→★5)' : ''} · ${CLASS_INFO[item.cls]?.name || item.cls} · ${item.attribute ? item.attribute + ' 속성 · ' : ''}${poolText}</div>
           <div class="detail-credit-row">
             ${item.cv ? `<span>CV: <strong>${item.cv}</strong></span>` : ''}
             ${item.illustrator ? `<span>Illust: <strong>${item.illustrator}</strong></span>` : ''}
@@ -2134,10 +2148,19 @@
         toast(`QP가 부족합니다! 필요: ${ascQp.toLocaleString()} QP (배틀 보물고에서 파밍하세요!)`);
         return;
       }
+      const prevR = getEffectiveRarity(sv, own);
       state.qp -= ascQp;
       own.ascension++;
       own.viewAsc = own.ascension;
-      if (own.ascension === 4) {
+      const nextR = getEffectiveRarity(sv, own);
+      if (sv.variableRarity && nextR > prevR) {
+        if (own.ascension === 4) {
+          state.sq += 3;
+          toast(`👑 ${sv.name} 레어도 승격!! ★★★★ SR → ★★★★★ SSR (팔라딘 해방) · 성정석 +3!`);
+        } else {
+          toast(`✨ ${sv.name} 레어도 승격!! ★★★ R → ★★★★ SR (금테 해방)!`);
+        }
+      } else if (own.ascension === 4) {
         state.sq += 3;
         toast(`✨ ${sv.name} 최종 재림 달성!! 일러스트 오라 해방 & 보너스 성정석 +3!`);
       } else {

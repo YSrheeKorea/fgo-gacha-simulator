@@ -679,7 +679,8 @@ window.FgoBattle = (() => {
       const own = (slot.isSupport || slot.isRental)
         ? { level: slot.isSupport ? 90 : 50, npLevel: slot.isSupport ? 2 : 1, viewAsc: slot.isSupport ? 4 : 1 }
         : st.servants[slot.id];
-      const baseMaxLv = sv.rarity === 5 ? 90 : (sv.rarity === 4 ? 80 : (sv.rarity === 3 ? 70 : (sv.rarity === 1 ? 60 : 65)));
+      const effR = getEffectiveRarity(sv, own);
+      const baseMaxLv = effR === 5 ? 90 : (effR === 4 ? 80 : (effR === 3 ? 70 : (effR === 1 ? 60 : 65)));
       const scale = 0.65 + (own.level / baseMaxLv) * 0.45;
       const maxHp = Math.round(sv.hp * scale);
       const atk = Math.round(sv.atk * scale);
