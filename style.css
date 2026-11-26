@@ -1630,3 +1630,665 @@ html, body {
   .result-cards-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .upgrade-actions { grid-template-columns: 1fr; }
 }
+
+
+/* ============================================================
+   FGO 커맨드 카드 배틀 UI (Buster / Arts / Quick · 보구 컷인)
+   ============================================================ */
+
+.hidden { display: none !important; }
+
+.btn-quest-go {
+  padding: 12px 24px;
+  font-size: 15px;
+  box-shadow: 0 0 20px rgba(245, 200, 76, 0.45);
+}
+
+.battle-lobby-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.25fr;
+  gap: 16px;
+}
+
+.quest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.quest-card {
+  text-align: left;
+  padding: 13px 15px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border-blue);
+  background: rgba(9, 17, 38, 0.9);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.16s;
+}
+.quest-card:hover { border-color: var(--gold); transform: translateY(-1px); }
+.quest-card.active {
+  border-color: var(--gold-light);
+  background: linear-gradient(135deg, rgba(44, 62, 128, 0.72), rgba(20, 30, 68, 0.95));
+  box-shadow: 0 0 16px rgba(245, 200, 76, 0.3);
+}
+.quest-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.quest-diff {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 230, 128, 0.16);
+  color: var(--gold-light);
+  font-weight: 800;
+  white-space: nowrap;
+}
+.quest-desc { font-size: 12px; color: var(--text-sub); margin-bottom: 5px; }
+.quest-reward { font-size: 12px; color: #75f0b8; font-weight: 700; }
+
+.party-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.party-slot-card {
+  background: rgba(8, 16, 36, 0.92);
+  border: 1px solid var(--border-blue);
+  border-radius: 12px;
+  padding: 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.party-slot-top { display: flex; gap: 9px; align-items: center; }
+.party-slot-face {
+  width: 48px; height: 48px;
+  border-radius: 9px;
+  object-fit: cover;
+  border: 1.5px solid var(--border-gold);
+  flex-shrink: 0;
+}
+.party-slot-badge { font-size: 10px; font-weight: 800; color: var(--cyan); letter-spacing: 0.5px; }
+.party-slot-name { font-size: 13px; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.party-slot-meta { font-size: 11px; color: var(--text-sub); }
+
+.party-deck-dots { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+.deck-dot, .deck-np-dot {
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-size: 10.5px;
+  font-weight: 900;
+  color: #fff;
+}
+.deck-dot.Buster, .deck-np-dot.Buster { background: #d62839; }
+.deck-dot.Arts, .deck-np-dot.Arts { background: #1e64d8; }
+.deck-dot.Quick, .deck-np-dot.Quick { background: #1b9a54; }
+.deck-np-dot { margin-left: auto; border: 1px solid #ffe680; }
+
+.party-select-label {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--text-sub);
+  font-weight: 700;
+}
+.party-select-label .filter-select { width: 100%; font-size: 11.5px; padding: 5px 7px; }
+
+.battle-rules-tip {
+  margin-top: 12px;
+  padding: 9px 12px;
+  border-radius: 9px;
+  background: rgba(6, 11, 24, 0.8);
+  border: 1px solid rgba(102, 170, 255, 0.2);
+  font-size: 12px;
+  color: #d6e4ff;
+}
+
+/* ================= 실시간 전장 ================= */
+.battle-arena {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ba-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(10, 20, 46, 0.92);
+  border: 1px solid var(--border-gold);
+}
+.ba-hud-left, .ba-hud-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ba-pill {
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: rgba(6, 12, 28, 0.85);
+  border: 1px solid var(--border-blue);
+  font-size: 12px;
+  font-weight: 900;
+}
+.ba-wave-pill { border-color: var(--gold); color: var(--gold-light); }
+.ba-star-pill {
+  background: linear-gradient(135deg, rgba(245, 200, 76, 0.25), rgba(160, 108, 12, 0.35));
+  border-color: #ffe680;
+  color: #fff3b0;
+  font-size: 13px;
+}
+.ba-quest-title { font-size: 13px; font-weight: 800; color: #dbe7ff; }
+
+/* 적 전장 */
+.ba-enemies-stage {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  padding: 16px;
+  border-radius: 16px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(120, 40, 80, 0.3), transparent 65%),
+    linear-gradient(180deg, rgba(14, 22, 48, 0.92), rgba(7, 12, 26, 0.96));
+  border: 1px solid rgba(255, 110, 140, 0.32);
+}
+
+.enemy-unit {
+  position: relative;
+  padding: 12px 14px;
+  border-radius: 13px;
+  background: rgba(12, 20, 44, 0.9);
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.16s;
+}
+.enemy-unit.boss { border-color: rgba(255, 100, 130, 0.65); background: linear-gradient(180deg, rgba(46, 14, 30, 0.9), rgba(14, 16, 36, 0.95)); }
+.enemy-unit.targeted {
+  border-color: #ff5277;
+  box-shadow: 0 0 18px rgba(255, 82, 119, 0.55);
+}
+.enemy-unit.dead { opacity: 0.25; filter: grayscale(1); pointer-events: none; }
+.enemy-unit.hit-shake { animation: sparkShake 0.32s linear; }
+
+.target-reticle {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: #ff3b5c;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+.enemy-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.enemy-cls-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #cfe4ff;
+  font-weight: 800;
+}
+.break-gem { color: #ff66b3; font-size: 14px; margin-left: 3px; text-shadow: 0 0 8px #ff3388; }
+.enemy-sprite { font-size: 42px; line-height: 1.2; margin: 4px 0; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.65)); }
+.enemy-name { font-size: 14px; font-weight: 900; margin-bottom: 6px; }
+
+.hp-bar-track, .np-bar-track {
+  height: 9px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.hp-bar-fill.enemy-hp { height: 100%; background: linear-gradient(90deg, #ff3b5c, #ff8552); transition: width 0.28s ease; }
+.hp-bar-fill.ally-hp { height: 100%; background: linear-gradient(90deg, #28c76f, #75f0b8); transition: width 0.28s ease; }
+.np-bar-track { height: 7px; margin-top: 4px; }
+.np-bar-fill { height: 100%; background: linear-gradient(90deg, #2d8cff, #70f3ff); transition: width 0.28s ease; }
+.np-bar-fill.full { background: linear-gradient(90deg, #ffae00, #fff4a6); box-shadow: 0 0 10px #ffe666; }
+
+.enemy-hp-text { font-size: 11.5px; color: #dbe7ff; margin-top: 4px; font-weight: 700; }
+.enemy-charge-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--text-sub);
+}
+.enemy-charge-row.danger { color: #ff6b8b; font-weight: 900; }
+.charge-pips { display: flex; gap: 4px; }
+.charge-pip {
+  width: 11px; height: 11px;
+  border-radius: 2px;
+  transform: rotate(45deg);
+  border: 1px solid #ff708d;
+  background: rgba(255, 255, 255, 0.08);
+}
+.charge-pip.filled { background: #ff4769; box-shadow: 0 0 6px #ff4769; }
+
+/* 마스터 마술예장 바 */
+.ba-master-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 13px;
+  border-radius: 10px;
+  background: rgba(12, 22, 48, 0.85);
+  border: 1px solid var(--border-blue);
+}
+.ba-master-label { font-size: 12px; font-weight: 800; color: var(--gold-light); }
+.ba-master-skills { display: flex; flex-wrap: wrap; gap: 6px; }
+.master-skill-btn {
+  padding: 5px 11px;
+  border-radius: 8px;
+  border: 1px solid rgba(110, 231, 255, 0.45);
+  background: rgba(18, 36, 78, 0.92);
+  color: #eef6ff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.master-skill-btn:hover:not(:disabled) { border-color: var(--gold); }
+.master-skill-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* 아군 3인 전열 */
+.ba-party-stage {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.ally-unit {
+  position: relative;
+  padding: 11px;
+  border-radius: 13px;
+  background: rgba(12, 22, 50, 0.92);
+  border: 1.5px solid var(--border-blue);
+  transition: transform 0.2s, border-color 0.2s;
+}
+.ally-unit.np-ready { border-color: #ffe680; box-shadow: 0 0 16px rgba(245, 200, 76, 0.28); }
+.ally-unit.attacking { transform: translateY(-6px); border-color: #70f3ff; }
+.ally-unit.dead { opacity: 0.3; filter: grayscale(1); }
+
+.ally-top { display: flex; gap: 9px; align-items: center; }
+.ally-face {
+  width: 52px; height: 52px;
+  border-radius: 9px;
+  object-fit: cover;
+  border: 1.5px solid var(--border-gold);
+  flex-shrink: 0;
+}
+.ally-name { font-size: 13px; font-weight: 900; margin-bottom: 4px; }
+.ally-name small { color: var(--text-sub); font-weight: 600; }
+.ally-stat-line { font-size: 11px; color: #dbe7ff; margin-top: 2px; }
+
+.ally-buffs { display: flex; flex-wrap: wrap; gap: 4px; min-height: 20px; margin: 6px 0; }
+.buff-pill {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(110, 231, 255, 0.14);
+  border: 1px solid rgba(110, 231, 255, 0.35);
+  color: #cfefff;
+  font-weight: 700;
+}
+
+.ally-skills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+.skill-btn {
+  padding: 6px 4px;
+  border-radius: 8px;
+  border: 1px solid rgba(245, 200, 76, 0.45);
+  background: linear-gradient(180deg, rgba(28, 46, 94, 0.95), rgba(14, 24, 52, 0.95));
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 10.5px;
+  font-weight: 700;
+}
+.skill-btn:hover:not(:disabled) { border-color: #fff0a6; transform: translateY(-1px); }
+.skill-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+.sk-ico { font-size: 14px; }
+.sk-nm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+
+/* ATTACK 원형 FGO 버튼 바 */
+.ba-attack-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: linear-gradient(90deg, rgba(14, 26, 58, 0.92), rgba(28, 46, 96, 0.88));
+  border: 1.5px solid var(--border-gold);
+}
+.ba-phase-hint { font-size: 13px; color: #dbe7ff; }
+
+.fgo-attack-btn {
+  width: 106px; height: 106px;
+  border-radius: 50%;
+  border: 3px solid #fff0a6;
+  background: radial-gradient(circle at 35% 30%, #66c8ff, #1d5ed6 58%, #0a1f5c 100%);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 28px rgba(70, 170, 255, 0.65), inset 0 0 18px rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.fgo-attack-btn:hover { transform: scale(1.06); box-shadow: 0 0 36px rgba(255, 230, 128, 0.8); }
+.fgo-attack-btn .att-sub { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; color: #ffe680; }
+.fgo-attack-btn strong { font-size: 20px; font-weight: 900; letter-spacing: 1px; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85); }
+
+/* ================= BUSTER / ARTS / QUICK 커맨드 카드 팬 ================= */
+.ba-card-drawer {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(10, 20, 48, 0.96), rgba(5, 10, 24, 0.98));
+  border: 2px solid var(--border-gold);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+}
+.ba-drawer-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.ba-chain-preview { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.chain-hint { font-size: 12.5px; color: #dbe7ff; font-weight: 700; }
+.chain-badge {
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  color: #fff;
+}
+.ch-buster { background: linear-gradient(90deg, #d62839, #ff6b4a); }
+.ch-arts { background: linear-gradient(90deg, #1b5fd8, #5ec4ff); }
+.ch-quick { background: linear-gradient(90deg, #158a4a, #57f2a8); color: #052212; }
+.ch-mighty { background: linear-gradient(90deg, #ff4769, #ffd859, #57f2a8, #5ec4ff); color: #120d1c; }
+.ch-brave { background: linear-gradient(90deg, #f5c84c, #fff0a6); color: #1b1202; }
+
+/* 보구 카드 3칸 */
+.ba-np-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.np-cmd-card {
+  position: relative;
+  padding: 9px 11px;
+  border-radius: 11px;
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  background: rgba(10, 16, 36, 0.85);
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.16s;
+}
+.np-cmd-card.locked { opacity: 0.4; cursor: not-allowed; }
+.np-cmd-card.ready.Buster { border-color: #ff6b6b; background: linear-gradient(135deg, rgba(175, 24, 38, 0.78), rgba(45, 10, 18, 0.95)); box-shadow: 0 0 18px rgba(255, 70, 80, 0.45); }
+.np-cmd-card.ready.Arts { border-color: #66c2ff; background: linear-gradient(135deg, rgba(24, 86, 196, 0.78), rgba(10, 22, 56, 0.95)); box-shadow: 0 0 18px rgba(70, 170, 255, 0.45); }
+.np-cmd-card.ready.Quick { border-color: #6bffa8; background: linear-gradient(135deg, rgba(22, 136, 74, 0.78), rgba(10, 38, 24, 0.95)); box-shadow: 0 0 18px rgba(70, 235, 140, 0.45); }
+.np-cmd-card.selected { transform: translateY(-4px); border-color: #fff4a6 !important; box-shadow: 0 0 24px rgba(255, 230, 128, 0.85) !important; }
+
+.np-cmd-top { display: flex; align-items: center; gap: 8px; }
+.np-cmd-face { width: 38px; height: 38px; border-radius: 7px; object-fit: cover; border: 1.5px solid #ffe680; flex-shrink: 0; }
+.np-cmd-type { font-size: 10px; font-weight: 900; letter-spacing: 0.8px; color: #ffe680; }
+.np-cmd-name { font-size: 12.5px; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.np-cmd-sub { font-size: 11px; color: #e2efff; margin-top: 4px; font-weight: 700; }
+
+/* B/A/Q 5장 커맨드 카드 */
+.ba-cmd-cards {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+.cmd-card {
+  position: relative;
+  padding: 8px 7px 0;
+  border-radius: 13px;
+  border: 2.5px solid transparent;
+  color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.16s, box-shadow 0.16s;
+}
+.cmd-card.Buster {
+  border-color: #ff6e6e;
+  background: linear-gradient(180deg, #6e101c 0%, #c92232 58%, #470a12 100%);
+  box-shadow: 0 6px 18px rgba(214, 40, 57, 0.42);
+}
+.cmd-card.Arts {
+  border-color: #6ec8ff;
+  background: linear-gradient(180deg, #0d2b6e 0%, #1d64db 58%, #091d4a 100%);
+  box-shadow: 0 6px 18px rgba(30, 100, 216, 0.42);
+}
+.cmd-card.Quick {
+  border-color: #6effb0;
+  background: linear-gradient(180deg, #0d4a2b 0%, #1ba358 58%, #08301b 100%);
+  box-shadow: 0 6px 18px rgba(27, 163, 88, 0.42);
+}
+.cmd-card:hover { transform: translateY(-6px); }
+.cmd-card.selected {
+  transform: translateY(-10px) scale(1.03);
+  border-color: #fff4a6;
+  box-shadow: 0 0 26px rgba(255, 236, 130, 0.9);
+}
+
+.cmd-order-badge {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 4;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fff4a6, #f5b82e);
+  color: #1c1202;
+  font-size: 12px;
+  font-weight: 900;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
+}
+
+.cmd-card-top {
+  width: 100%;
+  min-height: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.aff-weak {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #ff2e55;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+}
+.aff-resist {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #475569;
+  color: #cbd5e1;
+  font-size: 10px;
+  font-weight: 900;
+}
+.cmd-crit-badge {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(8, 12, 24, 0.85);
+  border: 1px solid #ffe666;
+  color: #ffe666;
+  font-size: 10.5px;
+  font-weight: 900;
+}
+
+.cmd-face-wrap {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2.5px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55);
+  background: #0d1630;
+}
+.cmd-face { width: 100%; height: 100%; object-fit: cover; }
+.cmd-face-fallback { width: 100%; height: 100%; display: grid; place-items: center; font-size: 28px; font-weight: 900; }
+
+.cmd-sv-name {
+  font-size: 11.5px;
+  font-weight: 800;
+  margin: 5px 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.cmd-type-ribbon {
+  width: calc(100% + 14px);
+  padding: 6px 4px;
+  background: rgba(0, 0, 0, 0.42);
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+.cmd-type-ribbon span { font-size: 10px; opacity: 0.9; font-weight: 700; letter-spacing: 0; }
+
+/* 대미지 플로트 팝업 */
+.dmg-float-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.dmg-pop {
+  font-size: 22px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 2px 6px #000, 0 0 10px rgba(0, 0, 0, 0.9);
+  animation: dmgRise 0.92s ease-out forwards;
+}
+.dmg-pop.dmg-weak { color: #ff5277; font-size: 26px; }
+.dmg-pop.dmg-crit { color: #ffe666; font-size: 28px; text-shadow: 0 0 14px #ff9900, 0 2px 6px #000; }
+.dmg-pop.dmg-np { color: #70f3ff; font-size: 28px; }
+.dmg-pop.dmg-extra { color: #ffd95e; font-size: 27px; }
+.dmg-pop.dmg-break { color: #ff66cc; font-size: 26px; }
+.dmg-pop.dmg-block { color: #80f0ff; font-size: 18px; }
+.dmg-pop.dmg-enemy-hit { color: #ff6b6b; font-size: 21px; }
+@keyframes dmgRise {
+  0% { opacity: 0; transform: translateY(10px) scale(0.75); }
+  20% { opacity: 1; transform: translateY(-6px) scale(1.12); }
+  100% { opacity: 0; transform: translateY(-42px) scale(0.95); }
+}
+
+/* 전투 로그 */
+.ba-log-box {
+  background: rgba(6, 11, 24, 0.85);
+  border: 1px solid rgba(102, 170, 255, 0.2);
+  border-radius: 10px;
+  padding: 9px 13px;
+  font-size: 12px;
+  color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.ba-log-line:first-child { color: #fff4b8; font-weight: 700; }
+
+/* 보구 발동 컷인 오버레이 */
+.np-cutin-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(4, 8, 20, 0.82);
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.18s ease;
+}
+.np-cutin-inner {
+  width: 100%;
+  padding: 20px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  border-top: 3px solid #ffe680;
+  border-bottom: 3px solid #ffe680;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
+}
+.np-cutin-overlay.Buster .np-cutin-inner { background: linear-gradient(90deg, rgba(160, 18, 32, 0.92), rgba(220, 48, 36, 0.95), rgba(40, 8, 16, 0.92)); }
+.np-cutin-overlay.Arts .np-cutin-inner { background: linear-gradient(90deg, rgba(16, 48, 130, 0.92), rgba(32, 112, 224, 0.95), rgba(8, 20, 56, 0.92)); }
+.np-cutin-overlay.Quick .np-cutin-inner { background: linear-gradient(90deg, rgba(14, 96, 52, 0.92), rgba(30, 172, 92, 0.95), rgba(8, 36, 22, 0.92)); }
+.np-cutin-img {
+  height: 210px;
+  border-radius: 10px;
+  border: 2px solid #ffe680;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
+}
+.np-cutin-ruby { font-size: 14px; font-weight: 800; color: #ffe680; letter-spacing: 2px; }
+.np-cutin-name { font-size: 32px; font-weight: 900; color: #fff; text-shadow: 0 4px 16px rgba(0, 0, 0, 0.85); margin: 4px 0; }
+.np-cutin-sv { font-size: 14px; color: #e2f0ff; font-weight: 700; }
+
+.br-quest { font-size: 16px; font-weight: 900; color: var(--gold-light); margin-bottom: 4px; }
+.br-meta { font-size: 13px; color: #dbe7ff; margin-bottom: 12px; }
+.br-rewards-box {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(6, 12, 28, 0.85);
+  border: 1px solid var(--border-gold);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #75f0b8;
+}
+.br-rw-title { font-size: 12px; color: var(--gold-light); margin-bottom: 4px; }
+
+/* 배틀 반응형 (모바일 최적화) */
+@media (max-width: 860px) {
+  .battle-lobby-grid { grid-template-columns: 1fr; }
+  .party-slots-grid { grid-template-columns: 1fr; }
+  .ba-party-stage { grid-template-columns: 1fr; }
+  .ba-np-cards { grid-template-columns: 1fr; }
+  .ba-cmd-cards { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .cmd-face-wrap { width: 48px; height: 48px; }
+  .cmd-type-ribbon { font-size: 11px; }
+  .np-cutin-name { font-size: 22px; }
+  .np-cutin-img { height: 140px; }
+}

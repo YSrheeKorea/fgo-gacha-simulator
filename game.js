@@ -1384,6 +1384,7 @@
     if (tabName === 'shop') renderShopTab();
     if (tabName === 'stats') renderStatsTab();
     if (tabName === 'settings') renderSettingsTab();
+    if (tabName === 'battle' && typeof window.FgoBattle !== 'undefined') window.FgoBattle.onEnterTab();
   }
 
   function renderAll() {
@@ -1394,6 +1395,9 @@
     if (document.getElementById('tab-shop').classList.contains('active')) renderShopTab();
     if (document.getElementById('tab-stats').classList.contains('active')) renderStatsTab();
     if (document.getElementById('tab-settings').classList.contains('active')) renderSettingsTab();
+    if (document.getElementById('tab-battle')?.classList.contains('active') && typeof window.FgoBattle !== 'undefined') {
+      window.FgoBattle.renderLobbyIfIdle();
+    }
   }
 
   // ================= 이벤트 바인딩 =================
@@ -1815,6 +1819,40 @@
       document.getElementById('btn-reset-save').click();
     });
   }
+
+  // 배틀 모듈(battle.js)과 상태를 안전하게 공유하는 브리지
+  window.ChaldeaBridge = {
+    getState: () => state,
+    grantBattleRewards(rewards, partyServantIds) {
+      if (rewards.sq) state.sq += rewards.sq;
+      if (rewards.embers) state.embers += rewards.embers;
+      if (rewards.qp) state.qp += rewards.qp;
+      if (rewards.mp) state.mp += rewards.mp;
+      if (rewards.rp) state.rp += rewards.rp;
+      if (rewards.tickets) state.tickets += rewards.tickets;
+      if (rewards.grails) state.grails += rewards.grails;
+
+      // 출격한 보유 서번트 인연 경험치 +1
+      (partyServantIds || []).forEach(id => {
+        const own = state.servants[id];
+        if (own && own.bond < 15) {
+          own.bondExp = (own.bondExp || 0) + 1;
+          const need = own.bond >= 10 ? 5 : 3;
+          if (own.bondExp >= need) {
+            own.bondExp = 0;
+            own.bond++;
+            const bonusSq = own.bond >= 11 ? 30 : 3;
+            state.sq += bonusSq;
+            const sv = SERVANT_MAP[id];
+            toast(`💖 전투 승리! ${sv?.name || ''} 인연 Lv.${own.bond} 달성 (성정석 +${bonusSq}!)`);
+          }
+        }
+      });
+      saveState();
+      renderResources();
+    },
+    toast
+  };
 
   // 초기화 시작
   bindEvents();
