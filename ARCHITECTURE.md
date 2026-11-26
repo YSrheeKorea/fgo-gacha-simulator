@@ -26,6 +26,7 @@ fgo-gacha/
 ├── README.md               # 프로젝트 소개 및 접속/설치 안내
 ├── SERVANT_CATALOG.md      # No.001~487 전체 서번트 마테리얼 ID 명세표
 ├── RARITY_LIST.md          # 레어도별(가변·SSR·SR·R·UC·C·★0·NPC) 서번트 전체 목록
+├── CRAFT_ESSENCE.md        # 개념예장(★1~★5 + NPC) 코스트 · 한계돌파(✛) · 파티 코스트(115) 명세서
 ├── HIDDEN_STATUS.md        # 전체 487기 히든 스테이터스(성별·속성·성향·특성) & 보구 특공 명세표
 ├── GAME_SPEC.md            # 가챠·프렌드 소환·배틀·상성·특공·QP 강화 상세 명세서
 ├── ARCHITECTURE.md         # 본 아키텍처 문서

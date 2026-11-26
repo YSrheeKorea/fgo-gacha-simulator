@@ -312,28 +312,62 @@ window.FgoBattle = (() => {
     return `마스터 스킬 [간드]! ${t ? t.name : '적'} 스턴(1T) & 크리스타 +15!`;
   }
 
-  function getCePassive(ceId) {
-    if (!ceId) return { startNp: 0, npDmg: 0, buster: 0, arts: 0, quick: 0, starsPerTurn: 0, npPerTurn: 0, crit: 0, hpDrain: 0, label: '미장착' };
+  function getCePassive(ceId, mlb = false) {
+    if (!ceId) return { startNp: 0, npDmg: 0, buster: 0, arts: 0, quick: 0, starsPerTurn: 0, npPerTurn: 0, crit: 0, npGain: 0, atkUp: 0, hpDrain: 0, label: '미장착' };
     const map = {
-      ce_kscope:            { startNp: 80, label: '개시 NP +80%' },
-      ce_black_grail:       { npDmg: 0.6, hpDrain: 500, label: '보구 위력 +60%' },
-      ce_2030:              { starsPerTurn: 8, label: '매 턴 스타 +8' },
-      ce_prisma:            { npPerTurn: 10, label: '매 턴 NP +10%' },
-      ce_formalcraft:       { arts: 0.25, label: 'Arts +25%' },
-      ce_limited_zero:      { buster: 0.25, label: 'Buster +25%' },
-      ce_imaginary_around:  { quick: 0.25, label: 'Quick +25%' },
-      ce_heavens_feel:      { npDmg: 0.4, label: '보구 위력 +40%' },
-      ce_imaginary_element: { startNp: 60, label: '개시 NP +60%' },
-      ce_dragon_meridian:   { startNp: 30, label: '개시 NP +30%' },
-      ce_ryuudou:           { startNp: 30, npDmg: 0.15, label: 'NP+30% · 보구+15%' },
-      ce_projection:        { arts: 0.15, label: 'Arts +15%' },
-      ce_verdant:           { buster: 0.15, label: 'Buster +15%' },
-      ce_gandr:             { quick: 0.15, label: 'Quick +15%' },
-      ce_knights_dignity:   { crit: 0.4, label: '크리 위력 +40%' },
-      ce_magical_sapphire:  { crit: 0.2, startNp: 20, label: 'NP+20% · 크리+20%' }
+      ce_kscope:            mlb ? { startNp: 100, label: '✛ 개시 NP +100%' } : { startNp: 80, label: '개시 NP +80%' },
+      ce_black_grail:       mlb ? { npDmg: 0.8, hpDrain: 500, label: '✛ 보구 위력 +80%' } : { npDmg: 0.6, hpDrain: 500, label: '보구 위력 +60%' },
+      ce_2030:              mlb ? { starsPerTurn: 10, label: '✛ 매 턴 스타 +10' } : { starsPerTurn: 8, label: '매 턴 스타 +8' },
+      ce_prisma:            mlb ? { npPerTurn: 10, label: '✛ 매 턴 NP +10%' } : { npPerTurn: 8, label: '매 턴 NP +8%' },
+      ce_formalcraft:       mlb ? { arts: 0.30, label: '✛ Arts +30%' } : { arts: 0.25, label: 'Arts +25%' },
+      ce_limited_zero:      mlb ? { buster: 0.30, label: '✛ Buster +30%' } : { buster: 0.25, label: 'Buster +25%' },
+      ce_imaginary_around:  mlb ? { quick: 0.30, label: '✛ Quick +30%' } : { quick: 0.25, label: 'Quick +25%' },
+      ce_heavens_feel:      mlb ? { npDmg: 0.5, label: '✛ 보구 위력 +50%' } : { npDmg: 0.4, label: '보구 위력 +40%' },
+      ce_imaginary_element: mlb ? { startNp: 75, label: '✛ 개시 NP +75%' } : { startNp: 60, label: '개시 NP +60%' },
+      ce_dragon_meridian:   mlb ? { startNp: 50, label: '✛ 개시 NP +50%' } : { startNp: 30, label: '개시 NP +30%' },
+      ce_ryuudou:           mlb ? { startNp: 50, npDmg: 0.20, label: '✛ NP+50% · 보구+20%' } : { startNp: 30, npDmg: 0.15, label: 'NP+30% · 보구+15%' },
+      ce_projection:        mlb ? { arts: 0.20, label: '✛ Arts +20%' } : { arts: 0.15, label: 'Arts +15%' },
+      ce_verdant:           mlb ? { buster: 0.20, label: '✛ Buster +20%' } : { buster: 0.15, label: 'Buster +15%' },
+      ce_gandr:             mlb ? { quick: 0.20, label: '✛ Quick +20%' } : { quick: 0.15, label: 'Quick +15%' },
+      ce_knights_dignity:   mlb ? { crit: 0.5, label: '✛ 크리 위력 +50%' } : { crit: 0.4, label: '크리 위력 +40%' },
+      ce_magical_sapphire:  mlb ? { crit: 0.25, startNp: 30, label: '✛ NP+30% · 크리+25%' } : { crit: 0.2, startNp: 20, label: 'NP+20% · 크리+20%' },
+      ce_npc_support:       { startNp: 50, npGain: 0.5, label: 'NPC: 개시 NP+50% · NP획득+50%' },
+      ce_fp1_tujaeng:       mlb ? { atkUp: 0.04, label: '✛ 공격력 +4% (코스트1)' } : { atkUp: 0.02, label: '공격력 +2% (코스트1)' },
+      ce_fp2_beonyeong:     { label: mlb ? '✛ 매 턴 HP+50 (코스트3)' : '매 턴 HP+30 (코스트3)' }
     };
-    const base = map[ceId] || { startNp: 15, label: '개시 NP +15%' };
-    return { startNp: 0, npDmg: 0, buster: 0, arts: 0, quick: 0, starsPerTurn: 0, npPerTurn: 0, crit: 0, hpDrain: 0, ...base };
+    const base = map[ceId] || (CE_MAP[ceId]?.rarity <= 2
+      ? { label: `코스트 ${getCeCost(CE_MAP[ceId])} 저코스트 예장` }
+      : { startNp: mlb ? 20 : 10, label: mlb ? '✛ 개시 NP +20%' : '개시 NP +10%' });
+    return { startNp: 0, npDmg: 0, buster: 0, arts: 0, quick: 0, starsPerTurn: 0, npPerTurn: 0, crit: 0, npGain: 0, atkUp: 0, hpDrain: 0, ...base };
+  }
+
+  function calcPartyCost(st) {
+    let total = 0;
+    partySlots.forEach((slot, idx) => {
+      if (!slot || idx === 5 || slot.isSupport) return; // 프렌드 슬롯 코스트 0!
+      const sv = SERVANT_MAP[slot.id];
+      const own = slot.isRental ? null : st.servants[slot.id];
+      total += getServantCost(sv, own);
+      if (slot.ceId && CE_MAP[slot.ceId]) total += getCeCost(CE_MAP[slot.ceId]);
+    });
+    return total;
+  }
+
+  function optimizePartyCost() {
+    const st = getBridge()?.getState();
+    if (!st) return;
+    // 코스트 초과 시 후열 예장 해제 → 마슈(코스트 0) 활용 안내
+    for (let i = 4; i >= 0; i--) {
+      if (calcPartyCost(st) <= MASTER_MAX_COST) break;
+      if (partySlots[i] && partySlots[i].ceId && !CE_MAP[partySlots[i].ceId]?.npcOnly) {
+        partySlots[i].ceId = null;
+      }
+    }
+    if (calcPartyCost(st) > MASTER_MAX_COST && st.servants.sv_no_001 && !partySlots.some((p, i) => i < 5 && p?.id === 'sv_no_001')) {
+      partySlots[4] = { id: 'sv_no_001', ceId: null, isSupport: false, isRental: false };
+    }
+    renderLobby();
+    getBridge().toast(`⚖️ 파티 코스트 자동 최적화 완료! (${calcPartyCost(st)} / ${MASTER_MAX_COST})`);
   }
 
   // ================= 퀘스트 7종 (종화·QP·특이점·바빌로니아·비스트Ⅰ·비스트Ⅲ/R·EX 챌린지) =================
@@ -544,7 +578,7 @@ window.FgoBattle = (() => {
         partySlots[i] = { id: ownedIds[i], ceId: ownedCes[i] || null, isSupport: false, isRental: false };
       } else {
         const fid = fallbackPool[i % fallbackPool.length];
-        partySlots[i] = { id: fid, ceId: ownedCes[i] || null, isSupport: false, isRental: true };
+        partySlots[i] = { id: fid, ceId: 'ce_npc_support', isSupport: false, isRental: true };
       }
     }
   }
@@ -582,18 +616,36 @@ window.FgoBattle = (() => {
     const ownedSvIds = Object.keys(st.servants).sort((a, b) => SERVANT_MAP[b].rarity - SERVANT_MAP[a].rarity);
     const ownedCeIds = Object.keys(st.ces).sort((a, b) => CE_MAP[b].rarity - CE_MAP[a].rarity);
 
+    // 파티 코스트 실시간 표시 (최대 115 · 마슈=0 · 프렌드=0)
+    const totalCost = calcPartyCost(st);
+    const overCost = totalCost > MASTER_MAX_COST;
+    const costBar = document.getElementById('battle-cost-bar');
+    if (costBar) {
+      costBar.className = 'party-cost-bar' + (overCost ? ' over-cost' : '');
+      costBar.innerHTML = `
+        <span>⚖️ <strong>PARTY COST: ${totalCost} / ${MASTER_MAX_COST}</strong> ${overCost ? '⚠️ 코스트 초과! (저성 예장·마슈 코스트0 활용)' : '✅ 편성 가능 (마슈·프렌드 코스트 0)'}</span>
+        ${overCost ? '<button class="small-outline-btn" id="btn-opt-cost" style="padding:4px 10px;font-size:11.5px">⚖️ 코스트 자동 조정</button>' : ''}
+      `;
+      document.getElementById('btn-opt-cost')?.addEventListener('click', optimizePartyCost);
+    }
+
     const slotsEl = document.getElementById('battle-party-slots');
     slotsEl.innerHTML = '';
     partySlots.forEach((slot, idx) => {
       const sv = SERVANT_MAP[slot.id];
       const isFriendSlot = idx === 5;
       const own = (slot.isSupport || slot.isRental)
-        ? { level: slot.isSupport ? 90 : 50, npLevel: slot.isSupport ? 2 : 1, viewAsc: slot.isSupport ? 4 : 1 }
+        ? { level: slot.isSupport ? 90 : 50, npLevel: slot.isSupport ? 2 : 1, viewAsc: slot.isSupport ? 4 : 1, ascension: slot.isSupport ? 4 : 1 }
         : st.servants[slot.id];
+      const effR = getEffectiveRarity(sv, own);
       const faceUrl = ArtRenderer.getFaceUrl(slot.id);
-      const cePassive = getCePassive(slot.ceId);
+      const ceOwn = slot.isSupport ? { copies: 5, level: 100 } : (slot.ceId ? st.ces[slot.ceId] : null);
+      const ceMlb = slot.isSupport || isCeMlb(ceOwn);
+      const ceObj = slot.ceId ? CE_MAP[slot.ceId] : null;
+      const ceStats = getCeCurrentStats(ceObj, ceOwn);
+      const slotCost = isFriendSlot ? 0 : (getServantCost(sv, own) + getCeCost(ceObj));
       const deckTypes = getServantDeckTypes(sv);
-      const lineTag = idx < 3 ? `전열 ${idx + 1}` : (isFriendSlot ? '프렌드 (후열 증원)' : `후열 ${idx - 2}`);
+      const lineTag = idx < 3 ? `전열 ${idx + 1}` : (isFriendSlot ? '프렌드 (코스트 0)' : `후열 ${idx - 2}`);
 
       let svOptions = '';
       if (isFriendSlot) {
@@ -602,16 +654,28 @@ window.FgoBattle = (() => {
         ).join('');
       } else {
         svOptions = [
-          ...ownedSvIds.map(id => `<option value="own:${id}" ${!slot.isRental && slot.id === id ? 'selected' : ''}>★${SERVANT_MAP[id].rarity} ${SERVANT_MAP[id].name} (Lv.${st.servants[id].level} · 보${st.servants[id].npLevel})</option>`),
+          ...ownedSvIds.map(id => {
+            const s = SERVANT_MAP[id];
+            const o = st.servants[id];
+            const er = getEffectiveRarity(s, o);
+            const c = getServantCost(s, o);
+            return `<option value="own:${id}" ${!slot.isRental && slot.id === id ? 'selected' : ''}>★${er} ${s.name} (Lv.${o.level} · 코스트${c})</option>`;
+          }),
           ...(slot.isRental ? [`<option value="rent:${slot.id}" selected>[칼데아 대여] ★${sv.rarity} ${sv.name} (Lv.50)</option>`] : [])
         ].join('');
       }
 
       const ceOptions = [
-        `<option value="">(개념예장 미장착)</option>`,
-        ...ownedCeIds.map(id => `<option value="${id}" ${slot.ceId === id ? 'selected' : ''}>★${CE_MAP[id].rarity} ${CE_MAP[id].name} (${getCePassive(id).label})</option>`),
-        ...(isFriendSlot && slot.ceId && !ownedCeIds.includes(slot.ceId)
-          ? [`<option value="${slot.ceId}" selected>[프렌드] ★${CE_MAP[slot.ceId].rarity} ${CE_MAP[slot.ceId].name}</option>`]
+        `<option value="">(개념예장 미장착 · 코스트 0)</option>`,
+        ...ownedCeIds.map(id => {
+          const c = CE_MAP[id];
+          const co = st.ces[id];
+          const m = isCeMlb(co);
+          const cs = getCeCurrentStats(c, co);
+          return `<option value="${id}" ${slot.ceId === id ? 'selected' : ''}>${m ? '✛' : ''}★${c.rarity} ${c.name} (코스트${getCeCost(c)} · Lv.${cs.level} · ${getCePassive(id, m).label})</option>`;
+        }),
+        ...((isFriendSlot || slot.isRental) && slot.ceId && !ownedCeIds.includes(slot.ceId)
+          ? [`<option value="${slot.ceId}" selected>[${isFriendSlot ? '프렌드 풀돌' : 'NPC'}] ${CE_MAP[slot.ceId]?.name} (${getCePassive(slot.ceId, true).label})</option>`]
           : [])
       ].join('');
 
@@ -621,9 +685,9 @@ window.FgoBattle = (() => {
         <div class="party-slot-top">
           ${faceUrl ? `<img src="${faceUrl}" class="party-slot-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
           <div style="flex:1;min-width:0">
-            <div class="party-slot-badge">${lineTag} · ${CLASS_INFO[sv.cls]?.name}</div>
-            <div class="party-slot-name">${'★'.repeat(sv.rarity)} ${sv.name}</div>
-            <div class="party-slot-meta">Lv.${own.level} · 보${own.npLevel} · ${sv.attribute || '인(人)'} · 보정 ${getClassAtkMod(sv.cls).toFixed(2)}</div>
+            <div class="party-slot-badge">${lineTag} · ${CLASS_INFO[sv.cls]?.name} · 코스트 ${slotCost}</div>
+            <div class="party-slot-name">${effR === 0 ? '☆0' : '★'.repeat(effR)} ${sv.name}</div>
+            <div class="party-slot-meta">Lv.${own.level} · 보${own.npLevel}${ceObj ? ` · 예장${ceMlb ? '✛' : ''} ATK+${ceStats.atk}/HP+${ceStats.hp}` : ''}</div>
           </div>
         </div>
         <div class="party-deck-dots">
@@ -682,9 +746,12 @@ window.FgoBattle = (() => {
       const effR = getEffectiveRarity(sv, own);
       const baseMaxLv = effR === 5 ? 90 : (effR === 4 ? 80 : (effR === 3 ? 70 : (effR === 1 ? 60 : 65)));
       const scale = 0.65 + (own.level / baseMaxLv) * 0.45;
-      const maxHp = Math.round(sv.hp * scale);
-      const atk = Math.round(sv.atk * scale);
-      const ce = getCePassive(slot.ceId);
+      const ceOwn = slot.isSupport ? { copies: 5, level: 100 } : (slot.ceId ? st.ces[slot.ceId] : null);
+      const ceMlb = slot.isSupport || isCeMlb(ceOwn);
+      const ceStats = getCeCurrentStats(slot.ceId ? CE_MAP[slot.ceId] : null, ceOwn);
+      const maxHp = Math.round(sv.hp * scale) + ceStats.hp;
+      const atk = Math.round(sv.atk * scale) + ceStats.atk;
+      const ce = getCePassive(slot.ceId, ceMlb);
       const maxNp = getMaxNp(own.npLevel);
 
       const skLevels = (slot.isSupport) ? [10, 10, 10] : ((own.skillLevels && own.skillLevels.length === 3) ? own.skillLevels : [1, 1, 1]);
@@ -697,6 +764,7 @@ window.FgoBattle = (() => {
         npLevel: own.npLevel,
         viewAsc: own.viewAsc || 1,
         ceId: slot.ceId,
+        ceMlb,
         maxHp,
         hp: maxHp,
         atk,
@@ -1376,7 +1444,7 @@ window.FgoBattle = (() => {
       const m = battle.roster[c.rosterIdx];
       if (!m || m.hp <= 0) continue;
       const sv = SERVANT_MAP[m.id];
-      const ce = getCePassive(m.ceId);
+      const ce = getCePassive(m.ceId, !!m.ceMlb);
       const maxNp = getMaxNp(m.npLevel);
 
       // 같은 서번트가 이미 죽은 적을 이어서 때리면 오버킬 유지, 다른 서번트거나 첫 타겟이 없으면 살아있는 적 자동 타겟!
@@ -1621,7 +1689,7 @@ window.FgoBattle = (() => {
     battle.turn++;
     battle.masterSkills.forEach(sk => { if (sk.curCd > 0) sk.curCd--; });
     getActiveMembers(battle).forEach(m => {
-      const ce = getCePassive(m.ceId);
+      const ce = getCePassive(m.ceId, !!m.ceMlb);
       const maxNp = getMaxNp(m.npLevel);
       m.skills.forEach(sk => { if (sk.curCd > 0) sk.curCd--; });
       if (ce.starsPerTurn) battle.stars = Math.min(99, battle.stars + ce.starsPerTurn);

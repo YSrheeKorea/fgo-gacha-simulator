@@ -239,7 +239,7 @@ const ArtRenderer = (() => {
 
   // 카드 프레임 오버레이 SVG (공식 일러스트 위에 씌우거나 단독 SVG에 합성)
   function renderFrameOverlaySVG(item, isServant, options, includePortraitFallback) {
-    const { ascension = 1, npLevel = 0, isNew = false, compact = false, rarityOverride = null } = options;
+    const { ascension = 1, npLevel = 0, isNew = false, compact = false, rarityOverride = null, mlb = false } = options;
     const effRarity = (rarityOverride !== null && rarityOverride !== undefined) ? rarityOverride : item.rarity;
     let frameLight = '#d5e0ec', frameMid = '#7f90a6', frameDark = '#1f2836', starsColor = '#d5e0ec';
     if (effRarity >= 4) {
@@ -278,6 +278,14 @@ const ArtRenderer = (() => {
       <text x="196" y="56" text-anchor="middle" fill="#fff" font-size="11" font-weight="900">NEW!</text>
     ` : '';
 
+    // 원작 FGO 풀돌(4회 한계돌파 최대해방) 우측 하단 황금 십자가 마크!
+    const mlbBadge = (!isServant && mlb) ? `
+      <g transform="translate(196, 360)">
+        <circle cx="14" cy="14" r="14" fill="rgba(16,12,4,0.92)" stroke="#ffe666" stroke-width="2"/>
+        <path d="M14 4 L17 11 L24 14 L17 17 L14 24 L11 17 L4 14 L11 11 Z" fill="#ffe666"/>
+      </g>
+    ` : '';
+
     const displayName = item.name.length > 11 && compact ? (item.nickname || item.name.slice(0, 10)) : item.name;
     const subtitle = isServant ? (CLASS_INFO[item.cls]?.name || item.cls) : '개념예장';
 
@@ -313,6 +321,7 @@ const ArtRenderer = (() => {
         ${clsBadge}
         ${npBadge}
         ${newBadge}
+        ${mlbBadge}
 
         <text x="120" y="328" text-anchor="middle" fill="${starsColor}" font-size="18" font-weight="900" letter-spacing="2" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.95))">${stars}</text>
         <line x1="28" y1="338" x2="212" y2="338" stroke="${frameLight}" stroke-width="1" opacity="0.55"/>

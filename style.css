@@ -3975,3 +3975,25 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+
+/* ================= v10: 파티 코스트 바 & 개념예장 풀돌 UI ================= */
+.party-cost-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(10, 26, 52, 0.85);
+  border: 1px solid rgba(110, 231, 183, 0.45);
+  color: #cfe9ff;
+  font-size: 12.5px;
+}
+.party-cost-bar.over-cost {
+  background: rgba(68, 16, 28, 0.88);
+  border-color: rgba(255, 92, 119, 0.78);
+  color: #ffd6de;
+}

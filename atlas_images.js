@@ -642,6 +642,16 @@ const ATLAS_IMAGES = {
       "atlasId": 9400160,
       "collectionNo": 16,
       "card": "https://static.atlasacademy.io/KR/CharaGraph/9400160/9400160a.png"
-    }
+    },
+    "ce_fp1_tujaeng": { "atlasId": 9403040, "collectionNo": 777, "card": "https://static.atlasacademy.io/KR/CharaGraph/9403040/9403040a.png" },
+    "ce_fp1_yeonswae": { "atlasId": 9403050, "collectionNo": 778, "card": "https://static.atlasacademy.io/KR/CharaGraph/9403050/9403050a.png" },
+    "ce_fp1_danjeol": { "atlasId": 9403060, "collectionNo": 779, "card": "https://static.atlasacademy.io/KR/CharaGraph/9403060/9403060a.png" },
+    "ce_fp1_gakseong": { "atlasId": 9403070, "collectionNo": 780, "card": "https://static.atlasacademy.io/KR/CharaGraph/9403070/9403070a.png" },
+    "ce_fp1_gia": { "atlasId": 9403080, "collectionNo": 781, "card": "https://static.atlasacademy.io/KR/CharaGraph/9403080/9403080a.png" },
+    "ce_fp2_jaae": { "atlasId": 9403090, "collectionNo": 782, "card": "https://static.atlasacademy.io/KR/CharaGraph/9403090/9403090a.png" },
+    "ce_fp2_beonyeong": { "atlasId": 9403100, "collectionNo": 783, "card": "https://static.atlasacademy.io/KR/CharaGraph/9403100/9403100a.png" },
+    "ce_fp2_giman": { "atlasId": 9403110, "collectionNo": 784, "card": "https://static.atlasacademy.io/KR/CharaGraph/9403110/9403110a.png" },
+    "ce_fp2_dongjo": { "atlasId": 9403120, "collectionNo": 785, "card": "https://static.atlasacademy.io/KR/CharaGraph/9403120/9403120a.png" },
+    "ce_fp2_amdam": { "atlasId": 9403130, "collectionNo": 786, "card": "https://static.atlasacademy.io/KR/CharaGraph/9403130/9403130a.png" }
   }
 };

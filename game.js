@@ -196,9 +196,9 @@
     const poolSv5 = SERVANTS.filter(s => s.rarity === 5 && inSqPool(s));
     const poolSv4 = SERVANTS.filter(s => s.rarity === 4 && inSqPool(s));
     const poolSv3 = SERVANTS.filter(s => s.rarity === 3 && inSqPool(s));
-    const allCe5  = CRAFT_ESSENCES.filter(c => c.rarity === 5);
-    const allCe4  = CRAFT_ESSENCES.filter(c => c.rarity === 4);
-    const allCe3  = CRAFT_ESSENCES.filter(c => c.rarity === 3);
+    const allCe5  = CRAFT_ESSENCES.filter(c => c.rarity === 5 && !c.npcOnly && !c.fpOnly);
+    const allCe4  = CRAFT_ESSENCES.filter(c => c.rarity === 4 && !c.npcOnly && !c.fpOnly);
+    const allCe3  = CRAFT_ESSENCES.filter(c => c.rarity === 3 && !c.npcOnly && !c.fpOnly);
 
     const hasPickup5 = !banner.isStory && banner.pickup5.length > 0;
     const hasPickup4 = !banner.isStory && banner.pickup4.length > 0;
@@ -451,13 +451,15 @@
     return rolls;
   }
 
-  // 프렌드 포인트 소환 1회 (★0 앙리마유 0.05% · ★4 세이버 릴리/하베트롯 0.5% · ★1~★3 프렌드 풀 + ★3 예장)
+  // 프렌드 포인트 소환 1회 (★0 앙리마유 0.05% · ★4 세이버 릴리/하베트롯 0.5% · ★1~★3 프렌드 서번트 + ★1~★3 프렌드 예장)
   function rollFriendPointCard() {
     const fp4 = SERVANTS.filter(s => s.fp && s.rarity === 4);
     const fp3 = SERVANTS.filter(s => s.fp && s.rarity === 3);
     const fp2 = SERVANTS.filter(s => s.fp && s.rarity === 2);
     const fp1 = SERVANTS.filter(s => s.fp && s.rarity === 1);
-    const allCe3 = CRAFT_ESSENCES.filter(c => c.rarity === 3);
+    const allCe3 = CRAFT_ESSENCES.filter(c => c.rarity === 3 && !c.npcOnly);
+    const allCe2 = CRAFT_ESSENCES.filter(c => c.rarity === 2 && !c.npcOnly);
+    const allCe1 = CRAFT_ESSENCES.filter(c => c.rarity === 1 && !c.npcOnly);
 
     const r = Math.random();
     let type = 'servant';
@@ -472,13 +474,16 @@
       animTier = 'gold';
     } else if (r < 0.1055 && fp3.length) {
       item = pickRandom(fp3);
-    } else if (r < 0.3455 && fp2.length) {
+    } else if (r < 0.3055 && fp2.length) {
       item = pickRandom(fp2);
-    } else if (r < 0.7455 && fp1.length) {
+    } else if (r < 0.6255 && fp1.length) {
       item = pickRandom(fp1);
+    } else if (r < 0.7255 && allCe3.length) {
+      type = 'ce'; item = pickRandom(allCe3);
+    } else if (r < 0.8555 && allCe2.length) {
+      type = 'ce'; item = pickRandom(allCe2);
     } else {
-      type = 'ce';
-      item = pickRandom(allCe3);
+      type = 'ce'; item = pickRandom(allCe1.length ? allCe1 : allCe3);
     }
 
     state.stats.fpPulls = (state.stats.fpPulls || 0) + 1;
@@ -1024,12 +1029,14 @@
         ? `<span class="codex-pool-tag pool-${item.pool}">${poolShort[item.pool] || item.pool}</span>`
         : '';
       const effR = isServant ? getEffectiveRarity(item, owned) : item.rarity;
+      const mlbCe = !isServant && isCeMlb(owned);
       div.innerHTML = ArtRenderer.renderCardSVG(item, isServant, {
         ascension: isServant && owned ? owned.viewAsc : 1,
         npLevel: isServant && owned ? owned.npLevel : 0,
         rarityOverride: effR,
+        mlb: mlbCe,
         compact: true
-      }) + noBadge + poolBadge + (owned ? `<span class="codex-item-count">${isServant ? `Lv.${owned.level}` : `x${owned.copies}`}</span>` : '');
+      }) + noBadge + poolBadge + (owned ? `<span class="codex-item-count">${isServant ? `Lv.${owned.level}` : `${mlbCe ? '✛' : ''}Lv.${owned.level || 1}·x${owned.copies}`}</span>` : '');
       div.addEventListener('click', () => openDetailModal(codexFilter.type, item.id));
       grid.appendChild(div);
     });
@@ -1747,30 +1754,71 @@
         });
       }
     } else {
-      const colNo = (typeof ATLAS_IMAGES !== 'undefined' && ATLAS_IMAGES.ces[id]?.collectionNo) || '-';
+      const colNo = (typeof ATLAS_IMAGES !== 'undefined' && ATLAS_IMAGES.ces[id]?.collectionNo) || (item.npcOnly ? 'NPC' : '-');
+      const ceCost = getCeCost(item);
+      const lb = owned ? getCeLimitBreak(owned) : 0;
+      const mlb = isCeMlb(owned);
+      const curSt = getCeCurrentStats(item, owned);
+      const caps = CE_MLB_LEVEL_CAPS[item.rarity] || [20, 30, 40, 50, 60];
+      const maxExp = CE_MAX_EXP_TABLE[item.rarity] || 3599000;
+      const lbDots = '◆'.repeat(lb) + '◇'.repeat(4 - lb);
       body.innerHTML = `
         <div class="detail-card-wrap">
-          ${ArtRenderer.renderCardSVG(item, false, { eager: true })}
+          ${ArtRenderer.renderCardSVG(item, false, { mlb, eager: true })}
         </div>
         <div class="detail-info">
-          <h3>${item.name}</h3>
-          <div class="detail-meta">개념예장 No.${colNo} · ${'★'.repeat(item.rarity)}</div>
+          <h3>${item.name} ${mlb ? '<span style="color:#ffe666">✛ 풀돌</span>' : ''}</h3>
+          <div class="detail-meta">개념예장 No.${colNo} · ${'★'.repeat(item.rarity)} ${RARITY_TIERS[item.rarity] || ''} · 코스트 ${ceCost}${item.fpOnly ? ' · 프렌드 가챠 전용' : (item.npcOnly ? ' · 스토리 NPC 전용' : '')}</div>
           <div class="detail-credit-row">
             ${item.illustrator ? `<span>Illust: <strong>${item.illustrator}</strong></span>` : ''}
-            ${item.atkMax !== undefined ? `<span>최대 ATK <strong>${item.atkMax.toLocaleString()}</strong> / HP <strong>${item.hpMax.toLocaleString()}</strong></span>` : ''}
+            <span>현재 Lv.<strong>${curSt.level} / ${curSt.maxLv}</strong> (한계돌파 ${lbDots} ${lb}/4)</span>
+            <span>적용 스탯 ATK <strong>+${curSt.atk.toLocaleString()}</strong> / HP <strong>+${curSt.hp.toLocaleString()}</strong></span>
+            <span>만렙(Lv.${caps[4]}) 기준 ATK <strong>+${(item.atkMax ?? curSt.atk).toLocaleString()}</strong> / HP <strong>+${(item.hpMax ?? curSt.hp).toLocaleString()}</strong></span>
           </div>
           <div style="margin-top:6px;font-size:13px"><strong>기본 효과:</strong> ${item.effect}</div>
-          ${item.effectMax ? `<div style="margin-top:4px;font-size:13px;color:#ffe680"><strong>최대 해방(풀돌):</strong> ${item.effectMax}</div>` : ''}
+          ${item.effectMax ? `<div style="margin-top:4px;font-size:13px;color:${mlb ? '#6effa8' : '#ffe680'}"><strong>${mlb ? '✅ 최대 해방(풀돌 적용 중!):' : '최대 해방(4돌/5장):'}</strong> ${item.effectMax}</div>` : ''}
+          ${!item.npcOnly ? `<div style="margin-top:6px;font-size:11.5px;color:#9cb2d9">한계돌파 상한: 초기 Lv.${caps[0]} → 1돌 ${caps[1]} → 2돌 ${caps[2]} → 3돌 ${caps[3]} → 4돌(풀돌) Lv.${caps[4]} (만렙 누적 EXP ${maxExp.toLocaleString()})</div>` : ''}
           <div class="detail-lore-box"><div class="detail-lore-title">📖 개념예장 해설</div>${item.flavor}</div>
           <div style="font-size:13px;color:#dbe7ff;margin-top:10px">
-            ${owned ? `✅ 보유 수량: ${owned.copies}장 ${owned.copies >= 5 ? '(최대 해방 풀돌 가능!)' : ''}` : '🔒 미보유 개념예장입니다.'}
+            ${owned ? `✅ 보유 수량: ${owned.copies}장 ${mlb ? '(✛ 최대 해방 풀돌 완료! 배틀 풀돌 수치 자동 적용)' : `(풀돌까지 ${5 - owned.copies}장 더 필요)`}` : (item.npcOnly ? '🛡️ 메인 퀘스트 대여 서포트 NPC 전용 개념예장입니다.' : '🔒 미보유 개념예장입니다.')}
           </div>
           <div class="detail-actions">
+            ${owned && !item.npcOnly && curSt.level < curSt.maxLv ? `<button class="small-gold-btn" id="btn-ce-lvup">🔥 예장 강화 +10Lv (🪙 5만 QP)</button>` : ''}
+            ${owned && !item.npcOnly && curSt.level < curSt.maxLv ? `<button class="small-outline-btn" id="btn-ce-lvmax">⚡ 상한 Lv.${curSt.maxLv} 일괄 강화</button>` : ''}
             <button class="small-outline-btn" id="btn-detail-close-in">닫기</button>
           </div>
           ${customUploadHtml}
         </div>
       `;
+      const ceUpBtn = document.getElementById('btn-ce-lvup');
+      if (ceUpBtn && owned) {
+        ceUpBtn.addEventListener('click', () => {
+          const qpCost = 50000;
+          if (state.qp < qpCost) { SoundEngine.error(); toast('QP가 50,000 부족합니다!'); return; }
+          state.qp -= qpCost;
+          owned.level = Math.min(curSt.maxLv, (owned.level || 1) + 10);
+          SoundEngine.levelUp();
+          saveState();
+          renderAll();
+          openDetailModal('ce', id);
+          toast(`✨ [${item.name}] Lv.${owned.level} 강화 완료! (ATK/HP 배틀 즉시 반영)`);
+        });
+      }
+      const ceMaxBtn = document.getElementById('btn-ce-lvmax');
+      if (ceMaxBtn && owned) {
+        ceMaxBtn.addEventListener('click', () => {
+          const steps = Math.ceil((curSt.maxLv - (owned.level || 1)) / 10);
+          const qpCost = Math.max(50000, steps * 50000);
+          if (state.qp < qpCost) { SoundEngine.error(); toast(`QP가 ${qpCost.toLocaleString()} 필요합니다!`); return; }
+          state.qp -= qpCost;
+          owned.level = curSt.maxLv;
+          SoundEngine.reveal(item.rarity, false);
+          saveState();
+          renderAll();
+          openDetailModal('ce', id);
+          toast(`🔥 [${item.name}] 현재 상한 Lv.${owned.level} MAX 달성!`);
+        });
+      }
     }
 
     const fileInput = document.getElementById('input-custom-art');

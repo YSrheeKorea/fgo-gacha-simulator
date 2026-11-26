@@ -55,6 +55,67 @@ function getEffectiveRarity(sv, owned) {
   return sv.rarity;
 }
 
+// ================= 원작 FGO 파티 코스트 & 개념예장 한계돌파/레벨 상한 표 =================
+const MASTER_MAX_COST = 115; // 마스터 만렙 Lv.170 기준 최대 편성 코스트
+const SERVANT_COST_BY_RARITY = { 5: 16, 4: 12, 3: 7, 2: 4, 1: 3, 0: 12 };
+const CE_COST_BY_RARITY      = { 5: 12, 4: 9, 3: 5, 2: 3, 1: 1, 0: 0 };
+const CE_MLB_LEVEL_CAPS = {
+  1: [10, 20, 30, 40, 50],
+  2: [15, 25, 35, 45, 55],
+  3: [20, 30, 40, 50, 60],
+  4: [20, 35, 50, 65, 80],
+  5: [20, 40, 60, 80, 100]
+};
+const CE_MAX_EXP_TABLE = {
+  1: 2082500,
+  2: 2772000,
+  3: 3599000,
+  4: 8532000,
+  5: 16665000
+};
+
+function getServantCost(sv, owned) {
+  if (!sv) return 0;
+  if (sv.collectionNo === 1) return 0; // 원작 고증: 마슈 키리에라이트는 코스트 0!
+  const r = getEffectiveRarity(sv, owned);
+  return SERVANT_COST_BY_RARITY[r] ?? 7;
+}
+function getCeCost(ce) {
+  if (!ce) return 0;
+  if (ce.npcOnly) return 0;
+  return CE_COST_BY_RARITY[ce.rarity] ?? 5;
+}
+function getCeLimitBreak(own) {
+  if (!own) return 0;
+  return Math.min(4, Math.max(0, (own.copies || 1) - 1));
+}
+function isCeMlb(own) {
+  return !!(own && (own.copies || 0) >= 5);
+}
+function getCeMaxLevel(ce, own) {
+  if (!ce || ce.npcOnly) return 1;
+  const caps = CE_MLB_LEVEL_CAPS[ce.rarity] || CE_MLB_LEVEL_CAPS[3];
+  return caps[getCeLimitBreak(own)] || caps[0];
+}
+function getCeCurrentStats(ce, own) {
+  if (!ce || ce.npcOnly) return { atk: 0, hp: 0, level: 1, maxLv: 1 };
+  const caps = CE_MLB_LEVEL_CAPS[ce.rarity] || CE_MLB_LEVEL_CAPS[3];
+  const fullMaxLv = caps[4];
+  const maxLv = getCeMaxLevel(ce, own);
+  const level = Math.min(maxLv, Math.max(1, (own && own.level) || 1));
+  const atkMax = ce.atkMax ?? (ce.rarity === 5 ? 2000 : (ce.rarity === 4 ? 1500 : (ce.rarity === 3 ? 800 : (ce.rarity === 2 ? 500 : 300))));
+  const hpMax = ce.hpMax ?? (ce.rarity === 5 ? 0 : (ce.rarity === 4 ? 0 : (ce.rarity === 3 ? 0 : 0)));
+  const atkBase = ce.atkBase ?? Math.round(atkMax * 0.25);
+  const hpBase = ce.hpBase ?? Math.round(hpMax * 0.25);
+  const ratio = fullMaxLv > 1 ? (level - 1) / (fullMaxLv - 1) : 1;
+  return {
+    atk: Math.round(atkBase + (atkMax - atkBase) * ratio),
+    hp: Math.round(hpBase + (hpMax - hpBase) * ratio),
+    level,
+    maxLv
+  };
+}
+
 // 서번트 데이터베이스 (5성 한정/상시, 4성, 3성)
 // limited: true면 픽업 배너에서만 등장(스토리/상시 제외), false면 상시(픽뚫 가능)
 const SERVANTS = [
@@ -1322,6 +1383,87 @@ const CRAFT_ESSENCES = [
     effect: '자신의 크리티컬 위력 15% UP',
     flavor: '토오사카 가문의 마력이 담긴 붉은 보석 펜던트.',
     art: { bg1: '#2e0e14', bg2: '#9c2233', primary: '#ff5c77', secondary: '#ffd700', icon: 'gem' }
+  },
+  // ================= 2★ (UC) 프렌드 포인트 전용 개념예장 (2018 개편판) =================
+  {
+    id: 'ce_fp2_jaae', name: '자애', nickname: '자애', rarity: 2, fpOnly: true,
+    atkBase: 0, atkMax: 0, hpBase: 200, hpMax: 750,
+    effect: '자신의 HP 회복량 3% UP', effectMax: '자신의 HP 회복량 5% UP [최대해방]',
+    flavor: '자비로운 것. 곁에 한 조각의 사랑을.',
+    art: { bg1: '#18242e', bg2: '#3a6678', primary: '#95e1d3', secondary: '#fff', icon: 'gem' }
+  },
+  {
+    id: 'ce_fp2_beonyeong', name: '번영', nickname: '번영', rarity: 2, fpOnly: true,
+    atkBase: 0, atkMax: 0, hpBase: 200, hpMax: 750,
+    effect: '자신에게 매 턴 HP 30 회복 상태 부여', effectMax: '자신에게 매 턴 HP 50 회복 상태 부여 [최대해방]',
+    flavor: '잎사귀는 무성하게 열매를 맺는다. 풍요로운 생명에게 축복을.',
+    art: { bg1: '#132a1d', bg2: '#38764a', primary: '#80ed99', secondary: '#ffe680', icon: 'prism' }
+  },
+  {
+    id: 'ce_fp2_giman', name: '기만', nickname: '기만', rarity: 2, fpOnly: true,
+    atkBase: 150, atkMax: 500, hpBase: 0, hpMax: 0,
+    effect: '자신의 약화 부여 성공률 3% UP', effectMax: '자신의 약화 부여 성공률 5% UP [최대해방]',
+    flavor: '지모책략, 자유자재로. 눈에 보이는 진실이야말로 허위.',
+    art: { bg1: '#221433', bg2: '#5f3785', primary: '#c77dff', secondary: '#e2e8f0', icon: 'keys' }
+  },
+  {
+    id: 'ce_fp2_dongjo', name: '동조', nickname: '동조', rarity: 2, fpOnly: true,
+    atkBase: 150, atkMax: 500, hpBase: 0, hpMax: 0,
+    effect: '자신의 받는 강화 성공률 3% UP', effectMax: '자신의 받는 강화 성공률 5% UP [최대해방]',
+    flavor: '몇 겹으로 계속 동기되는 나선. 수속하고, 수렴하여, 보다 강인해진다.',
+    art: { bg1: '#14213d', bg2: '#2d5a9e', primary: '#70d6ff', secondary: '#ffe680', icon: 'prism' }
+  },
+  {
+    id: 'ce_fp2_amdam', name: '암담', nickname: '암담', rarity: 2, fpOnly: true,
+    atkBase: 80, atkMax: 250, hpBase: 120, hpMax: 400,
+    effect: '자신의 즉사 내성 5% UP', effectMax: '자신의 즉사 내성 10% UP [최대해방]',
+    flavor: '암흑 속에 꿈틀거리는 그림자 있으니. 눈을 떼지말고 지켜보라.',
+    art: { bg1: '#11111a', bg2: '#35354a', primary: '#94a3b8', secondary: '#ff5c77', icon: 'gate' }
+  },
+  // ================= 1★ (C) 프렌드 포인트 전용 개념예장 (2018 개편판) =================
+  {
+    id: 'ce_fp1_tujaeng', name: '투쟁', nickname: '투쟁', rarity: 1, fpOnly: true,
+    atkBase: 100, atkMax: 300, hpBase: 0, hpMax: 0,
+    effect: '자신의 공격력 2% UP', effectMax: '자신의 공격력 4% UP [최대해방]',
+    flavor: '나에게 힘을. 그 손에 승리를 움켜쥘 때까지.',
+    art: { bg1: '#2e1010', bg2: '#8a2b2b', primary: '#ff6b6b', secondary: '#ffd166', icon: 'sword' }
+  },
+  {
+    id: 'ce_fp1_yeonswae', name: '연쇄', nickname: '연쇄', rarity: 1, fpOnly: true,
+    atkBase: 100, atkMax: 300, hpBase: 0, hpMax: 0,
+    effect: '자신에게 공격 대미지 30 플러스 상태 부여', effectMax: '자신에게 공격 대미지 50 플러스 상태 부여 [최대해방]',
+    flavor: '원을 이룬 사슬. 이어짐은 멈추는 것을 모른다.',
+    art: { bg1: '#2b1d10', bg2: '#7a4d22', primary: '#f4a261', secondary: '#ffe680', icon: 'keys' }
+  },
+  {
+    id: 'ce_fp1_danjeol', name: '단절', nickname: '단절', rarity: 1, fpOnly: true,
+    atkBase: 0, atkMax: 0, hpBase: 150, hpMax: 450,
+    effect: '자신에게 받는 대미지 30 컷 상태 부여', effectMax: '자신에게 받는 대미지 50 컷 상태 부여 [최대해방]',
+    flavor: '굳건하게 우뚝 솟은 것. 누구라도 통과할 수 없다.',
+    art: { bg1: '#182430', bg2: '#465d75', primary: '#a8dadc', secondary: '#e2e8f0', icon: 'gate' }
+  },
+  {
+    id: 'ce_fp1_gakseong', name: '각성', nickname: '각성', rarity: 1, fpOnly: true,
+    atkBase: 50, atkMax: 150, hpBase: 80, hpMax: 250,
+    effect: '자신의 스타 집중도 50% UP', effectMax: '자신의 스타 집중도 100% UP [최대해방]',
+    flavor: '눈을 떠라. 모든 것을 비추는 빛 아래에.',
+    art: { bg1: '#26210f', bg2: '#7d6924', primary: '#ffe666', secondary: '#fff', icon: 'gem' }
+  },
+  {
+    id: 'ce_fp1_gia', name: '기아', nickname: '기아', rarity: 1, fpOnly: true,
+    atkBase: 50, atkMax: 150, hpBase: 80, hpMax: 250,
+    effect: '대미지를 받을 때의 NP 획득량 15% UP', effectMax: '대미지를 받을 때의 NP 획득량 20% UP [최대해방]',
+    flavor: '끝없는 갈증. 아지랑이가 피어오르는 대지 위에, 목숨조차도 허공으로 사라진다.',
+    art: { bg1: '#21151a', bg2: '#5e3545', primary: '#f28482', secondary: '#ffd166', icon: 'tofu' }
+  },
+  // ================= NPC 전용 개념예장 (1800만 DL · 코스트 0) =================
+  {
+    id: 'ce_npc_support', name: 'NPC 전용 개념예장', nickname: 'NPC 예장', rarity: 5, npcOnly: true,
+    atkBase: 0, atkMax: 0, hpBase: 0, hpMax: 0,
+    effect: '자신의 NP를 50% 차지한 상태로 배틀을 개시 & NP 획득량 50% UP',
+    effectMax: 'Lv.1 고정 · 코스트 0 · 메인 퀘스트 서포트 NPC 전용',
+    flavor: '2부 4장 유가 크셰트라 개막과 함께 추가된 스토리 NPC 전용 예장. 이름과 번호는 없지만 NP 50% 차지 + NP 획득량 50% UP이라는 최상급 성능을 지닌다.',
+    art: { bg1: '#0d1b38', bg2: '#2c5da9', primary: '#70e0ff', secondary: '#ffe680', icon: 'prism' }
   }
 ];
 
