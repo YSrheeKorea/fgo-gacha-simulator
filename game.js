@@ -62,6 +62,8 @@
       grails: 3,         // 성배
       embers: 40,        // 종화 (예지의 맹화)
       qp: 15000000,      // QP
+      commandSpells: 3,  // 영주 (최대 3획, 매일 0시 전회복)
+      lastSpellResetDate: '', // YYYY-MM-DD (로컬 날짜 기준)
       activeBannerId: BANNERS[0].id,
       bannerState: {},   // { [bannerId]: { pity: 0, singleBonus: 0, totalPulls: 0 } }
       servants: {},      // { [id]: { copies, extraCopies, npLevel, level, ascension, grailsUsed, bond, bondExp, viewAsc } }
@@ -1821,8 +1823,41 @@
   }
 
   // 배틀 모듈(battle.js)과 상태를 안전하게 공유하는 브리지
+  function getTodayKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
+  function refreshCommandSpellsDaily() {
+    const today = getTodayKey();
+    if (state.lastSpellResetDate !== today) {
+      state.commandSpells = 3;
+      state.lastSpellResetDate = today;
+      saveState();
+    }
+    return state.commandSpells;
+  }
+  refreshCommandSpellsDaily();
+
   window.ChaldeaBridge = {
     getState: () => state,
+    getCommandSpells: () => refreshCommandSpellsDaily(),
+    consumeCommandSpells(count) {
+      refreshCommandSpellsDaily();
+      if (state.commandSpells < count) return false;
+      state.commandSpells -= count;
+      saveState();
+      return true;
+    },
+    spendSqForRevive() {
+      if (state.sq < 1) return false;
+      state.sq -= 1;
+      state.stats.sqSpent += 1;
+      saveState();
+      renderResources();
+      return true;
+    },
+    switchToBattleTab: () => switchTab('battle'),
     grantBattleRewards(rewards, partyServantIds) {
       if (rewards.sq) state.sq += rewards.sq;
       if (rewards.embers) state.embers += rewards.embers;
