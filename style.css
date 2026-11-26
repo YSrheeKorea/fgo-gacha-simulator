@@ -1427,16 +1427,33 @@ html, body {
   60% { transform: scale(1.06) translate(-6px, -3px); }
   80% { transform: scale(1.06) translate(6px, 5px); }
 }
-.summon-card-3d.glow-gold { filter: drop-shadow(0 0 28px rgba(245, 200, 76, 0.85)); }
-.summon-card-3d.glow-rainbow { filter: drop-shadow(0 0 36px rgba(130, 230, 255, 0.95)); }
 
+/* 주의: preserve-3d 부모(.summon-card-3d)에 filter를 걸면 3D가 평면화되어 앞면 카드가 사라지므로
+   반드시 개별 면(.summon-card-front)에 box-shadow로 광채를 적용한다! */
 .summon-card-face {
   position: absolute;
   inset: 0;
+  border-radius: 13px;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
-.summon-card-front { transform: rotateY(180deg); }
+.summon-card-back {
+  transform: rotateY(0deg) translateZ(1px);
+  transition: opacity 0.2s ease 0.18s;
+}
+.summon-card-3d.flipped .summon-card-back {
+  opacity: 0;
+  pointer-events: none;
+}
+.summon-card-front {
+  transform: rotateY(180deg) translateZ(1px);
+}
+.summon-card-3d.glow-gold .summon-card-front {
+  box-shadow: 0 0 28px rgba(245, 200, 76, 0.9), 0 0 56px rgba(245, 200, 76, 0.45);
+}
+.summon-card-3d.glow-rainbow .summon-card-front {
+  box-shadow: 0 0 30px rgba(130, 230, 255, 0.95), 0 0 64px rgba(255, 210, 110, 0.65);
+}
 
 .summon-quote-box {
   width: 100%;

@@ -513,6 +513,8 @@ const SummonFX = (() => {
       document.getElementById('summon-card-back').innerHTML = ArtRenderer.renderCardBackSVG(roll.item.cls, 'gold');
     }
 
+    // 승격 진동 애니메이션(spark-shake)이 남아있으면 transform을 덮어쓰므로 반드시 제거 후 플립
+    card3d.classList.remove('spark-shake');
     card3d.classList.add('entering', 'flipped');
     flashAlpha = roll.item.rarity === 5 ? 0.95 : (roll.item.rarity === 4 ? 0.52 : 0.25);
     if (roll.item.rarity === 5 && isServant) {
