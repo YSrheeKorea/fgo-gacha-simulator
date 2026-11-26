@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#070d1e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="칼데아 가챠">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <title>CHALDEA SUMMON SIMULATOR — 페그오 2차 창작 가챠 시뮬레이터</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="cosmos-bg" aria-hidden="true"></div>
+
+  <!-- ================= 상단 칼데아 헤더 & 재화 바 ================= -->
+  <header class="top-bar">
+    <div class="brand">
+      <div class="brand-emblem">✦</div>
+      <div class="brand-text">
+        <span class="brand-title">CHALDEA SUMMON</span>
+        <span class="brand-sub">FGO 2차 창작 가챠 시뮬레이터</span>
+      </div>
+    </div>
+
+    <div class="resource-bar">
+      <button class="res-pill res-sq" id="btn-open-charge" title="성정석 무료 충전 (과금 시뮬레이션)">
+        <span class="res-icon">💎</span>
+        <span class="res-label">성정석</span>
+        <strong id="res-sq">900</strong>
+        <span class="res-plus">+</span>
+      </button>
+      <div class="res-pill" title="호부 (1회 소환권)">
+        <span class="res-icon">🎫</span>
+        <span class="res-label">호부</span>
+        <strong id="res-ticket">15</strong>
+      </div>
+      <div class="res-pill" title="마나프리즘">
+        <span class="res-icon">🟢</span>
+        <span class="res-label">마프</span>
+        <strong id="res-mp">300</strong>
+      </div>
+      <div class="res-pill" title="레어프리즘">
+        <span class="res-icon">🟡</span>
+        <span class="res-label">레프</span>
+        <strong id="res-rp">5</strong>
+      </div>
+      <div class="res-pill hide-sm" title="성배 (마이룸 성배전림)">
+        <span class="res-icon">🏆</span>
+        <span class="res-label">성배</span>
+        <strong id="res-grail">3</strong>
+      </div>
+      <button class="pwa-install-pill btn-pwa-install" id="btn-header-pwa-install" title="기기 홈 화면 / 바탕화면에 앱으로 설치">📲 앱 설치</button>
+      <button class="icon-btn" id="btn-art-mode" title="공식 일러스트 / SVG 모드 전환">🖼️</button>
+      <button class="icon-btn" id="btn-mute" title="사운드 켜기/끄기">🔊</button>
+    </div>
+  </header>
+
+  <!-- ================= 메인 네비게이션 탭 ================= -->
+  <nav class="main-nav" role="tablist">
+    <button class="nav-tab active" data-tab="summon" role="tab">✨ 성정석 소환</button>
+    <button class="nav-tab" data-tab="codex" role="tab">📖 영기 일람</button>
+    <button class="nav-tab" data-tab="myroom" role="tab">🏰 마이룸 · 육성</button>
+    <button class="nav-tab" data-tab="shop" role="tab">🛒 다 빈치 공방</button>
+    <button class="nav-tab" data-tab="stats" role="tab">📊 가챠 통계 · 폭사력</button>
+    <button class="nav-tab" data-tab="settings" role="tab">⚙️ 설정</button>
+  </nav>
+
+  <!-- ================= 메인 컨텐츠 컨테이너 ================= -->
+  <main class="main-container">
+
+    <!-- ===== TAB 1: 성정석 소환 ===== -->
+    <section id="tab-summon" class="tab-panel active">
+      <!-- 배너 셀렉터 -->
+      <div class="banner-strip-wrap">
+        <div class="banner-strip" id="banner-strip"></div>
+      </div>
+
+      <!-- 현재 픽업 배너 히어로 카드 -->
+      <div class="banner-hero" id="banner-hero">
+        <div class="banner-hero-left">
+          <div class="banner-badges">
+            <span class="banner-tag" id="banner-tag">기간 한정</span>
+            <span class="banner-pity-badge" id="banner-pity-badge">천장까지 330회</span>
+            <span class="banner-bonus-badge" id="banner-bonus-badge">단차 보너스 0/10</span>
+          </div>
+          <h1 class="banner-title" id="banner-title">아발론 르 페이 픽업 소환</h1>
+          <p class="banner-subtitle" id="banner-subtitle">인권 1순위 아츠 서포터! 예언의 아이 강림</p>
+          <p class="banner-quote" id="banner-quote"></p>
+
+          <!-- 픽업 대상 미니 칩 -->
+          <div class="banner-pickups" id="banner-pickups"></div>
+
+          <!-- 천장 프로그레스 바 -->
+          <div class="pity-bar-wrap" id="pity-bar-wrap">
+            <div class="pity-bar-header">
+              <span>확정 소환(천장) 게이지</span>
+              <span id="pity-bar-text">0 / 330 회</span>
+            </div>
+            <div class="pity-bar-track">
+              <div class="pity-bar-fill" id="pity-bar-fill" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- 소환 옵션 (연출 속도 / 확률표) -->
+          <div class="summon-options-row">
+            <label class="toggle-chip">
+              <input type="checkbox" id="opt-fast-fx">
+              <span>⚡ 빠른 연출</span>
+            </label>
+            <label class="toggle-chip">
+              <input type="checkbox" id="opt-skip-fx">
+              <span>⏭️ 연출 즉시 스킵</span>
+            </label>
+            <button class="text-btn" id="btn-show-rates">📋 소환 상세 / 확률표</button>
+          </div>
+        </div>
+
+        <div class="banner-hero-right" id="banner-featured-card">
+          <!-- 픽업 5성 대형 SVG 카드 미리보기 -->
+        </div>
+      </div>
+
+      <!-- 소환 버튼 패널 -->
+      <div class="summon-actions-panel">
+        <button class="summon-btn btn-ticket" id="btn-pull-ticket">
+          <div class="sbtn-top">🎫 호부 1회 소환</div>
+          <div class="sbtn-cost">호부 1장 소모</div>
+        </button>
+
+        <button class="summon-btn btn-single" id="btn-pull-1">
+          <div class="sbtn-top">💎 1회 소환</div>
+          <div class="sbtn-cost">성정석 3개 (10회당 +1 보너스)</div>
+        </button>
+
+        <button class="summon-btn btn-multi" id="btn-pull-11">
+          <div class="sbtn-badge">★4 이상 1장 + ★3 이상 서번트 확정!</div>
+          <div class="sbtn-top">✨ 11회 소환 (10+1)</div>
+          <div class="sbtn-cost">성정석 30개 소모</div>
+        </button>
+
+        <button class="summon-btn btn-sim110" id="btn-pull-110" title="연출 없이 즉시 110연차(10세트) 시뮬레이션">
+          <div class="sbtn-top">🔥 110연 고속 시뮬</div>
+          <div class="sbtn-cost">성정석 300개 (즉시 결과)</div>
+        </button>
+      </div>
+
+      <!-- 최근 5성 획득 / 실시간 티커 -->
+      <div class="recent-pulls-card">
+        <div class="section-head-sm">
+          <h3>📜 최근 소환 기록 (최근 20건)</h3>
+          <button class="text-btn" id="btn-goto-stats">전체 통계 보기 →</button>
+        </div>
+        <div class="recent-pulls-list" id="recent-pulls-list">
+          <div class="empty-hint">아직 소환 기록이 없습니다. 첫 소환을 시작해 보세요!</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TAB 2: 영기 일람 (도감) ===== -->
+    <section id="tab-codex" class="tab-panel">
+      <div class="panel-header">
+        <div>
+          <h2>📖 영기 일람 (도감)</h2>
+          <p class="panel-desc">수집한 서번트와 개념예장을 확인하고, 보유 서번트를 클릭해 육성·마이룸 지정·영기 변환을 진행할 수 있습니다.</p>
+        </div>
+        <div class="codex-progress-box" id="codex-progress-box">수집률 0%</div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="filter-group" id="codex-type-filter">
+          <button class="filter-btn active" data-type="servant">서번트</button>
+          <button class="filter-btn" data-type="ce">개념예장</button>
+        </div>
+        <div class="filter-group" id="codex-rarity-filter">
+          <button class="filter-btn active" data-rarity="all">전체</button>
+          <button class="filter-btn" data-rarity="5">★5</button>
+          <button class="filter-btn" data-rarity="4">★4</button>
+          <button class="filter-btn" data-rarity="3">★3</button>
+        </div>
+        <div class="filter-group" id="codex-owned-filter">
+          <button class="filter-btn active" data-owned="all">전체 보기</button>
+          <button class="filter-btn" data-owned="owned">보유만</button>
+          <button class="filter-btn" data-owned="unowned">미보유만</button>
+        </div>
+        <select class="filter-select" id="codex-class-filter">
+          <option value="all">모든 클래스</option>
+        </select>
+      </div>
+
+      <div class="codex-grid" id="codex-grid"></div>
+    </section>
+
+    <!-- ===== TAB 3: 마이룸 & 보유 서번트 육성 ===== -->
+    <section id="tab-myroom" class="tab-panel">
+      <div class="myroom-layout">
+        <!-- 좌측: 마이룸 파트너 스테이지 -->
+        <div class="myroom-stage">
+          <div class="myroom-stage-top">
+            <span class="myroom-badge">🏰 MY ROOM</span>
+            <div class="myroom-asc-tabs" id="myroom-asc-tabs">
+              <button class="asc-btn active" data-asc="1">1차</button>
+              <button class="asc-btn" data-asc="2">2차</button>
+              <button class="asc-btn" data-asc="3">3차</button>
+              <button class="asc-btn" data-asc="4">최종</button>
+            </div>
+          </div>
+
+          <div class="myroom-portrait-wrap" id="myroom-portrait-wrap" title="서번트를 클릭하면 대사를 말합니다!">
+            <!-- 선택된 서번트 대형 카드 -->
+          </div>
+
+          <div class="fgo-dialogue-window myroom-fgo-dlg" id="myroom-dialogue-box" title="대사창 클릭 시 다음 대사 / 즉시 출력">
+            <div class="fgo-dlg-corner tl">◆</div>
+            <div class="fgo-dlg-corner tr">◆</div>
+            <div class="fgo-dlg-corner bl">◆</div>
+            <div class="fgo-dlg-corner br">◆</div>
+            <div class="fgo-dlg-header">
+              <div class="fgo-dlg-speaker" id="myroom-speaker">서번트를 선택해 주세요</div>
+              <div class="fgo-dlg-badge" id="myroom-dlg-badge">MY ROOM</div>
+            </div>
+            <div class="fgo-dlg-divider"></div>
+            <div class="fgo-dlg-text dialogue-text" id="myroom-dialogue-text">소환으로 서번트를 획득하면 마이룸에서 대화를 나누고 육성할 수 있습니다!</div>
+            <div class="fgo-dlg-footer">
+              <button class="small-gold-btn" id="btn-myroom-talk">💬 대화하기 (인연 +1)</button>
+              <span class="fgo-dlg-cursor visible" id="myroom-dlg-cursor">▼</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 우측: 서번트 스테이터스 & 육성 패널 -->
+        <div class="myroom-controls">
+          <div class="panel-card">
+            <div class="myroom-sv-header">
+              <div>
+                <h2 id="mr-name">-</h2>
+                <p id="mr-title" class="panel-desc">-</p>
+              </div>
+              <div class="mr-np-pill" id="mr-np-pill">보구 Lv.1</div>
+            </div>
+
+            <div class="stat-grid-2">
+              <div class="stat-box"><span>레벨</span><strong id="mr-level">Lv.1 / 90</strong></div>
+              <div class="stat-box"><span>인연 레벨</span><strong id="mr-bond">인연 Lv.1</strong></div>
+              <div class="stat-box"><span>ATK</span><strong id="mr-atk">0</strong></div>
+              <div class="stat-box"><span>HP</span><strong id="mr-hp">0</strong></div>
+            </div>
+
+            <div class="np-info-box">
+              <span class="np-type-badge" id="mr-np-type">Arts</span>
+              <div>
+                <strong id="mr-np-name">-</strong>
+                <div class="np-sub" id="mr-np-sub">-</div>
+                <div class="np-detail" id="mr-np-detail"></div>
+              </div>
+            </div>
+
+            <div class="mr-skills-row" id="mr-skills-row"></div>
+
+            <div class="materials-bar">
+              <span>🔥 종화(예지) 보유: <strong id="mr-embers">20</strong>개</span>
+              <span>🏆 성배 보유: <strong id="mr-grails">3</strong>개</span>
+              <span>🪙 QP: <strong id="mr-qp">10,000,000</strong></span>
+            </div>
+
+            <div class="upgrade-actions">
+              <button class="upgrade-btn" id="btn-lv-up">🔥 레벨업 (+10Lv / 종화 5개)</button>
+              <button class="upgrade-btn" id="btn-ascend">✨ 영기재림 (재림 단계 ↑)</button>
+              <button class="upgrade-btn btn-grail" id="btn-grail">🏆 성배전림 (최대 Lv +2 / 성배 1개)</button>
+              <button class="upgrade-btn btn-burn" id="btn-burn-extra">♻️ 중복 서번트 영기 변환</button>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <div class="section-head-sm">
+              <h3>👥 마이룸 파트너 변경 (보유 서번트)</h3>
+              <span id="mr-owned-count">0기 보유</span>
+            </div>
+            <div class="myroom-roster-list" id="myroom-roster-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TAB 4: 다 빈치 공방 (상점 & 무료 성정석 충전) ===== -->
+    <section id="tab-shop" class="tab-panel">
+      <div class="panel-header">
+        <div>
+          <h2>🛒 다 빈치 공방</h2>
+          <p class="panel-desc">마나프리즘·레어프리즘으로 호부/종화/성배를 교환하거나, 무료 과금 시뮬레이션으로 성정석을 충전할 수 있습니다.</p>
+        </div>
+        <div class="shop-currency-summary" id="shop-currency-summary"></div>
+      </div>
+
+      <!-- 무료 성정석 충전소 (과금 시뮬레이션) -->
+      <div class="panel-card shop-section">
+        <h3>💎 성정석 상점 (무료 시뮬레이션 — 현질 환산액 자동 기록!)</h3>
+        <p class="panel-desc">실제 결제는 전혀 발생하지 않으며, 통계 탭에서 "만약 진짜 현질했다면 얼마였을까?"를 계산해 줍니다.</p>
+        <div class="charge-grid" id="charge-grid"></div>
+      </div>
+
+      <!-- 마나프리즘 / 레어프리즘 교환소 -->
+      <div class="panel-card shop-section">
+        <h3>🟢 마나프리즘 · 🟡 레어프리즘 교환소</h3>
+        <div class="exchange-grid" id="exchange-grid"></div>
+      </div>
+
+      <!-- 영기 변환 (일괄 매각) -->
+      <div class="panel-card shop-section">
+        <h3>♻️ 영기 변환 (중복 3★ 예장 · 보5 초과 서번트 일괄 변환)</h3>
+        <p class="panel-desc">가챠에서 쌓인 중복 3성 개념예장이나 보구 5레벨을 초과한 잉여 서번트를 마나프리즘/레어프리즘으로 변환합니다.</p>
+        <div class="burn-actions">
+          <button class="upgrade-btn" id="btn-burn-ce3">🌶️ 중복 3★ 개념예장 일괄 변환 (1장당 마프 +1)</button>
+          <button class="upgrade-btn" id="btn-burn-ce4">✨ 중복 4★ 개념예장 일괄 변환 (1장당 마프 +3)</button>
+          <button class="upgrade-btn" id="btn-burn-sv-overflow">💎 보5 초과 잉여 서번트 일괄 변환</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TAB 5: 가챠 통계 & 폭사력 분석 ===== -->
+    <section id="tab-stats" class="tab-panel">
+      <div class="panel-header">
+        <div>
+          <h2>📊 가챠 통계 & 운세·폭사력 분석</h2>
+          <p class="panel-desc">당신의 실제 5성 확률, 픽뚫 비율, 현질 환산 트럭 수, 폭사 등급을 적나라하게 분석합니다.</p>
+        </div>
+        <div class="stats-header-actions">
+          <button class="small-outline-btn" id="btn-export-save">💾 세이브 내보내기</button>
+          <button class="small-outline-btn danger" id="btn-reset-save">🗑️ 데이터 초기화</button>
+        </div>
+      </div>
+
+      <!-- 폭사력 / 운세 등급 배너 -->
+      <div class="luck-rank-card" id="luck-rank-card">
+        <div class="luck-rank-badge" id="luck-rank-grade">C</div>
+        <div class="luck-rank-info">
+          <h3 id="luck-rank-title">칼데아 신입 마스터</h3>
+          <p id="luck-rank-desc">소환을 진행하면 당신의 진짜 운세(비틱력 vs 폭사력)가 판정됩니다!</p>
+        </div>
+        <div class="luck-money-box">
+          <span>현질 환산 추정액</span>
+          <strong id="stat-krw">₩0</strong>
+          <small id="stat-trucks">0.00 트럭 (167돌=₩99,000)</small>
+        </div>
+      </div>
+
+      <!-- 핵심 지표 그리드 -->
+      <div class="stats-kpi-grid" id="stats-kpi-grid"></div>
+
+      <!-- 레어도별 분포 바 차트 -->
+      <div class="stats-two-col">
+        <div class="panel-card">
+          <h3>📈 실제 출현율 vs 공식 확률 비교</h3>
+          <div class="rate-bars" id="stat-rate-bars"></div>
+        </div>
+        <div class="panel-card">
+          <h3>🏆 특수 기록 & 밈 카운터</h3>
+          <div class="meme-stats" id="stat-meme-list"></div>
+        </div>
+      </div>
+
+      <!-- 전체 5성 획득 이력 -->
+      <div class="panel-card">
+        <h3>✨ 획득한 ★5 서번트 히스토리</h3>
+        <div class="ssr-history-list" id="ssr-history-list">
+          <div class="empty-hint">아직 획득한 ★5 서번트가 없습니다.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TAB 6: 설정 ===== -->
+    <section id="tab-settings" class="tab-panel">
+      <div class="panel-header">
+        <div>
+          <h2>⚙️ 칼데아 시스템 설정</h2>
+          <p class="panel-desc">소환 연출 속도·이펙트, FGO 대사창 타자기 속도, 사운드, 일러스트 및 세이브 데이터를 자유롭게 설정할 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="settings-grid">
+        <!-- 소환 연출 설정 -->
+        <div class="panel-card">
+          <h3>✨ 소환 연출 설정</h3>
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">소환 연출 속도</div>
+              <div class="setting-sub">원작 FGO 소환진·3광구 회전·카드 뒤집기 연출 속도</div>
+            </div>
+            <div class="filter-group" id="set-fx-speed">
+              <button class="filter-btn active" data-speed="normal">원작 고증</button>
+              <button class="filter-btn" data-speed="fast">빠르게</button>
+              <button class="filter-btn" data-speed="skip">즉시 스킵</button>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">★3 중복 카드 자동 건너뛰기</div>
+              <div class="setting-sub">11연차 시 ★4 이상이나 처음 얻는(NEW) 영기만 연출 감상</div>
+            </div>
+            <label class="switch-toggle">
+              <input type="checkbox" id="set-auto-skip-common">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">고해상도 마력 파티클 이펙트</div>
+              <div class="setting-sub">저사양 기기에서는 끄면 소환진 프레임이 더 부드러워집니다</div>
+            </div>
+            <label class="switch-toggle">
+              <input type="checkbox" id="set-high-particles" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 사운드 & 대사창 설정 -->
+        <div class="panel-card">
+          <h3>🔊 사운드 & FGO 대사창 설정</h3>
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">효과음 (SFX) 켜기</div>
+              <div class="setting-sub">소환진·회전·치직 승격·팡파르·UI 클릭 사운드</div>
+            </div>
+            <label class="switch-toggle">
+              <input type="checkbox" id="set-sfx-enabled" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">효과음 볼륨 (<span id="set-vol-label">80%</span>)</div>
+              <div class="setting-sub">Web Audio 프로시저럴 사운드 출력 크기 조절</div>
+            </div>
+            <input type="range" class="fgo-range" id="set-sfx-volume" min="0" max="100" value="80">
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">FGO 대사창 텍스트 출력 속도</div>
+              <div class="setting-sub">소환 대사 및 마이룸 대사 타자기 표시 속도</div>
+            </div>
+            <div class="filter-group" id="set-text-speed">
+              <button class="filter-btn" data-ts="slow">느림</button>
+              <button class="filter-btn active" data-ts="normal">보통</button>
+              <button class="filter-btn" data-ts="fast">빠름</button>
+              <button class="filter-btn" data-ts="instant">즉시</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 원작 FGO 소환 연출 미리보기 테스트 -->
+        <div class="panel-card">
+          <h3>🎬 원작 FGO 가챠 연출 미리보기</h3>
+          <p class="panel-desc" style="margin-bottom:12px">성정석을 소모하지 않고 원작 FGO의 대표 소환 기믹을 즉시 감상해 볼 수 있습니다.</p>
+          <div class="preview-btn-grid">
+            <button class="upgrade-btn" id="btn-test-fx-normal">🔵 일반 소환 (은테)</button>
+            <button class="upgrade-btn" id="btn-test-fx-gold">🟡 금색 3중 회전 (★4+)</button>
+            <button class="upgrade-btn btn-grail" id="btn-test-fx-rainbow">🌈 무지개 3중 회전 (★5)</button>
+            <button class="upgrade-btn" id="btn-test-fx-spark">⚡ 은테 → 금테 치직 승격!</button>
+          </div>
+        </div>
+
+        <!-- 일러스트 & 세이브 데이터 관리 -->
+        <div class="panel-card">
+          <h3>🖼️ 일러스트 & 세이브 데이터 관리</h3>
+          <div class="setting-row">
+            <div>
+              <div class="setting-title">카드 일러스트 표시 방식</div>
+              <div class="setting-sub">Atlas Academy 공식 FGO 일러스트 또는 자체 SVG 모드</div>
+            </div>
+            <div class="filter-group" id="set-art-mode">
+              <button class="filter-btn active" data-art="official">🖼️ 공식 일러스트</button>
+              <button class="filter-btn" data-art="svg">🎨 SVG 모드</button>
+            </div>
+          </div>
+
+          <div class="settings-data-actions">
+            <button class="small-outline-btn" id="btn-set-export">💾 세이브 내보내기 (JSON)</button>
+            <label class="upload-label-btn">
+              📂 세이브 불러오기 (JSON)
+              <input type="file" id="input-import-save" accept="application/json,.json" style="display:none">
+            </label>
+            <button class="small-outline-btn" id="btn-set-clear-custom-art">🖼️ 커스텀 이미지 일괄 복원</button>
+            <button class="small-outline-btn danger" id="btn-set-reset-stats">📊 가챠 통계만 초기화</button>
+            <button class="small-outline-btn danger" id="btn-set-reset-all">🗑️ 전체 데이터 초기화</button>
+          </div>
+        </div>
+
+        <!-- 앱 설치 (PWA) -->
+        <div class="panel-card" style="grid-column: 1 / -1;">
+          <div class="pwa-settings-row">
+            <div class="pwa-settings-left">
+              <img src="icons/icon-192.png" alt="칼데아 가챠 앱 아이콘" class="pwa-preview-icon">
+              <div>
+                <h3>📲 앱 설치 (PWA · 오프라인 지원)</h3>
+                <p class="panel-desc" id="pwa-install-status">PC 바탕화면이나 스마트폰 홈 화면에 앱으로 설치해 전체 화면과 오프라인 캐시로 쾌적하게 즐길 수 있습니다.</p>
+              </div>
+            </div>
+            <button class="small-gold-btn" id="btn-settings-pwa-install">📲 앱 설치하기</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= 전체화면 소환 연출 스테이지 (원작 FGO 소환실) ================= -->
+  <div id="summon-stage" class="summon-stage hidden">
+    <canvas id="summon-canvas"></canvas>
+    <div class="summon-stage-ui" id="summon-stage-clickzone">
+      <div class="summon-stage-top">
+        <div class="summon-progress" id="summon-progress">1 / 11</div>
+        <div class="summon-servant-banner" id="summon-servant-banner"></div>
+        <button class="skip-btn" id="btn-summon-skip">SKIP ⏭️</button>
+      </div>
+
+      <div class="summon-event-tag" id="summon-event-tag"></div>
+
+      <div class="summon-card-perspective">
+        <div class="summon-card-3d" id="summon-card-3d">
+          <div class="summon-card-face summon-card-back" id="summon-card-back"></div>
+          <div class="summon-card-face summon-card-front" id="summon-card-front"></div>
+        </div>
+      </div>
+
+      <!-- 원작 FGO 인게임 스타일 하단 대사창 -->
+      <div class="fgo-dialogue-window summon-fgo-dlg" id="summon-quote-box">
+        <div class="fgo-dlg-corner tl">◆</div>
+        <div class="fgo-dlg-corner tr">◆</div>
+        <div class="fgo-dlg-corner bl">◆</div>
+        <div class="fgo-dlg-corner br">◆</div>
+        <div class="fgo-dlg-header">
+          <div class="fgo-dlg-speaker" id="summon-dlg-speaker">서번트</div>
+          <div class="fgo-dlg-badge" id="summon-dlg-badge"></div>
+        </div>
+        <div class="fgo-dlg-divider"></div>
+        <div class="fgo-dlg-text summon-quote-text" id="summon-dlg-text"></div>
+        <div class="fgo-dlg-footer fgo-dlg-footer-right">
+          <span class="summon-tap-inline">화면을 클릭하거나 Space로 계속</span>
+          <span class="fgo-dlg-cursor" id="summon-dlg-cursor">▼</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 11연 / 110연 소환 결과 요약 모달 ================= -->
+  <div id="result-modal" class="modal-overlay hidden">
+    <div class="modal-box modal-wide">
+      <div class="modal-header">
+        <h2 id="result-modal-title">✨ 소환 결과</h2>
+        <button class="modal-close" id="btn-close-result">✕</button>
+      </div>
+      <div class="result-summary-bar" id="result-summary-bar"></div>
+      <div class="result-cards-grid" id="result-cards-grid"></div>
+      <div class="modal-footer">
+        <button class="small-outline-btn" id="btn-result-close-2">확인</button>
+        <button class="small-gold-btn" id="btn-result-again">✨ 한 번 더 11회 소환 (💎30)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 서번트/예장 상세 모달 ================= -->
+  <div id="detail-modal" class="modal-overlay hidden">
+    <div class="modal-box modal-detail">
+      <div class="modal-header">
+        <h2 id="detail-modal-title">영기 상세</h2>
+        <button class="modal-close" id="btn-close-detail">✕</button>
+      </div>
+      <div class="detail-body" id="detail-body"></div>
+    </div>
+  </div>
+
+  <!-- ================= 확률표 모달 ================= -->
+  <div id="rates-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>📋 소환 확률 및 천장 안내 (FGO 고증)</h2>
+        <button class="modal-close" id="btn-close-rates">✕</button>
+      </div>
+      <div class="rates-body" id="rates-body"></div>
+    </div>
+  </div>
+
+  <!-- ================= 토스트 알림 ================= -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="data.js"></script>
+  <script src="atlas_images.js"></script>
+  <script src="kr_lore.js"></script>
+  <script src="audio.js"></script>
+  <script src="art.js"></script>
+  <script src="summon_fx.js"></script>
+  <script src="game.js"></script>
+  <script src="pwa.js"></script>
+</body>
+</html>
