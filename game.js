@@ -128,7 +128,7 @@
   }
 
   let state = ensureStarterAndCustom(loadState());
-  let codexFilter = { type: 'servant', rarity: 'all', owned: 'all', cls: 'all', pool: 'all', sort: 'id_asc', query: '' };
+  let codexFilter = { type: 'servant', rarity: 'all', owned: 'all', cls: 'all', pool: 'all', trait: 'all', sort: 'id_asc', query: '' };
   let codexLimit = 60;
   let myroomQuery = '';
   let welfareQuery = '';
@@ -899,6 +899,7 @@
     const pager = document.getElementById('codex-pager');
     const clsSelect = document.getElementById('codex-class-filter');
     const poolSelect = document.getElementById('codex-pool-filter');
+    const traitSelect = document.getElementById('codex-trait-filter');
     const sortSelect = document.getElementById('codex-sort-filter');
 
     // 클래스 필터 드롭다운 1회 채우기
@@ -917,6 +918,7 @@
     const isNpc = mode === 'npc';
     clsSelect.style.display = (isServant || isNpc) ? 'inline-block' : 'none';
     if (poolSelect) poolSelect.style.display = isServant ? 'inline-block' : 'none';
+    if (traitSelect) traitSelect.style.display = isServant ? 'inline-block' : 'none';
     if (sortSelect) sortSelect.style.display = isServant ? 'inline-block' : 'none';
 
     if (isNpc) {
@@ -960,6 +962,23 @@
       if (codexFilter.owned === 'unowned' && isOwned) return false;
       if (isServant && codexFilter.cls !== 'all' && item.cls !== codexFilter.cls) return false;
       if (isServant && codexFilter.pool !== 'all' && item.pool !== codexFilter.pool) return false;
+      if (isServant && codexFilter.trait !== 'all') {
+        const tf = codexFilter.trait;
+        if (tf === 'npSp') {
+          if (!item.npSpecial || !item.npSpecial.length) return false;
+        } else if (tf.startsWith('gen:')) {
+          const want = tf.slice(4);
+          if (want === '없음') {
+            if (item.gender === '여성' || item.gender === '남성') return false;
+          } else if (item.gender !== want) return false;
+        } else if (tf.startsWith('align:')) {
+          const want = tf.slice(6);
+          if (!(item.alignment || '').includes(want)) return false;
+        } else if (tf.startsWith('tr:')) {
+          const want = tf.slice(3);
+          if (!(item.traits || []).includes(want)) return false;
+        }
+      }
       if (q) {
         const noStr = String(item.collectionNo || '').padStart(3, '0');
         const hit = item.name.toLowerCase().includes(q)
@@ -1188,7 +1207,15 @@
       const cards = sv.cards || ['Quick', 'Arts', 'Arts', 'Buster', 'Buster'];
       deckRow.innerHTML = `<span style="font-size:11.5px;color:#9cb2d9;font-weight:700">커맨드 덱:</span>` +
         cards.map(c => `<span class="deck-dot ${c}">${c}</span>`).join('') +
-        `<span style="font-size:11px;color:#dbe7ff;margin-left:auto">${sv.attribute || '인(人)'} 속성</span>`;
+        `<span style="font-size:11px;color:#dbe7ff;margin-left:auto">${sv.attribute || '인(人)'} · ${sv.gender || '없음'} · ${sv.alignment || '-/-'}</span>`;
+    }
+    const hiddenRow = document.getElementById('mr-hidden-row');
+    if (hiddenRow) {
+      const trChips = (sv.traits || []).map(t => `<span class="trait-pill">${t}</span>`).join('');
+      const spChips = (sv.npSpecial || []).map(s => `<span class="trait-pill trait-sp">💥 ${s} 특공</span>`).join('');
+      hiddenRow.innerHTML = (trChips || spChips)
+        ? `<div class="hidden-traits-wrap">${spChips}${trChips}</div>`
+        : '';
     }
 
     // 공식 스킬 강화 (Lv.1 → Lv.10, 공식 QP 비용표, Lv.6/-1T · Lv.10/-2T 쿨감)
@@ -1668,6 +1695,18 @@
             <strong>보구:</strong> ${item.npName} <span style="color:#9cb2d9">(${item.npSub} · ${item.npType})</span>
             ${item.npDetail ? `<div class="np-detail">${item.npDetail}</div>` : ''}
           </div>
+          <div class="detail-hidden-box">
+            <div class="detail-lore-title">🧬 히든 스테이터스 & 특공 특성</div>
+            <div class="detail-hidden-grid">
+              <span>성별: <strong>${item.gender || '없음'}</strong></span>
+              <span>속성: <strong>${item.attribute || '인(人)'}</strong></span>
+              <span>성향: <strong>${item.alignment || '-/-'}</strong></span>
+            </div>
+            <div class="hidden-traits-wrap">
+              ${(item.npSpecial || []).map(s => `<span class="trait-pill trait-sp">💥 보구 특공: ${s}</span>`).join('')}
+              ${(item.traits || []).length ? item.traits.map(t => `<span class="trait-pill">${t}</span>`).join('') : '<span class="trait-pill">특수 특성 없음</span>'}
+            </div>
+          </div>
           ${item.skills && item.skills.length ? `<div class="mr-skills-row" style="margin-top:8px">${item.skills.map((sk, i) => `<span class="skill-chip">스킬${i + 1} · ${sk}</span>`).join('')}</div>` : ''}
           <div class="detail-quote"><div class="detail-lore-title">✦ 공식 소환 대사</div>“${item.summonQuote}”</div>
           ${loreBlocks ? `<div class="detail-lore-box"><div class="detail-lore-title">📖 영기 프로필 & 인연 스토리</div>${loreBlocks}</div>` : ''}
@@ -2003,6 +2042,11 @@
     });
     document.getElementById('codex-pool-filter')?.addEventListener('change', (e) => {
       codexFilter.pool = e.target.value;
+      codexLimit = 60;
+      renderCodexTab();
+    });
+    document.getElementById('codex-trait-filter')?.addEventListener('change', (e) => {
+      codexFilter.trait = e.target.value;
       codexLimit = 60;
       renderCodexTab();
     });

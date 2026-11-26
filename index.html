@@ -11,7 +11,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <title>CHALDEA SUMMON SIMULATOR — 페그오 2차 창작 가챠 시뮬레이터</title>
-  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
   <div class="cosmos-bg" aria-hidden="true"></div>
@@ -334,6 +334,38 @@
         <select class="filter-select" id="codex-class-filter">
           <option value="all">모든 클래스</option>
         </select>
+        <select class="filter-select" id="codex-trait-filter">
+          <option value="all">모든 특성·성향·성별</option>
+          <option value="npSp">💥 보구 특공 보유 (110+)</option>
+          <option value="gen:여성">♀️ 성별: 여성</option>
+          <option value="gen:남성">♂️ 성별: 남성</option>
+          <option value="gen:없음">⚧ 성별: 무성/없음/특수</option>
+          <option value="align:질서">⚖️ 성향: 질서</option>
+          <option value="align:중립">⚖️ 성향: 중립</option>
+          <option value="align:혼돈">⚖️ 성향: 혼돈</option>
+          <option value="align:선">✨ 성향: 선</option>
+          <option value="align:중용">✨ 성향: 중용</option>
+          <option value="align:악">🔥 성향: 악</option>
+          <option value="tr:용">🐉 특성: 용</option>
+          <option value="tr:알트리아 얼굴">👑 특성: 알트리아 얼굴</option>
+          <option value="tr:아서">⚔️ 특성: 아서</option>
+          <option value="tr:왕">👑 특성: 왕</option>
+          <option value="tr:신성">☀️ 특성: 신성</option>
+          <option value="tr:신령">🌟 특성: 신령</option>
+          <option value="tr:마성">😈 특성: 마성</option>
+          <option value="tr:로마">🏛️ 특성: 로마</option>
+          <option value="tr:맹수">🐾 특성: 맹수</option>
+          <option value="tr:요정">🧚 특성: 요정</option>
+          <option value="tr:초거대">🗿 특성: 초거대</option>
+          <option value="tr:인류의 위협">☄️ 특성: 인류의 위협</option>
+          <option value="tr:사랑하는 자">💘 특성: 사랑하는 자</option>
+          <option value="tr:그리스 신화 계 남성">🏛️ 특성: 그리스 신화 계 남성</option>
+          <option value="tr:아르고 호 관계자">⛵ 특성: 아르고 호 관계자</option>
+          <option value="tr:특별한 별">⭐ 특성: 특별한 별 (에누마 면역)</option>
+          <option value="tr:원탁의 기사">🛡️ 특성: 원탁의 기사</option>
+          <option value="tr:어린이">🧒 특성: 어린이</option>
+          <option value="tr:지금을 살아가는 인류">🌍 특성: 지금을 살아가는 인류</option>
+        </select>
         <select class="filter-select" id="codex-sort-filter">
           <option value="id_asc">ID No. 순 (001→487)</option>
           <option value="id_desc">ID No. 역순 (487→001)</option>
@@ -410,6 +442,7 @@
             </div>
 
             <div class="mr-deck-row" id="mr-deck-row"></div>
+            <div class="mr-hidden-row" id="mr-hidden-row"></div>
             <div class="mr-skills-row" id="mr-skills-row"></div>
 
             <div class="materials-bar">
@@ -813,15 +846,15 @@
   <!-- ================= 토스트 알림 ================= -->
   <div id="toast-container" class="toast-container"></div>
 
-  <script src="servant_catalog.js?v=7"></script>
-  <script src="data.js?v=7"></script>
+  <script src="servant_catalog.js?v=8"></script>
+  <script src="data.js?v=8"></script>
   <script src="atlas_images.js"></script>
   <script src="kr_lore.js?v=6"></script>
   <script src="audio.js"></script>
   <script src="art.js?v=7"></script>
   <script src="summon_fx.js?v=7"></script>
-  <script src="game.js?v=7"></script>
-  <script src="battle.js?v=7"></script>
+  <script src="game.js?v=8"></script>
+  <script src="battle.js?v=8"></script>
   <script src="pwa.js"></script>
 </body>
 </html>

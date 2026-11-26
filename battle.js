@@ -95,6 +95,43 @@ window.FgoBattle = (() => {
     return getClassAtkMod(atkCls) * getClassMultiplier(atkCls, defCls) * getAttrMultiplier(atkAttr, defAttr);
   }
 
+  // 원작 FGO 히든 스테이터스·특성 특공 판정 (보구 특공 1.5x!)
+  const STD_7_CLASSES = new Set(['Saber', 'Archer', 'Lancer', 'Rider', 'Caster', 'Assassin', 'Berserker']);
+  function getNpTraitBonus(sv, enemy) {
+    const spList = sv.npSpecial || [];
+    if (!spList.length || !enemy) return { mult: 1.0, matched: [] };
+    const enTraits = enemy.traits || [];
+    const enAlign = enemy.align || '';
+    const enGen = enemy.gender || '';
+    const matched = [];
+    for (const sp of spList) {
+      let hit = false;
+      if (sp === '서번트') {
+        hit = enTraits.includes('서번트') && !enTraits.includes('특별한 별');
+      } else if (sp === '정규 7클래스') {
+        hit = STD_7_CLASSES.has(enemy.cls);
+      } else if (sp === '비스트') {
+        hit = enemy.cls.startsWith('Beast') || enTraits.includes('비스트');
+      } else if (sp === '천/지') {
+        hit = enemy.attr === '천(天)' || enemy.attr === '지(地)';
+      } else if (sp === '천(天)' || sp === '지(地)' || sp === '인(人)' || sp === '성(星)') {
+        hit = enemy.attr === sp;
+      } else if (sp === '남성' || sp === '여성') {
+        hit = enGen === sp;
+      } else if (sp === '질서' || sp === '혼돈' || sp === '선' || sp === '악') {
+        hit = enAlign.includes(sp);
+      } else if (sp === '세이버') {
+        hit = enemy.cls === 'Saber';
+      } else if (sp === '라이더') {
+        hit = enemy.cls === 'Rider';
+      } else {
+        hit = enTraits.includes(sp);
+      }
+      if (hit) matched.push(sp);
+    }
+    return matched.length ? { mult: 1.5, matched } : { mult: 1.0, matched: [] };
+  }
+
   // 원작 FGO 클래스별 기본 스타 집중도 (Star Weight)
   const STAR_WEIGHT = {
     Rider: 200,
@@ -360,71 +397,71 @@ window.FgoBattle = (() => {
       rewards: { sq: 10, embers: 25, mp: 35 },
       waves: [
         [
-          { name: '스켈레톤 검사', cls: 'Saber', attr: '지(地)', hp: 38000, atk: 1900, maxCharge: 4, emoji: '☠️' },
-          { name: '섀도우 랜서', cls: 'Lancer', attr: '지(地)', hp: 46000, atk: 2100, maxCharge: 4, emoji: '👤' },
-          { name: '스켈레톤 검사', cls: 'Saber', attr: '지(地)', hp: 38000, atk: 1900, maxCharge: 4, emoji: '☠️' }
+          { name: '스켈레톤 검사', cls: 'Saber', attr: '지(地)', gender: '없음', align: '-/-', traits: ['마성'], hp: 38000, atk: 1900, maxCharge: 4, emoji: '☠️' },
+          { name: '섀도우 랜서', cls: 'Lancer', attr: '지(地)', gender: '남성', align: '질서/중용', traits: ['서번트', '신성'], hp: 46000, atk: 2100, maxCharge: 4, emoji: '👤' },
+          { name: '스켈레톤 검사', cls: 'Saber', attr: '지(地)', gender: '없음', align: '-/-', traits: ['마성'], hp: 38000, atk: 1900, maxCharge: 4, emoji: '☠️' }
         ],
         [
-          { name: '흑화 기사왕 [얼터]', cls: 'Saber', attr: '인(人)', hp: 145000, breakBars: [175000], atk: 3200, maxCharge: 4, emoji: '🖤', isBoss: true, npName: '엑스칼리버 모르간' }
+          { name: '흑화 기사왕 [얼터]', cls: 'Saber', attr: '인(人)', gender: '여성', align: '질서/악', traits: ['서번트', '용', '알트리아 얼굴', '아서', '왕'], hp: 145000, breakBars: [175000], atk: 3200, maxCharge: 4, emoji: '🖤', isBoss: true, npName: '엑스칼리버 모르간' }
         ]
       ]
     },
     {
       id: 'q_babylonia',
       name: '🐉 바빌로니아 — 티아마트 유체 격퇴전 (고난이도)',
-      desc: '비스트Ⅱ [짐승(獸)] 완전 무상성 보스! 별(星) 속성 서번트가 히든 상성 1.1배 유리합니다.',
+      desc: '비스트Ⅱ [짐승(獸)] 완전 무상성 보스! 별(星) 속성·신성/인류의 위협/초거대 특공이 유리합니다.',
       difficulty: '고난이도 · 추천 Lv.85',
       rewardText: '💎 성정석 +20 · 🟡 레프 +1 · 🔥 종화 +35',
       rewards: { sq: 20, rp: 1, embers: 35 },
       waves: [
         [
-          { name: '라흐무', cls: 'Lancer', attr: '지(地)', hp: 62000, atk: 2400, maxCharge: 4, emoji: '👾' },
-          { name: '라흐무', cls: 'Archer', attr: '지(地)', hp: 62000, atk: 2400, maxCharge: 3, emoji: '👾' },
-          { name: '라흐무', cls: 'Assassin', attr: '지(地)', hp: 58000, atk: 2400, maxCharge: 3, emoji: '👾' }
+          { name: '라흐무', cls: 'Lancer', attr: '지(地)', gender: '없음', align: '혼돈/악', traits: ['마성', '신성'], hp: 62000, atk: 2400, maxCharge: 4, emoji: '👾' },
+          { name: '라흐무', cls: 'Archer', attr: '지(地)', gender: '없음', align: '혼돈/악', traits: ['마성', '신성'], hp: 62000, atk: 2400, maxCharge: 3, emoji: '👾' },
+          { name: '라흐무', cls: 'Assassin', attr: '지(地)', gender: '없음', align: '혼돈/악', traits: ['마성', '신성'], hp: 58000, atk: 2400, maxCharge: 3, emoji: '👾' }
         ],
         [
-          { name: '벨 라흐무', cls: 'Berserker', attr: '지(地)', hp: 105000, atk: 2800, maxCharge: 4, emoji: '😈' },
-          { name: '비스트Ⅱ 티아마트', cls: 'BeastII', attr: '수(獸)', hp: 170000, breakBars: [200000], atk: 3400, maxCharge: 4, emoji: '🐉', isBoss: true, npName: '네가 제네시스' }
+          { name: '벨 라흐무', cls: 'Berserker', attr: '지(地)', gender: '없음', align: '혼돈/악', traits: ['마성', '신성', '초거대'], hp: 105000, atk: 2800, maxCharge: 4, emoji: '😈' },
+          { name: '비스트Ⅱ 티아마트', cls: 'BeastII', attr: '수(獸)', gender: '여성', align: '혼돈/악', traits: ['신성', '신령', '초거대', '인류의 위협', '비스트', '인간형 없음'], hp: 170000, breakBars: [200000], atk: 3400, maxCharge: 4, emoji: '🐉', isBoss: true, npName: '네가 제네시스' }
         ]
       ]
     },
     {
       id: 'q_goetia',
       name: '🔥 관위시간신전 — 마신왕 게티아 (비스트Ⅰ)',
-      desc: '3술사(라·캐·어)에게 2.0x 약점, 3기사에게 2.0x 반격, 어벤저에게 0.5x 반감! 별(星) 속성 1.1x!',
+      desc: '3술사(라·캐·어)에게 2.0x 약점, 3기사에게 2.0x 반격, 어벤저에게 0.5x 반감! 별(星) 속성·왕/비스트 특공!',
       difficulty: '비스트Ⅰ · 추천 Lv.90',
       rewardText: '💎 성정석 +25 · 🟡 레프 +2 · 🔥 종화 +40',
       rewards: { sq: 25, rp: 2, embers: 40 },
       waves: [
         [
-          { name: '마신주 플라우로스', cls: 'Caster', attr: '천(天)', hp: 85000, atk: 2600, maxCharge: 4, emoji: '👁️' },
-          { name: '마신왕 게티아', cls: 'BeastI', attr: '수(獸)', hp: 200000, breakBars: [240000], atk: 3600, maxCharge: 4, emoji: '🔥', isBoss: true, npName: '아르스 알마델 살로모니스' }
+          { name: '마신주 플라우로스', cls: 'Caster', attr: '천(天)', gender: '무성', align: '-/-', traits: ['마성', '초거대', '인류의 위협', '인간형 없음'], hp: 85000, atk: 2600, maxCharge: 4, emoji: '👁️' },
+          { name: '마신왕 게티아', cls: 'BeastI', attr: '수(獸)', gender: '무성', align: '-/-', traits: ['왕', '인류의 위협', '비스트', '인간형 없음'], hp: 200000, breakBars: [240000], atk: 3600, maxCharge: 4, emoji: '🔥', isBoss: true, npName: '아르스 알마델 살로모니스' }
         ]
       ]
     },
     {
       id: 'q_kiara',
       name: '🌸 SE.RA.PH — 마성보살 키아라 (비스트Ⅲ/R)',
-      desc: '얼터에고·문캔서에게 1.2x 약점, 나머지 전 클래스 무상성! 별(星) 속성 아키타입:어스가 빛납니다.',
+      desc: '얼터에고·문캔서에게 1.2x 약점! 여성·마성·초거대·비스트 특공 및 별(星) 속성이 빛납니다.',
       difficulty: '비스트Ⅲ/R · 추천 Lv.90',
       rewardText: '💎 성정석 +25 · 🎫 호부 +1 · 🟡 레프 +1',
       rewards: { sq: 25, tickets: 1, rp: 1 },
       waves: [
         [
-          { name: '마성보살 셋쇼인 키아라', cls: 'BeastIIIR', attr: '수(獸)', hp: 215000, breakBars: [255000], atk: 3500, maxCharge: 4, emoji: '🌸', isBoss: true, npName: '아미타 아미달라 · 헤븐즈 홀' }
+          { name: '마성보살 셋쇼인 키아라', cls: 'BeastIIIR', attr: '수(獸)', gender: '여성', align: '혼돈/악', traits: ['마성', '초거대', '인류의 위협', '비스트'], hp: 215000, breakBars: [255000], atk: 3500, maxCharge: 4, emoji: '🌸', isBoss: true, npName: '아미타 아미달라 · 헤븐즈 홀' }
         ]
       ]
     },
     {
       id: 'q_challenge',
       name: '👑 이문대 챌린지 — 거신 케르눈노스 (EX)',
-      desc: '6인 총력전! 버서커 [땅(地)] 2중 브레이크 최종 보스. 포리너·하늘(天) 속성과 영주를 총동원하세요!',
+      desc: '6인 총력전! 버서커 [땅(地)] 신성·초거대·요정·인류의 위협 최종 보스. 특공 딜러와 영주를 총동원하세요!',
       difficulty: 'EX 챌린지 · 추천 Lv.90+',
       rewardText: '💎 성정석 +30 · 🎫 호부 +1 · 🟡 레프 +2',
       rewards: { sq: 30, tickets: 1, rp: 2 },
       waves: [
         [
-          { name: '재액의 거신 케르눈노스', cls: 'Berserker', attr: '지(地)', hp: 220000, breakBars: [260000, 310000], atk: 3900, maxCharge: 4, emoji: '👁️', isBoss: true, npName: '칼라미티 커스' }
+          { name: '재액의 거신 케르눈노스', cls: 'Berserker', attr: '지(地)', gender: '무성', align: '혼돈/악', traits: ['신성', '초거대', '거인', '요정', '인류의 위협'], hp: 220000, breakBars: [260000, 310000], atk: 3900, maxCharge: 4, emoji: '👁️', isBoss: true, npName: '칼라미티 커스' }
         ]
       ]
     }
@@ -720,6 +757,9 @@ window.FgoBattle = (() => {
       name: e.name,
       cls: e.cls,
       attr: e.attr || '인(人)',
+      gender: e.gender || '없음',
+      align: e.align || '-/-',
+      traits: Array.isArray(e.traits) ? [...e.traits] : [],
       maxHp: e.hp,
       hp: e.hp,
       breakBars: [...(e.breakBars || [])],
@@ -895,6 +935,7 @@ window.FgoBattle = (() => {
         </div>
         <div class="enemy-sprite">${en.emoji}</div>
         <div class="enemy-name">${en.name}${en.stunned ? ' ⚡스턴' : ''}</div>
+        ${en.traits && en.traits.length ? `<div class="enemy-trait-line">${en.gender !== '없음' ? en.gender + ' · ' : ''}${en.align !== '-/-' ? en.align + ' · ' : ''}${en.traits.slice(0, 3).join(' · ')}</div>` : ''}
         <div class="hp-bar-track"><div class="hp-bar-fill enemy-hp" style="width:${hpPct}%"></div></div>
         <div class="enemy-hp-text">HP ${Math.max(0, en.hp).toLocaleString()} / ${en.maxHp.toLocaleString()}</div>
         <div class="enemy-charge-row ${en.charge >= en.maxCharge ? 'danger' : ''}">
@@ -1372,12 +1413,18 @@ window.FgoBattle = (() => {
           addLog(`✨ ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 전열 대숙정방어/무적 + 공업 + 회복!`);
         } else if (cat === 'aoe') {
           const baseMult = c.type === 'Buster' ? 3.8 : (c.type === 'Arts' ? 3.3 : 3.5);
+          const spHits = [];
           battle.enemies.forEach(en => {
             if (en.hp <= 0) return;
             const clsMult = getClassMultiplier(sv.cls, en.cls);
             const totalAff = getCombinedDamageMod(sv.cls, en.cls, sv.attribute, en.attr);
-            const dmg = m.atk * baseMult * npLvMult * (1 + m.buffs.atk) * (1 + cardBuff) * npDmgMult * totalAff * ocMult * (0.95 + Math.random() * 0.1);
-            const ok = damageEnemy(en, dmg, clsMult > 1 ? 'dmg-weak' : 'dmg-np');
+            const traitBonus = getNpTraitBonus(sv, en);
+            const dmg = m.atk * baseMult * npLvMult * (1 + m.buffs.atk) * (1 + cardBuff) * npDmgMult * totalAff * traitBonus.mult * ocMult * (0.95 + Math.random() * 0.1);
+            const ok = damageEnemy(en, dmg, (clsMult > 1 || traitBonus.mult > 1) ? 'dmg-weak' : 'dmg-np');
+            if (traitBonus.mult > 1) {
+              spHits.push(`${en.name}(${traitBonus.matched[0]})`);
+              showFloatDmg(`enemy-dmg-${en.idx}`, `💥 특공 ${traitBonus.matched[0]}!`, 'dmg-break');
+            }
             const okNpMult = ok ? 1.5 : 1.0;
             const okStarMult = ok ? 1.3 : 1.0;
             const enNpMod = getEnemyNpMod(en.cls); // 적 클래스별 NP 보정(캐1.2/라1.1/어0.9/버0.8)
@@ -1387,19 +1434,23 @@ window.FgoBattle = (() => {
               battle.stars = Math.min(99, battle.stars + Math.round(8 * okStarMult));
             }
           });
-          addLog(`💥 ${sv.name} 대군 보구 [${sv.npName}] (OC ${ocStage * 100}%) 작렬!`);
+          addLog(`💥 ${sv.name} 대군 보구 [${sv.npName}] (OC ${ocStage * 100}%) 작렬!${spHits.length ? ` [💥특공 1.5×: ${spHits.join(', ')}]` : ''}`);
         } else if (currentTarget) {
           const baseMult = c.type === 'Buster' ? 6.2 : (c.type === 'Arts' ? 5.6 : 5.9);
           const clsMult = getClassMultiplier(sv.cls, currentTarget.cls);
           const totalAff = getCombinedDamageMod(sv.cls, currentTarget.cls, sv.attribute, currentTarget.attr);
-          const dmg = m.atk * baseMult * npLvMult * (1 + m.buffs.atk) * (1 + cardBuff) * npDmgMult * totalAff * ocMult * (0.95 + Math.random() * 0.1);
-          const ok = damageEnemy(currentTarget, dmg, clsMult > 1 ? 'dmg-weak' : 'dmg-np');
+          const traitBonus = getNpTraitBonus(sv, currentTarget);
+          const dmg = m.atk * baseMult * npLvMult * (1 + m.buffs.atk) * (1 + cardBuff) * npDmgMult * totalAff * traitBonus.mult * ocMult * (0.95 + Math.random() * 0.1);
+          const ok = damageEnemy(currentTarget, dmg, (clsMult > 1 || traitBonus.mult > 1) ? 'dmg-weak' : 'dmg-np');
+          if (traitBonus.mult > 1) {
+            showFloatDmg(`enemy-dmg-${currentTarget.idx}`, `💥 특공 ${traitBonus.matched[0]}!`, 'dmg-break');
+          }
           const okNpMult = ok ? 1.5 : 1.0;
           const okStarMult = ok ? 1.3 : 1.0;
           const enNpMod = getEnemyNpMod(currentTarget.cls);
           if (c.type === 'Arts') m.np = Math.min(maxNp, m.np + Math.round(22 * (1 + cardBuff) * (1 + m.buffs.npGain) * okNpMult * enNpMod));
           if (c.type === 'Quick') battle.stars = Math.min(99, battle.stars + Math.round(14 * okStarMult));
-          addLog(`💥 ${sv.name} 단일 보구 [${sv.npName}] (OC ${ocStage * 100}%) → ${currentTarget.name} ${Math.round(dmg).toLocaleString()}!`);
+          addLog(`💥 ${sv.name} 단일 보구 [${sv.npName}] (OC ${ocStage * 100}%) → ${currentTarget.name} ${Math.round(dmg).toLocaleString()}!${traitBonus.mult > 1 ? ` [💥${traitBonus.matched.join('/')} 특공 1.5×!]` : ''}`);
         }
         m.buffs.npBoost = 1;
       } else if (currentTarget) {
