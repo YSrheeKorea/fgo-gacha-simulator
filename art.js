@@ -268,7 +268,7 @@ const ArtRenderer = (() => {
   }
 
   function renderCEPortraitInner(ce) {
-    const a = ce.art;
+    const a = ce.art || { bg1: '#1a2744', bg2: '#0b1224', primary: ce.accent || '#ffd86b', secondary: '#38bdf8' };
     const uid = ce.id;
     return `
       <defs>
