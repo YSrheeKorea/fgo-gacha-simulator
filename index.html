@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -11,8 +12,9 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <title>CHALDEA SUMMON SIMULATOR — 페그오 2차 창작 가챠 시뮬레이터</title>
-  <link rel="stylesheet" href="style.css?v=11">
+  <link rel="stylesheet" href="style.css?v=13">
 </head>
+
 <body>
   <div class="cosmos-bg" aria-hidden="true"></div>
 
@@ -58,7 +60,8 @@
         <span class="res-label">성배</span>
         <strong id="res-grail">3</strong>
       </div>
-      <button class="pwa-install-pill btn-pwa-install" id="btn-header-pwa-install" title="기기 홈 화면 / 바탕화면에 앱으로 설치">📲 앱 설치</button>
+      <button class="pwa-install-pill btn-pwa-install" id="btn-header-pwa-install" title="기기 홈 화면 / 바탕화면에 앱으로 설치">📲 앱
+        설치</button>
       <button class="icon-btn" id="btn-art-mode" title="공식 일러스트 / SVG 모드 전환">🖼️</button>
       <button class="icon-btn" id="btn-mute" title="사운드 켜기/끄기">🔊</button>
     </div>
@@ -104,12 +107,14 @@
           <div class="custom-pickup-box hidden" id="custom-pickup-box">
             <div class="cpu-row">
               <label for="custom-pu5-sel">★5 픽업 지정</label>
-              <input type="search" class="fgo-search-input cpu-search" id="custom-pu5-search" placeholder="★5 검색 (예: 올가마리, 캐밥)...">
+              <input type="search" class="fgo-search-input cpu-search" id="custom-pu5-search"
+                placeholder="★5 검색 (예: 올가마리, 캐밥)...">
               <select class="filter-select cpu-sel" id="custom-pu5-sel"></select>
             </div>
             <div class="cpu-row">
               <label for="custom-pu4-sel">★4 픽업 지정</label>
-              <input type="search" class="fgo-search-input cpu-search" id="custom-pu4-search" placeholder="★4 검색 (예: 얼터, 에미야)...">
+              <input type="search" class="fgo-search-input cpu-search" id="custom-pu4-search"
+                placeholder="★4 검색 (예: 얼터, 에미야)...">
               <select class="filter-select cpu-sel" id="custom-pu4-sel"></select>
             </div>
           </div>
@@ -268,7 +273,8 @@
 
         <!-- 택티컬 페이즈: 우측 하단 크리티컬 스타 + ATTACK 버튼 (원작 FGO 배치!) -->
         <div class="ba-attack-bar" id="ba-attack-bar">
-          <div class="ba-phase-hint">하단 서번트 스킬 · 우측 상단 <strong>Skill / 영주</strong>를 사용한 뒤 <strong>ATTACK</strong>을 눌러 카드를 선택하세요!</div>
+          <div class="ba-phase-hint">하단 서번트 스킬 · 우측 상단 <strong>Skill / 영주</strong>를 사용한 뒤 <strong>ATTACK</strong>을 눌러
+            카드를 선택하세요!</div>
           <div class="ba-bottom-right">
             <div class="ba-star-box" title="다음 턴 Attack 시 5장의 커맨드 카드에 클래스 집중도별로 분배됩니다">
               <span class="ba-star-label">CRITICAL STAR</span>
@@ -307,7 +313,8 @@
       </div>
 
       <div class="filter-bar">
-        <input type="search" class="fgo-search-input codex-search" id="codex-search" placeholder="이름 / No. 검색 (예: 마슈, 444)...">
+        <input type="search" class="fgo-search-input codex-search" id="codex-search"
+          placeholder="이름 / No. 검색 (예: 마슈, 444)...">
         <div class="filter-group" id="codex-type-filter">
           <button class="filter-btn active" data-type="servant">서번트 (475)</button>
           <button class="filter-btn" data-type="ce">개념예장</button>
@@ -412,7 +419,8 @@
               <div class="fgo-dlg-badge" id="myroom-dlg-badge">MY ROOM</div>
             </div>
             <div class="fgo-dlg-divider"></div>
-            <div class="fgo-dlg-text dialogue-text" id="myroom-dialogue-text">소환으로 서번트를 획득하면 마이룸에서 대화를 나누고 육성할 수 있습니다!</div>
+            <div class="fgo-dlg-text dialogue-text" id="myroom-dialogue-text">소환으로 서번트를 획득하면 마이룸에서 대화를 나누고 육성할 수 있습니다!
+            </div>
             <div class="fgo-dlg-footer">
               <button class="small-gold-btn" id="btn-myroom-talk">💬 대화하기 (인연 +1)</button>
               <span class="fgo-dlg-cursor visible" id="myroom-dlg-cursor">▼</span>
@@ -470,7 +478,8 @@
               <h3>👥 마이룸 파트너 변경 (보유 서번트)</h3>
               <span id="mr-owned-count">0기 보유</span>
             </div>
-            <input type="search" class="fgo-search-input" id="myroom-roster-search" placeholder="보유 서번트 검색 (이름 / No.)..." style="margin-bottom:8px">
+            <input type="search" class="fgo-search-input" id="myroom-roster-search"
+              placeholder="보유 서번트 검색 (이름 / No.)..." style="margin-bottom:8px">
             <div class="myroom-roster-list" id="myroom-roster-list"></div>
           </div>
         </div>
@@ -507,7 +516,8 @@
             <h3>🏆 순례의 축제 — 이벤트 배포 서번트 교환소 (59기)</h3>
             <p class="panel-desc">원작 FGO의 모든 이벤트 배포 서번트를 마나프리즘(첫 영입 100 / 보구업 50)으로 영입할 수 있습니다!</p>
           </div>
-          <input type="search" class="fgo-search-input" id="welfare-search" placeholder="배포 서번트 검색 (예: BB, 산타, 이오리)..." style="max-width:250px">
+          <input type="search" class="fgo-search-input" id="welfare-search" placeholder="배포 서번트 검색 (예: BB, 산타, 이오리)..."
+            style="max-width:250px">
         </div>
         <div class="welfare-grid" id="welfare-grid"></div>
       </div>
@@ -704,7 +714,8 @@
               <img src="icons/icon-192.png" alt="칼데아 가챠 앱 아이콘" class="pwa-preview-icon">
               <div>
                 <h3>📲 앱 설치 (PWA · 오프라인 지원)</h3>
-                <p class="panel-desc" id="pwa-install-status">PC 바탕화면이나 스마트폰 홈 화면에 앱으로 설치해 전체 화면과 오프라인 캐시로 쾌적하게 즐길 수 있습니다.</p>
+                <p class="panel-desc" id="pwa-install-status">PC 바탕화면이나 스마트폰 홈 화면에 앱으로 설치해 전체 화면과 오프라인 캐시로 쾌적하게 즐길 수
+                  있습니다.</p>
               </div>
             </div>
             <button class="small-gold-btn" id="btn-settings-pwa-install">📲 앱 설치하기</button>
@@ -811,7 +822,8 @@
         <button class="modal-close" id="btn-close-mc">✕</button>
       </div>
       <div class="mc-modal-toolbar">
-        <input type="search" class="fgo-search-input" id="mc-search" placeholder="마술예장·스킬 검색 (예: 오더 체인지, 아틀라스, 셔플, 근성)..." style="flex:1;min-width:180px">
+        <input type="search" class="fgo-search-input" id="mc-search"
+          placeholder="마술예장·스킬 검색 (예: 오더 체인지, 아틀라스, 셔플, 근성)..." style="flex:1;min-width:180px">
         <div class="filter-group" id="mc-cat-filter">
           <button class="filter-btn active" data-cat="all">전체 28종</button>
           <button class="filter-btn" data-cat="core">상시·스토리 (7)</button>
@@ -882,7 +894,8 @@
   <script src="art.js?v=10"></script>
   <script src="summon_fx.js?v=12"></script>
   <script src="game.js?v=12"></script>
-  <script src="battle.js?v=11"></script>
+  <script src="battle.js?v=13"></script>
   <script src="pwa.js"></script>
 </body>
+
 </html>

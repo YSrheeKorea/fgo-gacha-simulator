@@ -35,35 +35,35 @@ window.FgoBattle = (() => {
 
   // CLASS_AFFINITY[공격군][피격군] (표에 없는 조합은 기본 1.0x 무상성)
   const CLASS_AFFINITY = {
-    Saber:      { Archer: 0.5, Lancer: 2.0, Berserker: 2.0, Ruler: 0.5 },
-    Archer:     { Saber: 2.0, Lancer: 0.5, Berserker: 2.0, Ruler: 0.5 },
-    Lancer:     { Saber: 0.5, Archer: 2.0, Berserker: 2.0, Ruler: 0.5 },
-    Rider:      { Caster: 2.0, Assassin: 0.5, Berserker: 2.0, Ruler: 0.5, BeastI: 2.0 },
-    Caster:     { Rider: 0.5, Assassin: 2.0, Berserker: 2.0, Ruler: 0.5, BeastI: 2.0 },
-    Assassin:   { Rider: 2.0, Caster: 0.5, Berserker: 2.0, Ruler: 0.5, BeastI: 2.0 },
-    Berserker:  {
+    Saber: { Archer: 0.5, Lancer: 2.0, Berserker: 2.0, Ruler: 0.5 },
+    Archer: { Saber: 2.0, Lancer: 0.5, Berserker: 2.0, Ruler: 0.5 },
+    Lancer: { Saber: 0.5, Archer: 2.0, Berserker: 2.0, Ruler: 0.5 },
+    Rider: { Caster: 2.0, Assassin: 0.5, Berserker: 2.0, Ruler: 0.5, BeastI: 2.0 },
+    Caster: { Rider: 0.5, Assassin: 2.0, Berserker: 2.0, Ruler: 0.5, BeastI: 2.0 },
+    Assassin: { Rider: 2.0, Caster: 0.5, Berserker: 2.0, Ruler: 0.5, BeastI: 2.0 },
+    Berserker: {
       Saber: 1.5, Archer: 1.5, Lancer: 1.5, Rider: 1.5, Caster: 1.5, Assassin: 1.5,
       Berserker: 1.5, Ruler: 1.5, Avenger: 1.5, MoonCancer: 1.5, AlterEgo: 1.5,
       Pretender: 1.5, Foreigner: 0.5, BeastI: 1.5
     },
-    Shielder:   {},
-    BeastII:    {},
-    Ruler:      { Berserker: 2.0, Avenger: 0.5, MoonCancer: 2.0 },
-    Avenger:    { Berserker: 2.0, Ruler: 2.0, MoonCancer: 0.5 },
+    Shielder: {},
+    BeastII: {},
+    Ruler: { Berserker: 2.0, Avenger: 0.5, MoonCancer: 2.0 },
+    Avenger: { Berserker: 2.0, Ruler: 2.0, MoonCancer: 0.5 },
     MoonCancer: { Berserker: 2.0, Ruler: 0.5, Avenger: 2.0, BeastIIIR: 1.2 },
-    AlterEgo:   {
+    AlterEgo: {
       Saber: 0.5, Archer: 0.5, Lancer: 0.5, Rider: 1.5, Caster: 1.5, Assassin: 1.5,
       Berserker: 2.0, Pretender: 0.5, Foreigner: 2.0, BeastIIIR: 1.2
     },
-    Pretender:  {
+    Pretender: {
       Saber: 1.5, Archer: 1.5, Lancer: 1.5, Rider: 0.5, Caster: 0.5, Assassin: 0.5,
       Berserker: 2.0, AlterEgo: 2.0, Foreigner: 0.5
     },
-    Foreigner:  { Berserker: 2.0, AlterEgo: 0.5, Pretender: 2.0, Foreigner: 2.0 },
-    Beast:      { Saber: 1.5, Archer: 1.5, Lancer: 1.5, Rider: 1.5, Caster: 1.5, Assassin: 1.5, Berserker: 1.5, Ruler: 0.5, Avenger: 0.5, MoonCancer: 0.5, AlterEgo: 0.5, Pretender: 0.5, Foreigner: 0.5 },
-    UnBeast:    { Saber: 1.5, Archer: 1.5, Lancer: 1.5, Rider: 1.5, Caster: 1.5, Assassin: 1.5, Berserker: 1.5, Ruler: 0.5, Avenger: 0.5, MoonCancer: 0.5, AlterEgo: 0.5, Pretender: 0.5, Foreigner: 0.5 },
-    BeastI:     { Saber: 2.0, Archer: 2.0, Lancer: 2.0, Berserker: 2.0, Avenger: 0.5 },
-    BeastIIIR:  {}
+    Foreigner: { Berserker: 2.0, AlterEgo: 0.5, Pretender: 2.0, Foreigner: 2.0 },
+    Beast: { Saber: 1.5, Archer: 1.5, Lancer: 1.5, Rider: 1.5, Caster: 1.5, Assassin: 1.5, Berserker: 1.5, Ruler: 0.5, Avenger: 0.5, MoonCancer: 0.5, AlterEgo: 0.5, Pretender: 0.5, Foreigner: 0.5 },
+    UnBeast: { Saber: 1.5, Archer: 1.5, Lancer: 1.5, Rider: 1.5, Caster: 1.5, Assassin: 1.5, Berserker: 1.5, Ruler: 0.5, Avenger: 0.5, MoonCancer: 0.5, AlterEgo: 0.5, Pretender: 0.5, Foreigner: 0.5 },
+    BeastI: { Saber: 2.0, Archer: 2.0, Lancer: 2.0, Berserker: 2.0, Avenger: 0.5 },
+    BeastIIIR: {}
   };
 
   // 5×5 히든 속성 상성 (인간→하늘→땅→인간 1.1x/0.9x, 별↔짐승 1.1x)
@@ -183,7 +183,7 @@ window.FgoBattle = (() => {
   }
 
   const SUPPORT_NPS = new Set(['sv_castoria', 'sv_waver', 'sv_jeanne', 'sv_tamamo', 'sv_xu_fu', 'sv_stheno']);
-  const SINGLE_NPS  = new Set(['sv_melusine', 'sv_enkidu', 'sv_ozymandias', 'sv_jack', 'sv_cu_alter', 'sv_heracles', 'sv_baobhan', 'sv_tristan', 'sv_cu', 'sv_ushiwaka', 'sv_robin', 'sv_bedivere', 'sv_euryale', 'sv_izok', 'sv_mandricardo']);
+  const SINGLE_NPS = new Set(['sv_melusine', 'sv_enkidu', 'sv_ozymandias', 'sv_jack', 'sv_cu_alter', 'sv_heracles', 'sv_baobhan', 'sv_tristan', 'sv_cu', 'sv_ushiwaka', 'sv_robin', 'sv_bedivere', 'sv_euryale', 'sv_izok', 'sv_mandricardo']);
 
   function getNpCategory(sv) {
     if (sv.npCat) return sv.npCat;
@@ -192,107 +192,173 @@ window.FgoBattle = (() => {
     return 'aoe';
   }
 
-  // 서번트 3스킬 생성 (저장 복원 가능하도록 데이터+핸들러 분리)
+  // 서번트 3스킬 생성 (원작 고증 target: 'ally' 개인 지정 / 'all' 단체 지정 / 'self' 본인 지정 / 'enemy' 적 지정)
   function getSkillDefs(sv) {
     const names = (sv.skills && sv.skills.length >= 3) ? sv.skills : ['카리스마 A', '마력방출 A', '심안(진) B'];
     if (sv.id === 'sv_castoria') {
       return [
-        { key: 'castoria_1', name: names[0], cd: 5, icon: '⚔️', desc: '아군 전체 공격력 +20%(3T) & NP +30%' },
-        { key: 'castoria_2', name: names[1], cd: 5, icon: '💎', desc: '아군 전체 NP +20% & NP 획득량 +30%(3T)' },
-        { key: 'castoria_3', name: names[2], cd: 6, icon: '🔵', desc: '아군 전체 Arts +50%(3T) & 무적(1T)' }
+        { key: 'castoria_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & NP +30%' },
+        { key: 'castoria_2', name: names[1], cd: 5, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 NP +20% & 아군 전체 NP 획득량 +30%(3T)' },
+        { key: 'castoria_3', name: names[2], cd: 6, icon: '🔵', target: 'ally', desc: '[개인] 선택 아군 1명 Arts +50%(3T) & 무적(1T)' }
       ];
     }
     if (sv.id === 'sv_oberon') {
       return [
-        { key: 'oberon_1', name: names[0], cd: 5, icon: '🦋', desc: '아군 전체 보구 위력 +30%(3T) & NP +20%' },
-        { key: 'oberon_2', name: names[1], cd: 5, icon: '💎', desc: '아군 전체 NP +50% & 크리스타 +20' },
-        { key: 'oberon_3', name: names[2], cd: 6, icon: '🔥', desc: '아군 전체 Buster +50% & 보구 위력 2배 부스트(1T)!' }
+        { key: 'oberon_1', name: names[0], cd: 5, icon: '🦋', target: 'all',  desc: '[단체] 아군 전체 보구 위력 +30%(3T) & NP +20%' },
+        { key: 'oberon_2', name: names[1], cd: 5, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 NP +50% & 크리스타 +20' },
+        { key: 'oberon_3', name: names[2], cd: 6, icon: '🔥', target: 'ally', desc: '[개인] 선택 아군 1명 Buster +50%(1T) & 보구 위력 2배 부스트(1T)!' }
       ];
     }
     if (sv.id === 'sv_koyanskaya') {
       return [
-        { key: 'koyan_1', name: names[0], cd: 6, icon: '💎', desc: '아군 전체 NP +50% & 스킬 쿨타임 -2턴' },
-        { key: 'koyan_2', name: names[1], cd: 5, icon: '⭐', desc: '아군 전체 공격력 +25%(3T) & 크리스타 +20' },
-        { key: 'koyan_3', name: names[2], cd: 5, icon: '🔴', desc: '아군 전체 Buster +50%(3T) & 크리티컬 위력 +50%' }
+        { key: 'koyan_1', name: names[0], cd: 6, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 NP +50% & 스킬 쿨타임 -2턴' },
+        { key: 'koyan_2', name: names[1], cd: 5, icon: '⭐', target: 'ally', desc: '[개인] 선택 아군 1명 공격력 +25%(3T) & 크리스타 +20' },
+        { key: 'koyan_3', name: names[2], cd: 5, icon: '🔴', target: 'ally', desc: '[개인] 선택 아군 1명 Buster +50%(3T) & 크리티컬 위력 +50%(3T)' }
       ];
     }
     if (sv.id === 'sv_waver') {
       return [
-        { key: 'waver_1', name: names[0], cd: 5, icon: '💎', desc: '아군 전체 크리 위력 +40% & NP +30%' },
-        { key: 'waver_2', name: names[1], cd: 5, icon: '🛡️', desc: '아군 전체 방어력 +30%(3T) & NP +10%' },
-        { key: 'waver_3', name: names[2], cd: 5, icon: '⚔️', desc: '아군 전체 공격력 +30%(3T) & NP +10%' }
+        { key: 'waver_1', name: names[0], cd: 5, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 크리 위력 +40%(3T) & NP +30%' },
+        { key: 'waver_2', name: names[1], cd: 5, icon: '🛡️', target: 'all',  desc: '[단체] 아군 전체 방어력 +30%(3T) & NP +10%' },
+        { key: 'waver_3', name: names[2], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +30%(3T) & NP +10%' }
+      ];
+    }
+    if (sv.id === 'sv_no_001') {
+      return [
+        { key: 'mash_1', name: names[0], cd: 5, icon: '🛡️', target: 'all',  desc: '[단체] 아군 전체 방어력 +20%(3T)' },
+        { key: 'mash_2', name: names[1], cd: 6, icon: '✨', target: 'ally', desc: '[개인] 선택 아군 1명 무적(1T) & NP +20%' },
+        { key: 'mash_3', name: names[2], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP 획득량 +100%(1T) & HP +2000' }
+      ];
+    }
+    if (sv.id === 'sv_tamamo') {
+      return [
+        { key: 'tamamo_1', name: names[0], cd: 5, icon: '⏬', target: 'enemy', desc: '[적] 타겟 적의 차지 -1칸 감소' },
+        { key: 'tamamo_2', name: names[1], cd: 5, icon: '🛡️', target: 'self',  desc: '[본인] 자신 방어력 +30%(3T)' },
+        { key: 'tamamo_3', name: names[2], cd: 5, icon: '🔵', target: 'ally',  desc: '[개인] 선택 아군 1명 Arts +50%(3T) & HP +2500' }
+      ];
+    }
+    if (sv.id === 'sv_xu_fu') {
+      return [
+        { key: 'xufu_1', name: names[0], cd: 5, icon: '💚', target: 'self', desc: '[본인] 자신 HP +3000 & 약화 해제' },
+        { key: 'xufu_2', name: names[1], cd: 5, icon: '🔵', target: 'all',  desc: '[단체] 아군 전체 Arts +20%(3T) & 크리티컬 위력 +20%(3T)' },
+        { key: 'xufu_3', name: names[2], cd: 5, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 NP +30% & NP 획득량 +30%(3T)' }
       ];
     }
     const cardIcon = sv.npType === 'Buster' ? '🔴' : (sv.npType === 'Arts' ? '🔵' : '🟢');
     const npCharge = sv.id === 'sv_arcueid' ? 100 : (sv.rarity === 5 ? 50 : (sv.rarity === 4 ? 30 : 25));
+    const isSup = getNpCategory(sv) === 'support';
     return [
-      { key: 'gen_1', name: names[0], cd: 5, icon: '⚔️', desc: `아군 전체 공격력 +20%(3T) & 자신 ${sv.npType} +30%(3T)` },
-      { key: 'gen_2', name: names[1], cd: 5, icon: '💎', desc: `자신 NP +${npCharge}% & 크리티컬 스타 +15` },
-      { key: 'gen_3', name: names[2], cd: 6, icon: cardIcon, desc: '자신 회피/무적(1T) & 보구 위력 +30%(3T) & HP +2500' }
+      { key: 'gen_1', name: names[0], cd: 5, icon: '⚔️', target: 'all', desc: `[단체] 아군 전체 공격력 +20%(3T) & 자신 ${sv.npType} +30%(3T)` },
+      isSup
+        ? { key: 'sup_2', name: names[1], cd: 5, icon: '💎', target: 'ally', desc: `[개인] 선택 아군 1명 NP +30% & 크리티컬 스타 +15` }
+        : { key: 'gen_2', name: names[1], cd: 5, icon: '💎', target: 'self', desc: `[본인] 자신 NP +${npCharge}% & 크리티컬 스타 +15` },
+      { key: 'gen_3', name: names[2], cd: 6, icon: cardIcon, target: 'self', desc: '[본인] 자신 무적(1T) & 보구 위력 +30%(3T) & HP +2500' }
     ];
   }
 
-  function applyServantSkill(b, caster, key, name) {
+  function applyServantSkill(b, caster, key, name, targetRIdx = null) {
     const alive = getActiveMembers(b);
     const sv = SERVANT_MAP[caster.id];
+    const target = (targetRIdx !== null && targetRIdx !== undefined && b.roster[targetRIdx] && b.roster[targetRIdx].hp > 0)
+      ? b.roster[targetRIdx]
+      : caster;
+    const tgtSv = SERVANT_MAP[target.id];
+    const tgtName = tgtSv?.nickname || tgtSv?.name || '';
     const addNp = (m, amt) => { m.np = Math.min(getMaxNp(m.npLevel), m.np + amt); };
+    ensureMemberBuffs(caster);
+    ensureMemberBuffs(target);
 
     switch (key) {
       case 'castoria_1':
-        alive.forEach(m => { m.buffs.atk += 0.2; m.buffs.atkT = 3; addNp(m, 30); });
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.2; m.buffs.atkT = 3; addNp(m, 30); });
         return `${sv.name} [${name}]! 아군 전체 공업 +20% & NP +30%!`;
       case 'castoria_2':
-        alive.forEach(m => { addNp(m, 20); m.buffs.npGain += 0.3; m.buffs.npGainT = 3; });
-        return `${sv.name} [${name}]! 아군 전체 NP +20% & NP 획득량 UP!`;
+        addNp(target, 20);
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.npGain += 0.3; m.buffs.npGainT = 3; });
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} NP +20% & 아군 전체 NP 획득량 +30%!`;
       case 'castoria_3':
-        alive.forEach(m => { m.buffs.arts += 0.5; m.buffs.cardT = 3; m.buffs.invul = Math.max(m.buffs.invul, 1); });
-        return `${sv.name} [${name}]! 아군 전체 Arts +50% & 무적(1T)!`;
+        target.buffs.arts += 0.5; target.buffs.cardT = 3; target.buffs.invul = Math.max(target.buffs.invul, 1);
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} Arts +50%(3T) & 무적(1T)!`;
       case 'oberon_1':
-        alive.forEach(m => { m.buffs.npDmg += 0.3; m.buffs.npDmgT = 3; addNp(m, 20); });
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.npDmg += 0.3; m.buffs.npDmgT = 3; addNp(m, 20); });
         return `${sv.name} [${name}]! 아군 전체 보구 위력 +30% & NP +20%!`;
       case 'oberon_2':
-        alive.forEach(m => addNp(m, 50));
+        addNp(target, 50);
         b.stars = Math.min(99, b.stars + 20);
-        return `${sv.name} [${name}]! 아군 전체 NP +50% & 스타 +20!`;
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} NP +50% & 스타 +20!`;
       case 'oberon_3':
-        alive.forEach(m => { m.buffs.buster += 0.5; m.buffs.cardT = 3; m.buffs.npBoost = 2.0; });
-        return `${sv.name} [${name}]! 아군 전체 Buster +50% & 보구 위력 2배 부스트!!`;
+        target.buffs.buster += 0.5; target.buffs.cardT = Math.max(target.buffs.cardT, 1); target.buffs.npBoost = 2.0;
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} Buster +50% & 보구 위력 2배 부스트!!`;
       case 'koyan_1':
-        alive.forEach(m => { addNp(m, 50); m.skills.forEach(sk => { if (sk.curCd > 0) sk.curCd = Math.max(0, sk.curCd - 2); }); });
-        return `${sv.name} [${name}]! 아군 전체 NP +50% & 쿨타임 -2턴!`;
+        addNp(target, 50);
+        target.skills.forEach(sk => { if (sk.curCd > 0) sk.curCd = Math.max(0, sk.curCd - 2); });
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} NP +50% & 쿨타임 -2턴!`;
       case 'koyan_2':
-        alive.forEach(m => { m.buffs.atk += 0.25; m.buffs.atkT = 3; });
+        target.buffs.atk += 0.25; target.buffs.atkT = 3;
         b.stars = Math.min(99, b.stars + 20);
-        return `${sv.name} [${name}]! 아군 공격력 +25% & 스타 +20!`;
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} 공격력 +25%(3T) & 스타 +20!`;
       case 'koyan_3':
-        alive.forEach(m => { m.buffs.buster += 0.5; m.buffs.cardT = 3; m.buffs.crit += 0.5; m.buffs.critT = 3; });
-        return `${sv.name} [${name}]! 아군 전체 Buster +50% & 크리 위력 +50%!`;
+        target.buffs.buster += 0.5; target.buffs.cardT = 3; target.buffs.crit += 0.5; target.buffs.critT = 3;
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} Buster +50% & 크리 위력 +50%!`;
       case 'waver_1':
-        alive.forEach(m => { m.buffs.crit += 0.4; m.buffs.critT = 3; addNp(m, 30); });
-        return `${sv.name} [${name}]! 아군 전체 크리 +40% & NP +30%!`;
+        target.buffs.crit += 0.4; target.buffs.critT = 3; addNp(target, 30);
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} 크리 +40% & NP +30%!`;
       case 'waver_2':
-        alive.forEach(m => { m.buffs.def += 0.3; m.buffs.defT = 3; addNp(m, 10); });
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.def += 0.3; m.buffs.defT = 3; addNp(m, 10); });
         return `${sv.name} [${name}]! 아군 전체 방어 +30% & NP +10%!`;
       case 'waver_3':
-        alive.forEach(m => { m.buffs.atk += 0.3; m.buffs.atkT = 3; addNp(m, 10); });
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.3; m.buffs.atkT = 3; addNp(m, 10); });
         return `${sv.name} [${name}]! 아군 전체 공격 +30% & NP +10%!`;
+      case 'mash_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.def += 0.2; m.buffs.defT = 3; });
+        return `${sv.name} [${name}]! 아군 전체 방어력 +20%(3T)!`;
+      case 'mash_2':
+        target.buffs.invul = Math.max(target.buffs.invul, 1); addNp(target, 20);
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} 무적(1T) & NP +20%!`;
+      case 'mash_3':
+        caster.buffs.npGain += 1.0; caster.buffs.npGainT = 1; caster.hp = Math.min(caster.maxHp, caster.hp + 2000);
+        return `${sv.name} [${name}]! 본인 NP 획득량 +100% & HP +2000!`;
+      case 'tamamo_1': {
+        const en = b.enemies[b.targetIdx] || pickAliveTarget();
+        if (en && en.hp > 0) en.charge = Math.max(0, en.charge - 1);
+        return `${sv.name} [${name}]! ${en ? en.name : '적'} 차지 -1칸 감소!`;
+      }
+      case 'tamamo_2':
+        caster.buffs.def += 0.3; caster.buffs.defT = 3;
+        return `${sv.name} [${name}]! 본인 방어력 +30%(3T)!`;
+      case 'tamamo_3':
+        target.buffs.arts += 0.5; target.buffs.cardT = 3; target.hp = Math.min(target.maxHp, target.hp + 2500);
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} Arts +50%(3T) & HP +2500!`;
+      case 'xufu_1':
+        caster.hp = Math.min(caster.maxHp, caster.hp + 3000);
+        return `${sv.name} [${name}]! 본인 HP +3000 & 약화 해제!`;
+      case 'xufu_2':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.arts += 0.2; m.buffs.cardT = 3; m.buffs.crit += 0.2; m.buffs.critT = 3; });
+        return `${sv.name} [${name}]! 아군 전체 Arts +20% & 크리 +20%!`;
+      case 'xufu_3':
+        addNp(target, 30); target.buffs.npGain += 0.3; target.buffs.npGainT = 3;
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} NP +30% & NP 획득량 +30%!`;
+      case 'sup_2':
+        addNp(target, 30);
+        b.stars = Math.min(99, b.stars + 15);
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} NP +30% & 스타 +15!`;
       case 'gen_1': {
         const mc = sv.npType.toLowerCase();
-        alive.forEach(m => { m.buffs.atk += 0.2; m.buffs.atkT = 3; });
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.2; m.buffs.atkT = 3; });
         caster.buffs[mc] += 0.3; caster.buffs.cardT = 3;
-        return `${sv.name} [${name}]! 아군 공업 +20% & 자신 ${sv.npType} +30%!`;
+        return `${sv.name} [${name}]! 아군 공업 +20% & 본인 ${sv.npType} +30%!`;
       }
       case 'gen_2': {
         const amt = sv.id === 'sv_arcueid' ? 100 : (sv.rarity === 5 ? 50 : (sv.rarity === 4 ? 30 : 25));
         addNp(caster, amt);
         b.stars = Math.min(99, b.stars + 15);
-        return `${sv.name} [${name}]! NP +${amt}% & 스타 +15!`;
+        return `${sv.name} [${name}]! 본인 NP +${amt}% & 스타 +15!`;
       }
       default:
         caster.buffs.invul = Math.max(caster.buffs.invul, 1);
         caster.buffs.npDmg += 0.3; caster.buffs.npDmgT = 3;
         caster.hp = Math.min(caster.maxHp, caster.hp + 2500);
-        return `${sv.name} [${name}]! 무적(1T) & 보구 위력 +30% & HP 회복!`;
+        return `${sv.name} [${name}]! 본인 무적(1T) & 보구 위력 +30% & HP +2500!`;
     }
   }
 
@@ -411,7 +477,7 @@ window.FgoBattle = (() => {
     const targets = sk.target === 'all'
       ? alive
       : (sk.target === 'ally'
-        ? [b.roster[targetRIdx] || alive[0]].filter(Boolean)
+        ? [(targetRIdx !== null && targetRIdx !== undefined && b.roster[targetRIdx] && b.roster[targetRIdx].hp > 0) ? b.roster[targetRIdx] : alive[0]].filter(Boolean)
         : []);
 
     const val = (pair, step = 0) => Array.isArray(pair) ? interpMcVal(pair[0], pair[1], lv, step) : pair;
@@ -487,25 +553,25 @@ window.FgoBattle = (() => {
   function getCePassive(ceId, mlb = false) {
     if (!ceId) return { startNp: 0, npDmg: 0, buster: 0, arts: 0, quick: 0, starsPerTurn: 0, npPerTurn: 0, crit: 0, npGain: 0, atkUp: 0, hpDrain: 0, label: '미장착' };
     const map = {
-      ce_kscope:            mlb ? { startNp: 100, label: '✛ 개시 NP +100%' } : { startNp: 80, label: '개시 NP +80%' },
-      ce_black_grail:       mlb ? { npDmg: 0.8, hpDrain: 500, label: '✛ 보구 위력 +80%' } : { npDmg: 0.6, hpDrain: 500, label: '보구 위력 +60%' },
-      ce_2030:              mlb ? { starsPerTurn: 10, label: '✛ 매 턴 스타 +10' } : { starsPerTurn: 8, label: '매 턴 스타 +8' },
-      ce_prisma:            mlb ? { npPerTurn: 10, label: '✛ 매 턴 NP +10%' } : { npPerTurn: 8, label: '매 턴 NP +8%' },
-      ce_formalcraft:       mlb ? { arts: 0.30, label: '✛ Arts +30%' } : { arts: 0.25, label: 'Arts +25%' },
-      ce_limited_zero:      mlb ? { buster: 0.30, label: '✛ Buster +30%' } : { buster: 0.25, label: 'Buster +25%' },
-      ce_imaginary_around:  mlb ? { quick: 0.30, label: '✛ Quick +30%' } : { quick: 0.25, label: 'Quick +25%' },
-      ce_heavens_feel:      mlb ? { npDmg: 0.5, label: '✛ 보구 위력 +50%' } : { npDmg: 0.4, label: '보구 위력 +40%' },
+      ce_kscope: mlb ? { startNp: 100, label: '✛ 개시 NP +100%' } : { startNp: 80, label: '개시 NP +80%' },
+      ce_black_grail: mlb ? { npDmg: 0.8, hpDrain: 500, label: '✛ 보구 위력 +80%' } : { npDmg: 0.6, hpDrain: 500, label: '보구 위력 +60%' },
+      ce_2030: mlb ? { starsPerTurn: 10, label: '✛ 매 턴 스타 +10' } : { starsPerTurn: 8, label: '매 턴 스타 +8' },
+      ce_prisma: mlb ? { npPerTurn: 10, label: '✛ 매 턴 NP +10%' } : { npPerTurn: 8, label: '매 턴 NP +8%' },
+      ce_formalcraft: mlb ? { arts: 0.30, label: '✛ Arts +30%' } : { arts: 0.25, label: 'Arts +25%' },
+      ce_limited_zero: mlb ? { buster: 0.30, label: '✛ Buster +30%' } : { buster: 0.25, label: 'Buster +25%' },
+      ce_imaginary_around: mlb ? { quick: 0.30, label: '✛ Quick +30%' } : { quick: 0.25, label: 'Quick +25%' },
+      ce_heavens_feel: mlb ? { npDmg: 0.5, label: '✛ 보구 위력 +50%' } : { npDmg: 0.4, label: '보구 위력 +40%' },
       ce_imaginary_element: mlb ? { startNp: 75, label: '✛ 개시 NP +75%' } : { startNp: 60, label: '개시 NP +60%' },
-      ce_dragon_meridian:   mlb ? { startNp: 50, label: '✛ 개시 NP +50%' } : { startNp: 30, label: '개시 NP +30%' },
-      ce_ryuudou:           mlb ? { startNp: 50, npDmg: 0.20, label: '✛ NP+50% · 보구+20%' } : { startNp: 30, npDmg: 0.15, label: 'NP+30% · 보구+15%' },
-      ce_projection:        mlb ? { arts: 0.20, label: '✛ Arts +20%' } : { arts: 0.15, label: 'Arts +15%' },
-      ce_verdant:           mlb ? { buster: 0.20, label: '✛ Buster +20%' } : { buster: 0.15, label: 'Buster +15%' },
-      ce_gandr:             mlb ? { quick: 0.20, label: '✛ Quick +20%' } : { quick: 0.15, label: 'Quick +15%' },
-      ce_knights_dignity:   mlb ? { crit: 0.5, label: '✛ 크리 위력 +50%' } : { crit: 0.4, label: '크리 위력 +40%' },
-      ce_magical_sapphire:  mlb ? { crit: 0.25, startNp: 30, label: '✛ NP+30% · 크리+25%' } : { crit: 0.2, startNp: 20, label: 'NP+20% · 크리+20%' },
-      ce_npc_support:       { startNp: 50, npGain: 0.5, label: 'NPC: 개시 NP+50% · NP획득+50%' },
-      ce_fp1_tujaeng:       mlb ? { atkUp: 0.04, label: '✛ 공격력 +4% (코스트1)' } : { atkUp: 0.02, label: '공격력 +2% (코스트1)' },
-      ce_fp2_beonyeong:     { label: mlb ? '✛ 매 턴 HP+50 (코스트3)' : '매 턴 HP+30 (코스트3)' }
+      ce_dragon_meridian: mlb ? { startNp: 50, label: '✛ 개시 NP +50%' } : { startNp: 30, label: '개시 NP +30%' },
+      ce_ryuudou: mlb ? { startNp: 50, npDmg: 0.20, label: '✛ NP+50% · 보구+20%' } : { startNp: 30, npDmg: 0.15, label: 'NP+30% · 보구+15%' },
+      ce_projection: mlb ? { arts: 0.20, label: '✛ Arts +20%' } : { arts: 0.15, label: 'Arts +15%' },
+      ce_verdant: mlb ? { buster: 0.20, label: '✛ Buster +20%' } : { buster: 0.15, label: 'Buster +15%' },
+      ce_gandr: mlb ? { quick: 0.20, label: '✛ Quick +20%' } : { quick: 0.15, label: 'Quick +15%' },
+      ce_knights_dignity: mlb ? { crit: 0.5, label: '✛ 크리 위력 +50%' } : { crit: 0.4, label: '크리 위력 +40%' },
+      ce_magical_sapphire: mlb ? { crit: 0.25, startNp: 30, label: '✛ NP+30% · 크리+25%' } : { crit: 0.2, startNp: 20, label: 'NP+20% · 크리+20%' },
+      ce_npc_support: { startNp: 50, npGain: 0.5, label: 'NPC: 개시 NP+50% · NP획득+50%' },
+      ce_fp1_tujaeng: mlb ? { atkUp: 0.04, label: '✛ 공격력 +4% (코스트1)' } : { atkUp: 0.02, label: '공격력 +2% (코스트1)' },
+      ce_fp2_beonyeong: { label: mlb ? '✛ 매 턴 HP+50 (코스트3)' : '매 턴 HP+30 (코스트3)' }
     };
     const base = map[ceId] || (CE_MAP[ceId]?.rarity <= 2
       ? { label: `코스트 ${getCeCost(CE_MAP[ceId])} 저코스트 예장` }
@@ -688,8 +754,9 @@ window.FgoBattle = (() => {
   let partySlots = [null, null, null, null, null, null]; // 길이 6 (0~4 본인 5명, 5 프렌드 1명)
   let battle = null;
   let busy = false;
-  let openPopup = null; // 'master' | 'spells' | 'menu' | null
-  let pendingMasterSkillIdx = null; // 단일 아군 타겟 또는 오더 체인지 선택 대기
+  let openPopup = null; // 'master' | 'spells' | 'menu' | 'sv_target' | null
+  let pendingMasterSkillIdx = null; // 마스터 단일 아군 타겟 또는 오더 체인지 선택 대기
+  let pendingServantSkill = null;   // { casterRIdx, skillIdx } — 서번트 개인 지정(ally) 스킬 타겟 선택 대기!
   let ocSelectedFront = null;
   let ocSelectedSub = null;
   let mcModalFilter = 'all';
@@ -714,11 +781,11 @@ window.FgoBattle = (() => {
       } else {
         localStorage.setItem(ACTIVE_BATTLE_KEY, JSON.stringify(battle));
       }
-    } catch (_) {}
+    } catch (_) { }
   }
 
   function clearSavedBattle() {
-    try { localStorage.removeItem(ACTIVE_BATTLE_KEY); } catch (_) {}
+    try { localStorage.removeItem(ACTIVE_BATTLE_KEY); } catch (_) { }
   }
 
   function loadSavedBattle() {
@@ -1153,6 +1220,7 @@ window.FgoBattle = (() => {
     busy = false;
     openPopup = null;
     pendingMasterSkillIdx = null;
+    pendingServantSkill = null;
     ocSelectedFront = null;
     ocSelectedSub = null;
 
@@ -1336,10 +1404,10 @@ window.FgoBattle = (() => {
       const subs = getSubMembers(battle);
       subEl.innerHTML = subs.length
         ? `<span class="sub-label">후열 대기 (${subs.length}):</span>` + subs.map(m => {
-            const sv = SERVANT_MAP[m.id];
-            const face = ArtRenderer.getFaceUrl(m.id);
-            return `<span class="sub-chip">${face ? `<img src="${face}" class="sub-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}${sv.nickname || sv.name}${m.isSupport ? '🤝' : ''}</span>`;
-          }).join('')
+          const sv = SERVANT_MAP[m.id];
+          const face = ArtRenderer.getFaceUrl(m.id);
+          return `<span class="sub-chip">${face ? `<img src="${face}" class="sub-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}${sv.nickname || sv.name}${m.isSupport ? '🤝' : ''}</span>`;
+        }).join('')
         : `<span class="sub-label">후열 대기 없음 (전원 출전 완료)</span>`;
     }
 
@@ -1385,6 +1453,47 @@ window.FgoBattle = (() => {
       enemiesEl.appendChild(card);
     });
 
+    // 아군 개인 지정 스킬(서번트 스킬 또는 마스터 스킬) 대상 선택 대기 중인지 확인
+    const selectingAllyTarget =
+      (pendingServantSkill !== null) ||
+      (openPopup === 'master' && pendingMasterSkillIdx !== null && battle.masterSkills[pendingMasterSkillIdx]?.target === 'ally');
+
+    const commitPendingAllyTarget = (targetRIdx) => {
+      if (pendingServantSkill) {
+        const caster = battle.roster[pendingServantSkill.casterRIdx];
+        const sk = caster?.skills[pendingServantSkill.skillIdx];
+        if (!caster || !sk || sk.curCd > 0) { pendingServantSkill = null; openPopup = null; renderArena(); return; }
+        sk.curCd = sk.cd;
+        const msg = applyServantSkill(battle, caster, sk.key, sk.name, targetRIdx);
+        pendingServantSkill = null;
+        openPopup = null;
+        SoundEngine.levelUp();
+        addLog(`✨ ${msg}`);
+        getBridge().toast(msg);
+        showFloatDmg(`ally-dmg-${targetRIdx}`, `✨ ${sk.name}!`, 'dmg-break');
+        saveActiveBattle();
+        renderArena();
+        return;
+      }
+      if (openPopup === 'master' && pendingMasterSkillIdx !== null) {
+        const i = pendingMasterSkillIdx;
+        const sk = battle.masterSkills[i];
+        if (!sk || sk.curCd > 0) { pendingMasterSkillIdx = null; openPopup = null; renderArena(); return; }
+        sk.curCd = sk.cd;
+        const msg = applyMasterSkill(battle, i, targetRIdx, null, null);
+        pendingMasterSkillIdx = null;
+        openPopup = null;
+        SoundEngine.levelUp();
+        addLog(`🧤 ${msg}`);
+        getBridge().toast(msg);
+        showFloatDmg(`ally-dmg-${targetRIdx}`, `🧤 ${sk.name}!`, 'dmg-break');
+        saveActiveBattle();
+        renderArena();
+      }
+    };
+
+    const targetBadgeMap = { ally: '👤개인', all: '👥단체', self: '🙋본인', enemy: '🎯적' };
+
     // 2) 아군 전열 3칸 렌더링
     const partyEl = document.getElementById('ba-party');
     partyEl.innerHTML = '';
@@ -1426,9 +1535,10 @@ window.FgoBattle = (() => {
       if (m.buffs.starWeight > 0 || m.buffs.busterStarWeight > 0 || m.buffs.artsStarWeight > 0) activeBuffs.push(`🎯스타집중`);
 
       const unit = document.createElement('div');
-      unit.className = `ally-unit ${dead ? 'dead' : ''} ${m.np >= 100 ? 'np-ready' : ''}`;
+      unit.className = `ally-unit ${dead ? 'dead' : ''} ${m.np >= 100 ? 'np-ready' : ''} ${selectingAllyTarget && !dead ? 'target-selectable' : ''}`;
       unit.id = `ally-unit-${rIdx}`;
       unit.innerHTML = `
+        ${selectingAllyTarget && !dead ? '<div class="ally-select-banner">🎯 클릭하여 적용!</div>' : ''}
         <div class="ally-top">
           ${faceUrl ? `<img src="${faceUrl}" class="ally-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
           <div style="flex:1;min-width:0">
@@ -1441,26 +1551,60 @@ window.FgoBattle = (() => {
         </div>
         <div class="ally-buffs">${activeBuffs.map(t => `<span class="buff-pill">${t}</span>`).join('')}</div>
         <div class="ally-skills">
-          ${m.skills.map((sk, sIdx) => `
-            <button class="skill-btn ${sk.curCd > 0 ? 'cooldown' : ''}" data-ridx="${rIdx}" data-sidx="${sIdx}" ${dead || sk.curCd > 0 || battle.phase !== 'command' || busy ? 'disabled' : ''} title="${sk.name}: ${sk.desc}">
+          ${m.skills.map((sk, sIdx) => {
+            const tTag = targetBadgeMap[sk.target || 'self'] || '';
+            const isPend = pendingServantSkill && pendingServantSkill.casterRIdx === rIdx && pendingServantSkill.skillIdx === sIdx;
+            return `
+            <button class="skill-btn ${sk.curCd > 0 ? 'cooldown' : ''} ${isPend ? 'pending-target' : ''}" data-ridx="${rIdx}" data-sidx="${sIdx}" ${dead || sk.curCd > 0 || battle.phase !== 'command' || busy ? 'disabled' : ''} title="${sk.name}: ${sk.desc}">
               <span class="sk-ico">${sk.icon}</span>
               <span class="sk-nm">${sk.curCd > 0 ? `${sk.curCd}T` : sk.name.slice(0, 6)}</span>
+              ${sk.curCd === 0 && tTag ? `<span class="sk-tgt-tag tgt-${sk.target || 'self'}">${tTag}</span>` : ''}
             </button>
-          `).join('')}
+          `;
+          }).join('')}
         </div>
         <div class="dmg-float-layer" id="ally-dmg-${rIdx}"></div>
       `;
+      if (selectingAllyTarget && !dead) {
+        unit.addEventListener('click', (e) => {
+          if (e.target.closest('.skill-btn')) return;
+          commitPendingAllyTarget(rIdx);
+        });
+      }
       partyEl.appendChild(unit);
     });
 
     partyEl.querySelectorAll('.skill-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
         if (busy || battle.phase !== 'command') return;
-        const m = battle.roster[Number(btn.dataset.ridx)];
-        const sk = m.skills[Number(btn.dataset.sidx)];
+        const rIdx = Number(btn.dataset.ridx);
+        const sIdx = Number(btn.dataset.sidx);
+        const m = battle.roster[rIdx];
+        const sk = m.skills[sIdx];
         if (!m || !sk || sk.curCd > 0 || m.hp <= 0) return;
+
+        // 원작 FGO 고증: 개인 지정('ally') 스킬은 대상 아군 1명 선택 모드로 진입!
+        if (sk.target === 'ally') {
+          SoundEngine.click();
+          pendingMasterSkillIdx = null;
+          if (pendingServantSkill && pendingServantSkill.casterRIdx === rIdx && pendingServantSkill.skillIdx === sIdx) {
+            pendingServantSkill = null;
+            openPopup = null;
+          } else {
+            pendingServantSkill = { casterRIdx: rIdx, skillIdx: sIdx };
+            openPopup = 'sv_target';
+          }
+          renderArena();
+          return;
+        }
+
+        // 단체('all') · 본인('self') · 적('enemy') 스킬은 즉시 발동!
+        pendingServantSkill = null;
+        pendingMasterSkillIdx = null;
+        if (openPopup === 'sv_target') openPopup = null;
         sk.curCd = sk.cd;
-        const msg = applyServantSkill(battle, m, sk.key, sk.name);
+        const msg = applyServantSkill(battle, m, sk.key, sk.name, m.rosterIdx);
         SoundEngine.levelUp();
         addLog(`✨ ${msg}`);
         getBridge().toast(msg);
@@ -1502,6 +1646,59 @@ window.FgoBattle = (() => {
     }
 
     popupEl.classList.remove('hidden');
+    if (openPopup === 'sv_target' && pendingServantSkill) {
+      const caster = battle.roster[pendingServantSkill.casterRIdx];
+      const sk = caster?.skills[pendingServantSkill.skillIdx];
+      const casterSv = caster ? SERVANT_MAP[caster.id] : null;
+      const activeList = getActiveMembers(battle);
+      if (!caster || !sk) { pendingServantSkill = null; openPopup = null; renderArena(); return; }
+      popupEl.innerHTML = `
+        <div class="ms-picker-box" style="margin-top:0">
+          <div class="ms-picker-head">
+            <span>${sk.icon} <strong>${casterSv?.nickname || casterSv?.name} — ${sk.name}</strong> (👤 개인 지정 · 아래 버튼 또는 전열 카드를 클릭하세요!)</span>
+            <button class="small-outline-btn" id="btn-svt-cancel" style="padding:3px 9px;font-size:11px">취소</button>
+          </div>
+          <div style="font-size:12px;color:#cbd5e1;margin-bottom:8px">${sk.desc}</div>
+          <div class="ms-ally-targets">
+            ${activeList.map(m => {
+              const sv = SERVANT_MAP[m.id];
+              const face = ArtRenderer.getFaceUrl(m.id);
+              return `
+                <button class="ms-target-btn" data-sv-ally="${m.rosterIdx}">
+                  ${face ? `<img src="${face}" class="ms-target-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
+                  <div>
+                    <strong>${sv.nickname || sv.name}${m.rosterIdx === caster.rosterIdx ? ' (본인)' : ''}</strong>
+                    <div style="font-size:11px;color:#9cb2d9">HP ${m.hp.toLocaleString()}/${m.maxHp.toLocaleString()} · NP ${Math.floor(m.np)}%</div>
+                  </div>
+                </button>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+      document.getElementById('btn-svt-cancel')?.addEventListener('click', () => {
+        pendingServantSkill = null;
+        openPopup = null;
+        renderArena();
+      });
+      popupEl.querySelectorAll('[data-sv-ally]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetRIdx = Number(btn.dataset.svAlly);
+          sk.curCd = sk.cd;
+          const msg = applyServantSkill(battle, caster, sk.key, sk.name, targetRIdx);
+          pendingServantSkill = null;
+          openPopup = null;
+          SoundEngine.levelUp();
+          addLog(`✨ ${msg}`);
+          getBridge().toast(msg);
+          showFloatDmg(`ally-dmg-${targetRIdx}`, `✨ ${sk.name}!`, 'dmg-break');
+          saveActiveBattle();
+          renderArena();
+        });
+      });
+      return;
+    }
+
     if (openPopup === 'master') {
       const mc = (typeof MYSTIC_CODE_MAP !== 'undefined' && MYSTIC_CODE_MAP[battle.mysticCodeId]) || null;
       const mcTitle = mc ? `${mc.name} (Lv.${battle.mysticCodeLv || 1})` : '마술예장';
@@ -1614,10 +1811,11 @@ window.FgoBattle = (() => {
           if (!sk || sk.curCd > 0) return;
           if (sk.target === 'ally' || sk.target === 'order_change') {
             SoundEngine.click();
+            pendingServantSkill = null;
             pendingMasterSkillIdx = i;
             ocSelectedFront = null;
             ocSelectedSub = null;
-            renderTopPopups();
+            renderArena(); // 전열 서번트 카드도 바로 클릭 가능하도록 전체 전장 하이라이트 갱신!
             return;
           }
           commitMasterSkill(i);
@@ -1628,7 +1826,7 @@ window.FgoBattle = (() => {
         pendingMasterSkillIdx = null;
         ocSelectedFront = null;
         ocSelectedSub = null;
-        renderTopPopups();
+        renderArena();
       });
       popupEl.querySelectorAll('[data-ms-ally]').forEach(btn => {
         btn.addEventListener('click', () => commitMasterSkill(pendingMasterSkillIdx, Number(btn.dataset.msAlly)));
@@ -1650,8 +1848,8 @@ window.FgoBattle = (() => {
         <div class="ba-pop-title">✦ 영주 커맨드 (보유 ${spells} / 3획 · 매일 0시 3획 자동 회복)</div>
         <div class="cs-actions-wrap">
           ${activeList.map(m => {
-            const sv = SERVANT_MAP[m.id];
-            return `
+        const sv = SERVANT_MAP[m.id];
+        return `
               <div class="cs-member-row">
                 <strong>${sv.nickname || sv.name}</strong>
                 <div style="display:flex;gap:6px">
@@ -1660,7 +1858,7 @@ window.FgoBattle = (() => {
                 </div>
               </div>
             `;
-          }).join('')}
+      }).join('')}
         </div>
       `;
       popupEl.querySelectorAll('[data-cs-heal]').forEach(btn => {
@@ -2019,8 +2217,8 @@ window.FgoBattle = (() => {
         const orderMult = [1.0, 1.2, 1.4][step];
         const typeDmgBase = c.type === 'Buster' ? 1.5 : (c.type === 'Arts' ? 1.0 : 0.8);
         const hasFirstBuster = (firstType === 'Buster' || chain.mighty);
-        const hasFirstArts   = (firstType === 'Arts'   || chain.mighty);
-        const hasFirstQuick  = (firstType === 'Quick'  || chain.mighty);
+        const hasFirstArts = (firstType === 'Arts' || chain.mighty);
+        const hasFirstQuick = (firstType === 'Quick' || chain.mighty);
 
         const firstBusterAdd = hasFirstBuster ? 0.5 : 0;
         const busterChainMult = chain.colorChain === 'Buster' ? 1.2 : 1.0; // 버스터 체인 공 +20%!
@@ -2039,9 +2237,9 @@ window.FgoBattle = (() => {
 
         // 크리티컬 × 오버킬 곱연산! (NP: ×2.0 ×1.5, 스타: ×1.2 ×1.3)
         const npCritMult = isCrit ? 2.0 : 1.0;
-        const npOkMult   = isOverkill ? 1.5 : 1.0;
+        const npOkMult = isOverkill ? 1.5 : 1.0;
         const stCritMult = isCrit ? 1.2 : 1.0;
-        const stOkMult   = isOverkill ? 1.3 : 1.0;
+        const stOkMult = isOverkill ? 1.3 : 1.0;
 
         const npBase = c.type === 'Arts' ? 13 : (c.type === 'Quick' ? 5 : 0); // 버스터 자체 NP = 0!
         const npFirstAdd = hasFirstArts ? 6 : 0;
@@ -2435,20 +2633,26 @@ window.FgoBattle = (() => {
     document.getElementById('btn-ba-master-menu')?.addEventListener('click', () => {
       if (!battle || busy || battle.phase !== 'command') return;
       SoundEngine.click();
+      pendingServantSkill = null;
+      pendingMasterSkillIdx = null;
       openPopup = openPopup === 'master' ? null : 'master';
-      renderTopPopups();
+      renderArena();
     });
     document.getElementById('btn-ba-spells')?.addEventListener('click', () => {
       if (!battle || busy || battle.phase !== 'command') return;
       SoundEngine.click();
+      pendingServantSkill = null;
+      pendingMasterSkillIdx = null;
       openPopup = openPopup === 'spells' ? null : 'spells';
-      renderTopPopups();
+      renderArena();
     });
     document.getElementById('btn-ba-menu')?.addEventListener('click', () => {
       if (!battle || busy || battle.phase !== 'command') return;
       SoundEngine.click();
+      pendingServantSkill = null;
+      pendingMasterSkillIdx = null;
       openPopup = openPopup === 'menu' ? null : 'menu';
-      renderTopPopups();
+      renderArena();
     });
 
     // 전멸 컨티뉴 모달
@@ -2474,10 +2678,20 @@ window.FgoBattle = (() => {
         battle.mysticCodeLv = battle.mysticCodeLv || 1;
         battle.masterSkills = buildBattleMasterSkills(battle.mysticCodeId, battle.mysticCodeLv);
       }
-      battle.roster.forEach(m => ensureMemberBuffs(m));
+      battle.roster.forEach(m => {
+        ensureMemberBuffs(m);
+        const defs = getSkillDefs(SERVANT_MAP[m.id]);
+        m.skills.forEach((sk, si) => {
+          if (!sk.target && defs[si]) {
+            sk.target = defs[si].target;
+            sk.desc = defs[si].desc;
+          }
+        });
+      });
       busy = false;
       openPopup = null;
       pendingMasterSkillIdx = null;
+      pendingServantSkill = null;
       getBridge().switchToBattleTab();
       document.getElementById('battle-lobby').classList.add('hidden');
       document.getElementById('battle-arena').classList.remove('hidden');
