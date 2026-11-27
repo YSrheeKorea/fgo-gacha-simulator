@@ -35,32 +35,32 @@ window.FgoBattle = (() => {
 
   // CLASS_AFFINITY[공격군][피격군] (표에 없는 조합은 기본 1.0x 무상성)
   const CLASS_AFFINITY = {
-    Saber: { Archer: 0.5, Lancer: 2.0, Berserker: 2.0, Ruler: 0.5 },
-    Archer: { Saber: 2.0, Lancer: 0.5, Berserker: 2.0, Ruler: 0.5 },
-    Lancer: { Saber: 0.5, Archer: 2.0, Berserker: 2.0, Ruler: 0.5 },
-    Rider: { Caster: 2.0, Assassin: 0.5, Berserker: 2.0, Ruler: 0.5, BeastI: 2.0 },
-    Caster: { Rider: 0.5, Assassin: 2.0, Berserker: 2.0, Ruler: 0.5, BeastI: 2.0 },
-    Assassin: { Rider: 2.0, Caster: 0.5, Berserker: 2.0, Ruler: 0.5, BeastI: 2.0 },
+    Saber: { Archer: 0.5, Lancer: 2.0, Berserker: 2.0, Ruler: 0.5, Beast: 0.5 },
+    Archer: { Saber: 2.0, Lancer: 0.5, Berserker: 2.0, Ruler: 0.5, Beast: 0.5 },
+    Lancer: { Saber: 0.5, Archer: 2.0, Berserker: 2.0, Ruler: 0.5, Beast: 0.5 },
+    Rider: { Caster: 2.0, Assassin: 0.5, Berserker: 2.0, Ruler: 0.5, BeastI: 2.0, Beast: 0.5 },
+    Caster: { Rider: 0.5, Assassin: 2.0, Berserker: 2.0, Ruler: 0.5, BeastI: 2.0, Beast: 0.5 },
+    Assassin: { Rider: 2.0, Caster: 0.5, Berserker: 2.0, Ruler: 0.5, BeastI: 2.0, Beast: 0.5 },
     Berserker: {
       Saber: 1.5, Archer: 1.5, Lancer: 1.5, Rider: 1.5, Caster: 1.5, Assassin: 1.5,
       Berserker: 1.5, Ruler: 1.5, Avenger: 1.5, MoonCancer: 1.5, AlterEgo: 1.5,
-      Pretender: 1.5, Foreigner: 0.5, BeastI: 1.5
+      Pretender: 1.5, Foreigner: 0.5, BeastI: 1.5, Beast: 0.5
     },
     Shielder: {},
     BeastII: {},
-    Ruler: { Berserker: 2.0, Avenger: 0.5, MoonCancer: 2.0 },
-    Avenger: { Berserker: 2.0, Ruler: 2.0, MoonCancer: 0.5 },
-    MoonCancer: { Berserker: 2.0, Ruler: 0.5, Avenger: 2.0, BeastIIIR: 1.2 },
+    Ruler: { Berserker: 2.0, Avenger: 0.5, MoonCancer: 2.0, Beast: 2.0 },
+    Avenger: { Berserker: 2.0, Ruler: 2.0, MoonCancer: 0.5, Beast: 2.0 },
+    MoonCancer: { Berserker: 2.0, Ruler: 0.5, Avenger: 2.0, BeastIIIR: 1.2, Beast: 2.0 },
     AlterEgo: {
       Saber: 0.5, Archer: 0.5, Lancer: 0.5, Rider: 1.5, Caster: 1.5, Assassin: 1.5,
-      Berserker: 2.0, Pretender: 0.5, Foreigner: 2.0, BeastIIIR: 1.2
+      Berserker: 2.0, Pretender: 0.5, Foreigner: 2.0, BeastIIIR: 1.2, Beast: 2.0
     },
     Pretender: {
       Saber: 1.5, Archer: 1.5, Lancer: 1.5, Rider: 0.5, Caster: 0.5, Assassin: 0.5,
-      Berserker: 2.0, AlterEgo: 2.0, Foreigner: 0.5
+      Berserker: 2.0, AlterEgo: 2.0, Foreigner: 0.5, Beast: 2.0
     },
-    Foreigner: { Berserker: 2.0, AlterEgo: 0.5, Pretender: 2.0, Foreigner: 2.0 },
-    Beast: { Saber: 1.5, Archer: 1.5, Lancer: 1.5, Rider: 1.5, Caster: 1.5, Assassin: 1.5, Berserker: 1.5, Ruler: 0.5, Avenger: 0.5, MoonCancer: 0.5, AlterEgo: 0.5, Pretender: 0.5, Foreigner: 0.5 },
+    Foreigner: { Berserker: 2.0, AlterEgo: 0.5, Pretender: 2.0, Foreigner: 2.0, Beast: 2.0 },
+    Beast: { Saber: 1.5, Archer: 1.5, Lancer: 1.5, Rider: 1.5, Caster: 1.5, Assassin: 1.5, Berserker: 2.0, Ruler: 0.5, Avenger: 0.5, MoonCancer: 0.5, AlterEgo: 0.5, Pretender: 0.5, Foreigner: 0.5 },
     UnBeast: { Saber: 1.5, Archer: 1.5, Lancer: 1.5, Rider: 1.5, Caster: 1.5, Assassin: 1.5, Berserker: 1.5, Ruler: 0.5, Avenger: 0.5, MoonCancer: 0.5, AlterEgo: 0.5, Pretender: 0.5, Foreigner: 0.5 },
     BeastI: { Saber: 2.0, Archer: 2.0, Lancer: 2.0, Berserker: 2.0, Avenger: 0.5 },
     BeastIIIR: {}
@@ -439,6 +439,83 @@ window.FgoBattle = (() => {
         { key: 'sojuro_1', name: names[0], cd: 5, icon: '🔴', target: 'self', desc: '[본인] 자신 공격력 +30%(3T) & Buster +30%(3T)' },
         { key: 'sojuro_2', name: names[1], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 크리티컬 위력 +50%(1T)' },
         { key: 'sojuro_3', name: names[2], cd: 6, icon: '💥', target: 'self', desc: '[본인] 자신 NP +50% & 보구 위력 +30%(1T) (보구 발동 후 퇴장!)' }
+      ];
+    }
+    if (sv.id === 'sv_no_357') { // ★5 스카사하=스카디 [룰러](수카디): 개인 Q+50%/크리+100% + 전체 Q/B/공 + 개인 NP+50%!
+      return [
+        { key: 'rskadi_1', name: names[0], cd: 6, icon: '🟢', target: 'ally', desc: '[개인] 선택 아군 1명 Quick +50%(3T) & Buster 크리 +100%(3T)!' },
+        { key: 'rskadi_2', name: names[1], cd: 6, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20% · Quick +15% · Buster +15%(3T)' },
+        { key: 'rskadi_3', name: names[2], cd: 6, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 NP +50% & 스타 +15 획득!' }
+      ];
+    }
+    if (sv.id === 'sv_no_268') { // ★5 스페이스 이슈타르: 2스킬 보구 속성 3색 전환 (Quick→Arts→Buster)!
+      return [
+        { key: 'spishtar_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & 본인 3색 +20%(3T)' },
+        { key: 'spishtar_2', name: names[1], cd: 5, icon: '🌈', target: 'self', desc: '[본인] 보구 속성 전환 (Quick→Arts→Buster 순환) & 보구 +20% & 무적(1회)!' },
+        { key: 'spishtar_3', name: names[2], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 매 턴 NP 획득 준비!' }
+      ];
+    }
+    if (sv.id === 'sv_arcueid') { // ★5 아키타입: 어스: 자가 NP +100% 즉시 충전 + 아군 NP+30%!
+      return [
+        { key: 'arc_1', name: names[0], cd: 5, icon: '🌕', target: 'self', desc: '[본인] 자신 공격력 +30%(3T) & 크리티컬 위력 +50%(3T)' },
+        { key: 'arc_2', name: names[1], cd: 7, icon: '💎', target: 'self', desc: '[본인] 자신 NP +100% 즉시 충전!! & 약화 무효(1회)' },
+        { key: 'arc_3', name: names[2], cd: 6, icon: '✨', target: 'all',  desc: '[단체] 아군 전체(본인 제외) NP +30% & 무적(1회) & 스타 +15!' }
+      ];
+    }
+    if (sv.id === 'sv_no_418') { // ★5 C.I.E.L(시엘): NP+50% + 스타+30 & 버스터 스타집중!
+      return [
+        { key: 'ciel_1', name: names[0], cd: 5, icon: '🔴', target: 'self', desc: '[본인] 자신 공격력 +30%(3T) & Buster +30%(3T)' },
+        { key: 'ciel_2', name: names[1], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 크리티컬 위력 +50%(3T)' },
+        { key: 'ciel_3', name: names[2], cd: 6, icon: '⭐', target: 'self', desc: '[본인] 스타 +30개 즉시 획득 & 버스터 스타집중 +10,000%!!' }
+      ];
+    }
+    if (sv.id === 'sv_no_421') { // ★5 BB 두바이: 3스킬 공격(대군 Arts) ⇄ 보조 보구 실시간 전환!
+      return [
+        { key: 'bbdubai_1', name: names[0], cd: 5, icon: '🔵', target: 'all',  desc: '[단체] 아군 전체 Arts +20%(3T) & 공격력 +20%(3T)' },
+        { key: 'bbdubai_2', name: names[1], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 무적(1회·3T)' },
+        { key: 'bbdubai_3', name: names[2], cd: 5, icon: '🔄', target: 'self', desc: '[본인] 보구 형태 전환 (대군 Arts 공격 ⇄ 지원형 보조) & 스타 +20!' }
+      ];
+    }
+    if (sv.id === 'sv_no_448') { // ★5 옥토끼(료기 시키 [수영복]): 2스킬 대군 ⇄ 대인 보구 실시간 전환!
+      return [
+        { key: 'mshiki_1', name: names[0], cd: 5, icon: '🔵', target: 'self', desc: '[본인] 자신 Arts +30%(3T) & NP +30%' },
+        { key: 'mshiki_2', name: names[1], cd: 5, icon: '🔄', target: 'self', desc: '[본인] 보구 대상 전환 (대군 전체 ⇄ 대인 1체) & 보구 위력 +30%(3T)!' },
+        { key: 'mshiki_3', name: names[2], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 회피(1회·3T)' }
+      ];
+    }
+    if (sv.id === 'sv_no_297') { // ★5 아시야 도만: 자가 NP+80% + 혼돈·악 초강화 + 근성!
+      return [
+        { key: 'douman_1', name: names[0], cd: 6, icon: '👹', target: 'all',  desc: '[단체] 아군 전체 공격력 +40%(3T) & 크리티컬 위력 +100%(3T)!!' },
+        { key: 'douman_2', name: names[1], cd: 6, icon: '❤️‍🔥', target: 'self', desc: '[본인] 자신 근성(3,000·5T) & 스타 +20 획득' },
+        { key: 'douman_3', name: names[2], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +80% 즉시 충전!! & Quick +30%(3T)' }
+      ];
+    }
+    if (sv.id === 'sv_no_373') { // ★5 쿠쿨칸: NP+50% + 전체 공/B + 크리/무적!
+      return [
+        { key: 'kuku_1', name: names[0], cd: 5, icon: '☀️', target: 'all',  desc: '[단체] 아군 전체 공격력 +30%(3T) & Buster +30%(3T)!' },
+        { key: 'kuku_2', name: names[1], cd: 6, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 NP +50% & 회피(2회·3T)!' },
+        { key: 'kuku_3', name: names[2], cd: 6, icon: '⭐', target: 'self', desc: '[본인] 자신 크리 +50%(3T) & 무적(1T) & 스타 +30 획득!' }
+      ];
+    }
+    if (sv.id === 'sv_no_413') { // ★5 아오자키 아오코: 3스킬 슈퍼 아오코 변신 (보조 ⇄ 대군 Buster)!
+      return [
+        { key: 'aoko_1', name: names[0], cd: 5, icon: '🔵', target: 'self', desc: '[본인] 자신 공격력 +30%(3T) & 3색 +20%(3T)' },
+        { key: 'aoko_2', name: names[1], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 크리티컬 위력 +50%(3T)' },
+        { key: 'aoko_3', name: names[2], cd: 5, icon: '✨', target: 'self', desc: '[본인] 제5마법 슈퍼 아오코 변신! (보조 ⇄ 대군 Buster 전환 & 스타 +20)' }
+      ];
+    }
+    if (sv.id === 'sv_no_353') { // ★5 레이디 아발론(프멀린): 아츠판 멀린!
+      return [
+        { key: 'lavalon_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & NP +20%' },
+        { key: 'lavalon_2', name: names[1], cd: 7, icon: '🛡️', target: 'all',  desc: '[단체] 아군 전체 무적(1T) & NP 획득량 +30%(3T)' },
+        { key: 'lavalon_3', name: names[2], cd: 6, icon: '🔵', target: 'ally', desc: '[개인] 선택 아군 Arts +50%(3T) · 크리 +100%(1T) · 최대HP +3,000!' }
+      ];
+    }
+    if (sv.id === 'sv_no_377' || sv.id === 'sv_no_444') { // ★5 드라코(비스트) / ★5 U-올가마리(언비스트)
+      return [
+        { key: 'beast_1', name: names[0], cd: 5, icon: '🔥', target: 'all',  desc: '[단체] 짐승의 권능! 아군 전체 공격력 +30%(3T) & NP +30%' },
+        { key: 'beast_2', name: names[1], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 보구 위력 +30%(3T) & 3색 +30%(3T)' },
+        { key: 'beast_3', name: names[2], cd: 6, icon: '👑', target: 'all',  desc: '[단체] 아군 전체 무적(1회) & 크리 +50%(3T) & 스타 +20!' }
       ];
     }
     const cardIcon = sv.npType === 'Buster' ? '🔴' : (sv.npType === 'Arts' ? '🔵' : '🟢');
@@ -844,6 +921,148 @@ window.FgoBattle = (() => {
         addNp(caster, 50);
         caster.buffs.npDmg += 0.3; caster.buffs.npDmgT = Math.max(caster.buffs.npDmgT, 1);
         return `${sv.name} [${name}]! 본인 NP +50% & 보구 위력 +30%!`;
+      case 'rskadi_1':
+        target.buffs.quick += 0.5; target.buffs.cardT = 3;
+        target.buffs.crit += 1.0; target.buffs.critT = 3;
+        return `${sv.name} [${name}] → ${tgtName}! Quick+50% & 크리+100%(3T)!!`;
+      case 'rskadi_2':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.2; m.buffs.atkT = 3; m.buffs.quick += 0.15; m.buffs.buster += 0.15; m.buffs.cardT = 3; });
+        return `${sv.name} [${name}]! 아군 전체 공+20% · Quick/Buster+15%(3T)!`;
+      case 'rskadi_3':
+        addNp(target, 50);
+        b.stars = Math.min(99, b.stars + 15);
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} NP +50% & 스타 +15!`;
+      case 'spishtar_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.2; m.buffs.atkT = 3; });
+        caster.buffs.quick += 0.2; caster.buffs.arts += 0.2; caster.buffs.buster += 0.2; caster.buffs.cardT = 3;
+        return `${sv.name} [${name}]! 아군 공+20% & 본인 3색+20%(3T)!`;
+      case 'spishtar_2': {
+        const curT = getEffectiveNpType(sv, caster);
+        const nextT = curT === 'Quick' ? 'Arts' : (curT === 'Arts' ? 'Buster' : 'Quick');
+        caster.buffs.npTypeOverride = nextT;
+        caster.buffs.npDmg += 0.2; caster.buffs.npDmgT = 3;
+        caster.buffs.invulHits = Math.max(caster.buffs.invulHits, 1);
+        return `${sv.name} [${name}]! 🌈 보구 속성 [${nextT}] 전환 & 보구+20% & 무적(1회)!`;
+      }
+      case 'spishtar_3':
+        addNp(caster, 50);
+        return `${sv.name} [${name}]! 본인 NP +50% 충전!`;
+      case 'arc_1':
+        caster.buffs.atk += 0.3; caster.buffs.atkT = 3;
+        caster.buffs.crit += 0.5; caster.buffs.critT = 3;
+        return `${sv.name} [${name}]! 공+30% & 크리+50%(3T)!`;
+      case 'arc_2':
+        addNp(caster, 100);
+        caster.buffs.debuffImmune = Math.max(caster.buffs.debuffImmune, 1);
+        return `${sv.name} [${name}]! 🌕 본인 NP +100% 즉시 충전!!`;
+      case 'arc_3':
+        alive.forEach(m => { ensureMemberBuffs(m); if (m.rosterIdx !== caster.rosterIdx) addNp(m, 30); m.buffs.invulHits = Math.max(m.buffs.invulHits, 1); });
+        b.stars = Math.min(99, b.stars + 15);
+        return `${sv.name} [${name}]! 아군 NP +30% & 전체 무적(1회) & 스타 +15!`;
+      case 'ciel_1':
+        caster.buffs.atk += 0.3; caster.buffs.atkT = 3;
+        caster.buffs.buster += 0.3; caster.buffs.cardT = 3;
+        return `${sv.name} [${name}]! 공+30% & Buster+30%(3T)!`;
+      case 'ciel_2':
+        addNp(caster, 50);
+        caster.buffs.crit += 0.5; caster.buffs.critT = 3;
+        return `${sv.name} [${name}]! 본인 NP +50% & 크리+50%(3T)!`;
+      case 'ciel_3':
+        b.stars = Math.min(99, b.stars + 30);
+        caster.buffs.busterStarWeight += 10000;
+        reallocateCurrentHandStars(b);
+        return `${sv.name} [${name}]! ⭐ 스타 +30개 & 버스터 스타집중 +10,000%!!`;
+      case 'bbdubai_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.arts += 0.2; m.buffs.cardT = 3; m.buffs.atk += 0.2; m.buffs.atkT = 3; });
+        return `${sv.name} [${name}]! 아군 전체 Arts+20% & 공+20%(3T)!`;
+      case 'bbdubai_2':
+        addNp(caster, 50);
+        caster.buffs.invulHits = Math.max(caster.buffs.invulHits, 1);
+        return `${sv.name} [${name}]! 본인 NP +50% & 무적(1회)!`;
+      case 'bbdubai_3': {
+        const curCat = getNpCategory(sv, caster);
+        const nextCat = curCat === 'aoe' ? 'support' : 'aoe';
+        caster.buffs.npCatOverride = nextCat;
+        b.stars = Math.min(99, b.stars + 20);
+        return `${sv.name} [${name}]! 🔄 보구 [${nextCat === 'aoe' ? '대군 Arts 공격' : '지원형 보조'}] 전환 & 스타 +20!`;
+      }
+      case 'mshiki_1':
+        caster.buffs.arts += 0.3; caster.buffs.cardT = 3;
+        addNp(caster, 30);
+        return `${sv.name} [${name}]! Arts+30% & 본인 NP +30%!`;
+      case 'mshiki_2': {
+        const curCat = getNpCategory(sv, caster);
+        const nextCat = curCat === 'aoe' ? 'single' : 'aoe';
+        caster.buffs.npCatOverride = nextCat;
+        caster.buffs.npDmg += 0.3; caster.buffs.npDmgT = 3;
+        return `${sv.name} [${name}]! 🔄 보구 대상 [${nextCat === 'aoe' ? '대군 전체' : '대인 1체'}] 전환 & 보구+30%!`;
+      }
+      case 'mshiki_3':
+        addNp(caster, 50);
+        caster.buffs.evadeHits = Math.max(caster.buffs.evadeHits, 1); caster.buffs.evadeT = 3;
+        return `${sv.name} [${name}]! 본인 NP +50% & 회피(1회·3T)!`;
+      case 'douman_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.4; m.buffs.atkT = 3; m.buffs.crit += 1.0; m.buffs.critT = 3; });
+        return `${sv.name} [${name}]! 👹 아군 전체 공+40% & 크리+100%(3T)!!`;
+      case 'douman_2':
+        caster.buffs.guts = Math.max(caster.buffs.guts, 3000); caster.buffs.gutsT = 5;
+        b.stars = Math.min(99, b.stars + 20);
+        return `${sv.name} [${name}]! 본인 근성(3,000·5T) & 스타 +20!`;
+      case 'douman_3':
+        addNp(caster, 80);
+        caster.buffs.quick += 0.3; caster.buffs.cardT = 3;
+        return `${sv.name} [${name}]! 본인 NP +80% 즉시 충전!! & Quick+30%!`;
+      case 'kuku_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.3; m.buffs.atkT = 3; m.buffs.buster += 0.3; m.buffs.cardT = 3; });
+        return `${sv.name} [${name}]! 아군 전체 공+30% & Buster+30%(3T)!`;
+      case 'kuku_2':
+        addNp(target, 50);
+        target.buffs.evadeHits = Math.max(target.buffs.evadeHits, 2); target.buffs.evadeT = 3;
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} NP +50% & 회피(2회)!`;
+      case 'kuku_3':
+        caster.buffs.crit += 0.5; caster.buffs.critT = 3;
+        caster.buffs.invul = Math.max(caster.buffs.invul, 1);
+        b.stars = Math.min(99, b.stars + 30);
+        return `${sv.name} [${name}]! 크리+50% · 무적(1T) · 스타 +30!!`;
+      case 'aoko_1':
+        caster.buffs.atk += 0.3; caster.buffs.atkT = 3;
+        caster.buffs.quick += 0.2; caster.buffs.arts += 0.2; caster.buffs.buster += 0.2; caster.buffs.cardT = 3;
+        return `${sv.name} [${name}]! 공+30% & 3색+20%(3T)!`;
+      case 'aoko_2':
+        addNp(caster, 50);
+        caster.buffs.crit += 0.5; caster.buffs.critT = 3;
+        return `${sv.name} [${name}]! 본인 NP +50% & 크리+50%(3T)!`;
+      case 'aoko_3': {
+        const curCat = getNpCategory(sv, caster);
+        const toSuper = curCat !== 'aoe';
+        caster.buffs.npCatOverride = toSuper ? 'aoe' : 'support';
+        caster.buffs.npTypeOverride = toSuper ? 'Buster' : 'Arts';
+        b.stars = Math.min(99, b.stars + 20);
+        return `${sv.name} [${name}]! ✨ [${toSuper ? '슈퍼 아오코 (대군 Buster)' : '통상 아오코 (보조)'}] 전환 & 스타 +20!`;
+      }
+      case 'lavalon_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.2; m.buffs.atkT = 3; addNp(m, 20); });
+        return `${sv.name} [${name}]! 아군 전체 공+20%(3T) & NP +20%!`;
+      case 'lavalon_2':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.invul = Math.max(m.buffs.invul, 1); m.buffs.npGain += 0.3; m.buffs.npGainT = 3; });
+        return `${sv.name} [${name}]! 아군 전체 무적(1T) & NP 획득량+30%!`;
+      case 'lavalon_3':
+        target.buffs.arts += 0.5; target.buffs.cardT = 3;
+        target.buffs.crit += 1.0; target.buffs.critT = Math.max(target.buffs.critT, 1);
+        target.buffs.maxHpBonus += 3000; target.maxHp += 3000; target.hp += 3000;
+        return `${sv.name} [${name}] → ${tgtName}! Arts+50% · 크리+100% · 최대HP+3,000!!`;
+      case 'beast_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.3; m.buffs.atkT = 3; addNp(m, 30); });
+        return `${sv.name} [${name}]! 🔥 짐승의 권능 — 아군 전체 공+30%(3T) & NP +30%!`;
+      case 'beast_2':
+        addNp(caster, 50);
+        caster.buffs.npDmg += 0.3; caster.buffs.npDmgT = 3;
+        caster.buffs.quick += 0.3; caster.buffs.arts += 0.3; caster.buffs.buster += 0.3; caster.buffs.cardT = 3;
+        return `${sv.name} [${name}]! 본인 NP +50% & 보구+30% & 3색+30%!`;
+      case 'beast_3':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.invulHits = Math.max(m.buffs.invulHits, 1); m.buffs.crit += 0.5; m.buffs.critT = 3; });
+        b.stars = Math.min(99, b.stars + 20);
+        return `${sv.name} [${name}]! 아군 전체 무적(1회) & 크리+50% & 스타 +20!`;
       case 'sup_2':
         addNp(target, 30);
         b.stars = Math.min(99, b.stars + 15);
@@ -2829,6 +3048,86 @@ window.FgoBattle = (() => {
               ally.buffs.atk += 0.3; ally.buffs.atkT = 3;
             });
             addLog(`🌀 ${sv.name} 보구 [${sv.npName}]! 미궁 디버프 — 아군 전체 방어+50% · 공격+30%(3T)!`);
+          } else if (m.id === 'sv_no_229') {
+            // ★5 시황제: 본인 무적(1T) · 공+50% · 크리+100% · 스타집중+500%!
+            m.buffs.invul = Math.max(m.buffs.invul, 1);
+            m.buffs.atk += 0.5 * ocMult; m.buffs.atkT = 3;
+            m.buffs.crit += 1.0; m.buffs.critT = 3;
+            m.buffs.starWeight += 500;
+            addLog(`👑 ${sv.name} 보구 [${sv.npName}]! 본인 무적(1T) · 공+50% · 크리+100% · 스타집중+500%!!`);
+          } else if (m.id === 'sv_no_292') {
+            // ★5 히미코 [성명도]: 아군 전체 보구 오버차지 +2단계 · Buster+30% · 크리+50%!
+            getActiveMembers(battle).forEach(ally => {
+              ensureMemberBuffs(ally);
+              ally.buffs.ocUp += 2;
+              ally.buffs.buster += 0.3; ally.buffs.cardT = 3;
+              ally.buffs.crit += 0.5; ally.buffs.critT = 3;
+            });
+            addLog(`🔮 ${sv.name} 보구 [${sv.npName}]! 아군 전체 오버차지 +2단계 · Buster+30% · 크리+50%!!`);
+          } else if (m.id === 'sv_no_173') {
+            // ★5 셜록 홈즈 [엘리멘터리 마이 디어]: 아군 전체 무적관통(3T) · 크리+50% · 공+30%!
+            getActiveMembers(battle).forEach(ally => {
+              ensureMemberBuffs(ally);
+              ally.buffs.invulPierce = 1;
+              ally.buffs.crit += 0.5; ally.buffs.critT = 3;
+              ally.buffs.atk += 0.3; ally.buffs.atkT = 3;
+            });
+            addLog(`🔍 ${sv.name} 보구 [${sv.npName}]! 아군 전체 무적관통 · 크리+50% · 공+30%!!`);
+          } else if (m.id === 'sv_no_295') {
+            // ★5 반 고흐 [별이 빛나는 밤]: 아군 전체 공+30% · 크리+100% · 스타+15!
+            getActiveMembers(battle).forEach(ally => {
+              ensureMemberBuffs(ally);
+              ally.buffs.atk += 0.3; ally.buffs.atkT = 3;
+              ally.buffs.crit += 1.0; ally.buffs.critT = 3;
+            });
+            battle.stars = Math.min(99, battle.stars + 15);
+            addLog(`🌌 ${sv.name} 보구 [${sv.npName}]! 별이 빛나는 밤 — 아군 공+30% · 크리+100% · 스타+15!!`);
+          } else if (m.id === 'sv_no_353') {
+            // ★5 레이디 아발론 [아발론 르 페이]: 아군 전체 도트힐(1500×3T) + NP+15% + 스타!
+            getActiveMembers(battle).forEach(ally => {
+              ensureMemberBuffs(ally);
+              ally.buffs.regen = Math.max(ally.buffs.regen, 1500); ally.buffs.regenT = 3;
+              ally.hp = Math.min(ally.maxHp, ally.hp + 1500);
+              ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 15);
+            });
+            battle.stars = Math.min(99, battle.stars + Math.round(10 + ocStage * 5));
+            addLog(`🌸 ${sv.name} 보구 [${sv.npName}]! 아군 도트힐·NP+15%·스타 대량 획득!`);
+          } else if (m.id === 'sv_no_336') {
+            // ★5 바제트 [프라가라흐]: 선제 반격 자세(회피 1T·공+50%·크리+50%) + 적 전체 반격 강타!
+            m.buffs.evade = Math.max(m.buffs.evade, 1);
+            m.buffs.atk += 0.5; m.buffs.atkT = 3;
+            m.buffs.crit += 0.5; m.buffs.critT = 3;
+            battle.enemies.forEach(en => {
+              if (en.hp <= 0) return;
+              const totalAff = getCombinedDamageMod(sv.cls, en.cls, sv.attribute, en.attr);
+              const counterDmg = m.atk * 4.5 * npLvMult * (1 + m.buffs.atk) * npDmgMult * totalAff * ocMult;
+              damageEnemy(en, counterDmg, 'dmg-np');
+            });
+            addLog(`⚔️ ${sv.name} 보구 [${sv.npName}]! 역광검 프라가라흐 선제 반격 작렬 & 회피·공+50%!!`);
+          } else if (m.id === 'sv_no_413') {
+            // ★5 아오자키 아오코: 제5마법 슈퍼 아오코 변신! (보구 대군 Buster 전환 + 공+50%·크리+50%·스타+20)
+            m.buffs.npCatOverride = 'aoe';
+            m.buffs.npTypeOverride = 'Buster';
+            m.buffs.atk += 0.5; m.buffs.atkT = 3;
+            m.buffs.crit += 0.5; m.buffs.critT = 3;
+            battle.stars = Math.min(99, battle.stars + 20);
+            addLog(`✨ ${sv.name} 보구 [${sv.npName}]! 제5마법 슈퍼 아오코 변신 — 대군 Buster 보구 해방 & 공+50%·스타+20!!`);
+          } else if (m.id === 'sv_no_421') {
+            // ★5 BB 두바이 (지원형 보조 모드): 아군 전체 공+30% · NP+30% · 무적(1회) · 최대HP+2,000!
+            getActiveMembers(battle).forEach(ally => {
+              ensureMemberBuffs(ally);
+              ally.buffs.atk += 0.3; ally.buffs.atkT = 3;
+              ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 30);
+              ally.buffs.invulHits = Math.max(ally.buffs.invulHits, 1);
+              ally.buffs.maxHpBonus += 2000; ally.maxHp += 2000; ally.hp += 2000;
+            });
+            addLog(`🌙 ${sv.name} 보구 [${sv.npName}] (보조)! 아군 전체 공+30%·NP+30%·무적(1회)·최대HP+2,000!`);
+          } else if (sv.collectionNo === 107) {
+            // ★0 앙리마유 [베르그 아베스타]: 피격 대미지 2배 반사(적 전체 고정 반사 대미지) & 본인 근성!
+            m.buffs.guts = Math.max(m.buffs.guts, 1000); m.buffs.gutsT = 3;
+            const lostHp = Math.max(2000, m.maxHp - m.hp);
+            battle.enemies.forEach(en => { if (en.hp > 0) damageEnemy(en, lostHp * (2 + ocStage * 0.5), 'dmg-np'); });
+            addLog(`🖤 ${sv.name} 보구 [${sv.npName}]! 피격 대미지 반사 일격 작렬 & 근성 부여!`);
           } else {
             getActiveMembers(battle).forEach(ally => {
               ally.buffs.atk += 0.25 * ocMult; ally.buffs.atkT = 3;
