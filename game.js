@@ -1431,6 +1431,26 @@
             </button>
           `).join('')}
         </div>
+        ${(() => {
+          const matData = window.SERVANT_MATERIALS && window.SERVANT_MATERIALS[sv.collectionNo];
+          if (!matData) return '';
+          const fmt = (st) => st && st.items && st.items.length
+            ? st.items.map(([n, a]) => `${n} ×${a}`).join(', ') + ` (${formatQpShort(st.qp)} QP)`
+            : '재료 없음';
+          const ascRows = [0, 1, 2, 3].map(i => `<div><strong>${i + 1}차 재림:</strong> ${fmt(matData.asc && matData.asc[i])}</div>`).join('');
+          const skRows = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => `<div><strong>Lv.${i}→${i + 1}:</strong> ${fmt(matData.skill && matData.skill[i])}</div>`).join('');
+          return `
+            <details style="margin-top:4px;font-size:11.5px;color:#cde0ff">
+              <summary style="cursor:pointer;color:#ffd875;font-weight:700">🧪 공식 영기재림(1~4차) · 스킬(Lv.1~10) 필요 재료 보기</summary>
+              <div style="margin-top:6px;padding:8px;border-radius:8px;background:rgba(8,14,28,0.75);display:flex;flex-direction:column;gap:3px;line-height:1.45">
+                <div style="color:#93c5fd;font-weight:700">✨ 영기재림 재료</div>
+                ${ascRows}
+                <div style="color:#93c5fd;font-weight:700;margin-top:6px">⚡ 스킬 강화 재료 (스킬 1개당)</div>
+                ${skRows}
+              </div>
+            </details>
+          `;
+        })()}
       </div>
     `;
 
