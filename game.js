@@ -1377,7 +1377,12 @@
     const svSkills = (sv.skills && sv.skills.length >= 3) ? sv.skills : ['스킬 1', '스킬 2', '스킬 3'];
     skillsRow.innerHTML = svSkills.map((sk, idx) => {
       const slv = own.skillLevels[idx] || 1;
-      const cost = slv < 10 ? getSkillUpQp(sv.rarity, slv) : 0;
+      const matData = window.SERVANT_MATERIALS && window.SERVANT_MATERIALS[sv.collectionNo];
+      const skMat = slv < 10 && matData && matData.skill && matData.skill[slv];
+      const cost = slv < 10 ? ((skMat && skMat.qp) ? skMat.qp : getSkillUpQp(sv.rarity, slv)) : 0;
+      const reqStr = skMat && skMat.items && skMat.items.length
+        ? skMat.items.map(([n, a]) => `${n}×${a}`).join(', ') + ' · '
+        : '';
       const cdTip = slv >= 10 ? '쿨타임 -2T' : (slv >= 6 ? '쿨타임 -1T' : 'Lv.6에 쿨-1T');
       return `
         <div class="mr-skill-card">
@@ -1386,7 +1391,7 @@
             <span>Lv.${slv} / 10 (${cdTip})</span>
           </div>
           <button class="mr-skill-up-btn" data-skidx="${idx}" ${slv >= 10 ? 'disabled' : ''}>
-            ${slv >= 10 ? 'MAX' : `강화 (${formatQpShort(cost)} QP)`}
+            ${slv >= 10 ? 'MAX' : `강화 (${reqStr}${formatQpShort(cost)} QP)`}
           </button>
         </div>
       `;
@@ -1430,8 +1435,13 @@
     if (own.ascension >= 4) {
       ascBtn.textContent = '✨ 최종 영기재림 완료 (4차)';
     } else {
-      const ascQp = getAscensionQp(sv.rarity, own.ascension);
-      ascBtn.textContent = `✨ ${own.ascension + 1}차 영기재림 (${formatQpShort(ascQp)} QP)`;
+      const matData = window.SERVANT_MATERIALS && window.SERVANT_MATERIALS[sv.collectionNo];
+      const ascEntry = matData && matData.asc && matData.asc[own.ascension];
+      const ascQp = (ascEntry && ascEntry.qp) ? ascEntry.qp : getAscensionQp(sv.rarity, own.ascension);
+      const ascReqStr = ascEntry && ascEntry.items && ascEntry.items.length
+        ? ascEntry.items.map(([n, a]) => `${n}×${a}`).join(', ') + ' · '
+        : '';
+      ascBtn.textContent = `✨ ${own.ascension + 1}차 영기재림 (${ascReqStr}${formatQpShort(ascQp)} QP)`;
     }
 
     document.getElementById('myroom-speaker').textContent = `${sv.name} (${own.ascension}차 재림)`;
@@ -2633,9 +2643,9 @@
         toast(`QP가 부족합니다! 필요: ${ascQp.toLocaleString()} QP (배틀 보물고에서 파밍하세요!)`);
         return;
       }
-      // v29: 공식 영기재림 재료 실제 체크 및 소비!
+      // v38: 공식 영기재림 재료 실제 체크 및 소비! (2차→asc[1], 3차→asc[2], 4차→asc[3])
       const matData = window.SERVANT_MATERIALS && window.SERVANT_MATERIALS[sv.collectionNo];
-      const ascIdx = own.ascension - 1; // 1차→2차는 index 0, 2→3은 1, 3→4는 2
+      const ascIdx = own.ascension;
       const reqItems = matData && matData.asc && matData.asc[ascIdx] && matData.asc[ascIdx].items ? matData.asc[ascIdx].items : [];
       const missing = reqItems.filter(([name, amt]) => ((state.materials && state.materials[name]) || 0) < amt);
       if (missing.length) {
