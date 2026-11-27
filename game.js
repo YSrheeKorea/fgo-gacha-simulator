@@ -1280,31 +1280,44 @@
         <button class="small-outline-btn mr-v25-mode" data-mode="sheet" style="padding:3px 8px;font-size:11px;${mrViewMode === 'sheet' ? 'border-color:#ffd86b;color:#ffd86b;' : ''}">😊 표정 시트</button>
       </div>
     `;
-    if (mrViewMode === 'sprite' && (cmdSpUrl || stSpUrl)) {
+    if (mrViewMode === 'sprite' && (cmdSpUrl || stSpUrl || narUrl)) {
+      const spTab = state.options.myRoomSpriteTab || 'cmd'; // 'cmd' | 'status' | 'narrow'
+      const activeUrl = spTab === 'status' ? stSpUrl : (spTab === 'narrow' ? narUrl : cmdSpUrl);
+      const activeLabel = spTab === 'status' ? '전장 스테이터스 스프라이트' : (spTab === 'narrow' ? '보구 컷인' : '커맨드 배틀 스프라이트');
       portraitWrap.innerHTML = modeBtnsHtml + `
-        <div class="mr-standing-box" style="width:280px;min-height:360px;margin:0 auto;border-radius:14px;background:radial-gradient(circle at 50% 35%,rgba(45,75,140,0.5),rgba(10,16,32,0.94));border:1px solid rgba(255,215,100,0.35);padding:12px;display:flex;flex-direction:column;align-items:center;gap:10px">
-          <div style="font-size:11px;color:#ffd875;font-weight:700">⚔️ ${Math.min(3, curAsc)}차 재림 배틀 스프라이트</div>
-          ${cmdSpUrl ? `<img src="${cmdSpUrl}" alt="${sv.name} 커맨드 스프라이트" referrerpolicy="no-referrer" style="max-width:210px;max-height:190px;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(0,0,0,0.65))" onerror="this.remove()">` : ''}
-          <div style="display:flex;gap:8px;align-items:center;justify-content:center;width:100%">
-            ${stSpUrl ? `<img src="${stSpUrl}" alt="스테이터스" referrerpolicy="no-referrer" style="height:68px;object-fit:contain;border-radius:8px;background:rgba(0,0,0,0.35);padding:4px" onerror="this.remove()">` : ''}
-            ${narUrl ? `<img src="${narUrl}" alt="보구 컷인" referrerpolicy="no-referrer" style="height:68px;object-fit:cover;border-radius:8px;border:1px solid rgba(255,215,100,0.3)" onerror="this.remove()">` : ''}
+        <div class="mr-standing-box" style="width:280px;min-height:360px;margin:0 auto;border-radius:14px;background:radial-gradient(circle at 50% 35%,rgba(45,75,140,0.5),rgba(10,16,32,0.94));border:1px solid rgba(255,215,100,0.35);padding:12px;display:flex;flex-direction:column;align-items:center;gap:10px" onclick="event.stopPropagation()">
+          <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center">
+            <button class="small-outline-btn mr-v39-sptab" data-sptab="cmd" style="padding:2px 7px;font-size:10.5px;${spTab === 'cmd' ? 'border-color:#ffd86b;color:#ffd86b;' : ''}">⚔️ 커맨드</button>
+            <button class="small-outline-btn mr-v39-sptab" data-sptab="status" style="padding:2px 7px;font-size:10.5px;${spTab === 'status' ? 'border-color:#ffd86b;color:#ffd86b;' : ''}">🛡️ 스테이터스</button>
+            <button class="small-outline-btn mr-v39-sptab" data-sptab="narrow" style="padding:2px 7px;font-size:10.5px;${spTab === 'narrow' ? 'border-color:#ffd86b;color:#ffd86b;' : ''}">✨ 보구 컷인</button>
           </div>
-          <div style="font-size:10.5px;color:#9bb6df;text-align:center">상단 1차·2차·3차 탭을 누르면 배틀 스프라이트와 대사가 함께 변경됩니다!</div>
+          <div style="font-size:11px;color:#ffd875;font-weight:700">${Math.min(3, curAsc)}차 재림 · ${activeLabel}</div>
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;width:100%">
+            ${activeUrl ? `<img src="${activeUrl}" alt="${sv.name} ${activeLabel}" referrerpolicy="no-referrer" style="max-width:240px;max-height:250px;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(0,0,0,0.65))" onerror="this.parentElement.innerHTML='<div style=\\'color:#9bb6df;font-size:12px\\'>해당 에셋이 없습니다.</div>'">` : '<div style="color:#9bb6df;font-size:12px">해당 에셋이 없습니다.</div>'}
+          </div>
         </div>
       `;
     } else if (mrViewMode === 'standing' && figUrl) {
       portraitWrap.innerHTML = modeBtnsHtml + `
-        <div class="mr-standing-box" style="width:260px;height:380px;margin:0 auto;overflow:hidden;border-radius:14px;background:radial-gradient(circle at 50% 30%,rgba(60,95,165,0.45),rgba(10,16,32,0.9));border:1px solid rgba(255,215,100,0.35);display:flex;align-items:flex-start;justify-content:center">
+        <div class="mr-standing-box" style="width:280px;height:280px;margin:0 auto;overflow:hidden;border-radius:14px;background:radial-gradient(circle at 50% 30%,rgba(60,95,165,0.45),rgba(10,16,32,0.9));border:1px solid rgba(255,215,100,0.35);display:flex;align-items:flex-start;justify-content:center">
           <img src="${figUrl}" alt="${sv.name}" referrerpolicy="no-referrer"
-            style="width:260px;height:auto;object-fit:cover;object-position:top center;filter:drop-shadow(0 6px 14px rgba(0,0,0,0.65));transition:transform 0.2s"
-            onerror="this.parentElement.innerHTML='<div style=\\'padding:40px 12px;text-align:center;color:#9bb6df;font-size:12px\\'>스탠딩 에셋이 없는 서번트입니다.<br>카드 모드로 전환해 주세요.</div>'">
+            style="width:280px;height:280px;object-fit:cover;object-position:50% 0%;filter:drop-shadow(0 6px 14px rgba(0,0,0,0.65))"
+            onerror="this.parentElement.innerHTML='<div style=\\'padding:40px 12px;text-align:center;color:#9bb6df;font-size:12px\\'>스탠딩 에셋이 없는 서번트입니다.</div>'">
         </div>
       `;
     } else if (mrViewMode === 'sheet' && figUrl) {
+      const exprIdx = Number(state.options.myRoomExprIdx || 0); // 0~7 개별 표정 크롭
+      const col = exprIdx % 4;
+      const row = Math.floor(exprIdx / 4);
+      const posX = (col / 3) * 100;
+      const posY = row === 0 ? 78 : 98;
       portraitWrap.innerHTML = modeBtnsHtml + `
-        <div class="mr-standing-box" style="width:280px;max-height:380px;margin:0 auto;overflow:auto;border-radius:12px;background:rgba(10,16,32,0.92);border:1px solid rgba(255,215,100,0.35);padding:6px">
-          <img src="${figUrl}" alt="${sv.name} 표정 시트" referrerpolicy="no-referrer" style="width:100%;height:auto;display:block"
-            onerror="this.parentElement.innerHTML='<div style=\\'padding:40px 12px;text-align:center;color:#9bb6df;font-size:12px\\'>표정 시트가 없는 서번트입니다.</div>'">
+        <div class="mr-standing-box" style="width:280px;margin:0 auto;border-radius:14px;background:rgba(10,16,32,0.94);border:1px solid rgba(255,215,100,0.35);padding:10px;display:flex;flex-direction:column;align-items:center;gap:8px" onclick="event.stopPropagation()">
+          <div style="font-size:11px;color:#ffd875;font-weight:700">😊 ${Math.min(3, curAsc)}차 재림 · 표정 #${exprIdx + 1}</div>
+          <div style="width:180px;height:180px;border-radius:12px;border:1px solid rgba(255,215,100,0.3);background-color:#0b1328;background-image:url('${figUrl}');background-size:400% auto;background-position:${posX}% ${posY}%;background-repeat:no-repeat"></div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center">
+            ${[0, 1, 2, 3, 4, 5, 6, 7].map(i => `<button class="small-outline-btn mr-v39-expr" data-expr="${i}" style="padding:2px 7px;font-size:10.5px;${exprIdx === i ? 'border-color:#ffd86b;color:#ffd86b;' : ''}">표정 ${i + 1}</button>`).join('')}
+          </div>
         </div>
       `;
     } else {
@@ -1319,6 +1332,24 @@
         e.stopPropagation();
         SoundEngine.click();
         state.options.myRoomViewMode = b.dataset.mode;
+        saveState();
+        renderMyRoomTab();
+      });
+    });
+    portraitWrap.querySelectorAll('.mr-v39-sptab').forEach(b => {
+      b.addEventListener('click', (e) => {
+        e.stopPropagation();
+        SoundEngine.click();
+        state.options.myRoomSpriteTab = b.dataset.sptab;
+        saveState();
+        renderMyRoomTab();
+      });
+    });
+    portraitWrap.querySelectorAll('.mr-v39-expr').forEach(b => {
+      b.addEventListener('click', (e) => {
+        e.stopPropagation();
+        SoundEngine.click();
+        state.options.myRoomExprIdx = Number(b.dataset.expr);
         saveState();
         renderMyRoomTab();
       });
