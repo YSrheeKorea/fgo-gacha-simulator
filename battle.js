@@ -1812,8 +1812,6 @@ window.FgoBattle = (() => {
         card.className = 'quest-card' + (q.id === selectedQuestId ? ' active' : '');
         card.innerHTML = `
         <div class="quest-card-head">
-          <strong>${q.name}</strong>
-          <span class="quest-diff">${q.difficulty}</span>
           <strong>${q.name} ${clearCnt > 0 ? `<span class="gate-clear-badge">✅ CLEAR (${clearCnt})</span>` : ''}</strong>
           <span class="quest-diff">${q.difficulty}${!isTodayOpen ? ' · 캠페인개방' : ''}</span>
         </div>
