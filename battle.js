@@ -294,6 +294,34 @@ window.FgoBattle = (() => {
         { key: 'cu_3', name: names[2], cd: 5, icon: '💚', target: 'self', desc: '[본인] 자신 약화 해제 & HP +2,500 회복' }
       ];
     }
+    if (sv.id === 'sv_no_241') { // ★5 사마의(라이네스): 개인 50% 주유 서포터!
+      return [
+        { key: 'reines_1', name: names[0], cd: 5, icon: '🛡️', target: 'all',  desc: '[단체] 아군 전체 방어력 +20%(3T) & NP +10%' },
+        { key: 'reines_2', name: names[1], cd: 5, icon: '⚔️', target: 'ally', desc: '[개인] 선택 아군 1명 공격력 +40%(3T) & NP +20%' },
+        { key: 'reines_3', name: names[2], cd: 6, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 무적(2회·3T) & NP +20%' }
+      ];
+    }
+    if (sv.id === 'sv_no_315') { // ★4 하베트롯: 자가 80% 차지 + 3스킬 선택 아군 버프 후 자폭 오첸!
+      return [
+        { key: 'habe_1', name: names[0], cd: 5, icon: '💚', target: 'all',  desc: '[단체] 아군 전체 HP +2,000 & 크리티컬 위력 +30%(3T)' },
+        { key: 'habe_2', name: names[1], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +80% & Arts +30%(3T)!' },
+        { key: 'habe_3', name: names[2], cd: 6, icon: '🌸', target: 'ally', desc: '[개인] 선택 아군 1명 근성(3,000)·회복·무적 부여 후 자신 퇴장(후열 증원!)' }
+      ];
+    }
+    if (sv.id === 'sv_ozymandias') { // ★5 오지만디아스: 아군 전체 NP +20% + 황제특권!
+      return [
+        { key: 'ozy_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & 크리 위력 +20%(3T)' },
+        { key: 'ozy_2', name: names[1], cd: 5, icon: '👑', target: 'self', desc: '[본인] 황제특권! 공격 +40%(3T) & 방어 +40%(3T) & HP +3,000' },
+        { key: 'ozy_3', name: names[2], cd: 6, icon: '☀️', target: 'all',  desc: '[단체] 아군 전체 NP +20% & 보구 위력 +20%(3T)!' }
+      ];
+    }
+    if (sv.id === 'sv_no_397') { // ★5 타케다 하루노부(타케다 신겐): 개인 쿨타임 -1T + 50차지!
+      return [
+        { key: 'shingen_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & Buster +20%(3T)' },
+        { key: 'shingen_2', name: names[1], cd: 6, icon: '⏱️', target: 'ally', desc: '[개인] 선택 아군 1명 스킬 쿨타임 -1턴 & 회피(1회·3T)!' },
+        { key: 'shingen_3', name: names[2], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 크리 위력 +50%(3T)' }
+      ];
+    }
     const cardIcon = sv.npType === 'Buster' ? '🔴' : (sv.npType === 'Arts' ? '🔵' : '🟢');
     const npCharge = sv.id === 'sv_arcueid' ? 100 : (sv.rarity === 5 ? 50 : (sv.rarity === 4 ? 30 : 25));
     const isSup = getNpCategory(sv) === 'support';
@@ -463,6 +491,48 @@ window.FgoBattle = (() => {
       case 'cu_3':
         caster.hp = Math.min(caster.maxHp, caster.hp + 2500);
         return `${sv.name} [${name}]! 약화 해제 & HP +2,500 회복!`;
+      case 'reines_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.def += 0.2; m.buffs.defT = 3; addNp(m, 10); });
+        return `${sv.name} [${name}]! 아군 전체 방어 +20% & NP +10%!`;
+      case 'reines_2':
+        target.buffs.atk += 0.4; target.buffs.atkT = 3; addNp(target, 20);
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} 공격 +40%(3T) & NP +20%!`;
+      case 'reines_3':
+        target.buffs.invulHits = Math.max(target.buffs.invulHits, 2); addNp(target, 20);
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} 무적(2회) & NP +20%!`;
+      case 'habe_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.hp = Math.min(m.maxHp, m.hp + 2000); m.buffs.crit += 0.3; m.buffs.critT = 3; });
+        return `${sv.name} [${name}]! 아군 전체 HP +2,000 & 크리 +30%!`;
+      case 'habe_2':
+        addNp(caster, 80); caster.buffs.arts += 0.3; caster.buffs.cardT = 3;
+        return `${sv.name} [${name}]! 본인 NP +80% & Arts +30%!`;
+      case 'habe_3':
+        target.buffs.guts = Math.max(target.buffs.guts, 3000); target.buffs.gutsT = 3;
+        target.buffs.invul = Math.max(target.buffs.invul, 1);
+        target.hp = Math.min(target.maxHp, target.hp + 3000);
+        caster.hp = 0;
+        reinforceFromBackline();
+        return `${sv.name} [${name}] → ${tgtName}! 수호신부 버프 부여 후 하베트롯 퇴장 → 후열 증원!`;
+      case 'ozy_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.2; m.buffs.atkT = 3; m.buffs.crit += 0.2; m.buffs.critT = 3; });
+        return `${sv.name} [${name}]! 아군 전체 공+20% & 크리+20%!`;
+      case 'ozy_2':
+        caster.buffs.atk += 0.4; caster.buffs.atkT = 3; caster.buffs.def += 0.4; caster.buffs.defT = 3;
+        caster.hp = Math.min(caster.maxHp, caster.hp + 3000);
+        return `${sv.name} [${name}]! 황제특권 공+40% · 방+40% · HP+3,000!`;
+      case 'ozy_3':
+        alive.forEach(m => { ensureMemberBuffs(m); addNp(m, 20); m.buffs.npDmg += 0.2; m.buffs.npDmgT = 3; });
+        return `${sv.name} [${name}]! 태양신의 가호 — 아군 전체 NP +20% & 보구 위력 +20%!`;
+      case 'shingen_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.2; m.buffs.atkT = 3; m.buffs.buster += 0.2; m.buffs.cardT = 3; });
+        return `${sv.name} [${name}]! 아군 전체 공+20% & Buster+20%!`;
+      case 'shingen_2':
+        target.skills.forEach(sk => { if (sk.curCd > 0) sk.curCd = Math.max(0, sk.curCd - 1); });
+        target.buffs.evadeHits = Math.max(target.buffs.evadeHits, 1); target.buffs.evadeT = 3;
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} 스킬 쿨타임 -1턴 & 회피(1회·3T)!`;
+      case 'shingen_3':
+        addNp(caster, 50); caster.buffs.crit += 0.5; caster.buffs.critT = 3;
+        return `${sv.name} [${name}]! 본인 NP +50% & 크리 +50%!`;
       case 'sup_2':
         addNp(target, 30);
         b.stars = Math.min(99, b.stars + 15);
@@ -2335,6 +2405,25 @@ window.FgoBattle = (() => {
               ally.hp = Math.min(ally.maxHp, ally.hp + 2500);
             });
             addLog(`✨ ${sv.name} 보구 [${sv.npName}]! 아군 전체 크리+40% · 방어+30% · HP 회복!`);
+          } else if (m.id === 'sv_no_241') {
+            // ★5 사마의(라이네스) [혼원일진]: 아군 전체 방어+30% · NP획득+30% · 크리+30% · 적 방어 약화!
+            getActiveMembers(battle).forEach(ally => {
+              ensureMemberBuffs(ally);
+              ally.buffs.def += 0.3; ally.buffs.defT = 3;
+              ally.buffs.npGain += 0.3; ally.buffs.npGainT = 3;
+              ally.buffs.atk += 0.25 * ocMult; ally.buffs.atkT = 3;
+            });
+            addLog(`📜 ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 아군 전체 공·방·NP획득 대폭 강화!`);
+          } else if (m.id === 'sv_no_342' || m.id === 'sv_no_026') {
+            // ★5 콘스탄티누스 11세 / ★3 부디카: 아군 전체 방어+40% · 무적(1T) · 아츠+20% · HP 회복!
+            getActiveMembers(battle).forEach(ally => {
+              ensureMemberBuffs(ally);
+              ally.buffs.def += 0.4; ally.buffs.defT = 3;
+              ally.buffs.arts += 0.2; ally.buffs.cardT = 3;
+              ally.buffs.invul = Math.max(ally.buffs.invul, 1);
+              ally.hp = Math.min(ally.maxHp, ally.hp + 2500);
+            });
+            addLog(`🏰 ${sv.name} 보구 [${sv.npName}]! 아군 전체 방어+40% · 무적(1T) · Arts+20% · 회복!`);
           } else {
             getActiveMembers(battle).forEach(ally => {
               ally.buffs.atk += 0.25 * ocMult; ally.buffs.atkT = 3;
