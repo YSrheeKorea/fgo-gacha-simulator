@@ -1474,6 +1474,7 @@ window.FgoBattle = (() => {
   // 프렌드 서포트 목록 (6인 중 1명 프렌드 슬롯 전용)
   const QUESTS = [
     ...(typeof buildGateQuestCatalog === 'function' ? buildGateQuestCatalog() : []),
+    ...(typeof window !== 'undefined' && Array.isArray(window.FGO_FREE_QUESTS_P1A) ? window.FGO_FREE_QUESTS_P1A : []),
     ...BOSS_QUESTS
   ];
 
@@ -3604,6 +3605,17 @@ window.FgoBattle = (() => {
             finalRewards.qp += qpExtra;
           }
           const mcRes = getBridge().grantBattleRewards(finalRewards, ownedInParty);
+          // v33: 프리 퀘스트 등 소재 드랍 아이템을 보유 재료(state.materials)에 즉시 지급!
+          if (Array.isArray(q.drops) && q.drops.length) {
+            const stNow = getBridge().getState();
+            if (stNow) {
+              if (!stNow.materials) stNow.materials = {};
+              q.drops.forEach(([matName, amt]) => {
+                stNow.materials[matName] = (stNow.materials[matName] || 0) + amt;
+              });
+              if (getBridge().save) getBridge().save();
+            }
+          }
           titleEl.textContent = '🏆 QUEST CLEAR!!';
           bodyEl.innerHTML = `
         <div class="br-quest">${q.name}</div>
