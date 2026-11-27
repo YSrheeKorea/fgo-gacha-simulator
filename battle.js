@@ -392,6 +392,55 @@ window.FgoBattle = (() => {
         { key: 'jack_3', name: names[2], cd: 4, icon: '💚', target: 'ally',  desc: '[개인] 외과수술! 선택 아군 1명 HP +2,500 회복!' }
       ];
     }
+    if (sv.id === 'sv_no_247') { // ★5 아르주나 [얼터](신준): 약체특공 공업 + 버스터 스타집중 + 근성·도트힐!
+      return [
+        { key: 'junao_1', name: names[0], cd: 5, icon: '⚡', target: 'self', desc: '[본인] 대귀결! 자신 공격력 +30%(3T) & 약체특공(+50% 화력·3T)!' },
+        { key: 'junao_2', name: names[1], cd: 5, icon: '💎', target: 'self', desc: '[본인] 천리안(초월)! 자신 NP +30% & 버스터 스타집중 +10,000%(3T)!' },
+        { key: 'junao_3', name: names[2], cd: 6, icon: '❤️‍🔥', target: 'self', desc: '[본인] 혼의 등불! 자신 근성(2,000·3T) & 매 턴 HP +2,000(3T)!' }
+      ];
+    }
+    if (sv.id === 'sv_morgan') { // ★5 모르간: 아군 전체 공+20%/본인 NP+30% + 개인 NP+20% + 근성·크리!
+      return [
+        { key: 'morgan_1', name: names[0], cd: 5, icon: '👑', target: 'all',  desc: '[단체] 갈망의 카리스마! 아군 공+20%(3T) & 본인 NP +30%' },
+        { key: 'morgan_2', name: names[1], cd: 5, icon: '💎', target: 'ally', desc: '[개인] 호수의 가호! 선택 아군 1명 NP +20% & NP 획득량 +30%(3T)' },
+        { key: 'morgan_3', name: names[2], cd: 6, icon: '❤️‍🔥', target: 'self', desc: '[본인] 끝에서부터! 자신 근성(3,000·3T) & 크리 +50%(3T) & 스타 +15!' }
+      ];
+    }
+    if (sv.id === 'sv_no_355') { // ★5 이부키도지(수영복): 전체 공/크리 + 개인 쿨감-1T + 자가 50차지!
+      return [
+        { key: 'ibuki_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & 크리티컬 위력 +30%(3T)' },
+        { key: 'ibuki_2', name: names[1], cd: 6, icon: '⏱️', target: 'ally', desc: '[개인] 선택 아군 1명 Arts/Buster +30%(3T) & 스킬 쿨타임 -1턴!!' },
+        { key: 'ibuki_3', name: names[2], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 크리티컬 스타 +20 획득!' }
+      ];
+    }
+    if (sv.id === 'sv_no_386') { // ★5 알트리아 캐스터(수영복): 전체 NP+20% + 개인 NP+50% + 대숙정방어!
+      return [
+        { key: 'bakatoria_1', name: names[0], cd: 5, icon: '🔵', target: 'all',  desc: '[단체] 아군 전체 Arts +20%(3T) & NP +20%' },
+        { key: 'bakatoria_2', name: names[1], cd: 6, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 NP +50% & NP 획득량 +30%(3T)!' },
+        { key: 'bakatoria_3', name: names[2], cd: 6, icon: '✨', target: 'self', desc: '[본인] 자신 무적(1T) & 크리 +50%(3T) & 보구 위력 +30%(3T)!' }
+      ];
+    }
+    if (sv.id === 'sv_heracles') { // ★4 헤라클레스: 용맹 + 심안(위) 회피 + 전투속행 근성 5턴!
+      return [
+        { key: 'herc_1', name: names[0], cd: 5, icon: '⚔️', target: 'self', desc: '[본인] 용맹 A+! 자신 공격력 +31%(3T)' },
+        { key: 'herc_2', name: names[1], cd: 6, icon: '💨', target: 'self', desc: '[본인] 심안(위)! 자신 회피(1T) & 크리티컬 위력 +36%(3T)' },
+        { key: 'herc_3', name: names[2], cd: 7, icon: '❤️‍🔥', target: 'self', desc: '[본인] 전투속행! 자신 근성 부여 (HP 2,500 · 5턴 — 불사신!)' }
+      ];
+    }
+    if (sv.id === 'sv_cu_alter') { // ★5 쿠 훌린 [얼터]: 화살막이 회피 2회 + 전투속행 근성 5턴!
+      return [
+        { key: 'cualter_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 정령의 광소! 적 약화(아군 공+20% · 방+20% 3T)' },
+        { key: 'cualter_2', name: names[1], cd: 5, icon: '💨', target: 'self', desc: '[본인] 화살막이의 가호! 자신 회피(2회·3T) & 방어력 +20%(3T)' },
+        { key: 'cualter_3', name: names[2], cd: 7, icon: '❤️‍🔥', target: 'self', desc: '[본인] 전투속행! 자신 근성 부여 (HP 2,500 · 5턴)' }
+      ];
+    }
+    if (sv.id === 'sv_no_414') { // ★4 시즈키 소쥬로: 100% 자가차지 + 초고배율 단일 자폭 보구!
+      return [
+        { key: 'sojuro_1', name: names[0], cd: 5, icon: '🔴', target: 'self', desc: '[본인] 자신 공격력 +30%(3T) & Buster +30%(3T)' },
+        { key: 'sojuro_2', name: names[1], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 크리티컬 위력 +50%(1T)' },
+        { key: 'sojuro_3', name: names[2], cd: 6, icon: '💥', target: 'self', desc: '[본인] 자신 NP +50% & 보구 위력 +30%(1T) (보구 발동 후 퇴장!)' }
+      ];
+    }
     const cardIcon = sv.npType === 'Buster' ? '🔴' : (sv.npType === 'Arts' ? '🔵' : '🟢');
     const npCharge = sv.id === 'sv_arcueid' ? 100 : (sv.rarity === 5 ? 50 : (sv.rarity === 4 ? 30 : 25));
     const isSup = getNpCategory(sv) === 'support';
@@ -714,6 +763,87 @@ window.FgoBattle = (() => {
       case 'jack_3':
         target.hp = Math.min(target.maxHp, target.hp + 2500);
         return `${sv.name} [${name}] → ${tgtName}! 외과수술 HP +2,500 회복!`;
+      case 'junao_1':
+        caster.buffs.atk += 0.3; caster.buffs.atkT = 3;
+        caster.buffs.npDmg += 0.5; caster.buffs.npDmgT = 3;
+        return `${sv.name} [${name}]! 대귀결 — 공+30%(3T) & 약체특공(+50% 화력)!!`;
+      case 'junao_2':
+        addNp(caster, 30);
+        caster.buffs.busterStarWeight += 10000;
+        reallocateCurrentHandStars(b);
+        return `${sv.name} [${name}]! 천리안(초월) — 본인 NP +30% & 버스터 스타집중 +10,000%!`;
+      case 'junao_3':
+        caster.buffs.guts = Math.max(caster.buffs.guts, 2000); caster.buffs.gutsT = 3;
+        caster.buffs.regen = Math.max(caster.buffs.regen, 2000); caster.buffs.regenT = 3;
+        return `${sv.name} [${name}]! 혼의 등불 — 근성(2,000·3T) & 매 턴 HP +2,000(3T)!`;
+      case 'morgan_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.2; m.buffs.atkT = 3; });
+        addNp(caster, 30);
+        return `${sv.name} [${name}]! 아군 공+20%(3T) & 본인 NP +30%!`;
+      case 'morgan_2':
+        addNp(target, 20);
+        target.buffs.npGain += 0.3; target.buffs.npGainT = 3;
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} NP +20% & NP 획득량 +30%!`;
+      case 'morgan_3':
+        caster.buffs.guts = Math.max(caster.buffs.guts, 3000); caster.buffs.gutsT = 3;
+        caster.buffs.crit += 0.5; caster.buffs.critT = 3;
+        b.stars = Math.min(99, b.stars + 15);
+        return `${sv.name} [${name}]! 근성(3,000·3T) & 크리 +50%(3T) & 스타 +15!`;
+      case 'ibuki_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.2; m.buffs.atkT = 3; m.buffs.crit += 0.3; m.buffs.critT = 3; });
+        return `${sv.name} [${name}]! 아군 공+20% & 크리+30%(3T)!`;
+      case 'ibuki_2':
+        target.buffs.arts += 0.3; target.buffs.buster += 0.3; target.buffs.cardT = 3;
+        target.skills.forEach(sk => { if (sk.curCd > 0) sk.curCd = Math.max(0, sk.curCd - 1); });
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} Arts/Buster+30% & 쿨타임 -1턴!!`;
+      case 'ibuki_3':
+        addNp(caster, 50);
+        b.stars = Math.min(99, b.stars + 20);
+        return `${sv.name} [${name}]! 본인 NP +50% & 스타 +20!`;
+      case 'bakatoria_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.arts += 0.2; m.buffs.cardT = 3; addNp(m, 20); });
+        return `${sv.name} [${name}]! 아군 전체 Arts+20%(3T) & NP +20%!`;
+      case 'bakatoria_2':
+        addNp(target, 50);
+        target.buffs.npGain += 0.3; target.buffs.npGainT = 3;
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} NP +50% & NP 획득량 +30%!`;
+      case 'bakatoria_3':
+        caster.buffs.invul = Math.max(caster.buffs.invul, 1);
+        caster.buffs.crit += 0.5; caster.buffs.critT = 3;
+        caster.buffs.npDmg += 0.3; caster.buffs.npDmgT = 3;
+        return `${sv.name} [${name}]! 본인 무적(1T) & 크리+50% & 보구+30%!`;
+      case 'herc_1':
+        caster.buffs.atk += 0.31; caster.buffs.atkT = 3;
+        return `${sv.name} [${name}]! 용맹 A+ — 공격력 +31%(3T)!`;
+      case 'herc_2':
+        caster.buffs.evade = Math.max(caster.buffs.evade, 1);
+        caster.buffs.crit += 0.36; caster.buffs.critT = 3;
+        return `${sv.name} [${name}]! 심안(위) — 회피(1T) & 크리 +36%(3T)!`;
+      case 'herc_3':
+        caster.buffs.guts = Math.max(caster.buffs.guts, 2500); caster.buffs.gutsT = 5;
+        return `${sv.name} [${name}]! 전투속행 — 근성(HP 2,500 · 5턴) 부여!`;
+      case 'cualter_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.2; m.buffs.atkT = 3; m.buffs.def += 0.2; m.buffs.defT = 3; });
+        return `${sv.name} [${name}]! 정령의 광소 — 적 약화(아군 공/방+20%)!`;
+      case 'cualter_2':
+        caster.buffs.evadeHits = Math.max(caster.buffs.evadeHits, 2); caster.buffs.evadeT = 3;
+        caster.buffs.def += 0.2; caster.buffs.defT = 3;
+        return `${sv.name} [${name}]! 화살막이의 가호 — 회피(2회·3T) & 방어+20%!`;
+      case 'cualter_3':
+        caster.buffs.guts = Math.max(caster.buffs.guts, 2500); caster.buffs.gutsT = 5;
+        return `${sv.name} [${name}]! 전투속행 — 근성(HP 2,500 · 5턴) 부여!`;
+      case 'sojuro_1':
+        caster.buffs.atk += 0.3; caster.buffs.atkT = 3;
+        caster.buffs.buster += 0.3; caster.buffs.cardT = 3;
+        return `${sv.name} [${name}]! 공+30% & Buster+30%(3T)!`;
+      case 'sojuro_2':
+        addNp(caster, 50);
+        caster.buffs.crit += 0.5; caster.buffs.critT = Math.max(caster.buffs.critT, 1);
+        return `${sv.name} [${name}]! 본인 NP +50% & 크리+50%!`;
+      case 'sojuro_3':
+        addNp(caster, 50);
+        caster.buffs.npDmg += 0.3; caster.buffs.npDmgT = Math.max(caster.buffs.npDmgT, 1);
+        return `${sv.name} [${name}]! 본인 NP +50% & 보구 위력 +30%!`;
       case 'sup_2':
         addNp(target, 30);
         b.stars = Math.min(99, b.stars + 15);
@@ -2537,7 +2667,7 @@ window.FgoBattle = (() => {
         const cat = getNpCategory(sv, m);
         const npLvMult = [0, 1.0, 1.25, 1.4, 1.5, 1.65][m.npLevel] || 1.0;
         const cardBuff = (c.type === 'Buster' ? m.buffs.buster + ce.buster + (ps.b || 0) : (c.type === 'Arts' ? m.buffs.arts + ce.arts + (ps.a || 0) : m.buffs.quick + ce.quick + (ps.q || 0)));
-        const arashMult = (m.id === 'sv_no_016') ? 1.6 : (m.id === 'sv_no_258' ? 1.5 : 1.0); // ★1 아라쉬 스텔라 ×1.6 / ★2 진궁 기각일진 ×1.5!
+        const arashMult = (m.id === 'sv_no_016') ? 1.6 : ((m.id === 'sv_no_258' || m.id === 'sv_no_414') ? 1.5 : 1.0); // ★1 아라쉬 ×1.6 / ★2 진궁·★4 시즈키 소쥬로 ×1.5!
         const npDmgMult = (1 + m.buffs.npDmg + ce.npDmg) * m.buffs.npBoost * npUpMult * arashMult;
 
         if (cat === 'support') {
@@ -2676,6 +2806,29 @@ window.FgoBattle = (() => {
               ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 20);
             });
             addLog(`🐍 ${sv.name} 보구 [${sv.npName}]! 아군 전체 HP+3,000·Arts+25%·약화무효·NP+20%!`);
+          } else if (m.id === 'sv_no_097') {
+            // ★5 나이팅게일 [나이팅게일 플레지]: 아군 전체 HP+4,000 · 방어+40%(3T) · 약화무효(1회)!
+            getActiveMembers(battle).forEach(ally => {
+              ensureMemberBuffs(ally);
+              ally.hp = Math.min(ally.maxHp, ally.hp + Math.round(4000 * ocMult));
+              ally.buffs.def += 0.4; ally.buffs.defT = 3;
+              ally.buffs.debuffImmune = Math.max(ally.buffs.debuffImmune, 1);
+            });
+            addLog(`🏥 ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 아군 전체 대회복 · 방어+40% · 약화무효!`);
+          } else if (m.id === 'sv_no_054') {
+            // ★2 칼리굴라 [플럭투스 디아나]: 적 전체 스턴(1T) · 차지 -1칸 · 강화무효(1회)!
+            battle.enemies.forEach(en => {
+              if (en.hp > 0) { en.stunned = true; en.charge = Math.max(0, en.charge - 1); en.buffBlock = (en.buffBlock || 0) + 1; }
+            });
+            addLog(`🌙 ${sv.name} 보구 [${sv.npName}]! 적 전체 스턴(1T) · 차지 -1칸 · 강화무효!`);
+          } else if (m.id === 'sv_no_053') {
+            // ★1 아스테리오스 [카오스 라비린토스]: 적 전체 공격 대폭 약화(아군 방+50% 3T) & 아군 공+30%(3T)!
+            getActiveMembers(battle).forEach(ally => {
+              ensureMemberBuffs(ally);
+              ally.buffs.def += 0.5; ally.buffs.defT = 3;
+              ally.buffs.atk += 0.3; ally.buffs.atkT = 3;
+            });
+            addLog(`🌀 ${sv.name} 보구 [${sv.npName}]! 미궁 디버프 — 아군 전체 방어+50% · 공격+30%(3T)!`);
           } else {
             getActiveMembers(battle).forEach(ally => {
               ally.buffs.atk += 0.25 * ocMult; ally.buffs.atkT = 3;
@@ -2752,6 +2905,18 @@ window.FgoBattle = (() => {
           if (c.type === 'Arts') m.np = Math.min(maxNp, m.np + Math.round(22 * (1 + cardBuff) * (1 + m.buffs.npGain) * okNpMult * enNpMod));
           if (c.type === 'Quick') battle.stars = Math.min(99, battle.stars + Math.round(14 * (1 + (ps.sg || 0)) * okStarMult));
           addLog(`💥 ${sv.name} 단일 보구 [${sv.npName}]${npUpMult > 1 ? ' 🗡️강화' : ''} (OC ${ocStage * 100}%) → ${currentTarget.name} ${Math.round(dmg).toLocaleString()}!${traitBonus.mult > 1 ? ` [💥${traitBonus.matched.join('/')} 특공 1.5×!]` : ''}`);
+          if (m.id === 'sv_no_414') {
+            // ★4 시즈키 소쥬로: 초고배율(×1.5) 단일 버스터 보구 후 자신 즉사 → 후열 서번트 자동 증원!
+            if (m.buffs.guts > 0) {
+              m.hp = Math.min(m.maxHp, m.buffs.guts);
+              m.buffs.guts = 0; m.buffs.gutsT = 0;
+              addLog(`❤️‍🔥 시즈키 소쥬로 근성 발동! 보구 반동에서 HP ${m.hp.toLocaleString()} 생환!`);
+            } else {
+              m.hp = 0;
+              addLog(`💥 시즈키 소쥬로 전력 일격 후 퇴장 → 후열 서번트 자동 증원!`);
+              reinforceFromBackline();
+            }
+          }
         }
         m.buffs.npBoost = 1;
       } else if (currentTarget) {

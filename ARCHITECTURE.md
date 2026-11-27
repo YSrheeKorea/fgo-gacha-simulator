@@ -21,7 +21,7 @@ fgo-gacha/
 ├── game.js                 # 성정석/커스텀/프렌드 가챠 엔진, 487 마테리얼 도감, 마이룸 육성(★0~★5), 순례의 축제, 통계, 설정, ChaldeaBridge
 ├── battle.js               # 6인 FGO 커맨드 카드 배틀 엔진 (상성·히든속성·Beast/UnBeast·영주·FP 보상·자동저장 이어하기)
 ├── pwa.js                  # PWA 원클릭 설치(beforeinstallprompt) & iOS 홈 화면 안내 컨트롤러
-├── sw.js                   # 오프라인 지원 Service Worker (v19 · 앱 파일 Network-First + 일러스트 Cache-First)
+├── sw.js                   # 오프라인 지원 Service Worker (v20 · 앱 파일 Network-First + 일러스트 Cache-First)
 ├── manifest.webmanifest    # PWA 스탠드얼론 앱 매니페스트
 ├── icons/                  # 전용 PNG 앱 아이콘 (192×192, 512×512, 180×180 Apple Touch)
 ├── .nojekyll               # GitHub Pages 정적 파일 직서빙 설정
@@ -36,6 +36,7 @@ fgo-gacha/
 ├── RIDER_CLASS.md          # 라이더 클래스 52기 완전 명세서 · 커맨드 6타입 · 라이네스/하베트롯/오지만/신겐 기믹 · 보구 강화(🗡️)
 ├── CASTER_CLASS.md         # 캐스터 클래스 53기 완전 명세서 · 커맨드 5타입 · 멀린/스카디/진궁/크레인/모차르트 기믹 · 보구 강화(🗡️)
 ├── ASSASSIN_CLASS.md       # 어새신 클래스 48기 완전 명세서 · 커맨드 6타입 · 테스카틀리포카/카마/산의 노인/잭/지킬/오사카베히메 기믹 · 보구 강화(🗡️)
+├── BERSERKER_CLASS.md      # 버서커 클래스 49기 완전 명세서 · 커맨드 5타입 · 신준/모르간/수부키/수캐밥/헤라클레스/소쥬로 기믹 · 보구 강화(🗡️)
 ├── HIDDEN_STATUS.md        # 전체 487기 히든 스테이터스(성별·속성·성향·특성) & 보구 특공 명세표
 ├── GAME_SPEC.md            # 가챠·프렌드 소환·배틀·상성·특공·QP 강화 상세 명세서
 ├── ARCHITECTURE.md         # 본 아키텍처 문서
