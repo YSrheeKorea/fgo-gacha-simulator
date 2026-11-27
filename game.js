@@ -631,7 +631,17 @@
       return;
     }
 
-    if (mode === 'ticket') {
+    if (mode === 'ticket10') {
+      if (state.tickets < 10) {
+        SoundEngine.error();
+        toast('호부가 10장 이상 필요합니다! 다 빈치 공방에서 마나프리즘으로 교환해 보세요.');
+        return;
+      }
+      state.tickets -= 10;
+      state.stats.ticketsSpent += 10;
+      results = rollMulti11(banner);
+      modalTitle = '🎫 호부 10장 연속 소환 (10+1연) 결과';
+    } else if (mode === 'ticket') {
       if (state.tickets < 1) {
         SoundEngine.error();
         toast('호부가 부족합니다! 다 빈치 공방에서 마나프리즘으로 교환해 보세요.');
@@ -2413,6 +2423,7 @@
 
     // 소환 버튼 4종 (성정석/호부) + 프렌드 포인트 3종
     document.getElementById('btn-pull-ticket').addEventListener('click', () => executeSummon('ticket'));
+    document.getElementById('btn-pull-ticket10')?.addEventListener('click', () => executeSummon('ticket10'));
     document.getElementById('btn-pull-1').addEventListener('click', () => executeSummon('single'));
     document.getElementById('btn-pull-11').addEventListener('click', () => executeSummon('multi'));
     document.getElementById('btn-pull-110').addEventListener('click', () => executeSummon('sim110'));
