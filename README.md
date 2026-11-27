@@ -14,10 +14,11 @@
 - **[RARITY_LIST.md](./RARITY_LIST.md)** — **레어도별 서번트 전체 목록** (`레어도 가변 마슈` · `★5 SSR 202` · `★4 SR 195` · `★3 R 49` · `★2 UC 15` · `★1 C 12` · `★0 1` · `NPC 12`)
 - **[CRAFT_ESSENCE.md](./CRAFT_ESSENCE.md)** — **개념예장(★1~★5 + NPC 전용) 코스트 · 한계돌파(✛ 풀돌) · 레벨 상한 · 파티 코스트(115) 명세서**
 - **[MYSTIC_CODES.md](./MYSTIC_CODES.md)** — **마술예장 28종 전체 명세서** (`칼데아`~`칼데아 학원제복` · 마스터 스킬 84종 · 오더 체인지 · 커맨드 셔플 · 4종 EXP 테이블)
+- **[SABER_CLASS.md](./SABER_CLASS.md)** — **세이버 클래스 59기 완전 명세서 & 전체 475기 클래스 패시브(대마력·기승 등)·보구 강화 퀘스트(🗡️)**
 - **[HIDDEN_STATUS.md](./HIDDEN_STATUS.md)** — **전체 487기 히든 스테이터스(성별·속성·성향·특성) & 보구 특공(1.5×) 명세표**
 - **[GAME_SPEC.md](./GAME_SPEC.md)** — 가챠 확률·천장, 프렌드 가챠, 커스텀 픽업, 6인 FGO 배틀 공식(버스터/아츠/퀵, 체인 7종, 클래스 상성, 히든 속성, 특공, 적 NP 보정, 스타 집중도, 영주 3획, ★0~★5 공식 QP 강화표) 전체 명세서
 - **[ARCHITECTURE.md](./ARCHITECTURE.md)** — 파일 구조, 모듈 아키텍처, 데이터 출처, `localStorage` 세이브 스키마 및 PWA 캐시 설계
-- **[CHANGELOG.md](./CHANGELOG.md)** — 버전별 개발 및 패치 이력 (`v1` ~ `v13`)
+- **[CHANGELOG.md](./CHANGELOG.md)** — 버전별 개발 및 패치 이력 (`v1` ~ `v14`)
 
 ---
 

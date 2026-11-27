@@ -1926,6 +1926,7 @@ window.FgoBattle = (() => {
       const selIdx = battle.selectedCards.findIndex(c => c.kind === 'np' && c.rosterIdx === rIdx);
       const faceUrl = ArtRenderer.getFaceUrl(m.id);
       const catLabel = getNpCategory(sv) === 'support' ? '보조' : (getNpCategory(sv) === 'single' ? '단일' : '대군');
+      const npUpTag = (typeof isNpUpgraded === 'function' && isNpUpgraded(sv)) ? ' 🗡️강화' : '';
       const ocNow = Math.max(1, Math.floor(m.np / 100)) * 100;
 
       const btn = document.createElement('button');
@@ -1936,7 +1937,7 @@ window.FgoBattle = (() => {
         <div class="np-cmd-top">
           ${faceUrl ? `<img src="${faceUrl}" class="np-cmd-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
           <div>
-            <div class="np-cmd-type">${sv.npType.toUpperCase()} 보구 · ${catLabel}</div>
+            <div class="np-cmd-type">${sv.npType.toUpperCase()} 보구 · ${catLabel}${npUpTag}</div>
             <div class="np-cmd-name">${sv.npName}</div>
           </div>
         </div>
@@ -2130,6 +2131,8 @@ window.FgoBattle = (() => {
       if (!m || m.hp <= 0) continue;
       const sv = SERVANT_MAP[m.id];
       const ce = getCePassive(m.ceId, !!m.ceMlb);
+      const ps = (typeof getServantPassives === 'function') ? getServantPassives(sv) : { q: 0, a: 0, b: 0, c: 0, sg: 0, ad: 0, nr: 0 };
+      const npUpMult = (typeof isNpUpgraded === 'function' && isNpUpgraded(sv)) ? 1.25 : 1.0;
       const maxNp = getMaxNp(m.npLevel);
 
       // 같은 서번트가 이미 죽은 적을 이어서 때리면 오버킬 유지, 다른 서번트거나 첫 타겟이 없으면 살아있는 적 자동 타겟!
@@ -2156,8 +2159,8 @@ window.FgoBattle = (() => {
         // 원작 고증: 보구 자체는 커맨드 순서/퍼스트/색상 체인 보너스를 받지 않음!
         const cat = getNpCategory(sv);
         const npLvMult = [0, 1.0, 1.25, 1.4, 1.5, 1.65][m.npLevel] || 1.0;
-        const cardBuff = (c.type === 'Buster' ? m.buffs.buster + ce.buster : (c.type === 'Arts' ? m.buffs.arts + ce.arts : m.buffs.quick + ce.quick));
-        const npDmgMult = (1 + m.buffs.npDmg + ce.npDmg) * m.buffs.npBoost;
+        const cardBuff = (c.type === 'Buster' ? m.buffs.buster + ce.buster + (ps.b || 0) : (c.type === 'Arts' ? m.buffs.arts + ce.arts + (ps.a || 0) : m.buffs.quick + ce.quick + (ps.q || 0)));
+        const npDmgMult = (1 + m.buffs.npDmg + ce.npDmg) * m.buffs.npBoost * npUpMult;
 
         if (cat === 'support') {
           getActiveMembers(battle).forEach(ally => {
@@ -2175,7 +2178,7 @@ window.FgoBattle = (() => {
             const clsMult = getClassMultiplier(sv.cls, en.cls);
             const totalAff = getCombinedDamageMod(sv.cls, en.cls, sv.attribute, en.attr);
             const traitBonus = getNpTraitBonus(sv, en);
-            const dmg = m.atk * baseMult * npLvMult * (1 + m.buffs.atk) * (1 + cardBuff) * npDmgMult * totalAff * traitBonus.mult * ocMult * (0.95 + Math.random() * 0.1);
+            const dmg = m.atk * baseMult * npLvMult * (1 + m.buffs.atk) * (1 + cardBuff) * npDmgMult * totalAff * traitBonus.mult * ocMult * (0.95 + Math.random() * 0.1) + (ps.ad || 0);
             const ok = damageEnemy(en, dmg, (clsMult > 1 || traitBonus.mult > 1) ? 'dmg-weak' : 'dmg-np');
             if (traitBonus.mult > 1) {
               spHits.push(`${en.name}(${traitBonus.matched[0]})`);
@@ -2187,16 +2190,16 @@ window.FgoBattle = (() => {
             if (c.type === 'Arts') m.np = Math.min(maxNp, m.np + Math.round(16 * (1 + cardBuff) * (1 + m.buffs.npGain) * okNpMult * enNpMod));
             if (c.type === 'Quick') {
               m.np = Math.min(maxNp, m.np + Math.round(9 * (1 + cardBuff) * okNpMult * enNpMod));
-              battle.stars = Math.min(99, battle.stars + Math.round(8 * okStarMult));
+              battle.stars = Math.min(99, battle.stars + Math.round(8 * (1 + (ps.sg || 0)) * okStarMult));
             }
           });
-          addLog(`💥 ${sv.name} 대군 보구 [${sv.npName}] (OC ${ocStage * 100}%) 작렬!${spHits.length ? ` [💥특공 1.5×: ${spHits.join(', ')}]` : ''}`);
+          addLog(`💥 ${sv.name} 대군 보구 [${sv.npName}]${npUpMult > 1 ? ' 🗡️강화' : ''} (OC ${ocStage * 100}%) 작렬!${spHits.length ? ` [💥특공 1.5×: ${spHits.join(', ')}]` : ''}`);
         } else if (currentTarget) {
           const baseMult = c.type === 'Buster' ? 6.2 : (c.type === 'Arts' ? 5.6 : 5.9);
           const clsMult = getClassMultiplier(sv.cls, currentTarget.cls);
           const totalAff = getCombinedDamageMod(sv.cls, currentTarget.cls, sv.attribute, currentTarget.attr);
           const traitBonus = getNpTraitBonus(sv, currentTarget);
-          const dmg = m.atk * baseMult * npLvMult * (1 + m.buffs.atk) * (1 + cardBuff) * npDmgMult * totalAff * traitBonus.mult * ocMult * (0.95 + Math.random() * 0.1);
+          const dmg = m.atk * baseMult * npLvMult * (1 + m.buffs.atk) * (1 + cardBuff) * npDmgMult * totalAff * traitBonus.mult * ocMult * (0.95 + Math.random() * 0.1) + (ps.ad || 0);
           const ok = damageEnemy(currentTarget, dmg, (clsMult > 1 || traitBonus.mult > 1) ? 'dmg-weak' : 'dmg-np');
           if (traitBonus.mult > 1) {
             showFloatDmg(`enemy-dmg-${currentTarget.idx}`, `💥 특공 ${traitBonus.matched[0]}!`, 'dmg-break');
@@ -2205,15 +2208,15 @@ window.FgoBattle = (() => {
           const okStarMult = ok ? 1.3 : 1.0;
           const enNpMod = getEnemyNpMod(currentTarget.cls);
           if (c.type === 'Arts') m.np = Math.min(maxNp, m.np + Math.round(22 * (1 + cardBuff) * (1 + m.buffs.npGain) * okNpMult * enNpMod));
-          if (c.type === 'Quick') battle.stars = Math.min(99, battle.stars + Math.round(14 * okStarMult));
-          addLog(`💥 ${sv.name} 단일 보구 [${sv.npName}] (OC ${ocStage * 100}%) → ${currentTarget.name} ${Math.round(dmg).toLocaleString()}!${traitBonus.mult > 1 ? ` [💥${traitBonus.matched.join('/')} 특공 1.5×!]` : ''}`);
+          if (c.type === 'Quick') battle.stars = Math.min(99, battle.stars + Math.round(14 * (1 + (ps.sg || 0)) * okStarMult));
+          addLog(`💥 ${sv.name} 단일 보구 [${sv.npName}]${npUpMult > 1 ? ' 🗡️강화' : ''} (OC ${ocStage * 100}%) → ${currentTarget.name} ${Math.round(dmg).toLocaleString()}!${traitBonus.mult > 1 ? ` [💥${traitBonus.matched.join('/')} 특공 1.5×!]` : ''}`);
         }
         m.buffs.npBoost = 1;
       } else if (currentTarget) {
         // 원작 FGO 일반 커맨드 카드 계산:
         // - 기본 비율: Buster 1.5, Arts 1.0, Quick 0.8
         // - 순서 배율: 1st 1.0, 2nd 1.2, 3rd 1.4 (예: 버스터 1.5 / 1.8 / 2.1배!)
-        // - 클래스 공격 보정치(0.90~1.10) × 클래스 상성(0.5~2.0) × 히든 속성 상성(0.9~1.1)
+        // - 클래스 패시브(기승 Q+ / 진지작성 A+ / 광화 B+ / 단독행동 크리+ / 신성 추가대미지 / 기척차단 스타+) 반영!
         const orderMult = [1.0, 1.2, 1.4][step];
         const typeDmgBase = c.type === 'Buster' ? 1.5 : (c.type === 'Arts' ? 1.0 : 0.8);
         const hasFirstBuster = (firstType === 'Buster' || chain.mighty);
@@ -2223,16 +2226,16 @@ window.FgoBattle = (() => {
         const firstBusterAdd = hasFirstBuster ? 0.5 : 0;
         const busterChainMult = chain.colorChain === 'Buster' ? 1.2 : 1.0; // 버스터 체인 공 +20%!
 
-        const cardBuff = (c.type === 'Buster' ? m.buffs.buster + ce.buster : (c.type === 'Arts' ? m.buffs.arts + ce.arts : m.buffs.quick + ce.quick));
+        const cardBuff = (c.type === 'Buster' ? m.buffs.buster + ce.buster + (ps.b || 0) : (c.type === 'Arts' ? m.buffs.arts + ce.arts + (ps.a || 0) : m.buffs.quick + ce.quick + (ps.q || 0)));
         const clsMult = getClassMultiplier(sv.cls, currentTarget.cls);
         const totalAff = getCombinedDamageMod(sv.cls, currentTarget.cls, sv.attribute, currentTarget.attr);
 
         // 퀵 퍼스트 / 마이티 체인: 체인 내 카드 크리티컬 확률 +20%!
         const critChance = Math.min(100, c.critPct + (hasFirstQuick ? 20 : 0));
         const isCrit = Math.random() * 100 < critChance;
-        const critDmgMult = isCrit ? (2.0 + m.buffs.crit + ce.crit) : 1.0;
+        const critDmgMult = isCrit ? (2.0 + m.buffs.crit + ce.crit + (ps.c || 0)) : 1.0;
 
-        const dmg = m.atk * (typeDmgBase * orderMult * (1 + cardBuff) + firstBusterAdd) * (1 + m.buffs.atk) * busterChainMult * totalAff * critDmgMult * (0.92 + Math.random() * 0.16);
+        const dmg = m.atk * (typeDmgBase * orderMult * (1 + cardBuff) + firstBusterAdd) * (1 + m.buffs.atk) * busterChainMult * totalAff * critDmgMult * (0.92 + Math.random() * 0.16) + (ps.ad || 0);
         const isOverkill = damageEnemy(currentTarget, dmg, isCrit ? 'dmg-crit' : (clsMult > 1 ? 'dmg-weak' : ''));
 
         // 크리티컬 × 오버킬 곱연산! (NP: ×2.0 ×1.5, 스타: ×1.2 ×1.3)
@@ -2248,7 +2251,7 @@ window.FgoBattle = (() => {
 
         const starBase = c.type === 'Quick' ? 11 : (c.type === 'Buster' ? 3 : 1);
         const starFirstAdd = hasFirstQuick ? 4 : 0;
-        const starGain = Math.round((starBase * orderMult + starFirstAdd) * (1 + (m.buffs.starGen || 0)) * stCritMult * stOkMult);
+        const starGain = Math.round((starBase * orderMult + starFirstAdd) * (1 + (m.buffs.starGen || 0) + (ps.sg || 0)) * stCritMult * stOkMult);
 
         m.np = Math.min(maxNp, m.np + npGain);
         battle.stars = Math.min(99, battle.stars + starGain);
@@ -2405,10 +2408,12 @@ window.FgoBattle = (() => {
     getActiveMembers(battle).forEach(m => {
       ensureMemberBuffs(m);
       const ce = getCePassive(m.ceId, !!m.ceMlb);
+      const ps = (typeof getServantPassives === 'function') ? getServantPassives(SERVANT_MAP[m.id]) : { nr: 0 };
       const maxNp = getMaxNp(m.npLevel);
       m.skills.forEach(sk => { if (sk.curCd > 0) sk.curCd--; });
       if (ce.starsPerTurn) battle.stars = Math.min(99, battle.stars + ce.starsPerTurn);
       if (ce.npPerTurn) m.np = Math.min(maxNp, m.np + ce.npPerTurn);
+      if (ps.nr) m.np = Math.min(maxNp, m.np + ps.nr);
       if (ce.hpDrain) m.hp = Math.max(1, m.hp - ce.hpDrain);
       if (m.buffs.regen > 0 && m.buffs.regenT > 0) {
         m.hp = Math.min(m.maxHp, m.hp + m.buffs.regen);

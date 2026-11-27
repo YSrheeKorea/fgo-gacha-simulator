@@ -1234,7 +1234,8 @@
     const npBadge = document.getElementById('mr-np-type');
     npBadge.textContent = sv.npType;
     npBadge.className = `np-type-badge ${sv.npType}`;
-    document.getElementById('mr-np-name').textContent = sv.npName;
+    const mrNpUp = (typeof isNpUpgraded === 'function' && isNpUpgraded(sv)) ? ' 🗡️ 보구 강화(+25%)' : '';
+    document.getElementById('mr-np-name').textContent = `${sv.npName}${mrNpUp}`;
     document.getElementById('mr-np-sub').textContent = sv.npSub || '';
     document.getElementById('mr-np-detail').textContent = sv.npDetail || '';
 
@@ -1248,10 +1249,12 @@
     }
     const hiddenRow = document.getElementById('mr-hidden-row');
     if (hiddenRow) {
+      const ps = (typeof getServantPassives === 'function') ? getServantPassives(sv) : { n: [] };
+      const pChips = (ps.n || []).map(p => `<span class="trait-pill" style="background:rgba(56,189,248,0.18);color:#93d5ff;border-color:rgba(56,189,248,0.35)">🛡️ ${p}</span>`).join('');
       const trChips = (sv.traits || []).map(t => `<span class="trait-pill">${t}</span>`).join('');
       const spChips = (sv.npSpecial || []).map(s => `<span class="trait-pill trait-sp">💥 ${s} 특공</span>`).join('');
-      hiddenRow.innerHTML = (trChips || spChips)
-        ? `<div class="hidden-traits-wrap">${spChips}${trChips}</div>`
+      hiddenRow.innerHTML = (pChips || trChips || spChips)
+        ? `<div class="hidden-traits-wrap">${pChips}${spChips}${trChips}</div>`
         : '';
     }
 
@@ -1718,6 +1721,11 @@
       const colNo = item.collectionNo || (typeof ATLAS_IMAGES !== 'undefined' && ATLAS_IMAGES.servants[id]?.collectionNo) || '-';
       const poolText = item.poolNote || POOL_LABELS[item.pool] || (item.limited ? '기간 한정' : (item.storyLocked ? '스토리 해금' : '상시'));
       const loreBlocks = [item.profileSummary, ...(item.profileBond || [])].filter(Boolean).join('\n\n──────────\n\n');
+      const ps = (typeof getServantPassives === 'function') ? getServantPassives(item) : { n: [] };
+      const cStd = (typeof CLASS_STANDARD_STATS !== 'undefined' && CLASS_STANDARD_STATS[item.cls]) || null;
+      const npUpBadge = (typeof isNpUpgraded === 'function' && isNpUpgraded(item))
+        ? ' <span style="color:#fde047;font-weight:800">🗡️ 보구 강화(+25%)</span>'
+        : '';
       body.innerHTML = `
         <div class="detail-card-wrap">
           ${ArtRenderer.renderCardSVG(item, true, { ascension: owned ? owned.viewAsc : 1, npLevel: owned ? owned.npLevel : 0, rarityOverride: effR, eager: true })}
@@ -1731,16 +1739,18 @@
             <span>최대 ATK <strong>${item.atk.toLocaleString()}</strong> / HP <strong>${item.hp.toLocaleString()}</strong></span>
           </div>
           <div style="margin-top:4px;font-size:13px">
-            <strong>보구:</strong> ${item.npName} <span style="color:#9cb2d9">(${item.npSub} · ${item.npType})</span>
+            <strong>보구:</strong> ${item.npName}${npUpBadge} <span style="color:#9cb2d9">(${item.npSub} · ${item.npType})</span>
             ${item.npDetail ? `<div class="np-detail">${item.npDetail}</div>` : ''}
           </div>
           <div class="detail-hidden-box">
-            <div class="detail-lore-title">🧬 히든 스테이터스 & 특공 특성</div>
+            <div class="detail-lore-title">🧬 히든 스테이터스 · 클래스 패시브 & 특공 특성</div>
             <div class="detail-hidden-grid">
               <span>성별: <strong>${item.gender || '없음'}</strong></span>
               <span>속성: <strong>${item.attribute || '인(人)'}</strong></span>
               <span>성향: <strong>${item.alignment || '-/-'}</strong></span>
+              ${cStd ? `<span>공격계수: <strong>×${cStd.atkMod.toFixed(2)}</strong></span><span>스타집중: <strong>${cStd.starWeight}</strong></span><span>스타발생/피즉사: <strong>${Math.round(cStd.starGen * 100)}% / ${Math.round(cStd.deathRate * 100)}%</strong></span>` : ''}
             </div>
+            ${(ps.n || []).length ? `<div class="hidden-traits-wrap" style="margin-bottom:4px">${ps.n.map(p => `<span class="trait-pill" style="background:rgba(56,189,248,0.18);color:#93d5ff;border-color:rgba(56,189,248,0.35)">🛡️ ${p}</span>`).join('')}</div>` : ''}
             <div class="hidden-traits-wrap">
               ${(item.npSpecial || []).map(s => `<span class="trait-pill trait-sp">💥 보구 특공: ${s}</span>`).join('')}
               ${(item.traits || []).length ? item.traits.map(t => `<span class="trait-pill">${t}</span>`).join('') : '<span class="trait-pill">특수 특성 없음</span>'}
@@ -2483,138 +2493,138 @@
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   }
 
-  function refreshCommandSpellsDaily() {
-    const today = getTodayKey();
-    if (state.lastSpellResetDate !== today) {
-      state.commandSpells = 3;
-      state.lastSpellResetDate = today;
-      saveState();
-    }
-    return state.commandSpells;
-  }
-  refreshCommandSpellsDaily();
-
-  window.ChaldeaBridge = {
-    getState: () => state,
-    getCommandSpells: () => refreshCommandSpellsDaily(),
-    consumeCommandSpells(count) {
-      refreshCommandSpellsDaily();
-      if (state.commandSpells < count) return false;
-      state.commandSpells -= count;
-      saveState();
-      return true;
-    },
-    spendSqForRevive() {
-      if (state.sq < 1) return false;
-      state.sq -= 1;
-      state.stats.sqSpent += 1;
-      saveState();
-      renderResources();
-      return true;
-    },
-    switchToBattleTab: () => switchTab('battle'),
-    getActiveMysticCodeId: () => state.activeMysticCodeId || 'mc_chaldea',
-    getMysticCodeState: (id) => (state.mysticCodes && state.mysticCodes[id]) || null,
-    setActiveMysticCode(id) {
-      if (typeof MYSTIC_CODE_MAP === 'undefined' || !MYSTIC_CODE_MAP[id]) return false;
-      if (!state.mysticCodes[id]) return false;
-      state.activeMysticCodeId = id;
-      saveState();
-      return true;
-    },
-    unlockMysticCode(id, free = false) {
-      if (typeof MYSTIC_CODE_MAP === 'undefined' || !MYSTIC_CODE_MAP[id]) return { ok: false, reason: 'invalid' };
-      if (state.mysticCodes[id]) return { ok: true, already: true };
-      const costMp = free ? 0 : 20;
-      if (state.mp < costMp) return { ok: false, reason: 'mp' };
-      state.mp -= costMp;
-      state.mysticCodes[id] = { exp: 0, level: 1 };
-      saveState();
-      renderResources();
-      return { ok: true };
-    },
-    unlockAllMysticCodes() {
-      if (typeof MYSTIC_CODES === 'undefined') return 0;
-      let added = 0;
-      MYSTIC_CODES.forEach(mc => {
-        if (!state.mysticCodes[mc.id]) {
-          state.mysticCodes[mc.id] = { exp: 0, level: 1 };
-          added++;
-        }
-      });
-      saveState();
-      return added;
-    },
-    trainMysticCodeLevel(id, toMax = false) {
-      if (typeof MYSTIC_CODE_MAP === 'undefined' || !MYSTIC_CODE_MAP[id] || !state.mysticCodes[id]) return { ok: false };
-      const mc = MYSTIC_CODE_MAP[id];
-      const entry = state.mysticCodes[id];
-      const curve = MYSTIC_CODE_EXP_CURVES[mc.expCurve] || MYSTIC_CODE_EXP_CURVES.event;
-      const curLv = getMcLevelFromExp(mc.expCurve, entry.exp || 0);
-      if (curLv >= 10) return { ok: false, reason: 'max' };
-      const targetLv = toMax ? 10 : curLv + 1;
-      const qpCost = toMax ? (10 - curLv) * 500000 : 500000;
-      if (state.qp < qpCost) return { ok: false, reason: 'qp', need: qpCost };
-      state.qp -= qpCost;
-      entry.exp = curve[targetLv - 1];
-      entry.level = targetLv;
-      saveState();
-      renderResources();
-      return { ok: true, level: targetLv, qpCost };
-    },
-    grantMysticCodeExp(expAmount) {
-      if (typeof MYSTIC_CODE_MAP === 'undefined' || !expAmount) return null;
-      const id = state.activeMysticCodeId || 'mc_chaldea';
-      const mc = MYSTIC_CODE_MAP[id];
-      if (!mc) return null;
-      if (!state.mysticCodes[id]) state.mysticCodes[id] = { exp: 0, level: 1 };
-      const entry = state.mysticCodes[id];
-      const curve = MYSTIC_CODE_EXP_CURVES[mc.expCurve] || MYSTIC_CODE_EXP_CURVES.event;
-      const maxExp = curve[curve.length - 1];
-      const prevLv = getMcLevelFromExp(mc.expCurve, entry.exp || 0);
-      entry.exp = Math.min(maxExp, (entry.exp || 0) + expAmount);
-      const newLv = getMcLevelFromExp(mc.expCurve, entry.exp);
-      entry.level = newLv;
-      saveState();
-      if (newLv > prevLv) {
-        toast(`🧤 마술예장 [${mc.name}] Lv.${newLv} 달성!!`);
+    function refreshCommandSpellsDaily() {
+      const today = getTodayKey();
+      if (state.lastSpellResetDate !== today) {
+        state.commandSpells = 3;
+        state.lastSpellResetDate = today;
+        saveState();
       }
-      return { mc, prevLv, newLv, gained: expAmount, exp: entry.exp, maxExp };
-    },
-    grantBattleRewards(rewards, partyServantIds) {
-      if (rewards.sq) state.sq += rewards.sq;
-      if (rewards.embers) state.embers += rewards.embers;
-      if (rewards.qp) state.qp += rewards.qp;
-      if (rewards.mp) state.mp += rewards.mp;
-      if (rewards.rp) state.rp += rewards.rp;
-      if (rewards.fp) state.fp = (state.fp || 0) + rewards.fp;
-      if (rewards.tickets) state.tickets += rewards.tickets;
-      if (rewards.grails) state.grails += rewards.grails;
+      return state.commandSpells;
+    }
+    refreshCommandSpellsDaily();
 
-      // 출격한 보유 서번트 인연 경험치 +1
-      (partyServantIds || []).forEach(id => {
-        const own = state.servants[id];
-        if (own && own.bond < 15) {
-          own.bondExp = (own.bondExp || 0) + 1;
-          const need = own.bond >= 10 ? 5 : 3;
-          if (own.bondExp >= need) {
-            own.bondExp = 0;
-            own.bond++;
-            const bonusSq = own.bond >= 11 ? 30 : 3;
-            state.sq += bonusSq;
-            const sv = SERVANT_MAP[id];
-            toast(`💖 전투 승리! ${sv?.name || ''} 인연 Lv.${own.bond} 달성 (성정석 +${bonusSq}!)`);
+    window.ChaldeaBridge = {
+      getState: () => state,
+      getCommandSpells: () => refreshCommandSpellsDaily(),
+      consumeCommandSpells(count) {
+        refreshCommandSpellsDaily();
+        if (state.commandSpells < count) return false;
+        state.commandSpells -= count;
+        saveState();
+        return true;
+      },
+      spendSqForRevive() {
+        if (state.sq < 1) return false;
+        state.sq -= 1;
+        state.stats.sqSpent += 1;
+        saveState();
+        renderResources();
+        return true;
+      },
+      switchToBattleTab: () => switchTab('battle'),
+      getActiveMysticCodeId: () => state.activeMysticCodeId || 'mc_chaldea',
+      getMysticCodeState: (id) => (state.mysticCodes && state.mysticCodes[id]) || null,
+      setActiveMysticCode(id) {
+        if (typeof MYSTIC_CODE_MAP === 'undefined' || !MYSTIC_CODE_MAP[id]) return false;
+        if (!state.mysticCodes[id]) return false;
+        state.activeMysticCodeId = id;
+        saveState();
+        return true;
+      },
+      unlockMysticCode(id, free = false) {
+        if (typeof MYSTIC_CODE_MAP === 'undefined' || !MYSTIC_CODE_MAP[id]) return { ok: false, reason: 'invalid' };
+        if (state.mysticCodes[id]) return { ok: true, already: true };
+        const costMp = free ? 0 : 20;
+        if (state.mp < costMp) return { ok: false, reason: 'mp' };
+        state.mp -= costMp;
+        state.mysticCodes[id] = { exp: 0, level: 1 };
+        saveState();
+        renderResources();
+        return { ok: true };
+      },
+      unlockAllMysticCodes() {
+        if (typeof MYSTIC_CODES === 'undefined') return 0;
+        let added = 0;
+        MYSTIC_CODES.forEach(mc => {
+          if (!state.mysticCodes[mc.id]) {
+            state.mysticCodes[mc.id] = { exp: 0, level: 1 };
+            added++;
           }
+        });
+        saveState();
+        return added;
+      },
+      trainMysticCodeLevel(id, toMax = false) {
+        if (typeof MYSTIC_CODE_MAP === 'undefined' || !MYSTIC_CODE_MAP[id] || !state.mysticCodes[id]) return { ok: false };
+        const mc = MYSTIC_CODE_MAP[id];
+        const entry = state.mysticCodes[id];
+        const curve = MYSTIC_CODE_EXP_CURVES[mc.expCurve] || MYSTIC_CODE_EXP_CURVES.event;
+        const curLv = getMcLevelFromExp(mc.expCurve, entry.exp || 0);
+        if (curLv >= 10) return { ok: false, reason: 'max' };
+        const targetLv = toMax ? 10 : curLv + 1;
+        const qpCost = toMax ? (10 - curLv) * 500000 : 500000;
+        if (state.qp < qpCost) return { ok: false, reason: 'qp', need: qpCost };
+        state.qp -= qpCost;
+        entry.exp = curve[targetLv - 1];
+        entry.level = targetLv;
+        saveState();
+        renderResources();
+        return { ok: true, level: targetLv, qpCost };
+      },
+      grantMysticCodeExp(expAmount) {
+        if (typeof MYSTIC_CODE_MAP === 'undefined' || !expAmount) return null;
+        const id = state.activeMysticCodeId || 'mc_chaldea';
+        const mc = MYSTIC_CODE_MAP[id];
+        if (!mc) return null;
+        if (!state.mysticCodes[id]) state.mysticCodes[id] = { exp: 0, level: 1 };
+        const entry = state.mysticCodes[id];
+        const curve = MYSTIC_CODE_EXP_CURVES[mc.expCurve] || MYSTIC_CODE_EXP_CURVES.event;
+        const maxExp = curve[curve.length - 1];
+        const prevLv = getMcLevelFromExp(mc.expCurve, entry.exp || 0);
+        entry.exp = Math.min(maxExp, (entry.exp || 0) + expAmount);
+        const newLv = getMcLevelFromExp(mc.expCurve, entry.exp);
+        entry.level = newLv;
+        saveState();
+        if (newLv > prevLv) {
+          toast(`🧤 마술예장 [${mc.name}] Lv.${newLv} 달성!!`);
         }
-      });
-      // 장착 마술예장 경험치 지급
-      const mcRes = rewards.mcExp ? window.ChaldeaBridge.grantMysticCodeExp(rewards.mcExp) : null;
-      saveState();
-      renderResources();
-      return mcRes;
-    },
-    toast
-  };
+        return { mc, prevLv, newLv, gained: expAmount, exp: entry.exp, maxExp };
+      },
+      grantBattleRewards(rewards, partyServantIds) {
+        if (rewards.sq) state.sq += rewards.sq;
+        if (rewards.embers) state.embers += rewards.embers;
+        if (rewards.qp) state.qp += rewards.qp;
+        if (rewards.mp) state.mp += rewards.mp;
+        if (rewards.rp) state.rp += rewards.rp;
+        if (rewards.fp) state.fp = (state.fp || 0) + rewards.fp;
+        if (rewards.tickets) state.tickets += rewards.tickets;
+        if (rewards.grails) state.grails += rewards.grails;
+
+        // 출격한 보유 서번트 인연 경험치 +1
+        (partyServantIds || []).forEach(id => {
+          const own = state.servants[id];
+          if (own && own.bond < 15) {
+            own.bondExp = (own.bondExp || 0) + 1;
+            const need = own.bond >= 10 ? 5 : 3;
+            if (own.bondExp >= need) {
+              own.bondExp = 0;
+              own.bond++;
+              const bonusSq = own.bond >= 11 ? 30 : 3;
+              state.sq += bonusSq;
+              const sv = SERVANT_MAP[id];
+              toast(`💖 전투 승리! ${sv?.name || ''} 인연 Lv.${own.bond} 달성 (성정석 +${bonusSq}!)`);
+            }
+          }
+        });
+        // 장착 마술예장 경험치 지급
+        const mcRes = rewards.mcExp ? window.ChaldeaBridge.grantMysticCodeExp(rewards.mcExp) : null;
+        saveState();
+        renderResources();
+        return mcRes;
+      },
+      toast
+    };
 
   // 초기화 시작
   bindEvents();

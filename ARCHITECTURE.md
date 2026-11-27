@@ -11,6 +11,7 @@ fgo-gacha/
 ├── style.css               # 칼데아 테마, 원작 FGO 대사창, 3D 카드 플립, B/A/Q 배틀 UI, 반응형 스타일
 ├── servant_catalog.js      # FGO 전체 마테리얼 카탈로그 (No.001~487: 플레이어블 475기 + 미실장 프로필 12기, 217KB)
 ├── mystic_codes.js         # 원작 FGO 마술예장 28종 전체 데이터(스킬 84종 · Lv.1~10 보간 · 4종 EXP 테이블 · Atlas 공식 아이콘)
+├── class_passives.js       # 19개 클래스 표준 히든 스탯 · 전체 475기 공식 클래스 패시브(대마력·기승 등) · 보구 강화 퀘스트(187기)
 ├── data.js                 # 19개 클래스 메타(Beast/UnBeast 포함), 475기 서번트 하이드레이션, 39종 개념예장, 12개 배너(커스텀·프렌드 포함)
 ├── atlas_images.js         # 핵심 45기 서번트 & 28종 예장 Atlas Academy KR CDN URL 맵 (나머지 430기는 art.js에서 KR/JP CDN 자동 해석)
 ├── kr_lore.js              # 핵심 45기 한그오 공식 원문 대사·프로필 (신규 430기는 상세/마이룸 진입 시 Atlas API 온디맨드 자동 로드)
@@ -29,6 +30,9 @@ fgo-gacha/
 ├── RARITY_LIST.md          # 레어도별(가변·SSR·SR·R·UC·C·★0·NPC) 서번트 전체 목록
 ├── CRAFT_ESSENCE.md        # 개념예장(★1~★5 + NPC) 코스트 · 한계돌파(✛) · 파티 코스트(115) 명세서
 ├── MYSTIC_CODES.md         # 마술예장 28종 전체 · 84종 마스터 스킬 · 4종 EXP 테이블 명세서
+├── CRAFT_ESSENCE.md        # 개념예장(★1~★5 + NPC) 코스트 · 한계돌파(✛) · 파티 코스트(115) 명세서
+├── MYSTIC_CODES.md         # 마술예장 28종 전체 · 84종 마스터 스킬 · 4종 EXP 테이블 명세서
+├── SABER_CLASS.md          # 세이버 클래스 59기 완전 명세서 · 커맨드 5타입 · 클래스 패시브 · 보구 강화(🗡️)
 ├── HIDDEN_STATUS.md        # 전체 487기 히든 스테이터스(성별·속성·성향·특성) & 보구 특공 명세표
 ├── GAME_SPEC.md            # 가챠·프렌드 소환·배틀·상성·특공·QP 강화 상세 명세서
 ├── ARCHITECTURE.md         # 본 아키텍처 문서
