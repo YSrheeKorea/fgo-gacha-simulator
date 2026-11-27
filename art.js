@@ -67,9 +67,14 @@ const ArtRenderer = (() => {
       }
       return null;
     } else {
-      if (typeof ATLAS_IMAGES === 'undefined') return null;
-      const entry = ATLAS_IMAGES.ces && ATLAS_IMAGES.ces[item.id];
-      return (entry && entry.card) || null;
+      if (typeof ATLAS_IMAGES !== 'undefined') {
+        const entry = ATLAS_IMAGES.ces && ATLAS_IMAGES.ces[item.id];
+        if (entry && entry.card) return entry.card;
+      }
+      if (item.atlasId) {
+        return `https://static.atlasacademy.io/${item.region || 'KR'}/CharaGraph/${item.atlasId}/${item.atlasId}a.png`;
+      }
+      return null;
     }
   }
 
