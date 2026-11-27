@@ -1254,18 +1254,35 @@
       btn.classList.toggle('active', asc === own.viewAsc);
     });
 
-    // 대형 포트레이트 (v25: 카드 보기 ⇄ Atlas Academy 스탠딩 & 표정 시트 전환!)
-    const mrViewMode = state.options.myRoomViewMode || 'card'; // 'card' | 'standing' | 'sheet'
+    // 대형 포트레이트 (v31: 카드 ⇄ 스탠딩 ⇄ 배틀 스프라이트 ⇄ 표정 시트 전환 + 재림 단계 실시간 연동!)
+    const mrViewMode = state.options.myRoomViewMode || 'card'; // 'card' | 'standing' | 'sprite' | 'sheet'
     const portraitWrap = document.getElementById('myroom-portrait-wrap');
-    const figUrl = ArtRenderer.getCharaFigureUrl ? ArtRenderer.getCharaFigureUrl(sv.id, own.viewAsc || 1) : null;
+    const curAsc = own.viewAsc || 1;
+    const figUrl = ArtRenderer.getCharaFigureUrl ? ArtRenderer.getCharaFigureUrl(sv.id, curAsc) : null;
+    const cmdSpUrl = ArtRenderer.getCommandSpriteUrl ? ArtRenderer.getCommandSpriteUrl(sv.id, curAsc) : null;
+    const stSpUrl = ArtRenderer.getStatusSpriteUrl ? ArtRenderer.getStatusSpriteUrl(sv.id, curAsc) : null;
+    const narUrl = ArtRenderer.getNarrowFigureUrl ? ArtRenderer.getNarrowFigureUrl(sv.id, curAsc) : null;
     const modeBtnsHtml = `
-      <div style="display:flex;gap:5px;justify-content:center;margin-bottom:8px" onclick="event.stopPropagation()">
-        <button class="small-outline-btn mr-v25-mode" data-mode="card" style="padding:3px 9px;font-size:11px;${mrViewMode === 'card' ? 'border-color:#ffd86b;color:#ffd86b;' : ''}">🃏 카드</button>
-        <button class="small-outline-btn mr-v25-mode" data-mode="standing" style="padding:3px 9px;font-size:11px;${mrViewMode === 'standing' ? 'border-color:#ffd86b;color:#ffd86b;' : ''}">🧍 스탠딩</button>
-        <button class="small-outline-btn mr-v25-mode" data-mode="sheet" style="padding:3px 9px;font-size:11px;${mrViewMode === 'sheet' ? 'border-color:#ffd86b;color:#ffd86b;' : ''}">😊 표정 시트</button>
+      <div style="display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin-bottom:8px" onclick="event.stopPropagation()">
+        <button class="small-outline-btn mr-v25-mode" data-mode="card" style="padding:3px 8px;font-size:11px;${mrViewMode === 'card' ? 'border-color:#ffd86b;color:#ffd86b;' : ''}">🃏 카드</button>
+        <button class="small-outline-btn mr-v25-mode" data-mode="standing" style="padding:3px 8px;font-size:11px;${mrViewMode === 'standing' ? 'border-color:#ffd86b;color:#ffd86b;' : ''}">🧍 스탠딩</button>
+        <button class="small-outline-btn mr-v25-mode" data-mode="sprite" style="padding:3px 8px;font-size:11px;${mrViewMode === 'sprite' ? 'border-color:#ffd86b;color:#ffd86b;' : ''}">⚔️ 배틀 스프라이트</button>
+        <button class="small-outline-btn mr-v25-mode" data-mode="sheet" style="padding:3px 8px;font-size:11px;${mrViewMode === 'sheet' ? 'border-color:#ffd86b;color:#ffd86b;' : ''}">😊 표정 시트</button>
       </div>
     `;
-    if (mrViewMode === 'standing' && figUrl) {
+    if (mrViewMode === 'sprite' && (cmdSpUrl || stSpUrl)) {
+      portraitWrap.innerHTML = modeBtnsHtml + `
+        <div class="mr-standing-box" style="width:280px;min-height:360px;margin:0 auto;border-radius:14px;background:radial-gradient(circle at 50% 35%,rgba(45,75,140,0.5),rgba(10,16,32,0.94));border:1px solid rgba(255,215,100,0.35);padding:12px;display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div style="font-size:11px;color:#ffd875;font-weight:700">⚔️ ${Math.min(3, curAsc)}차 재림 배틀 스프라이트</div>
+          ${cmdSpUrl ? `<img src="${cmdSpUrl}" alt="${sv.name} 커맨드 스프라이트" referrerpolicy="no-referrer" style="max-width:210px;max-height:190px;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(0,0,0,0.65))" onerror="this.remove()">` : ''}
+          <div style="display:flex;gap:8px;align-items:center;justify-content:center;width:100%">
+            ${stSpUrl ? `<img src="${stSpUrl}" alt="스테이터스" referrerpolicy="no-referrer" style="height:68px;object-fit:contain;border-radius:8px;background:rgba(0,0,0,0.35);padding:4px" onerror="this.remove()">` : ''}
+            ${narUrl ? `<img src="${narUrl}" alt="보구 컷인" referrerpolicy="no-referrer" style="height:68px;object-fit:cover;border-radius:8px;border:1px solid rgba(255,215,100,0.3)" onerror="this.remove()">` : ''}
+          </div>
+          <div style="font-size:10.5px;color:#9bb6df;text-align:center">상단 1차·2차·3차 탭을 누르면 배틀 스프라이트와 대사가 함께 변경됩니다!</div>
+        </div>
+      `;
+    } else if (mrViewMode === 'standing' && figUrl) {
       portraitWrap.innerHTML = modeBtnsHtml + `
         <div class="mr-standing-box" style="width:260px;height:380px;margin:0 auto;overflow:hidden;border-radius:14px;background:radial-gradient(circle at 50% 30%,rgba(60,95,165,0.45),rgba(10,16,32,0.9));border:1px solid rgba(255,215,100,0.35);display:flex;align-items:flex-start;justify-content:center">
           <img src="${figUrl}" alt="${sv.name}" referrerpolicy="no-referrer"
