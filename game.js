@@ -1599,12 +1599,14 @@
       if (own.bondExp >= need) {
         own.bondExp = 0;
         own.bond++;
+        const bondCoin = typeof window.getFgoBondCoins === 'function' ? window.getFgoBondCoins(own.bond) : 0;
+        if (bondCoin > 0) own.coins = (own.coins || 0) + bondCoin;
         if (own.bond >= 11) {
           state.sq += 30;
-          toast(`💖 ${sv.name} 인연 Lv.${own.bond} 달성! 몽화 보너스 성정석 +30 지급!`);
+          toast(`💖 ${sv.name} 인연 Lv.${own.bond} 달성! 성정석 +30${bondCoin ? ` · 코인 +${bondCoin}` : ''}!`);
         } else {
           state.sq += 3;
-          toast(`💖 ${sv.name} 인연 Lv.${own.bond} 달성! 성정석 +3 지급!`);
+          toast(`💖 ${sv.name} 인연 Lv.${own.bond} 달성! 성정석 +3${bondCoin ? ` · 코인 +${bondCoin}` : ''}!`);
         }
         SoundEngine.levelUp();
       }
@@ -1613,7 +1615,11 @@
       renderMyRoomTab();
     }
 
-    if (sv.officialLines && sv.officialLines.length) {
+    const krVoices = window.SERVANT_VOICES && window.SERVANT_VOICES[sv.collectionNo];
+    if (krVoices && krVoices.length) {
+      const [label, text] = pickRandom(krVoices);
+      playMyRoomTypewriter(sv.name, label, text);
+    } else if (sv.officialLines && sv.officialLines.length) {
       const picked = pickRandom(sv.officialLines);
       playMyRoomTypewriter(sv.name, picked.label, picked.text);
     } else {
