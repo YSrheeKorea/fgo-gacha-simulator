@@ -168,7 +168,7 @@
   }
 
   function saveState() {
-    try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch (_) { }
+    try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch (_) {}
   }
 
   function getBannerState(bannerId) {
@@ -211,12 +211,9 @@
     const poolSv5 = SERVANTS.filter(s => s.rarity === 5 && inSqPool(s));
     const poolSv4 = SERVANTS.filter(s => s.rarity === 4 && inSqPool(s));
     const poolSv3 = SERVANTS.filter(s => s.rarity === 3 && inSqPool(s));
-    const allCe5 = CRAFT_ESSENCES.filter(c => c.rarity === 5);
-    const allCe4 = CRAFT_ESSENCES.filter(c => c.rarity === 4);
-    const allCe3 = CRAFT_ESSENCES.filter(c => c.rarity === 3);
-    const allCe5 = CRAFT_ESSENCES.filter(c => c.rarity === 5 && !c.npcOnly && !c.fpOnly);
-    const allCe4 = CRAFT_ESSENCES.filter(c => c.rarity === 4 && !c.npcOnly && !c.fpOnly);
-    const allCe3 = CRAFT_ESSENCES.filter(c => c.rarity === 3 && !c.npcOnly && !c.fpOnly);
+    const allCe5  = CRAFT_ESSENCES.filter(c => c.rarity === 5 && !c.npcOnly && !c.fpOnly);
+    const allCe4  = CRAFT_ESSENCES.filter(c => c.rarity === 4 && !c.npcOnly && !c.fpOnly);
+    const allCe3  = CRAFT_ESSENCES.filter(c => c.rarity === 3 && !c.npcOnly && !c.fpOnly);
 
     const hasPickup5 = !banner.isStory && banner.pickup5.length > 0;
     const hasPickup4 = !banner.isStory && banner.pickup4.length > 0;
@@ -469,14 +466,12 @@
     return rolls;
   }
 
-  // 프렌드 포인트 소환 1회 (★0 앙리마유 0.05% · ★4 세이버 릴리/하베트롯 0.5% · ★1~★3 프렌드 풀 + ★3 예장)
   // 프렌드 포인트 소환 1회 (★0 앙리마유 0.05% · ★4 세이버 릴리/하베트롯 0.5% · ★1~★3 프렌드 서번트 + ★1~★3 프렌드 예장)
   function rollFriendPointCard() {
     const fp4 = SERVANTS.filter(s => s.fp && s.rarity === 4);
     const fp3 = SERVANTS.filter(s => s.fp && s.rarity === 3);
     const fp2 = SERVANTS.filter(s => s.fp && s.rarity === 2);
     const fp1 = SERVANTS.filter(s => s.fp && s.rarity === 1);
-    const allCe3 = CRAFT_ESSENCES.filter(c => c.rarity === 3);
     const allCe3 = CRAFT_ESSENCES.filter(c => c.rarity === 3 && !c.npcOnly);
     const allCe2 = CRAFT_ESSENCES.filter(c => c.rarity === 2 && !c.npcOnly);
     const allCe1 = CRAFT_ESSENCES.filter(c => c.rarity === 1 && !c.npcOnly);
@@ -494,10 +489,8 @@
       animTier = 'gold';
     } else if (r < 0.1055 && fp3.length) {
       item = pickRandom(fp3);
-    } else if (r < 0.3455 && fp2.length) {
     } else if (r < 0.3055 && fp2.length) {
       item = pickRandom(fp2);
-    } else if (r < 0.7455 && fp1.length) {
     } else if (r < 0.6255 && fp1.length) {
       item = pickRandom(fp1);
     } else if (r < 0.7255 && allCe3.length) {
@@ -505,8 +498,6 @@
     } else if (r < 0.8555 && allCe2.length) {
       type = 'ce'; item = pickRandom(allCe2);
     } else {
-      type = 'ce';
-      item = pickRandom(allCe3);
       type = 'ce'; item = pickRandom(allCe1.length ? allCe1 : allCe3);
     }
 
@@ -707,10 +698,10 @@
     // 110연일 경우 상위 레어도 우선 정렬해서 핵심 카드가 맨 위에 보이게!
     const displayList = results.length > 20
       ? [...results].sort((a, b) => {
-        const scoreA = a.item.rarity * 10 + (a.type === 'servant' ? 5 : 0);
-        const scoreB = b.item.rarity * 10 + (b.type === 'servant' ? 5 : 0);
-        return scoreB - scoreA;
-      })
+          const scoreA = a.item.rarity * 10 + (a.type === 'servant' ? 5 : 0);
+          const scoreB = b.item.rarity * 10 + (b.type === 'servant' ? 5 : 0);
+          return scoreB - scoreA;
+        })
       : results;
 
     gridEl.innerHTML = '';
@@ -1063,126 +1054,125 @@
         rarityOverride: effR,
         mlb: mlbCe,
         compact: true
-      }) + noBadge + poolBadge + (owned ? `<span class="codex-item-count">${isServant ? `Lv.${owned.level}` : `x${owned.copies}`}</span>` : '');
-    }) + noBadge + poolBadge + (owned ? `<span class="codex-item-count">${isServant ? `Lv.${owned.level}` : `${mlbCe ? '✛' : ''}Lv.${owned.level || 1}·x${owned.copies}`}</span>` : '');
-    div.addEventListener('click', () => openDetailModal(codexFilter.type, item.id));
-    grid.appendChild(div);
-  });
+      }) + noBadge + poolBadge + (owned ? `<span class="codex-item-count">${isServant ? `Lv.${owned.level}` : `${mlbCe ? '✛' : ''}Lv.${owned.level || 1}·x${owned.copies}`}</span>` : '');
+      div.addEventListener('click', () => openDetailModal(codexFilter.type, item.id));
+      grid.appendChild(div);
+    });
 
-  if (pager && filtered.length > visibleList.length) {
-    pager.innerHTML = `
+    if (pager && filtered.length > visibleList.length) {
+      pager.innerHTML = `
         <span class="codex-pager-info">표시 중 ${visibleList.length} / ${filtered.length}기</span>
         <button class="small-outline-btn" id="btn-codex-more">➕ 60기 더 보기</button>
         <button class="small-outline-btn" id="btn-codex-all">전체 ${filtered.length}기 표시</button>
       `;
-    document.getElementById('btn-codex-more').addEventListener('click', () => {
-      codexLimit += 60;
-      renderCodexTab();
-    });
-    document.getElementById('btn-codex-all').addEventListener('click', () => {
-      codexLimit = filtered.length;
-      renderCodexTab();
-    });
-  } else if (pager && filtered.length > 0) {
-    pager.innerHTML = `<span class="codex-pager-info">총 ${filtered.length}기 표시 완료</span>`;
+      document.getElementById('btn-codex-more').addEventListener('click', () => {
+        codexLimit += 60;
+        renderCodexTab();
+      });
+      document.getElementById('btn-codex-all').addEventListener('click', () => {
+        codexLimit = filtered.length;
+        renderCodexTab();
+      });
+    } else if (pager && filtered.length > 0) {
+      pager.innerHTML = `<span class="codex-pager-info">총 ${filtered.length}기 표시 완료</span>`;
+    }
   }
-}
 
   // ================= 렌더링: 마이룸 & 육성 =================
   function getBaseMaxLevel(rarity) {
-  if (rarity === 5) return 90;
-  if (rarity === 4) return 80;
-  if (rarity === 3) return 70;
-  if (rarity === 2 || rarity === 0) return 65;
-  return 60; // ★1
-}
-
-function getMaxLevelCap(sv, owned) {
-  const effR = getEffectiveRarity(sv, owned);
-  const baseMax = getBaseMaxLevel(effR);
-  const ascCap = Math.min(baseMax, Math.max(20, (baseMax - 30) + (owned.ascension - 1) * 10));
-  if (owned.ascension < 4) return ascCap;
-  // 성배전림으로 최대 Lv.120까지 확장!
-  return Math.min(120, baseMax + owned.grailsUsed * 2);
-}
-
-// ================= 공식 FGO 강화 QP 비용표 (★0~★5 나무위키 기준) =================
-const ASCENSION_QP = {
-  5: [300000, 1000000, 3000000],
-  4: [150000, 500000, 1500000],
-  3: [100000, 300000, 900000],
-  2: [45000, 150000, 450000],
-  1: [30000, 100000, 300000],
-  0: [45000, 150000, 450000]
-};
-const SKILL_QP = {
-  5: [200000, 400000, 1200000, 1600000, 4000000, 5000000, 10000000, 12000000, 20000000],
-  4: [100000, 200000, 600000, 800000, 2000000, 2500000, 5000000, 6000000, 10000000],
-  3: [50000, 100000, 300000, 400000, 1000000, 1250000, 2500000, 3000000, 5000000],
-  2: [20000, 40000, 120000, 160000, 400000, 500000, 1000000, 1200000, 2000000],
-  1: [10000, 20000, 60000, 80000, 200000, 250000, 500000, 600000, 1000000],
-  0: [20000, 40000, 120000, 160000, 400000, 500000, 1000000, 1200000, 2000000]
-};
-function getLevelUpQp(rarity, level) {
-  const mult = rarity === 5 ? 180 : (rarity === 4 ? 120 : (rarity === 3 ? 60 : (rarity === 1 ? 20 : 40)));
-  const base = rarity === 5 ? 420 : (rarity === 4 ? 280 : (rarity === 3 ? 140 : (rarity === 1 ? 60 : 100)));
-  return (base + mult * level) * 5;
-}
-function getAscensionQp(rarity, curAsc) {
-  const table = ASCENSION_QP[rarity] || ASCENSION_QP[3];
-  return table[Math.max(0, Math.min(2, curAsc - 1))] || 300000;
-}
-function getSkillUpQp(rarity, curLv) {
-  const table = SKILL_QP[rarity] || SKILL_QP[3];
-  return table[curLv - 1] || 0;
-}
-function formatQpShort(n) {
-  if (n >= 10000000) return `${(n / 10000000).toFixed(n % 10000000 === 0 ? 0 : 1)}천만`;
-  if (n >= 10000) return `${Math.round(n / 10000)}만`;
-  return n.toLocaleString();
-}
-
-function renderMyRoomTab() {
-  const ownedIds = Object.keys(state.servants);
-  document.getElementById('mr-owned-count').textContent = `${ownedIds.length}기 보유`;
-  document.getElementById('mr-embers').textContent = state.embers.toLocaleString();
-  document.getElementById('mr-grails').textContent = state.grails.toLocaleString();
-  document.getElementById('mr-qp').textContent = state.qp.toLocaleString();
-
-  const rosterEl = document.getElementById('myroom-roster-list');
-  rosterEl.innerHTML = '';
-
-  if (ownedIds.length === 0) {
-    document.getElementById('myroom-portrait-wrap').innerHTML =
-      `<div class="empty-hint" style="text-align:center;padding:50px 10px">소환으로 첫 서번트를<br>영입해 주세요!</div>`;
-    document.getElementById('mr-name').textContent = '보유 서번트 없음';
-    document.getElementById('mr-title').textContent = '소환 탭에서 서번트를 뽑아보세요';
-    return;
+    if (rarity === 5) return 90;
+    if (rarity === 4) return 80;
+    if (rarity === 3) return 70;
+    if (rarity === 2 || rarity === 0) return 65;
+    return 60; // ★1
   }
 
-  if (!state.myRoomServantId || !state.servants[state.myRoomServantId]) {
-    state.myRoomServantId = ownedIds[0];
+  function getMaxLevelCap(sv, owned) {
+    const effR = getEffectiveRarity(sv, owned);
+    const baseMax = getBaseMaxLevel(effR);
+    const ascCap = Math.min(baseMax, Math.max(20, (baseMax - 30) + (owned.ascension - 1) * 10));
+    if (owned.ascension < 4) return ascCap;
+    // 성배전림으로 최대 Lv.120까지 확장!
+    return Math.min(120, baseMax + owned.grailsUsed * 2);
   }
 
-  // 레어도 높은 순 정렬 + 검색 필터
-  ownedIds.sort((a, b) => (SERVANT_MAP[b].rarity - SERVANT_MAP[a].rarity) || (state.servants[b].level - state.servants[a].level) || ((SERVANT_MAP[a].collectionNo || 0) - (SERVANT_MAP[b].collectionNo || 0)));
-  const mq = myroomQuery.trim().toLowerCase();
-  const visibleOwned = mq
-    ? ownedIds.filter(id => {
-      const s = SERVANT_MAP[id];
-      return s && (s.name.toLowerCase().includes(mq) || String(s.collectionNo || '').includes(mq));
-    })
-    : ownedIds;
-  visibleOwned.forEach(id => {
-    const sv = SERVANT_MAP[id];
-    const own = state.servants[id];
-    const chip = document.createElement('button');
-    chip.className = 'roster-chip' + (id === state.myRoomServantId ? ' active' : '');
-    const faceUrl = ArtRenderer.getFaceUrl(id);
-    const faceHtml = faceUrl
-      ? `<img class="roster-face" src="${faceUrl}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`
-      : '';
-    chip.innerHTML = `
+  // ================= 공식 FGO 강화 QP 비용표 (★0~★5 나무위키 기준) =================
+  const ASCENSION_QP = {
+    5: [300000, 1000000, 3000000],
+    4: [150000, 500000, 1500000],
+    3: [100000, 300000, 900000],
+    2: [45000, 150000, 450000],
+    1: [30000, 100000, 300000],
+    0: [45000, 150000, 450000]
+  };
+  const SKILL_QP = {
+    5: [200000, 400000, 1200000, 1600000, 4000000, 5000000, 10000000, 12000000, 20000000],
+    4: [100000, 200000, 600000, 800000, 2000000, 2500000, 5000000, 6000000, 10000000],
+    3: [50000, 100000, 300000, 400000, 1000000, 1250000, 2500000, 3000000, 5000000],
+    2: [20000, 40000, 120000, 160000, 400000, 500000, 1000000, 1200000, 2000000],
+    1: [10000, 20000, 60000, 80000, 200000, 250000, 500000, 600000, 1000000],
+    0: [20000, 40000, 120000, 160000, 400000, 500000, 1000000, 1200000, 2000000]
+  };
+  function getLevelUpQp(rarity, level) {
+    const mult = rarity === 5 ? 180 : (rarity === 4 ? 120 : (rarity === 3 ? 60 : (rarity === 1 ? 20 : 40)));
+    const base = rarity === 5 ? 420 : (rarity === 4 ? 280 : (rarity === 3 ? 140 : (rarity === 1 ? 60 : 100)));
+    return (base + mult * level) * 5;
+  }
+  function getAscensionQp(rarity, curAsc) {
+    const table = ASCENSION_QP[rarity] || ASCENSION_QP[3];
+    return table[Math.max(0, Math.min(2, curAsc - 1))] || 300000;
+  }
+  function getSkillUpQp(rarity, curLv) {
+    const table = SKILL_QP[rarity] || SKILL_QP[3];
+    return table[curLv - 1] || 0;
+  }
+  function formatQpShort(n) {
+    if (n >= 10000000) return `${(n / 10000000).toFixed(n % 10000000 === 0 ? 0 : 1)}천만`;
+    if (n >= 10000) return `${Math.round(n / 10000)}만`;
+    return n.toLocaleString();
+  }
+
+  function renderMyRoomTab() {
+    const ownedIds = Object.keys(state.servants);
+    document.getElementById('mr-owned-count').textContent = `${ownedIds.length}기 보유`;
+    document.getElementById('mr-embers').textContent = state.embers.toLocaleString();
+    document.getElementById('mr-grails').textContent = state.grails.toLocaleString();
+    document.getElementById('mr-qp').textContent = state.qp.toLocaleString();
+
+    const rosterEl = document.getElementById('myroom-roster-list');
+    rosterEl.innerHTML = '';
+
+    if (ownedIds.length === 0) {
+      document.getElementById('myroom-portrait-wrap').innerHTML =
+        `<div class="empty-hint" style="text-align:center;padding:50px 10px">소환으로 첫 서번트를<br>영입해 주세요!</div>`;
+      document.getElementById('mr-name').textContent = '보유 서번트 없음';
+      document.getElementById('mr-title').textContent = '소환 탭에서 서번트를 뽑아보세요';
+      return;
+    }
+
+    if (!state.myRoomServantId || !state.servants[state.myRoomServantId]) {
+      state.myRoomServantId = ownedIds[0];
+    }
+
+    // 레어도 높은 순 정렬 + 검색 필터
+    ownedIds.sort((a, b) => (SERVANT_MAP[b].rarity - SERVANT_MAP[a].rarity) || (state.servants[b].level - state.servants[a].level) || ((SERVANT_MAP[a].collectionNo || 0) - (SERVANT_MAP[b].collectionNo || 0)));
+    const mq = myroomQuery.trim().toLowerCase();
+    const visibleOwned = mq
+      ? ownedIds.filter(id => {
+          const s = SERVANT_MAP[id];
+          return s && (s.name.toLowerCase().includes(mq) || String(s.collectionNo || '').includes(mq));
+        })
+      : ownedIds;
+    visibleOwned.forEach(id => {
+      const sv = SERVANT_MAP[id];
+      const own = state.servants[id];
+      const chip = document.createElement('button');
+      chip.className = 'roster-chip' + (id === state.myRoomServantId ? ' active' : '');
+      const faceUrl = ArtRenderer.getFaceUrl(id);
+      const faceHtml = faceUrl
+        ? `<img class="roster-face" src="${faceUrl}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`
+        : '';
+      chip.innerHTML = `
         <div class="roster-chip-row">
           ${faceHtml}
           <div style="flex:1;min-width:0">
@@ -1191,89 +1181,89 @@ function renderMyRoomTab() {
           </div>
         </div>
       `;
-    chip.addEventListener('click', () => {
-      SoundEngine.click();
-      state.myRoomServantId = id;
-      saveState();
-      renderMyRoomTab();
-      triggerMyRoomLine(false);
-      fetchOfficialServantLore(sv);
+      chip.addEventListener('click', () => {
+        SoundEngine.click();
+        state.myRoomServantId = id;
+        saveState();
+        renderMyRoomTab();
+        triggerMyRoomLine(false);
+        fetchOfficialServantLore(sv);
+      });
+      rosterEl.appendChild(chip);
     });
-    rosterEl.appendChild(chip);
-  });
 
-  const sv = SERVANT_MAP[state.myRoomServantId];
-  const own = state.servants[state.myRoomServantId];
-  const effR = getEffectiveRarity(sv, own);
-  const maxCap = getMaxLevelCap(sv, own);
+    const sv = SERVANT_MAP[state.myRoomServantId];
+    const own = state.servants[state.myRoomServantId];
+    const effR = getEffectiveRarity(sv, own);
+    const maxCap = getMaxLevelCap(sv, own);
 
-  // 영기재림 보기 탭
-  document.querySelectorAll('#myroom-asc-tabs .asc-btn').forEach(btn => {
-    const asc = Number(btn.dataset.asc);
-    btn.disabled = asc > own.ascension;
-    btn.classList.toggle('active', asc === own.viewAsc);
-  });
+    // 영기재림 보기 탭
+    document.querySelectorAll('#myroom-asc-tabs .asc-btn').forEach(btn => {
+      const asc = Number(btn.dataset.asc);
+      btn.disabled = asc > own.ascension;
+      btn.classList.toggle('active', asc === own.viewAsc);
+    });
 
-  // 대형 포트레이트
-  document.getElementById('myroom-portrait-wrap').innerHTML = ArtRenderer.renderCardSVG(sv, true, {
-    ascension: own.viewAsc,
-    npLevel: own.npLevel,
-    rarityOverride: effR
-  });
+    // 대형 포트레이트
+    document.getElementById('myroom-portrait-wrap').innerHTML = ArtRenderer.renderCardSVG(sv, true, {
+      ascension: own.viewAsc,
+      npLevel: own.npLevel,
+      rarityOverride: effR
+    });
 
-  // 스탯 계산
-  const lvRatio = 0.35 + (own.level / getBaseMaxLevel(effR)) * 0.65;
-  const curAtk = Math.round(sv.atk * lvRatio);
-  const curHp = Math.round(sv.hp * lvRatio);
+    // 스탯 계산
+    const lvRatio = 0.35 + (own.level / getBaseMaxLevel(effR)) * 0.65;
+    const curAtk = Math.round(sv.atk * lvRatio);
+    const curHp = Math.round(sv.hp * lvRatio);
 
-  const tierLabel = RARITY_TIERS[effR] || '';
-  document.getElementById('mr-name').textContent = `${effR === 0 ? '☆0' : '★'.repeat(effR)} ${tierLabel}${sv.variableRarity ? '(가변)' : ''} ${sv.name}`;
-  const creditParts = [
-    CLASS_INFO[sv.cls]?.name || sv.cls,
-    sv.cv ? `CV. ${sv.cv}` : sv.title,
-    sv.illustrator ? `Illust. ${sv.illustrator}` : '',
-    `보유 ${own.copies}기${own.extraCopies ? ` (잉여 ${own.extraCopies})` : ''}`
-  ].filter(Boolean);
-  document.getElementById('mr-title').textContent = creditParts.join(' · ');
-  document.getElementById('mr-np-pill').textContent = `보구 Lv.${own.npLevel}`;
-  document.getElementById('mr-level').textContent = `Lv.${own.level} / ${maxCap}`;
-  document.getElementById('mr-bond').textContent = `인연 Lv.${own.bond} / 15`;
-  document.getElementById('mr-atk').textContent = curAtk.toLocaleString();
-  document.getElementById('mr-hp').textContent = curHp.toLocaleString();
+    const tierLabel = RARITY_TIERS[effR] || '';
+    document.getElementById('mr-name').textContent = `${effR === 0 ? '☆0' : '★'.repeat(effR)} ${tierLabel}${sv.variableRarity ? '(가변)' : ''} ${sv.name}`;
+    const creditParts = [
+      CLASS_INFO[sv.cls]?.name || sv.cls,
+      sv.cv ? `CV. ${sv.cv}` : sv.title,
+      sv.illustrator ? `Illust. ${sv.illustrator}` : '',
+      `보유 ${own.copies}기${own.extraCopies ? ` (잉여 ${own.extraCopies})` : ''}`
+    ].filter(Boolean);
+    document.getElementById('mr-title').textContent = creditParts.join(' · ');
+    document.getElementById('mr-np-pill').textContent = `보구 Lv.${own.npLevel}`;
+    document.getElementById('mr-level').textContent = `Lv.${own.level} / ${maxCap}`;
+    document.getElementById('mr-bond').textContent = `인연 Lv.${own.bond} / 15`;
+    document.getElementById('mr-atk').textContent = curAtk.toLocaleString();
+    document.getElementById('mr-hp').textContent = curHp.toLocaleString();
 
-  const npBadge = document.getElementById('mr-np-type');
-  npBadge.textContent = sv.npType;
-  npBadge.className = `np-type-badge ${sv.npType}`;
-  document.getElementById('mr-np-name').textContent = sv.npName;
-  document.getElementById('mr-np-sub').textContent = sv.npSub || '';
-  document.getElementById('mr-np-detail').textContent = sv.npDetail || '';
+    const npBadge = document.getElementById('mr-np-type');
+    npBadge.textContent = sv.npType;
+    npBadge.className = `np-type-badge ${sv.npType}`;
+    document.getElementById('mr-np-name').textContent = sv.npName;
+    document.getElementById('mr-np-sub').textContent = sv.npSub || '';
+    document.getElementById('mr-np-detail').textContent = sv.npDetail || '';
 
-  // 공식 5장 커맨드 카드 덱 표기
-  const deckRow = document.getElementById('mr-deck-row');
-  if (deckRow) {
-    const cards = sv.cards || ['Quick', 'Arts', 'Arts', 'Buster', 'Buster'];
-    deckRow.innerHTML = `<span style="font-size:11.5px;color:#9cb2d9;font-weight:700">커맨드 덱:</span>` +
-      cards.map(c => `<span class="deck-dot ${c}">${c}</span>`).join('') +
-      `<span style="font-size:11px;color:#dbe7ff;margin-left:auto">${sv.attribute || '인(人)'} · ${sv.gender || '없음'} · ${sv.alignment || '-/-'}</span>`;
-  }
-  const hiddenRow = document.getElementById('mr-hidden-row');
-  if (hiddenRow) {
-    const trChips = (sv.traits || []).map(t => `<span class="trait-pill">${t}</span>`).join('');
-    const spChips = (sv.npSpecial || []).map(s => `<span class="trait-pill trait-sp">💥 ${s} 특공</span>`).join('');
-    hiddenRow.innerHTML = (trChips || spChips)
-      ? `<div class="hidden-traits-wrap">${spChips}${trChips}</div>`
-      : '';
-  }
+    // 공식 5장 커맨드 카드 덱 표기
+    const deckRow = document.getElementById('mr-deck-row');
+    if (deckRow) {
+      const cards = sv.cards || ['Quick', 'Arts', 'Arts', 'Buster', 'Buster'];
+      deckRow.innerHTML = `<span style="font-size:11.5px;color:#9cb2d9;font-weight:700">커맨드 덱:</span>` +
+        cards.map(c => `<span class="deck-dot ${c}">${c}</span>`).join('') +
+        `<span style="font-size:11px;color:#dbe7ff;margin-left:auto">${sv.attribute || '인(人)'} · ${sv.gender || '없음'} · ${sv.alignment || '-/-'}</span>`;
+    }
+    const hiddenRow = document.getElementById('mr-hidden-row');
+    if (hiddenRow) {
+      const trChips = (sv.traits || []).map(t => `<span class="trait-pill">${t}</span>`).join('');
+      const spChips = (sv.npSpecial || []).map(s => `<span class="trait-pill trait-sp">💥 ${s} 특공</span>`).join('');
+      hiddenRow.innerHTML = (trChips || spChips)
+        ? `<div class="hidden-traits-wrap">${spChips}${trChips}</div>`
+        : '';
+    }
 
-  // 공식 스킬 강화 (Lv.1 → Lv.10, 공식 QP 비용표, Lv.6/-1T · Lv.10/-2T 쿨감)
-  if (!Array.isArray(own.skillLevels) || own.skillLevels.length !== 3) own.skillLevels = [1, 1, 1];
-  const skillsRow = document.getElementById('mr-skills-row');
-  const svSkills = (sv.skills && sv.skills.length >= 3) ? sv.skills : ['스킬 1', '스킬 2', '스킬 3'];
-  skillsRow.innerHTML = svSkills.map((sk, idx) => {
-    const slv = own.skillLevels[idx] || 1;
-    const cost = slv < 10 ? getSkillUpQp(sv.rarity, slv) : 0;
-    const cdTip = slv >= 10 ? '쿨타임 -2T' : (slv >= 6 ? '쿨타임 -1T' : 'Lv.6에 쿨-1T');
-    return `
+    // 공식 스킬 강화 (Lv.1 → Lv.10, 공식 QP 비용표, Lv.6/-1T · Lv.10/-2T 쿨감)
+    if (!Array.isArray(own.skillLevels) || own.skillLevels.length !== 3) own.skillLevels = [1, 1, 1];
+    const skillsRow = document.getElementById('mr-skills-row');
+    const svSkills = (sv.skills && sv.skills.length >= 3) ? sv.skills : ['스킬 1', '스킬 2', '스킬 3'];
+    skillsRow.innerHTML = svSkills.map((sk, idx) => {
+      const slv = own.skillLevels[idx] || 1;
+      const cost = slv < 10 ? getSkillUpQp(sv.rarity, slv) : 0;
+      const cdTip = slv >= 10 ? '쿨타임 -2T' : (slv >= 6 ? '쿨타임 -1T' : 'Lv.6에 쿨-1T');
+      return `
         <div class="mr-skill-card">
           <div class="mr-skill-info">
             <strong>스킬${idx + 1} · ${sk}</strong>
@@ -1284,175 +1274,175 @@ function renderMyRoomTab() {
           </button>
         </div>
       `;
-  }).join('');
-  skillsRow.querySelectorAll('.mr-skill-up-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = Number(btn.dataset.skidx);
-      const slv = own.skillLevels[idx] || 1;
-      if (slv >= 10) return;
-      const cost = getSkillUpQp(sv.rarity, slv);
-      if (state.qp < cost) {
-        SoundEngine.error();
-        toast(`QP가 부족합니다! 필요: ${cost.toLocaleString()} QP (배틀 보물고에서 파밍하세요!)`);
-        return;
-      }
-      state.qp -= cost;
-      own.skillLevels[idx] = slv + 1;
-      SoundEngine.levelUp();
-      saveState();
-      renderMyRoomTab();
-      const extra = (slv + 1 === 6 || slv + 1 === 10) ? ' (배틀 쿨타임 -1턴 감소!)' : '';
-      toast(`⚡ ${sv.name} [${svSkills[idx]}] Lv.${slv + 1} 달성!${extra}`);
+    }).join('');
+    skillsRow.querySelectorAll('.mr-skill-up-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.dataset.skidx);
+        const slv = own.skillLevels[idx] || 1;
+        if (slv >= 10) return;
+        const cost = getSkillUpQp(sv.rarity, slv);
+        if (state.qp < cost) {
+          SoundEngine.error();
+          toast(`QP가 부족합니다! 필요: ${cost.toLocaleString()} QP (배틀 보물고에서 파밍하세요!)`);
+          return;
+        }
+        state.qp -= cost;
+        own.skillLevels[idx] = slv + 1;
+        SoundEngine.levelUp();
+        saveState();
+        renderMyRoomTab();
+        const extra = (slv + 1 === 6 || slv + 1 === 10) ? ' (배틀 쿨타임 -1턴 감소!)' : '';
+        toast(`⚡ ${sv.name} [${svSkills[idx]}] Lv.${slv + 1} 달성!${extra}`);
+      });
     });
-  });
 
-  // 레벨업 / 영기재림 버튼에 공식 QP 비용 표시
-  const lvQp = getLevelUpQp(sv.rarity, own.level);
-  document.getElementById('btn-lv-up').textContent = `🔥 레벨업 (+10Lv / 종화 5 · ${formatQpShort(lvQp)} QP)`;
-  const ascBtn = document.getElementById('btn-ascend');
-  if (own.ascension >= 4) {
-    ascBtn.textContent = '✨ 최종 영기재림 완료 (4차)';
-  } else {
-    const ascQp = getAscensionQp(sv.rarity, own.ascension);
-    ascBtn.textContent = `✨ ${own.ascension + 1}차 영기재림 (${formatQpShort(ascQp)} QP)`;
-  }
-
-  document.getElementById('myroom-speaker').textContent = `${sv.name} (${own.ascension}차 재림)`;
-}
-
-// 마이룸 FGO 타자기 대사 출력 상태
-let mrTypeTimer = null;
-let mrFullText = '';
-let mrTypingDone = true;
-
-function stopMyRoomTypewriter(showFull = true) {
-  if (mrTypeTimer) {
-    clearInterval(mrTypeTimer);
-    mrTypeTimer = null;
-  }
-  mrTypingDone = true;
-  const txtEl = document.getElementById('myroom-dialogue-text');
-  const curEl = document.getElementById('myroom-dlg-cursor');
-  if (showFull && txtEl) txtEl.textContent = mrFullText;
-  if (curEl) curEl.classList.add('visible');
-}
-
-function playMyRoomTypewriter(speaker, badge, text) {
-  stopMyRoomTypewriter(false);
-  document.getElementById('myroom-speaker').textContent = speaker;
-  const badgeEl = document.getElementById('myroom-dlg-badge');
-  if (badgeEl) badgeEl.textContent = badge;
-  const txtEl = document.getElementById('myroom-dialogue-text');
-  const curEl = document.getElementById('myroom-dlg-cursor');
-
-  mrFullText = text;
-  const speedMap = { slow: 44, normal: 22, fast: 9, instant: 0 };
-  const interval = speedMap[state.options.textSpeed || 'normal'] ?? 22;
-
-  if (interval === 0) {
-    txtEl.textContent = mrFullText;
-    mrTypingDone = true;
-    if (curEl) curEl.classList.add('visible');
-    return;
-  }
-
-  let pos = 0;
-  txtEl.textContent = '';
-  mrTypingDone = false;
-  if (curEl) curEl.classList.remove('visible');
-
-  mrTypeTimer = setInterval(() => {
-    pos += (state.options.textSpeed === 'fast' ? 2 : 1);
-    if (pos >= mrFullText.length) {
-      stopMyRoomTypewriter(true);
+    // 레벨업 / 영기재림 버튼에 공식 QP 비용 표시
+    const lvQp = getLevelUpQp(sv.rarity, own.level);
+    document.getElementById('btn-lv-up').textContent = `🔥 레벨업 (+10Lv / 종화 5 · ${formatQpShort(lvQp)} QP)`;
+    const ascBtn = document.getElementById('btn-ascend');
+    if (own.ascension >= 4) {
+      ascBtn.textContent = '✨ 최종 영기재림 완료 (4차)';
     } else {
-      txtEl.textContent = mrFullText.slice(0, pos);
+      const ascQp = getAscensionQp(sv.rarity, own.ascension);
+      ascBtn.textContent = `✨ ${own.ascension + 1}차 영기재림 (${formatQpShort(ascQp)} QP)`;
     }
-  }, interval);
-}
 
-function triggerMyRoomLine(addBond = true) {
-  if (!state.myRoomServantId || !state.servants[state.myRoomServantId]) return;
-  if (!mrTypingDone) {
-    stopMyRoomTypewriter(true);
-    return;
+    document.getElementById('myroom-speaker').textContent = `${sv.name} (${own.ascension}차 재림)`;
   }
-  const sv = SERVANT_MAP[state.myRoomServantId];
-  const own = state.servants[state.myRoomServantId];
 
-  SoundEngine.myRoomTap();
-  const wrap = document.getElementById('myroom-portrait-wrap');
-  wrap.classList.remove('bounce');
-  void wrap.offsetWidth;
-  wrap.classList.add('bounce');
+  // 마이룸 FGO 타자기 대사 출력 상태
+  let mrTypeTimer = null;
+  let mrFullText = '';
+  let mrTypingDone = true;
 
-  if (addBond && own.bond < 15) {
-    own.bondExp = (own.bondExp || 0) + 1;
-    const need = own.bond >= 10 ? 5 : 3;
-    if (own.bondExp >= need) {
-      own.bondExp = 0;
-      own.bond++;
-      if (own.bond >= 11) {
-        state.sq += 30;
-        toast(`💖 ${sv.name} 인연 Lv.${own.bond} 달성! 몽화 보너스 성정석 +30 지급!`);
+  function stopMyRoomTypewriter(showFull = true) {
+    if (mrTypeTimer) {
+      clearInterval(mrTypeTimer);
+      mrTypeTimer = null;
+    }
+    mrTypingDone = true;
+    const txtEl = document.getElementById('myroom-dialogue-text');
+    const curEl = document.getElementById('myroom-dlg-cursor');
+    if (showFull && txtEl) txtEl.textContent = mrFullText;
+    if (curEl) curEl.classList.add('visible');
+  }
+
+  function playMyRoomTypewriter(speaker, badge, text) {
+    stopMyRoomTypewriter(false);
+    document.getElementById('myroom-speaker').textContent = speaker;
+    const badgeEl = document.getElementById('myroom-dlg-badge');
+    if (badgeEl) badgeEl.textContent = badge;
+    const txtEl = document.getElementById('myroom-dialogue-text');
+    const curEl = document.getElementById('myroom-dlg-cursor');
+
+    mrFullText = text;
+    const speedMap = { slow: 44, normal: 22, fast: 9, instant: 0 };
+    const interval = speedMap[state.options.textSpeed || 'normal'] ?? 22;
+
+    if (interval === 0) {
+      txtEl.textContent = mrFullText;
+      mrTypingDone = true;
+      if (curEl) curEl.classList.add('visible');
+      return;
+    }
+
+    let pos = 0;
+    txtEl.textContent = '';
+    mrTypingDone = false;
+    if (curEl) curEl.classList.remove('visible');
+
+    mrTypeTimer = setInterval(() => {
+      pos += (state.options.textSpeed === 'fast' ? 2 : 1);
+      if (pos >= mrFullText.length) {
+        stopMyRoomTypewriter(true);
       } else {
-        state.sq += 3;
-        toast(`💖 ${sv.name} 인연 Lv.${own.bond} 달성! 성정석 +3 지급!`);
+        txtEl.textContent = mrFullText.slice(0, pos);
       }
-      SoundEngine.levelUp();
+    }, interval);
+  }
+
+  function triggerMyRoomLine(addBond = true) {
+    if (!state.myRoomServantId || !state.servants[state.myRoomServantId]) return;
+    if (!mrTypingDone) {
+      stopMyRoomTypewriter(true);
+      return;
     }
-    saveState();
-    renderResources();
-    renderMyRoomTab();
+    const sv = SERVANT_MAP[state.myRoomServantId];
+    const own = state.servants[state.myRoomServantId];
+
+    SoundEngine.myRoomTap();
+    const wrap = document.getElementById('myroom-portrait-wrap');
+    wrap.classList.remove('bounce');
+    void wrap.offsetWidth;
+    wrap.classList.add('bounce');
+
+    if (addBond && own.bond < 15) {
+      own.bondExp = (own.bondExp || 0) + 1;
+      const need = own.bond >= 10 ? 5 : 3;
+      if (own.bondExp >= need) {
+        own.bondExp = 0;
+        own.bond++;
+        if (own.bond >= 11) {
+          state.sq += 30;
+          toast(`💖 ${sv.name} 인연 Lv.${own.bond} 달성! 몽화 보너스 성정석 +30 지급!`);
+        } else {
+          state.sq += 3;
+          toast(`💖 ${sv.name} 인연 Lv.${own.bond} 달성! 성정석 +3 지급!`);
+        }
+        SoundEngine.levelUp();
+      }
+      saveState();
+      renderResources();
+      renderMyRoomTab();
+    }
+
+    if (sv.officialLines && sv.officialLines.length) {
+      const picked = pickRandom(sv.officialLines);
+      playMyRoomTypewriter(sv.name, picked.label, picked.text);
+    } else {
+      const line = pickRandom(sv.lines);
+      playMyRoomTypewriter(sv.name, `${own.ascension}차 재림`, line);
+    }
   }
 
-  if (sv.officialLines && sv.officialLines.length) {
-    const picked = pickRandom(sv.officialLines);
-    playMyRoomTypewriter(sv.name, picked.label, picked.text);
-  } else {
-    const line = pickRandom(sv.lines);
-    playMyRoomTypewriter(sv.name, `${own.ascension}차 재림`, line);
-  }
-}
+  // ================= 렌더링: 다 빈치 공방 =================
+  const CHARGE_PACKS = [
+    { id: 'pk_free', title: '🎁 운영자 사죄돌 배포', desc: '긴급 점검 보상! 현질 환산액에 포함되지 않는 무료 배포 성정석', sq: 300, krw: 0, badge: '무료 배포' },
+    { id: 'pk_small', title: '💎 성정석 42개 팩', desc: '가볍게 단차·11연 1세트 맛보기 (시뮬레이션)', sq: 42, krw: 33000, badge: '₩33,000' },
+    { id: 'pk_truck1', title: '🚚 성정석 1트럭 (167개)', desc: 'FGO 마스터의 기본 단위! 11연 5세트 + 알파', sq: 167, krw: 99000, badge: '₩99,000', truck: true },
+    { id: 'pk_truck3', title: '🚚 성정석 3트럭 (501개)', desc: '픽업 저격용 중과금 패키지 (약 183연)', sq: 501, krw: 297000, badge: '₩297,000', truck: true },
+    { id: 'pk_pity', title: '👑 천장 확정 풀패키지 (900개)', desc: '330연 천장을 뚫기 위한 성정석 900개 (약 5.4트럭)', sq: 900, krw: 534000, badge: '₩534,000', truck: true }
+  ];
 
-// ================= 렌더링: 다 빈치 공방 =================
-const CHARGE_PACKS = [
-  { id: 'pk_free', title: '🎁 운영자 사죄돌 배포', desc: '긴급 점검 보상! 현질 환산액에 포함되지 않는 무료 배포 성정석', sq: 300, krw: 0, badge: '무료 배포' },
-  { id: 'pk_small', title: '💎 성정석 42개 팩', desc: '가볍게 단차·11연 1세트 맛보기 (시뮬레이션)', sq: 42, krw: 33000, badge: '₩33,000' },
-  { id: 'pk_truck1', title: '🚚 성정석 1트럭 (167개)', desc: 'FGO 마스터의 기본 단위! 11연 5세트 + 알파', sq: 167, krw: 99000, badge: '₩99,000', truck: true },
-  { id: 'pk_truck3', title: '🚚 성정석 3트럭 (501개)', desc: '픽업 저격용 중과금 패키지 (약 183연)', sq: 501, krw: 297000, badge: '₩297,000', truck: true },
-  { id: 'pk_pity', title: '👑 천장 확정 풀패키지 (900개)', desc: '330연 천장을 뚫기 위한 성정석 900개 (약 5.4트럭)', sq: 900, krw: 534000, badge: '₩534,000', truck: true }
-];
+  const EXCHANGE_ITEMS = [
+    { id: 'ex_ticket1', title: '🎫 호부 1장', desc: '단차 1회 소환권 (단차 보너스 적용)', costType: 'mp', cost: 20, reward: () => { state.tickets += 1; } },
+    { id: 'ex_ticket5', title: '🎫 호부 5장 세트', desc: '매달 갱신되는 다 빈치 공방의 보물!', costType: 'mp', cost: 100, reward: () => { state.tickets += 5; } },
+    { id: 'ex_fp10k', title: '🤝 프렌드 포인트 +10,000 FP', desc: '프렌드 가챠 50연분 (앙리마유·세이버 릴리 도전!)', costType: 'mp', cost: 20, reward: () => { state.fp = (state.fp || 0) + 10000; } },
+    { id: 'ex_fp_free', title: '🎁 프렌드 포인트 무료 보급 (+20,000 FP)', desc: '마스터 지원 보급품! 무료로 20,000 FP 즉시 지급', costType: 'mp', cost: 0, reward: () => { state.fp = (state.fp || 0) + 20000; } },
+    { id: 'ex_ember', title: '🔥 예지의 맹화(종화) 20개', desc: '마이룸 서번트 레벨업 재료', costType: 'mp', cost: 40, reward: () => { state.embers += 20; } },
+    { id: 'ex_sq_rp', title: '💎 성정석 30개 교환', desc: '레어프리즘으로 성정석 11연치 확보', costType: 'rp', cost: 2, reward: () => { state.sq += 30; } },
+    { id: 'ex_grail', title: '🏆 성배 1개 주조', desc: '레어프리즘으로 최애 서번트용 성배 획득', costType: 'rp', cost: 3, reward: () => { state.grails += 1; } },
+    { id: 'ex_uso', title: '✨ 무기명 영기 → 원하는 ★5 교환', desc: '무기명 영기 10개로 현재 픽업 5성 즉시 소환!', costType: 'uso', cost: 10, reward: null }
+  ];
 
-const EXCHANGE_ITEMS = [
-  { id: 'ex_ticket1', title: '🎫 호부 1장', desc: '단차 1회 소환권 (단차 보너스 적용)', costType: 'mp', cost: 20, reward: () => { state.tickets += 1; } },
-  { id: 'ex_ticket5', title: '🎫 호부 5장 세트', desc: '매달 갱신되는 다 빈치 공방의 보물!', costType: 'mp', cost: 100, reward: () => { state.tickets += 5; } },
-  { id: 'ex_fp10k', title: '🤝 프렌드 포인트 +10,000 FP', desc: '프렌드 가챠 50연분 (앙리마유·세이버 릴리 도전!)', costType: 'mp', cost: 20, reward: () => { state.fp = (state.fp || 0) + 10000; } },
-  { id: 'ex_fp_free', title: '🎁 프렌드 포인트 무료 보급 (+20,000 FP)', desc: '마스터 지원 보급품! 무료로 20,000 FP 즉시 지급', costType: 'mp', cost: 0, reward: () => { state.fp = (state.fp || 0) + 20000; } },
-  { id: 'ex_ember', title: '🔥 예지의 맹화(종화) 20개', desc: '마이룸 서번트 레벨업 재료', costType: 'mp', cost: 40, reward: () => { state.embers += 20; } },
-  { id: 'ex_sq_rp', title: '💎 성정석 30개 교환', desc: '레어프리즘으로 성정석 11연치 확보', costType: 'rp', cost: 2, reward: () => { state.sq += 30; } },
-  { id: 'ex_grail', title: '🏆 성배 1개 주조', desc: '레어프리즘으로 최애 서번트용 성배 획득', costType: 'rp', cost: 3, reward: () => { state.grails += 1; } },
-  { id: 'ex_uso', title: '✨ 무기명 영기 → 원하는 ★5 교환', desc: '무기명 영기 10개로 현재 픽업 5성 즉시 소환!', costType: 'uso', cost: 10, reward: null }
-];
-
-function renderWelfareShop() {
-  const grid = document.getElementById('welfare-grid');
-  if (!grid) return;
-  const q = welfareQuery.trim().toLowerCase();
-  const list = SERVANTS.filter(s => s.pool === 'welfare' && (!q || s.name.toLowerCase().includes(q) || String(s.collectionNo).includes(q)));
-  grid.innerHTML = '';
-  if (list.length === 0) {
-    grid.innerHTML = '<div class="empty-hint">검색 조건에 맞는 배포 서번트가 없습니다.</div>';
-    return;
-  }
-  list.forEach(sv => {
-    const own = state.servants[sv.id];
-    const cost = own ? 50 : 100;
-    const isMaxNp = own && own.npLevel >= 5;
-    const faceUrl = ArtRenderer.getFaceUrl(sv.id);
-    const card = document.createElement('div');
-    card.className = 'welfare-card';
-    card.innerHTML = `
+  function renderWelfareShop() {
+    const grid = document.getElementById('welfare-grid');
+    if (!grid) return;
+    const q = welfareQuery.trim().toLowerCase();
+    const list = SERVANTS.filter(s => s.pool === 'welfare' && (!q || s.name.toLowerCase().includes(q) || String(s.collectionNo).includes(q)));
+    grid.innerHTML = '';
+    if (list.length === 0) {
+      grid.innerHTML = '<div class="empty-hint">검색 조건에 맞는 배포 서번트가 없습니다.</div>';
+      return;
+    }
+    list.forEach(sv => {
+      const own = state.servants[sv.id];
+      const cost = own ? 50 : 100;
+      const isMaxNp = own && own.npLevel >= 5;
+      const faceUrl = ArtRenderer.getFaceUrl(sv.id);
+      const card = document.createElement('div');
+      card.className = 'welfare-card';
+      card.innerHTML = `
         ${faceUrl ? `<img class="welfare-face" src="${faceUrl}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
         <div class="welfare-info">
           <div class="welfare-name">No.${String(sv.collectionNo).padStart(3, '0')} ${sv.name}</div>
@@ -1462,39 +1452,39 @@ function renderWelfareShop() {
           </button>
         </div>
       `;
-    card.querySelector('button').addEventListener('click', () => {
-      if (isMaxNp) return;
-      if (state.mp < cost) {
-        SoundEngine.error();
-        toast(`마나프리즘이 ${cost}개 필요합니다!`);
-        return;
-      }
-      state.mp -= cost;
-      if (!state.servants[sv.id]) {
-        state.servants[sv.id] = { copies: 1, extraCopies: 0, npLevel: 1, level: 1, ascension: 1, grailsUsed: 0, bond: 1, bondExp: 0, viewAsc: 1 };
-      } else {
-        state.servants[sv.id].copies++;
-        state.servants[sv.id].npLevel = Math.min(5, state.servants[sv.id].npLevel + 1);
-      }
-      SoundEngine.reveal(sv.rarity, true);
-      saveState();
-      renderAll();
-      toast(`🏆 순례의 축제: [${sv.name}] 보구 Lv.${state.servants[sv.id].npLevel} 영입 완료!`);
+      card.querySelector('button').addEventListener('click', () => {
+        if (isMaxNp) return;
+        if (state.mp < cost) {
+          SoundEngine.error();
+          toast(`마나프리즘이 ${cost}개 필요합니다!`);
+          return;
+        }
+        state.mp -= cost;
+        if (!state.servants[sv.id]) {
+          state.servants[sv.id] = { copies: 1, extraCopies: 0, npLevel: 1, level: 1, ascension: 1, grailsUsed: 0, bond: 1, bondExp: 0, viewAsc: 1 };
+        } else {
+          state.servants[sv.id].copies++;
+          state.servants[sv.id].npLevel = Math.min(5, state.servants[sv.id].npLevel + 1);
+        }
+        SoundEngine.reveal(sv.rarity, true);
+        saveState();
+        renderAll();
+        toast(`🏆 순례의 축제: [${sv.name}] 보구 Lv.${state.servants[sv.id].npLevel} 영입 완료!`);
+      });
+      grid.appendChild(card);
     });
-    grid.appendChild(card);
-  });
-}
+  }
 
-function renderShopTab() {
-  document.getElementById('shop-currency-summary').innerHTML =
-    `🟢 마프 <strong>${state.mp.toLocaleString()}</strong> · 🟡 레프 <strong>${state.rp.toLocaleString()}</strong> · 🤝 FP <strong>${(state.fp || 0).toLocaleString()}</strong> · 💠 무기명 영기 <strong>${state.uso}</strong>`;
+  function renderShopTab() {
+    document.getElementById('shop-currency-summary').innerHTML =
+      `🟢 마프 <strong>${state.mp.toLocaleString()}</strong> · 🟡 레프 <strong>${state.rp.toLocaleString()}</strong> · 🤝 FP <strong>${(state.fp || 0).toLocaleString()}</strong> · 💠 무기명 영기 <strong>${state.uso}</strong>`;
 
-  const chargeEl = document.getElementById('charge-grid');
-  chargeEl.innerHTML = '';
-  CHARGE_PACKS.forEach(pk => {
-    const card = document.createElement('div');
-    card.className = 'shop-card' + (pk.truck ? ' truck-card' : '');
-    card.innerHTML = `
+    const chargeEl = document.getElementById('charge-grid');
+    chargeEl.innerHTML = '';
+    CHARGE_PACKS.forEach(pk => {
+      const card = document.createElement('div');
+      card.className = 'shop-card' + (pk.truck ? ' truck-card' : '');
+      card.innerHTML = `
         <div>
           <div class="shop-card-title">${pk.title}</div>
           <div class="shop-card-desc">${pk.desc}</div>
@@ -1502,25 +1492,25 @@ function renderShopTab() {
         <div class="shop-card-price">${pk.badge} → 💎 +${pk.sq.toLocaleString()}</div>
         <button class="small-gold-btn">충전하기 (무료 시뮬)</button>
       `;
-    card.querySelector('button').addEventListener('click', () => {
-      SoundEngine.shopBuy();
-      state.sq += pk.sq;
-      state.stats.simPaidKrw += pk.krw;
-      saveState();
-      renderResources();
-      renderShopTab();
-      toast(`💎 성정석 +${pk.sq}개 충전 완료!${pk.krw ? ` (가상 과금 +₩${pk.krw.toLocaleString()})` : ''}`);
+      card.querySelector('button').addEventListener('click', () => {
+        SoundEngine.shopBuy();
+        state.sq += pk.sq;
+        state.stats.simPaidKrw += pk.krw;
+        saveState();
+        renderResources();
+        renderShopTab();
+        toast(`💎 성정석 +${pk.sq}개 충전 완료!${pk.krw ? ` (가상 과금 +₩${pk.krw.toLocaleString()})` : ''}`);
+      });
+      chargeEl.appendChild(card);
     });
-    chargeEl.appendChild(card);
-  });
 
-  const exEl = document.getElementById('exchange-grid');
-  exEl.innerHTML = '';
-  EXCHANGE_ITEMS.forEach(item => {
-    const costLabel = item.costType === 'mp' ? `🟢 마프 ${item.cost}` : (item.costType === 'rp' ? `🟡 레프 ${item.cost}` : `💠 무기명 영기 ${item.cost}`);
-    const card = document.createElement('div');
-    card.className = 'shop-card';
-    card.innerHTML = `
+    const exEl = document.getElementById('exchange-grid');
+    exEl.innerHTML = '';
+    EXCHANGE_ITEMS.forEach(item => {
+      const costLabel = item.costType === 'mp' ? `🟢 마프 ${item.cost}` : (item.costType === 'rp' ? `🟡 레프 ${item.cost}` : `💠 무기명 영기 ${item.cost}`);
+      const card = document.createElement('div');
+      card.className = 'shop-card';
+      card.innerHTML = `
         <div>
           <div class="shop-card-title">${item.title}</div>
           <div class="shop-card-desc">${item.desc}</div>
@@ -1528,80 +1518,80 @@ function renderShopTab() {
         <div class="shop-card-price">필요 재화: ${costLabel}</div>
         <button class="small-outline-btn">교환하기</button>
       `;
-    card.querySelector('button').addEventListener('click', () => {
-      if (state[item.costType] < item.cost) {
-        SoundEngine.error();
-        toast('재화가 부족합니다!');
-        return;
-      }
-      if (item.id === 'ex_uso') {
-        // 현재 배너의 픽업 5성 즉시 획득
-        const banner = BANNER_MAP[state.activeBannerId] || BANNERS[0];
-        const targetId = banner.pickup5[0] || 'sv_castoria';
-        const sv = SERVANT_MAP[targetId];
-        state.uso -= 10;
-        if (!state.servants[targetId]) {
-          state.servants[targetId] = { copies: 1, extraCopies: 0, npLevel: 1, level: 1, ascension: 1, grailsUsed: 0, bond: 1, bondExp: 0, viewAsc: 1 };
-        } else {
-          state.servants[targetId].copies++;
-          state.servants[targetId].npLevel = Math.min(5, state.servants[targetId].npLevel + 1);
+      card.querySelector('button').addEventListener('click', () => {
+        if (state[item.costType] < item.cost) {
+          SoundEngine.error();
+          toast('재화가 부족합니다!');
+          return;
         }
-        SoundEngine.reveal(5, true);
-        toast(`💠 무기명 영기 10개로 ★5 [${sv.name}] 교환 완료!`);
-      } else {
-        state[item.costType] -= item.cost;
-        item.reward();
-        SoundEngine.shopBuy();
-        toast(`✅ [${item.title}] 교환 완료!`);
-      }
-      saveState();
-      renderAll();
+        if (item.id === 'ex_uso') {
+          // 현재 배너의 픽업 5성 즉시 획득
+          const banner = BANNER_MAP[state.activeBannerId] || BANNERS[0];
+          const targetId = banner.pickup5[0] || 'sv_castoria';
+          const sv = SERVANT_MAP[targetId];
+          state.uso -= 10;
+          if (!state.servants[targetId]) {
+            state.servants[targetId] = { copies: 1, extraCopies: 0, npLevel: 1, level: 1, ascension: 1, grailsUsed: 0, bond: 1, bondExp: 0, viewAsc: 1 };
+          } else {
+            state.servants[targetId].copies++;
+            state.servants[targetId].npLevel = Math.min(5, state.servants[targetId].npLevel + 1);
+          }
+          SoundEngine.reveal(5, true);
+          toast(`💠 무기명 영기 10개로 ★5 [${sv.name}] 교환 완료!`);
+        } else {
+          state[item.costType] -= item.cost;
+          item.reward();
+          SoundEngine.shopBuy();
+          toast(`✅ [${item.title}] 교환 완료!`);
+        }
+        saveState();
+        renderAll();
+      });
+      exEl.appendChild(card);
     });
-    exEl.appendChild(card);
-  });
-  renderWelfareShop();
-}
-
-// ================= 렌더링: 가챠 통계 & 폭사력 분석 =================
-function evaluateLuckRank(s) {
-  if (s.totalPulls < 11) {
-    return { grade: '?', title: '측정 대기 중', desc: '최소 11회 이상 소환하면 당신의 비틱력 / 폭사력 등급이 판정됩니다!' };
+    renderWelfareShop();
   }
-  const rate = (s.sv5 / s.totalPulls) * 100;
-  if (rate >= 2.2) return { grade: 'EX', title: '우주급 비틱 마스터 (억까 면역)', desc: `실제 5성 확률 ${rate.toFixed(2)}%! 칼데아 확률 조작 의혹의 중심에 서 계십니다.` };
-  if (rate >= 1.45) return { grade: 'A+', title: '축복받은 황금손 마스터', desc: `평균(1.00%)을 훌쩍 웃도는 ${rate.toFixed(2)}%! 무지개 회전이 당신을 사랑합니다.` };
-  if (rate >= 0.95) return { grade: 'B', title: '수학적 기댓값의 화신', desc: `5성 확률 ${rate.toFixed(2)}%로 FGO 공식 확률 1%에 완벽히 수렴하고 있습니다.` };
-  if (rate >= 0.55) return { grade: 'D', title: '마파두부 단골 손님 (폭사 주의)', desc: `5성 확률 ${rate.toFixed(2)}%… 지갑이 슬퍼하고 있습니다. 신부님이 웃고 계시네요.` };
-  return { grade: 'E-', title: '칼데아 전설의 대폭사 (신부의 애제자)', desc: `5성 확률 ${rate.toFixed(2)}%!! 이 정도면 영령의 좌가 출입 금지령을 내린 수준입니다…` };
-}
 
-function renderStatsTab() {
-  const s = state.stats;
-  const total = s.totalPulls;
-  const pct = (n) => total > 0 ? ((n / total) * 100).toFixed(2) : '0.00';
+  // ================= 렌더링: 가챠 통계 & 폭사력 분석 =================
+  function evaluateLuckRank(s) {
+    if (s.totalPulls < 11) {
+      return { grade: '?', title: '측정 대기 중', desc: '최소 11회 이상 소환하면 당신의 비틱력 / 폭사력 등급이 판정됩니다!' };
+    }
+    const rate = (s.sv5 / s.totalPulls) * 100;
+    if (rate >= 2.2) return { grade: 'EX', title: '우주급 비틱 마스터 (억까 면역)', desc: `실제 5성 확률 ${rate.toFixed(2)}%! 칼데아 확률 조작 의혹의 중심에 서 계십니다.` };
+    if (rate >= 1.45) return { grade: 'A+', title: '축복받은 황금손 마스터', desc: `평균(1.00%)을 훌쩍 웃도는 ${rate.toFixed(2)}%! 무지개 회전이 당신을 사랑합니다.` };
+    if (rate >= 0.95) return { grade: 'B', title: '수학적 기댓값의 화신', desc: `5성 확률 ${rate.toFixed(2)}%로 FGO 공식 확률 1%에 완벽히 수렴하고 있습니다.` };
+    if (rate >= 0.55) return { grade: 'D', title: '마파두부 단골 손님 (폭사 주의)', desc: `5성 확률 ${rate.toFixed(2)}%… 지갑이 슬퍼하고 있습니다. 신부님이 웃고 계시네요.` };
+    return { grade: 'E-', title: '칼데아 전설의 대폭사 (신부의 애제자)', desc: `5성 확률 ${rate.toFixed(2)}%!! 이 정도면 영령의 좌가 출입 금지령을 내린 수준입니다…` };
+  }
 
-  // 현질 환산액 계산 (성정석 소비 기준: 167돌 = ₩99,000 + 호부는 3돌 환산)
-  const eqSq = s.sqSpent + s.ticketsSpent * 3;
-  const trucks = eqSq / 167;
-  const estKrw = Math.round(trucks * 99000);
+  function renderStatsTab() {
+    const s = state.stats;
+    const total = s.totalPulls;
+    const pct = (n) => total > 0 ? ((n / total) * 100).toFixed(2) : '0.00';
 
-  const rank = evaluateLuckRank(s);
-  document.getElementById('luck-rank-grade').textContent = rank.grade;
-  document.getElementById('luck-rank-title').textContent = rank.title;
-  document.getElementById('luck-rank-desc').textContent = rank.desc;
-  document.getElementById('stat-krw').textContent = `₩${estKrw.toLocaleString()}`;
-  document.getElementById('stat-trucks').textContent = `${trucks.toFixed(2)} 트럭 소비 (충전 시뮬 ₩${s.simPaidKrw.toLocaleString()})`;
+    // 현질 환산액 계산 (성정석 소비 기준: 167돌 = ₩99,000 + 호부는 3돌 환산)
+    const eqSq = s.sqSpent + s.ticketsSpent * 3;
+    const trucks = eqSq / 167;
+    const estKrw = Math.round(trucks * 99000);
 
-  // KPI 카드
-  const kpis = [
-    { label: '총 소환 횟수', val: `${total.toLocaleString()}회`, sub: `성정석 ${s.sqSpent.toLocaleString()} · 호부 ${s.ticketsSpent}` },
-    { label: '★5 서번트 획득', val: `${s.sv5}기`, sub: `실제 확률 ${pct(s.sv5)}% (공식 1.00%)` },
-    { label: '픽업 성공 / 픽뚫', val: `${s.sv5Pickup} / ${s.sv5Spook}`, sub: `천장 도달 ${s.sv5Pity}회` },
-    { label: '최대 연속 노5성', val: `${s.maxDryStreak}연`, sub: `현재 연속 노5성: ${s.curDryStreak}연` },
-    { label: '★4 서번트 획득', val: `${s.sv4}기`, sub: `실제 확률 ${pct(s.sv4)}% (공식 3.00%)` },
-    { label: '★5 개념예장 획득', val: `${s.ce5}장`, sub: `젤릿치 ${s.kscopeCount} · 흑성배 ${s.blackGrailCount}` }
-  ];
-  document.getElementById('stats-kpi-grid').innerHTML = kpis.map(k => `
+    const rank = evaluateLuckRank(s);
+    document.getElementById('luck-rank-grade').textContent = rank.grade;
+    document.getElementById('luck-rank-title').textContent = rank.title;
+    document.getElementById('luck-rank-desc').textContent = rank.desc;
+    document.getElementById('stat-krw').textContent = `₩${estKrw.toLocaleString()}`;
+    document.getElementById('stat-trucks').textContent = `${trucks.toFixed(2)} 트럭 소비 (충전 시뮬 ₩${s.simPaidKrw.toLocaleString()})`;
+
+    // KPI 카드
+    const kpis = [
+      { label: '총 소환 횟수', val: `${total.toLocaleString()}회`, sub: `성정석 ${s.sqSpent.toLocaleString()} · 호부 ${s.ticketsSpent}` },
+      { label: '★5 서번트 획득', val: `${s.sv5}기`, sub: `실제 확률 ${pct(s.sv5)}% (공식 1.00%)` },
+      { label: '픽업 성공 / 픽뚫', val: `${s.sv5Pickup} / ${s.sv5Spook}`, sub: `천장 도달 ${s.sv5Pity}회` },
+      { label: '최대 연속 노5성', val: `${s.maxDryStreak}연`, sub: `현재 연속 노5성: ${s.curDryStreak}연` },
+      { label: '★4 서번트 획득', val: `${s.sv4}기`, sub: `실제 확률 ${pct(s.sv4)}% (공식 3.00%)` },
+      { label: '★5 개념예장 획득', val: `${s.ce5}장`, sub: `젤릿치 ${s.kscopeCount} · 흑성배 ${s.blackGrailCount}` }
+    ];
+    document.getElementById('stats-kpi-grid').innerHTML = kpis.map(k => `
       <div class="kpi-card">
         <div class="kpi-label">${k.label}</div>
         <div class="kpi-val">${k.val}</div>
@@ -1609,19 +1599,19 @@ function renderStatsTab() {
       </div>
     `).join('');
 
-  // 확률 비교 바
-  const rows = [
-    { name: '★5 서번트', count: s.sv5, official: 1, color: '#ffe666' },
-    { name: '★4 서번트', count: s.sv4, official: 3, color: '#ffad42' },
-    { name: '★5 개념예장', count: s.ce5, official: 4, color: '#c084fc' },
-    { name: '★4 개념예장', count: s.ce4, official: 12, color: '#60a5fa' },
-    { name: '★3 서번트', count: s.sv3, official: 40, color: '#94a3b8' },
-    { name: '★3 개념예장', count: s.ce3, official: 40, color: '#64748b' }
-  ];
-  document.getElementById('stat-rate-bars').innerHTML = rows.map(r => {
-    const actual = total > 0 ? (r.count / total) * 100 : 0;
-    const width = Math.min(100, actual * (r.official <= 4 ? 12 : 2));
-    return `
+    // 확률 비교 바
+    const rows = [
+      { name: '★5 서번트', count: s.sv5, official: 1, color: '#ffe666' },
+      { name: '★4 서번트', count: s.sv4, official: 3, color: '#ffad42' },
+      { name: '★5 개념예장', count: s.ce5, official: 4, color: '#c084fc' },
+      { name: '★4 개념예장', count: s.ce4, official: 12, color: '#60a5fa' },
+      { name: '★3 서번트', count: s.sv3, official: 40, color: '#94a3b8' },
+      { name: '★3 개념예장', count: s.ce3, official: 40, color: '#64748b' }
+    ];
+    document.getElementById('stat-rate-bars').innerHTML = rows.map(r => {
+      const actual = total > 0 ? (r.count / total) * 100 : 0;
+      const width = Math.min(100, actual * (r.official <= 4 ? 12 : 2));
+      return `
         <div class="rate-bar-row">
           <div class="rate-bar-head">
             <span>${r.name} (${r.count}장)</span>
@@ -1632,89 +1622,89 @@ function renderStatsTab() {
           </div>
         </div>
       `;
-  }).join('');
+    }).join('');
 
-  // 밈 카운터
-  const memes = [
-    ['🌶️ 먹어치운 매운 마파두부', `${s.mapoCount}그릇`],
-    ['⚡ 은테 → 금테 치직 승격 연출', `${s.sparkCount}회`],
-    ['🌈 무지개 회전 연출 목격', `${s.rainbowCount}회`],
-    ['💎 칼레이도스코프 (젤릿치) 획득', `${s.kscopeCount}장`],
-    ['🩸 검은 성배 (흑성배) 획득', `${s.blackGrailCount}장`],
-    ['💠 보유 무기명 영기 (USO)', `${state.uso}개`]
-  ];
-  document.getElementById('stat-meme-list').innerHTML = memes.map(([k, v]) => `
+    // 밈 카운터
+    const memes = [
+      ['🌶️ 먹어치운 매운 마파두부', `${s.mapoCount}그릇`],
+      ['⚡ 은테 → 금테 치직 승격 연출', `${s.sparkCount}회`],
+      ['🌈 무지개 회전 연출 목격', `${s.rainbowCount}회`],
+      ['💎 칼레이도스코프 (젤릿치) 획득', `${s.kscopeCount}장`],
+      ['🩸 검은 성배 (흑성배) 획득', `${s.blackGrailCount}장`],
+      ['💠 보유 무기명 영기 (USO)', `${state.uso}개`]
+    ];
+    document.getElementById('stat-meme-list').innerHTML = memes.map(([k, v]) => `
       <div class="meme-row"><span>${k}</span><strong>${v}</strong></div>
     `).join('');
 
-  // 5성 히스토리
-  const histEl = document.getElementById('ssr-history-list');
-  if (s.ssrHistory.length === 0) {
-    histEl.innerHTML = '<div class="empty-hint">아직 획득한 ★5 서번트가 없습니다.</div>';
-  } else {
-    histEl.innerHTML = s.ssrHistory.map(h => {
-      const badge = h.isPity ? '👑천장' : (h.isSpook ? '💥픽뚫' : (h.isPickup ? '✨픽업' : '★상시'));
-      return `<div class="ssr-hist-pill">#${h.pullNo}연 · <strong>${h.name}</strong> (${CLASS_INFO[h.cls]?.name || h.cls}) ${badge}</div>`;
-    }).join('');
-  }
-}
-
-// ================= 온디맨드 Atlas Academy 공식 KR/JP 로어 로드 =================
-async function fetchOfficialServantLore(sv, onLoaded) {
-  if (!sv || !sv.atlasId || sv._loreLoaded || sv.profileSummary) return;
-  sv._loreLoaded = true;
-  try {
-    const reg = sv.region || 'KR';
-    const resp = await fetch(`https://api.atlasacademy.io/nice/${reg}/servant/${sv.atlasId}?lore=true`);
-    if (!resp.ok) return;
-    const data = await resp.json();
-    const prof = data.profile || {};
-    if (prof.cv) sv.cv = prof.cv;
-    if (prof.illustrator) sv.illustrator = prof.illustrator;
-    if (Array.isArray(prof.comments) && prof.comments.length) {
-      sv.profileSummary = prof.comments[0].comment || '';
-      sv.profileBond = prof.comments.slice(1, 5).map(c => c.comment).filter(Boolean);
+    // 5성 히스토리
+    const histEl = document.getElementById('ssr-history-list');
+    if (s.ssrHistory.length === 0) {
+      histEl.innerHTML = '<div class="empty-hint">아직 획득한 ★5 서번트가 없습니다.</div>';
+    } else {
+      histEl.innerHTML = s.ssrHistory.map(h => {
+        const badge = h.isPity ? '👑천장' : (h.isSpook ? '💥픽뚫' : (h.isPickup ? '✨픽업' : '★상시'));
+        return `<div class="ssr-hist-pill">#${h.pullNo}연 · <strong>${h.name}</strong> (${CLASS_INFO[h.cls]?.name || h.cls}) ${badge}</div>`;
+      }).join('');
     }
-    if (Array.isArray(prof.voices)) {
-      const lines = [];
-      for (const vg of prof.voices) {
-        for (const v of (vg.voiceLines || [])) {
-          if (!v.subtitle) continue;
-          if (v.type === 'firstGet' && !sv._hasOfficialSummon) {
-            sv.summonQuote = v.subtitle;
-            sv._hasOfficialSummon = true;
-          } else if (vg.type === 'home' && lines.length < 8) {
-            lines.push({ label: v.name || '마이룸', text: v.subtitle });
+  }
+
+  // ================= 온디맨드 Atlas Academy 공식 KR/JP 로어 로드 =================
+  async function fetchOfficialServantLore(sv, onLoaded) {
+    if (!sv || !sv.atlasId || sv._loreLoaded || sv.profileSummary) return;
+    sv._loreLoaded = true;
+    try {
+      const reg = sv.region || 'KR';
+      const resp = await fetch(`https://api.atlasacademy.io/nice/${reg}/servant/${sv.atlasId}?lore=true`);
+      if (!resp.ok) return;
+      const data = await resp.json();
+      const prof = data.profile || {};
+      if (prof.cv) sv.cv = prof.cv;
+      if (prof.illustrator) sv.illustrator = prof.illustrator;
+      if (Array.isArray(prof.comments) && prof.comments.length) {
+        sv.profileSummary = prof.comments[0].comment || '';
+        sv.profileBond = prof.comments.slice(1, 5).map(c => c.comment).filter(Boolean);
+      }
+      if (Array.isArray(prof.voices)) {
+        const lines = [];
+        for (const vg of prof.voices) {
+          for (const v of (vg.voiceLines || [])) {
+            if (!v.subtitle) continue;
+            if (v.type === 'firstGet' && !sv._hasOfficialSummon) {
+              sv.summonQuote = v.subtitle;
+              sv._hasOfficialSummon = true;
+            } else if (vg.type === 'home' && lines.length < 8) {
+              lines.push({ label: v.name || '마이룸', text: v.subtitle });
+            }
           }
         }
+        if (lines.length) sv.officialLines = lines;
       }
-      if (lines.length) sv.officialLines = lines;
-    }
-    if (typeof onLoaded === 'function') onLoaded();
-  } catch (_) { }
-}
-
-// ================= 상세 모달 =================
-function openDetailModal(type, id) {
-  SoundEngine.click();
-  const modal = document.getElementById('detail-modal');
-  const body = document.getElementById('detail-body');
-  const isServant = type === 'servant';
-  const item = isServant ? SERVANT_MAP[id] : CE_MAP[id];
-  if (!item) return;
-
-  const owned = isServant ? state.servants[id] : state.ces[id];
-  const effR = isServant ? getEffectiveRarity(item, owned) : item.rarity;
-  const tierTxt = RARITY_TIERS[effR] || '';
-  document.getElementById('detail-modal-title').textContent = `${effR === 0 ? '☆0' : '★'.repeat(effR)} ${tierTxt}${item.variableRarity ? '(레어도 가변)' : ''} ${item.name}`;
-
-  if (isServant && !item.profileSummary && !item._loreLoaded) {
-    fetchOfficialServantLore(item, () => {
-      if (!modal.classList.contains('hidden')) openDetailModal('servant', id);
-    });
+      if (typeof onLoaded === 'function') onLoaded();
+    } catch (_) {}
   }
 
-  const customUploadHtml = `
+  // ================= 상세 모달 =================
+  function openDetailModal(type, id) {
+    SoundEngine.click();
+    const modal = document.getElementById('detail-modal');
+    const body = document.getElementById('detail-body');
+    const isServant = type === 'servant';
+    const item = isServant ? SERVANT_MAP[id] : CE_MAP[id];
+    if (!item) return;
+
+    const owned = isServant ? state.servants[id] : state.ces[id];
+    const effR = isServant ? getEffectiveRarity(item, owned) : item.rarity;
+    const tierTxt = RARITY_TIERS[effR] || '';
+    document.getElementById('detail-modal-title').textContent = `${effR === 0 ? '☆0' : '★'.repeat(effR)} ${tierTxt}${item.variableRarity ? '(레어도 가변)' : ''} ${item.name}`;
+
+    if (isServant && !item.profileSummary && !item._loreLoaded) {
+      fetchOfficialServantLore(item, () => {
+        if (!modal.classList.contains('hidden')) openDetailModal('servant', id);
+      });
+    }
+
+    const customUploadHtml = `
       <div class="custom-img-row">
         <label class="upload-label-btn">
           📷 내 이미지로 교체
@@ -1724,11 +1714,11 @@ function openDetailModal(type, id) {
       </div>
     `;
 
-  if (isServant) {
-    const colNo = item.collectionNo || (typeof ATLAS_IMAGES !== 'undefined' && ATLAS_IMAGES.servants[id]?.collectionNo) || '-';
-    const poolText = item.poolNote || POOL_LABELS[item.pool] || (item.limited ? '기간 한정' : (item.storyLocked ? '스토리 해금' : '상시'));
-    const loreBlocks = [item.profileSummary, ...(item.profileBond || [])].filter(Boolean).join('\n\n──────────\n\n');
-    body.innerHTML = `
+    if (isServant) {
+      const colNo = item.collectionNo || (typeof ATLAS_IMAGES !== 'undefined' && ATLAS_IMAGES.servants[id]?.collectionNo) || '-';
+      const poolText = item.poolNote || POOL_LABELS[item.pool] || (item.limited ? '기간 한정' : (item.storyLocked ? '스토리 해금' : '상시'));
+      const loreBlocks = [item.profileSummary, ...(item.profileBond || [])].filter(Boolean).join('\n\n──────────\n\n');
+      body.innerHTML = `
         <div class="detail-card-wrap">
           ${ArtRenderer.renderCardSVG(item, true, { ascension: owned ? owned.viewAsc : 1, npLevel: owned ? owned.npLevel : 0, rarityOverride: effR, eager: true })}
         </div>
@@ -1761,8 +1751,8 @@ function openDetailModal(type, id) {
           ${loreBlocks ? `<div class="detail-lore-box"><div class="detail-lore-title">📖 영기 프로필 & 인연 스토리</div>${loreBlocks}</div>` : ''}
           <div style="font-size:13px;color:#dbe7ff;margin-top:10px">
             ${owned
-        ? `✅ 보유 중 · Lv.${owned.level} · 보구 Lv.${owned.npLevel} (총 ${owned.copies}기 소환 / 인연 Lv.${owned.bond})`
-        : '🔒 미보유 영기입니다.'}
+              ? `✅ 보유 중 · Lv.${owned.level} · 보구 Lv.${owned.npLevel} (총 ${owned.copies}기 소환 / 인연 Lv.${owned.bond})`
+              : '🔒 미보유 영기입니다.'}
           </div>
           <div class="detail-actions">
             ${owned ? `<button class="small-gold-btn" id="btn-detail-myroom">🏰 마이룸에 배치 & 육성하기</button>` : ''}
@@ -1771,50 +1761,43 @@ function openDetailModal(type, id) {
           ${customUploadHtml}
         </div>
       `;
-    const mrBtn = document.getElementById('btn-detail-myroom');
-    if (mrBtn) {
-      mrBtn.addEventListener('click', () => {
-        state.myRoomServantId = id;
-        saveState();
-        modal.classList.add('hidden');
-        switchTab('myroom');
-        triggerMyRoomLine(false);
-      });
-    }
-  } else {
-    const colNo = (typeof ATLAS_IMAGES !== 'undefined' && ATLAS_IMAGES.ces[id]?.collectionNo) || '-';
-    const colNo = (typeof ATLAS_IMAGES !== 'undefined' && ATLAS_IMAGES.ces[id]?.collectionNo) || (item.npcOnly ? 'NPC' : '-');
-    const ceCost = getCeCost(item);
-    const lb = owned ? getCeLimitBreak(owned) : 0;
-    const mlb = isCeMlb(owned);
-    const curSt = getCeCurrentStats(item, owned);
-    const caps = CE_MLB_LEVEL_CAPS[item.rarity] || [20, 30, 40, 50, 60];
-    const maxExp = CE_MAX_EXP_TABLE[item.rarity] || 3599000;
-    const lbDots = '◆'.repeat(lb) + '◇'.repeat(4 - lb);
-    body.innerHTML = `
+      const mrBtn = document.getElementById('btn-detail-myroom');
+      if (mrBtn) {
+        mrBtn.addEventListener('click', () => {
+          state.myRoomServantId = id;
+          saveState();
+          modal.classList.add('hidden');
+          switchTab('myroom');
+          triggerMyRoomLine(false);
+        });
+      }
+    } else {
+      const colNo = (typeof ATLAS_IMAGES !== 'undefined' && ATLAS_IMAGES.ces[id]?.collectionNo) || (item.npcOnly ? 'NPC' : '-');
+      const ceCost = getCeCost(item);
+      const lb = owned ? getCeLimitBreak(owned) : 0;
+      const mlb = isCeMlb(owned);
+      const curSt = getCeCurrentStats(item, owned);
+      const caps = CE_MLB_LEVEL_CAPS[item.rarity] || [20, 30, 40, 50, 60];
+      const maxExp = CE_MAX_EXP_TABLE[item.rarity] || 3599000;
+      const lbDots = '◆'.repeat(lb) + '◇'.repeat(4 - lb);
+      body.innerHTML = `
         <div class="detail-card-wrap">
-          ${ArtRenderer.renderCardSVG(item, false, { eager: true })}
           ${ArtRenderer.renderCardSVG(item, false, { mlb, eager: true })}
         </div>
         <div class="detail-info">
-          <h3>${item.name}</h3>
-          <div class="detail-meta">개념예장 No.${colNo} · ${'★'.repeat(item.rarity)}</div>
           <h3>${item.name} ${mlb ? '<span style="color:#ffe666">✛ 풀돌</span>' : ''}</h3>
           <div class="detail-meta">개념예장 No.${colNo} · ${'★'.repeat(item.rarity)} ${RARITY_TIERS[item.rarity] || ''} · 코스트 ${ceCost}${item.fpOnly ? ' · 프렌드 가챠 전용' : (item.npcOnly ? ' · 스토리 NPC 전용' : '')}</div>
           <div class="detail-credit-row">
             ${item.illustrator ? `<span>Illust: <strong>${item.illustrator}</strong></span>` : ''}
-            ${item.atkMax !== undefined ? `<span>최대 ATK <strong>${item.atkMax.toLocaleString()}</strong> / HP <strong>${item.hpMax.toLocaleString()}</strong></span>` : ''}
             <span>현재 Lv.<strong>${curSt.level} / ${curSt.maxLv}</strong> (한계돌파 ${lbDots} ${lb}/4)</span>
             <span>적용 스탯 ATK <strong>+${curSt.atk.toLocaleString()}</strong> / HP <strong>+${curSt.hp.toLocaleString()}</strong></span>
             <span>만렙(Lv.${caps[4]}) 기준 ATK <strong>+${(item.atkMax ?? curSt.atk).toLocaleString()}</strong> / HP <strong>+${(item.hpMax ?? curSt.hp).toLocaleString()}</strong></span>
           </div>
           <div style="margin-top:6px;font-size:13px"><strong>기본 효과:</strong> ${item.effect}</div>
-          ${item.effectMax ? `<div style="margin-top:4px;font-size:13px;color:#ffe680"><strong>최대 해방(풀돌):</strong> ${item.effectMax}</div>` : ''}
           ${item.effectMax ? `<div style="margin-top:4px;font-size:13px;color:${mlb ? '#6effa8' : '#ffe680'}"><strong>${mlb ? '✅ 최대 해방(풀돌 적용 중!):' : '최대 해방(4돌/5장):'}</strong> ${item.effectMax}</div>` : ''}
           ${!item.npcOnly ? `<div style="margin-top:6px;font-size:11.5px;color:#9cb2d9">한계돌파 상한: 초기 Lv.${caps[0]} → 1돌 ${caps[1]} → 2돌 ${caps[2]} → 3돌 ${caps[3]} → 4돌(풀돌) Lv.${caps[4]} (만렙 누적 EXP ${maxExp.toLocaleString()})</div>` : ''}
           <div class="detail-lore-box"><div class="detail-lore-title">📖 개념예장 해설</div>${item.flavor}</div>
           <div style="font-size:13px;color:#dbe7ff;margin-top:10px">
-            ${owned ? `✅ 보유 수량: ${owned.copies}장 ${owned.copies >= 5 ? '(최대 해방 풀돌 가능!)' : ''}` : '🔒 미보유 개념예장입니다.'}
             ${owned ? `✅ 보유 수량: ${owned.copies}장 ${mlb ? '(✛ 최대 해방 풀돌 완료! 배틀 풀돌 수치 자동 적용)' : `(풀돌까지 ${5 - owned.copies}장 더 필요)`}` : (item.npcOnly ? '🛡️ 메인 퀘스트 대여 서포트 NPC 전용 개념예장입니다.' : '🔒 미보유 개념예장입니다.')}
           </div>
           <div class="detail-actions">
@@ -1825,75 +1808,75 @@ function openDetailModal(type, id) {
           ${customUploadHtml}
         </div>
       `;
-    const ceUpBtn = document.getElementById('btn-ce-lvup');
-    if (ceUpBtn && owned) {
-      ceUpBtn.addEventListener('click', () => {
-        const qpCost = 50000;
-        if (state.qp < qpCost) { SoundEngine.error(); toast('QP가 50,000 부족합니다!'); return; }
-        state.qp -= qpCost;
-        owned.level = Math.min(curSt.maxLv, (owned.level || 1) + 10);
-        SoundEngine.levelUp();
-        saveState();
-        renderAll();
-        openDetailModal('ce', id);
-        toast(`✨ [${item.name}] Lv.${owned.level} 강화 완료! (ATK/HP 배틀 즉시 반영)`);
-      });
+      const ceUpBtn = document.getElementById('btn-ce-lvup');
+      if (ceUpBtn && owned) {
+        ceUpBtn.addEventListener('click', () => {
+          const qpCost = 50000;
+          if (state.qp < qpCost) { SoundEngine.error(); toast('QP가 50,000 부족합니다!'); return; }
+          state.qp -= qpCost;
+          owned.level = Math.min(curSt.maxLv, (owned.level || 1) + 10);
+          SoundEngine.levelUp();
+          saveState();
+          renderAll();
+          openDetailModal('ce', id);
+          toast(`✨ [${item.name}] Lv.${owned.level} 강화 완료! (ATK/HP 배틀 즉시 반영)`);
+        });
+      }
+      const ceMaxBtn = document.getElementById('btn-ce-lvmax');
+      if (ceMaxBtn && owned) {
+        ceMaxBtn.addEventListener('click', () => {
+          const steps = Math.ceil((curSt.maxLv - (owned.level || 1)) / 10);
+          const qpCost = Math.max(50000, steps * 50000);
+          if (state.qp < qpCost) { SoundEngine.error(); toast(`QP가 ${qpCost.toLocaleString()} 필요합니다!`); return; }
+          state.qp -= qpCost;
+          owned.level = curSt.maxLv;
+          SoundEngine.reveal(item.rarity, false);
+          saveState();
+          renderAll();
+          openDetailModal('ce', id);
+          toast(`🔥 [${item.name}] 현재 상한 Lv.${owned.level} MAX 달성!`);
+        });
+      }
     }
-    const ceMaxBtn = document.getElementById('btn-ce-lvmax');
-    if (ceMaxBtn && owned) {
-      ceMaxBtn.addEventListener('click', () => {
-        const steps = Math.ceil((curSt.maxLv - (owned.level || 1)) / 10);
-        const qpCost = Math.max(50000, steps * 50000);
-        if (state.qp < qpCost) { SoundEngine.error(); toast(`QP가 ${qpCost.toLocaleString()} 필요합니다!`); return; }
-        state.qp -= qpCost;
-        owned.level = curSt.maxLv;
-        SoundEngine.reveal(item.rarity, false);
-        saveState();
-        renderAll();
-        openDetailModal('ce', id);
-        toast(`🔥 [${item.name}] 현재 상한 Lv.${owned.level} MAX 달성!`);
-      });
-    }
-  }
 
-  const fileInput = document.getElementById('input-custom-art');
-  if (fileInput) {
-    fileInput.addEventListener('change', (e) => {
-      const file = e.target.files && e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        const ok = ArtRenderer.setCustomImage(id, reader.result);
-        if (!ok) {
-          toast('⚠️ 이미지 용량이 너무 커서 저장할 수 없습니다. 더 작은 이미지를 사용해 주세요.');
-          return;
-        }
-        toast('📷 커스텀 일러스트로 교체되었습니다!');
+    const fileInput = document.getElementById('input-custom-art');
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          const ok = ArtRenderer.setCustomImage(id, reader.result);
+          if (!ok) {
+            toast('⚠️ 이미지 용량이 너무 커서 저장할 수 없습니다. 더 작은 이미지를 사용해 주세요.');
+            return;
+          }
+          toast('📷 커스텀 일러스트로 교체되었습니다!');
+          renderAll();
+          openDetailModal(type, id);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+    const resetArtBtn = document.getElementById('btn-reset-custom-art');
+    if (resetArtBtn) {
+      resetArtBtn.addEventListener('click', () => {
+        ArtRenderer.setCustomImage(id, null);
+        toast('↩️ 공식 일러스트로 복원되었습니다!');
         renderAll();
         openDetailModal(type, id);
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-  const resetArtBtn = document.getElementById('btn-reset-custom-art');
-  if (resetArtBtn) {
-    resetArtBtn.addEventListener('click', () => {
-      ArtRenderer.setCustomImage(id, null);
-      toast('↩️ 공식 일러스트로 복원되었습니다!');
-      renderAll();
-      openDetailModal(type, id);
-    });
+      });
+    }
+
+    document.getElementById('btn-detail-close-in').addEventListener('click', () => modal.classList.add('hidden'));
+    modal.classList.remove('hidden');
   }
 
-  document.getElementById('btn-detail-close-in').addEventListener('click', () => modal.classList.add('hidden'));
-  modal.classList.remove('hidden');
-}
-
-// ================= 확률표 모달 =================
-function openRatesModal() {
-  SoundEngine.click();
-  const b = BANNER_MAP[state.activeBannerId] || BANNERS[0];
-  document.getElementById('rates-body').innerHTML = `
+  // ================= 확률표 모달 =================
+  function openRatesModal() {
+    SoundEngine.click();
+    const b = BANNER_MAP[state.activeBannerId] || BANNERS[0];
+    document.getElementById('rates-body').innerHTML = `
       <p style="font-size:13px;color:#cbd5e1;margin-bottom:10px">
         본 시뮬레이터는 <strong>Fate/Grand Order 실제 확률 및 천장 규칙</strong>을 충실히 고증했습니다.
       </p>
@@ -1915,630 +1898,590 @@ function openRatesModal() {
         <li><strong>보구 레벨 & 무기명 영기</strong>: 동일 서번트 중복 시 보구 Lv.5까지 자동 강화. ★5 서번트 6기 이상부터 무기명 영기(USO) +1 지급!</li>
       </ul>
     `;
-  document.getElementById('rates-modal').classList.remove('hidden');
-}
-
-// ================= 렌더링: 설정 탭 =================
-function renderSettingsTab() {
-  const curSpeed = state.options.skipFx ? 'skip' : (state.options.fastFx ? 'fast' : 'normal');
-  document.querySelectorAll('#set-fx-speed .filter-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.speed === curSpeed);
-  });
-  document.getElementById('set-auto-skip-common').checked = !!state.options.autoSkipCommon;
-  document.getElementById('set-high-particles').checked = state.options.highParticles !== false;
-
-  document.getElementById('set-sfx-enabled').checked = !SoundEngine.isMuted();
-  const volPct = Math.round(SoundEngine.getVolume() * 100);
-  document.getElementById('set-sfx-volume').value = volPct;
-  document.getElementById('set-vol-label').textContent = `${volPct}%`;
-
-  const curTs = state.options.textSpeed || 'normal';
-  document.querySelectorAll('#set-text-speed .filter-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.ts === curTs);
-  });
-
-  const curArt = ArtRenderer.getArtMode();
-  document.querySelectorAll('#set-art-mode .filter-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.art === curArt);
-  });
-}
-
-// 원작 FGO 가챠 연출 미리보기 (성정석 소모 없음)
-function previewSummonFX(mode) {
-  const banner = BANNER_MAP[state.activeBannerId] || BANNERS[0];
-  const p5 = SERVANT_MAP[banner.pickup5[0] || 'sv_castoria'];
-  const p4 = SERVANT_MAP[banner.pickup4[0] || 'sv_emiya'];
-  const sv3 = SERVANT_MAP.sv_cu;
-
-  let sampleRoll;
-  if (mode === 'normal') {
-    sampleRoll = { type: 'servant', item: sv3, isNew: false, isPickup: false, isSpook: false, isPity: false, npLevelAfter: 1, usoGained: false, animTier: 'normal' };
-  } else if (mode === 'gold') {
-    sampleRoll = { type: 'servant', item: p4, isNew: true, isPickup: true, isSpook: false, isPity: false, npLevelAfter: 1, usoGained: false, animTier: 'gold' };
-  } else if (mode === 'rainbow') {
-    sampleRoll = { type: 'servant', item: p5, isNew: true, isPickup: true, isSpook: false, isPity: false, npLevelAfter: 1, usoGained: false, animTier: 'rainbow' };
-  } else {
-    sampleRoll = { type: 'servant', item: p5, isNew: true, isPickup: true, isSpook: false, isPity: false, npLevelAfter: 1, usoGained: false, animTier: 'spark_rainbow' };
+    document.getElementById('rates-modal').classList.remove('hidden');
   }
 
-  SummonFX.playSequence([sampleRoll], () => {
-    toast('🎬 원작 FGO 소환 연출 미리보기가 종료되었습니다.');
-  }, {
-    fastMode: state.options.fastFx,
-    autoSkipCommon: false,
-    highParticles: state.options.highParticles !== false,
-    textSpeed: state.options.textSpeed || 'normal'
-  });
-}
-
-// ================= 탭 전환 =================
-function switchTab(tabName) {
-  document.querySelectorAll('.nav-tab').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.tab === tabName);
-  });
-  document.querySelectorAll('.tab-panel').forEach(sec => {
-    sec.classList.toggle('active', sec.id === `tab-${tabName}`);
-  });
-  if (tabName === 'codex') renderCodexTab();
-  if (tabName === 'myroom') renderMyRoomTab();
-  if (tabName === 'shop') renderShopTab();
-  if (tabName === 'stats') renderStatsTab();
-  if (tabName === 'settings') renderSettingsTab();
-  if (tabName === 'battle' && typeof window.FgoBattle !== 'undefined') window.FgoBattle.onEnterTab();
-}
-
-function renderAll() {
-  renderResources();
-  renderSummonTab();
-  if (document.getElementById('tab-codex').classList.contains('active')) renderCodexTab();
-  if (document.getElementById('tab-myroom').classList.contains('active')) renderMyRoomTab();
-  if (document.getElementById('tab-shop').classList.contains('active')) renderShopTab();
-  if (document.getElementById('tab-stats').classList.contains('active')) renderStatsTab();
-  if (document.getElementById('tab-settings').classList.contains('active')) renderSettingsTab();
-  if (document.getElementById('tab-battle')?.classList.contains('active') && typeof window.FgoBattle !== 'undefined') {
-    window.FgoBattle.renderLobbyIfIdle();
-  }
-}
-
-// ================= 이벤트 바인딩 =================
-function bindEvents() {
-  // 네비게이션 탭
-  document.querySelectorAll('.nav-tab').forEach(btn => {
-    btn.addEventListener('click', () => {
-      SoundEngine.click();
-      switchTab(btn.dataset.tab);
+  // ================= 렌더링: 설정 탭 =================
+  function renderSettingsTab() {
+    const curSpeed = state.options.skipFx ? 'skip' : (state.options.fastFx ? 'fast' : 'normal');
+    document.querySelectorAll('#set-fx-speed .filter-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.speed === curSpeed);
     });
-  });
+    document.getElementById('set-auto-skip-common').checked = !!state.options.autoSkipCommon;
+    document.getElementById('set-high-particles').checked = state.options.highParticles !== false;
 
-  // 상단 버튼
-  document.getElementById('btn-open-charge').addEventListener('click', () => {
-    SoundEngine.click();
-    switchTab('shop');
-  });
-  document.getElementById('btn-mute').addEventListener('click', () => {
-    SoundEngine.toggleMute();
-    renderResources();
-  });
-  document.getElementById('btn-art-mode').addEventListener('click', () => {
-    SoundEngine.click();
-    const mode = ArtRenderer.toggleArtMode();
-    renderAll();
-    toast(mode === 'official' ? '🖼️ 공식 일러스트 모드 (Atlas Academy)' : '🎨 프로시저럴 SVG 팬아트 모드');
-  });
+    document.getElementById('set-sfx-enabled').checked = !SoundEngine.isMuted();
+    const volPct = Math.round(SoundEngine.getVolume() * 100);
+    document.getElementById('set-sfx-volume').value = volPct;
+    document.getElementById('set-vol-label').textContent = `${volPct}%`;
 
-  // 소환 버튼 4종 (성정석/호부) + 프렌드 포인트 3종
-  document.getElementById('btn-pull-ticket').addEventListener('click', () => executeSummon('ticket'));
-  document.getElementById('btn-pull-1').addEventListener('click', () => executeSummon('single'));
-  document.getElementById('btn-pull-11').addEventListener('click', () => executeSummon('multi'));
-  document.getElementById('btn-pull-110').addEventListener('click', () => executeSummon('sim110'));
-  document.getElementById('btn-pull-fp1')?.addEventListener('click', () => executeSummon('fp1'));
-  document.getElementById('btn-pull-fp10')?.addEventListener('click', () => executeSummon('fp10'));
-  document.getElementById('btn-pull-fp100')?.addEventListener('click', () => executeSummon('fp100'));
+    const curTs = state.options.textSpeed || 'normal';
+    document.querySelectorAll('#set-text-speed .filter-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.ts === curTs);
+    });
 
-  // 커스텀 픽업 선택기
-  document.getElementById('custom-pu5-search')?.addEventListener('input', populateCustomPickupSelectors);
-  document.getElementById('custom-pu4-search')?.addEventListener('input', populateCustomPickupSelectors);
-  document.getElementById('custom-pu5-sel')?.addEventListener('change', (e) => {
-    state.customPickup.sv5 = e.target.value;
-    if (BANNER_MAP.bn_custom) BANNER_MAP.bn_custom.pickup5 = [state.customPickup.sv5];
-    saveState();
-    renderSummonTab();
-    toast(`🎯 커스텀 ★5 픽업 변경: [${SERVANT_MAP[state.customPickup.sv5]?.name}]`);
-  });
-  document.getElementById('custom-pu4-sel')?.addEventListener('change', (e) => {
-    state.customPickup.sv4 = e.target.value;
-    if (BANNER_MAP.bn_custom) BANNER_MAP.bn_custom.pickup4 = [state.customPickup.sv4];
-    saveState();
-    renderSummonTab();
-    toast(`🎯 커스텀 ★4 픽업 변경: [${SERVANT_MAP[state.customPickup.sv4]?.name}]`);
-  });
+    const curArt = ArtRenderer.getArtMode();
+    document.querySelectorAll('#set-art-mode .filter-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.art === curArt);
+    });
+  }
 
-  // 소환 옵션
-  document.getElementById('opt-fast-fx').addEventListener('change', (e) => {
-    state.options.fastFx = e.target.checked;
-    saveState();
-  });
-  document.getElementById('opt-skip-fx').addEventListener('change', (e) => {
-    state.options.skipFx = e.target.checked;
-    saveState();
-  });
-  document.getElementById('btn-show-rates').addEventListener('click', openRatesModal);
-  document.getElementById('btn-goto-stats').addEventListener('click', () => switchTab('stats'));
+  // 원작 FGO 가챠 연출 미리보기 (성정석 소모 없음)
+  function previewSummonFX(mode) {
+    const banner = BANNER_MAP[state.activeBannerId] || BANNERS[0];
+    const p5 = SERVANT_MAP[banner.pickup5[0] || 'sv_castoria'];
+    const p4 = SERVANT_MAP[banner.pickup4[0] || 'sv_emiya'];
+    const sv3 = SERVANT_MAP.sv_cu;
 
-  // 소환 연출 스테이지 클릭 / 스킵 / 키보드
-  document.getElementById('summon-stage-clickzone').addEventListener('click', (e) => {
-    if (e.target.closest('#btn-summon-skip')) return;
-    SummonFX.handleStageClick();
-  });
-  document.getElementById('btn-summon-skip').addEventListener('click', (e) => {
-    e.stopPropagation();
-    SummonFX.skipAll();
-  });
-  window.addEventListener('keydown', (e) => {
-    if (SummonFX.isActive() && (e.code === 'Space' || e.code === 'Enter')) {
-      e.preventDefault();
-      SummonFX.handleStageClick();
-    } else if (e.code === 'Escape') {
-      document.querySelectorAll('.modal-overlay').forEach(m => m.classList.add('hidden'));
+    let sampleRoll;
+    if (mode === 'normal') {
+      sampleRoll = { type: 'servant', item: sv3, isNew: false, isPickup: false, isSpook: false, isPity: false, npLevelAfter: 1, usoGained: false, animTier: 'normal' };
+    } else if (mode === 'gold') {
+      sampleRoll = { type: 'servant', item: p4, isNew: true, isPickup: true, isSpook: false, isPity: false, npLevelAfter: 1, usoGained: false, animTier: 'gold' };
+    } else if (mode === 'rainbow') {
+      sampleRoll = { type: 'servant', item: p5, isNew: true, isPickup: true, isSpook: false, isPity: false, npLevelAfter: 1, usoGained: false, animTier: 'rainbow' };
+    } else {
+      sampleRoll = { type: 'servant', item: p5, isNew: true, isPickup: true, isSpook: false, isPity: false, npLevelAfter: 1, usoGained: false, animTier: 'spark_rainbow' };
     }
-  });
 
-  // 결과 모달
-  const closeResult = () => document.getElementById('result-modal').classList.add('hidden');
-  document.getElementById('btn-close-result').addEventListener('click', closeResult);
-  document.getElementById('btn-result-close-2').addEventListener('click', closeResult);
-  document.getElementById('btn-result-again').addEventListener('click', () => {
-    closeResult();
-    const nextMode = lastPullMode === 'sim110'
-      ? 'sim110'
-      : (lastPullMode === 'fp100' ? 'fp100' : ((lastPullMode === 'fp10' || lastPullMode === 'fp1') ? 'fp10' : 'multi'));
-    executeSummon(nextMode);
-  });
-
-  // 상세 / 확률 모달 닫기
-  document.getElementById('btn-close-detail').addEventListener('click', () => document.getElementById('detail-modal').classList.add('hidden'));
-  document.getElementById('btn-close-rates').addEventListener('click', () => document.getElementById('rates-modal').classList.add('hidden'));
-  document.querySelectorAll('.modal-overlay').forEach(overlay => {
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) overlay.classList.add('hidden');
+    SummonFX.playSequence([sampleRoll], () => {
+      toast('🎬 원작 FGO 소환 연출 미리보기가 종료되었습니다.');
+    }, {
+      fastMode: state.options.fastFx,
+      autoSkipCommon: false,
+      highParticles: state.options.highParticles !== false,
+      textSpeed: state.options.textSpeed || 'normal'
     });
-  });
+  }
 
-  // 도감 필터
-  document.querySelectorAll('#codex-type-filter .filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      SoundEngine.click();
-      codexFilter.type = btn.dataset.type;
-      codexLimit = 60;
-      document.querySelectorAll('#codex-type-filter .filter-btn').forEach(b => b.classList.toggle('active', b === btn));
-      renderCodexTab();
+  // ================= 탭 전환 =================
+  function switchTab(tabName) {
+    document.querySelectorAll('.nav-tab').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tab === tabName);
     });
-  });
-  document.querySelectorAll('#codex-rarity-filter .filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      SoundEngine.click();
-      codexFilter.rarity = btn.dataset.rarity;
-      codexLimit = 60;
-      document.querySelectorAll('#codex-rarity-filter .filter-btn').forEach(b => b.classList.toggle('active', b === btn));
-      renderCodexTab();
+    document.querySelectorAll('.tab-panel').forEach(sec => {
+      sec.classList.toggle('active', sec.id === `tab-${tabName}`);
     });
-  });
-  document.querySelectorAll('#codex-owned-filter .filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      SoundEngine.click();
-      codexFilter.owned = btn.dataset.owned;
-      codexLimit = 60;
-      document.querySelectorAll('#codex-owned-filter .filter-btn').forEach(b => b.classList.toggle('active', b === btn));
-      renderCodexTab();
-    });
-  });
-  document.getElementById('codex-class-filter').addEventListener('change', (e) => {
-    codexFilter.cls = e.target.value;
-    codexLimit = 60;
-    renderCodexTab();
-  });
-  document.getElementById('codex-pool-filter')?.addEventListener('change', (e) => {
-    codexFilter.pool = e.target.value;
-    codexLimit = 60;
-    renderCodexTab();
-  });
-  document.getElementById('codex-trait-filter')?.addEventListener('change', (e) => {
-    codexFilter.trait = e.target.value;
-    codexLimit = 60;
-    renderCodexTab();
-  });
-  document.getElementById('codex-sort-filter')?.addEventListener('change', (e) => {
-    codexFilter.sort = e.target.value;
-    codexLimit = 60;
-    renderCodexTab();
-  });
-  document.getElementById('codex-search')?.addEventListener('input', (e) => {
-    codexFilter.query = e.target.value;
-    codexLimit = 60;
-    renderCodexTab();
-  });
-  document.getElementById('myroom-roster-search')?.addEventListener('input', (e) => {
-    myroomQuery = e.target.value;
-    renderMyRoomTab();
-  });
-  document.getElementById('welfare-search')?.addEventListener('input', (e) => {
-    welfareQuery = e.target.value;
-    renderWelfareShop();
-  });
+    if (tabName === 'codex') renderCodexTab();
+    if (tabName === 'myroom') renderMyRoomTab();
+    if (tabName === 'shop') renderShopTab();
+    if (tabName === 'stats') renderStatsTab();
+    if (tabName === 'settings') renderSettingsTab();
+    if (tabName === 'battle' && typeof window.FgoBattle !== 'undefined') window.FgoBattle.onEnterTab();
+  }
 
-  // 마이룸 상호작용 & 육성
-  document.getElementById('myroom-portrait-wrap').addEventListener('click', () => triggerMyRoomLine(true));
-  document.getElementById('myroom-dialogue-box').addEventListener('click', (e) => {
-    if (e.target.closest('#btn-myroom-talk')) return;
-    triggerMyRoomLine(true);
-  });
-  document.getElementById('btn-myroom-talk').addEventListener('click', () => triggerMyRoomLine(true));
+  function renderAll() {
+    renderResources();
+    renderSummonTab();
+    if (document.getElementById('tab-codex').classList.contains('active')) renderCodexTab();
+    if (document.getElementById('tab-myroom').classList.contains('active')) renderMyRoomTab();
+    if (document.getElementById('tab-shop').classList.contains('active')) renderShopTab();
+    if (document.getElementById('tab-stats').classList.contains('active')) renderStatsTab();
+    if (document.getElementById('tab-settings').classList.contains('active')) renderSettingsTab();
+    if (document.getElementById('tab-battle')?.classList.contains('active') && typeof window.FgoBattle !== 'undefined') {
+      window.FgoBattle.renderLobbyIfIdle();
+    }
+  }
 
-  document.querySelectorAll('#myroom-asc-tabs .asc-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const own = state.servants[state.myRoomServantId];
-      if (!own) return;
-      const asc = Number(btn.dataset.asc);
-      if (asc > own.ascension) return;
+  // ================= 이벤트 바인딩 =================
+  function bindEvents() {
+    // 네비게이션 탭
+    document.querySelectorAll('.nav-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        SoundEngine.click();
+        switchTab(btn.dataset.tab);
+      });
+    });
+
+    // 상단 버튼
+    document.getElementById('btn-open-charge').addEventListener('click', () => {
       SoundEngine.click();
-      own.viewAsc = asc;
+      switchTab('shop');
+    });
+    document.getElementById('btn-mute').addEventListener('click', () => {
+      SoundEngine.toggleMute();
+      renderResources();
+    });
+    document.getElementById('btn-art-mode').addEventListener('click', () => {
+      SoundEngine.click();
+      const mode = ArtRenderer.toggleArtMode();
+      renderAll();
+      toast(mode === 'official' ? '🖼️ 공식 일러스트 모드 (Atlas Academy)' : '🎨 프로시저럴 SVG 팬아트 모드');
+    });
+
+    // 소환 버튼 4종 (성정석/호부) + 프렌드 포인트 3종
+    document.getElementById('btn-pull-ticket').addEventListener('click', () => executeSummon('ticket'));
+    document.getElementById('btn-pull-1').addEventListener('click', () => executeSummon('single'));
+    document.getElementById('btn-pull-11').addEventListener('click', () => executeSummon('multi'));
+    document.getElementById('btn-pull-110').addEventListener('click', () => executeSummon('sim110'));
+    document.getElementById('btn-pull-fp1')?.addEventListener('click', () => executeSummon('fp1'));
+    document.getElementById('btn-pull-fp10')?.addEventListener('click', () => executeSummon('fp10'));
+    document.getElementById('btn-pull-fp100')?.addEventListener('click', () => executeSummon('fp100'));
+
+    // 커스텀 픽업 선택기
+    document.getElementById('custom-pu5-search')?.addEventListener('input', populateCustomPickupSelectors);
+    document.getElementById('custom-pu4-search')?.addEventListener('input', populateCustomPickupSelectors);
+    document.getElementById('custom-pu5-sel')?.addEventListener('change', (e) => {
+      state.customPickup.sv5 = e.target.value;
+      if (BANNER_MAP.bn_custom) BANNER_MAP.bn_custom.pickup5 = [state.customPickup.sv5];
       saveState();
+      renderSummonTab();
+      toast(`🎯 커스텀 ★5 픽업 변경: [${SERVANT_MAP[state.customPickup.sv5]?.name}]`);
+    });
+    document.getElementById('custom-pu4-sel')?.addEventListener('change', (e) => {
+      state.customPickup.sv4 = e.target.value;
+      if (BANNER_MAP.bn_custom) BANNER_MAP.bn_custom.pickup4 = [state.customPickup.sv4];
+      saveState();
+      renderSummonTab();
+      toast(`🎯 커스텀 ★4 픽업 변경: [${SERVANT_MAP[state.customPickup.sv4]?.name}]`);
+    });
+
+    // 소환 옵션
+    document.getElementById('opt-fast-fx').addEventListener('change', (e) => {
+      state.options.fastFx = e.target.checked;
+      saveState();
+    });
+    document.getElementById('opt-skip-fx').addEventListener('change', (e) => {
+      state.options.skipFx = e.target.checked;
+      saveState();
+    });
+    document.getElementById('btn-show-rates').addEventListener('click', openRatesModal);
+    document.getElementById('btn-goto-stats').addEventListener('click', () => switchTab('stats'));
+
+    // 소환 연출 스테이지 클릭 / 스킵 / 키보드
+    document.getElementById('summon-stage-clickzone').addEventListener('click', (e) => {
+      if (e.target.closest('#btn-summon-skip')) return;
+      SummonFX.handleStageClick();
+    });
+    document.getElementById('btn-summon-skip').addEventListener('click', (e) => {
+      e.stopPropagation();
+      SummonFX.skipAll();
+    });
+    window.addEventListener('keydown', (e) => {
+      if (SummonFX.isActive() && (e.code === 'Space' || e.code === 'Enter')) {
+        e.preventDefault();
+        SummonFX.handleStageClick();
+      } else if (e.code === 'Escape') {
+        document.querySelectorAll('.modal-overlay').forEach(m => m.classList.add('hidden'));
+      }
+    });
+
+    // 결과 모달
+    const closeResult = () => document.getElementById('result-modal').classList.add('hidden');
+    document.getElementById('btn-close-result').addEventListener('click', closeResult);
+    document.getElementById('btn-result-close-2').addEventListener('click', closeResult);
+    document.getElementById('btn-result-again').addEventListener('click', () => {
+      closeResult();
+      const nextMode = lastPullMode === 'sim110'
+        ? 'sim110'
+        : (lastPullMode === 'fp100' ? 'fp100' : ((lastPullMode === 'fp10' || lastPullMode === 'fp1') ? 'fp10' : 'multi'));
+      executeSummon(nextMode);
+    });
+
+    // 상세 / 확률 모달 닫기
+    document.getElementById('btn-close-detail').addEventListener('click', () => document.getElementById('detail-modal').classList.add('hidden'));
+    document.getElementById('btn-close-rates').addEventListener('click', () => document.getElementById('rates-modal').classList.add('hidden'));
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) overlay.classList.add('hidden');
+      });
+    });
+
+    // 도감 필터
+    document.querySelectorAll('#codex-type-filter .filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        SoundEngine.click();
+        codexFilter.type = btn.dataset.type;
+        codexLimit = 60;
+        document.querySelectorAll('#codex-type-filter .filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+        renderCodexTab();
+      });
+    });
+    document.querySelectorAll('#codex-rarity-filter .filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        SoundEngine.click();
+        codexFilter.rarity = btn.dataset.rarity;
+        codexLimit = 60;
+        document.querySelectorAll('#codex-rarity-filter .filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+        renderCodexTab();
+      });
+    });
+    document.querySelectorAll('#codex-owned-filter .filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        SoundEngine.click();
+        codexFilter.owned = btn.dataset.owned;
+        codexLimit = 60;
+        document.querySelectorAll('#codex-owned-filter .filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+        renderCodexTab();
+      });
+    });
+    document.getElementById('codex-class-filter').addEventListener('change', (e) => {
+      codexFilter.cls = e.target.value;
+      codexLimit = 60;
+      renderCodexTab();
+    });
+    document.getElementById('codex-pool-filter')?.addEventListener('change', (e) => {
+      codexFilter.pool = e.target.value;
+      codexLimit = 60;
+      renderCodexTab();
+    });
+    document.getElementById('codex-trait-filter')?.addEventListener('change', (e) => {
+      codexFilter.trait = e.target.value;
+      codexLimit = 60;
+      renderCodexTab();
+    });
+    document.getElementById('codex-sort-filter')?.addEventListener('change', (e) => {
+      codexFilter.sort = e.target.value;
+      codexLimit = 60;
+      renderCodexTab();
+    });
+    document.getElementById('codex-search')?.addEventListener('input', (e) => {
+      codexFilter.query = e.target.value;
+      codexLimit = 60;
+      renderCodexTab();
+    });
+    document.getElementById('myroom-roster-search')?.addEventListener('input', (e) => {
+      myroomQuery = e.target.value;
       renderMyRoomTab();
     });
-  });
-
-  document.getElementById('btn-lv-up').addEventListener('click', () => {
-    const sv = SERVANT_MAP[state.myRoomServantId];
-    const own = state.servants[state.myRoomServantId];
-    if (!sv || !own) return;
-    const cap = getMaxLevelCap(sv, own);
-    if (own.level >= cap) {
-      SoundEngine.error();
-      toast(own.ascension < 4 ? '최대 레벨입니다! 먼저 영기재림을 진행하세요.' : '현재 상한입니다! 성배전림으로 Lv.120까지 확장할 수 있습니다.');
-      return;
-    }
-    if (state.embers < 5) {
-      SoundEngine.error();
-      toast('종화가 부족합니다! 배틀 종화 던전이나 다 빈치 공방에서 획득하세요.');
-      return;
-    }
-    const lvQp = getLevelUpQp(sv.rarity, own.level);
-    if (state.qp < lvQp) {
-      SoundEngine.error();
-      toast(`QP가 부족합니다! (필요: ${lvQp.toLocaleString()} QP)`);
-      return;
-    }
-    state.embers -= 5;
-    state.qp -= lvQp;
-    own.level = Math.min(cap, own.level + 10);
-    SoundEngine.levelUp();
-    saveState();
-    renderMyRoomTab();
-    toast(`🔥 ${sv.name} Lv.${own.level} 달성! (-${lvQp.toLocaleString()} QP)`);
-  });
-
-  document.getElementById('btn-ascend').addEventListener('click', () => {
-    const sv = SERVANT_MAP[state.myRoomServantId];
-    const own = state.servants[state.myRoomServantId];
-    if (!sv || !own) return;
-    if (own.ascension >= 4) {
-      toast('이미 최종 영기재림(4차) 상태입니다!');
-      return;
-    }
-    const ascQp = getAscensionQp(sv.rarity, own.ascension);
-    if (state.qp < ascQp) {
-      SoundEngine.error();
-      toast(`QP가 부족합니다! 필요: ${ascQp.toLocaleString()} QP (배틀 보물고에서 파밍하세요!)`);
-      return;
-    }
-    const prevR = getEffectiveRarity(sv, own);
-    state.qp -= ascQp;
-    own.ascension++;
-    own.viewAsc = own.ascension;
-    const nextR = getEffectiveRarity(sv, own);
-    if (sv.variableRarity && nextR > prevR) {
-      if (own.ascension === 4) {
-        state.sq += 3;
-        toast(`👑 ${sv.name} 레어도 승격!! ★★★★ SR → ★★★★★ SSR (팔라딘 해방) · 성정석 +3!`);
-      } else {
-        toast(`✨ ${sv.name} 레어도 승격!! ★★★ R → ★★★★ SR (금테 해방)!`);
-      }
-    } else if (own.ascension === 4) {
-      state.sq += 3;
-      toast(`✨ ${sv.name} 최종 재림 달성!! 일러스트 오라 해방 & 보너스 성정석 +3!`);
-    } else {
-      toast(`✨ ${sv.name} ${own.ascension}차 영기재림 완료!`);
-    }
-    SoundEngine.levelUp();
-    saveState();
-    renderResources();
-    renderMyRoomTab();
-  });
-
-  document.getElementById('btn-grail').addEventListener('click', () => {
-    const sv = SERVANT_MAP[state.myRoomServantId];
-    const own = state.servants[state.myRoomServantId];
-    if (!sv || !own) return;
-    if (own.ascension < 4) {
-      SoundEngine.error();
-      toast('최종 재림(4차) 이후에만 성배전림이 가능합니다!');
-      return;
-    }
-    if (getMaxLevelCap(sv, own) >= 120) {
-      toast('이미 Lv.120 궁극의 성배전림을 완료했습니다!');
-      return;
-    }
-    if (state.grails < 1) {
-      SoundEngine.error();
-      toast('성배가 부족합니다! 다 빈치 공방에서 레어프리즘으로 주조할 수 있습니다.');
-      return;
-    }
-    state.grails -= 1;
-    own.grailsUsed++;
-    own.level = Math.min(120, own.level + 2);
-    SoundEngine.reveal(5, true);
-    saveState();
-    renderResources();
-    renderMyRoomTab();
-    toast(`🏆 ${sv.name} 성배전림 성공! 최대 레벨 Lv.${getMaxLevelCap(sv, own)} 해방!`);
-  });
-
-  document.getElementById('btn-burn-extra').addEventListener('click', () => {
-    const sv = SERVANT_MAP[state.myRoomServantId];
-    const own = state.servants[state.myRoomServantId];
-    if (!sv || !own || own.extraCopies <= 0) {
-      SoundEngine.error();
-      toast('보구 Lv.5를 초과한 잉여 영기가 없습니다.');
-      return;
-    }
-    const cnt = own.extraCopies;
-    own.extraCopies = 0;
-    if (sv.rarity === 5) { state.rp += cnt * 5; state.mp += cnt * 10; }
-    else if (sv.rarity === 4) { state.rp += cnt * 1; state.mp += cnt * 5; }
-    else { state.mp += cnt * 3; }
-    SoundEngine.shopBuy();
-    saveState();
-    renderAll();
-    toast(`♻️ ${sv.name} 잉여 ${cnt}기 변환 완료!`);
-  });
-
-  // 상점 일괄 변환
-  document.getElementById('btn-burn-ce3').addEventListener('click', () => {
-    let gained = 0;
-    CRAFT_ESSENCES.filter(c => c.rarity === 3).forEach(c => {
-      const own = state.ces[c.id];
-      if (own && own.copies > 1) {
-        const burn = own.copies - 1;
-        own.copies = 1;
-        own.extraCopies = 0;
-        gained += burn;
-      }
+    document.getElementById('welfare-search')?.addEventListener('input', (e) => {
+      welfareQuery = e.target.value;
+      renderWelfareShop();
     });
-    if (gained === 0) { toast('변환할 중복 3★ 개념예장이 없습니다.'); return; }
-    state.mp += gained;
-    SoundEngine.shopBuy();
-    saveState();
-    renderAll();
-    toast(`🌶️ 중복 3★ 예장 ${gained}장 변환 → 마나프리즘 +${gained}!`);
-  });
 
-  document.getElementById('btn-burn-ce4').addEventListener('click', () => {
-    let burned = 0;
-    CRAFT_ESSENCES.filter(c => c.rarity === 4).forEach(c => {
-      const own = state.ces[c.id];
-      if (own && own.copies > 5) {
-        const burn = own.copies - 5;
-        own.copies = 5;
-        own.extraCopies = 0;
-        burned += burn;
-      }
+    // 마이룸 상호작용 & 육성
+    document.getElementById('myroom-portrait-wrap').addEventListener('click', () => triggerMyRoomLine(true));
+    document.getElementById('myroom-dialogue-box').addEventListener('click', (e) => {
+      if (e.target.closest('#btn-myroom-talk')) return;
+      triggerMyRoomLine(true);
     });
-    if (burned === 0) { toast('풀돌(5장) 초과 중복 4★ 개념예장이 없습니다.'); return; }
-    state.mp += burned * 3;
-    SoundEngine.shopBuy();
-    saveState();
-    renderAll();
-    toast(`✨ 4★ 예장 ${burned}장 변환 → 마나프리즘 +${burned * 3}!`);
-  });
+    document.getElementById('btn-myroom-talk').addEventListener('click', () => triggerMyRoomLine(true));
 
-  document.getElementById('btn-burn-sv-overflow').addEventListener('click', () => {
-    let mpGain = 0, rpGain = 0, cnt = 0;
-    SERVANTS.forEach(sv => {
-      const own = state.servants[sv.id];
-      if (own && own.extraCopies > 0) {
-        cnt += own.extraCopies;
-        if (sv.rarity === 5) { rpGain += own.extraCopies * 5; mpGain += own.extraCopies * 10; }
-        else if (sv.rarity === 4) { rpGain += own.extraCopies; mpGain += own.extraCopies * 5; }
-        else { mpGain += own.extraCopies * 3; }
-        own.extraCopies = 0;
-      }
+    document.querySelectorAll('#myroom-asc-tabs .asc-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const own = state.servants[state.myRoomServantId];
+        if (!own) return;
+        const asc = Number(btn.dataset.asc);
+        if (asc > own.ascension) return;
+        SoundEngine.click();
+        own.viewAsc = asc;
+        saveState();
+        renderMyRoomTab();
+      });
     });
-    if (cnt === 0) { toast('보구 Lv.5를 초과한 잉여 서번트가 없습니다.'); return; }
-    state.mp += mpGain;
-    state.rp += rpGain;
-    SoundEngine.shopBuy();
-    saveState();
-    renderAll();
-    toast(`♻️ 잉여 서번트 ${cnt}기 변환 → 마프 +${mpGain}, 레프 +${rpGain}!`);
-  });
 
-  // 통계 탭 내보내기 / 초기화
-  document.getElementById('btn-export-save').addEventListener('click', () => {
-    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(state, null, 2));
-    const a = document.createElement('a');
-    a.href = dataStr;
-    a.download = `chaldea_gacha_save_${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    toast('💾 세이브 파일(JSON)을 다운로드했습니다!');
-  });
-
-  document.getElementById('btn-reset-save').addEventListener('click', () => {
-    if (!confirm('정말 모든 가챠 기록, 보유 서번트, 통계를 초기화하시겠습니까?')) return;
-    state = ensureStarterAndCustom(createDefaultState());
-    saveState();
-    renderAll();
-    toast('🗑️ 칼데아 데이터가 초기화되었습니다. (기본 서번트 마슈 지급)');
-  });
-
-  // ================= 설정 탭 이벤트 바인딩 =================
-  document.querySelectorAll('#set-fx-speed .filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      SoundEngine.click();
-      const spd = btn.dataset.speed;
-      state.options.fastFx = (spd === 'fast');
-      state.options.skipFx = (spd === 'skip');
+    document.getElementById('btn-lv-up').addEventListener('click', () => {
+      const sv = SERVANT_MAP[state.myRoomServantId];
+      const own = state.servants[state.myRoomServantId];
+      if (!sv || !own) return;
+      const cap = getMaxLevelCap(sv, own);
+      if (own.level >= cap) {
+        SoundEngine.error();
+        toast(own.ascension < 4 ? '최대 레벨입니다! 먼저 영기재림을 진행하세요.' : '현재 상한입니다! 성배전림으로 Lv.120까지 확장할 수 있습니다.');
+        return;
+      }
+      if (state.embers < 5) {
+        SoundEngine.error();
+        toast('종화가 부족합니다! 배틀 종화 던전이나 다 빈치 공방에서 획득하세요.');
+        return;
+      }
+      const lvQp = getLevelUpQp(sv.rarity, own.level);
+      if (state.qp < lvQp) {
+        SoundEngine.error();
+        toast(`QP가 부족합니다! (필요: ${lvQp.toLocaleString()} QP)`);
+        return;
+      }
+      state.embers -= 5;
+      state.qp -= lvQp;
+      own.level = Math.min(cap, own.level + 10);
+      SoundEngine.levelUp();
       saveState();
-      renderAll();
+      renderMyRoomTab();
+      toast(`🔥 ${sv.name} Lv.${own.level} 달성! (-${lvQp.toLocaleString()} QP)`);
     });
-  });
 
-  document.getElementById('set-auto-skip-common').addEventListener('change', (e) => {
-    state.options.autoSkipCommon = e.target.checked;
-    saveState();
-    toast(e.target.checked ? '⚡ ★3 중복 카드는 연출을 자동 건너뜁니다.' : '✨ 모든 카드 소환 연출을 표시합니다.');
-  });
-
-  document.getElementById('set-high-particles').addEventListener('change', (e) => {
-    state.options.highParticles = e.target.checked;
-    saveState();
-  });
-
-  document.getElementById('set-sfx-enabled').addEventListener('change', (e) => {
-    SoundEngine.setMuted(!e.target.checked);
-    renderResources();
-    if (e.target.checked) SoundEngine.click();
-  });
-
-  document.getElementById('set-sfx-volume').addEventListener('input', (e) => {
-    const pct = Number(e.target.value);
-    SoundEngine.setVolume(pct / 100);
-    document.getElementById('set-vol-label').textContent = `${pct}%`;
-  });
-  document.getElementById('set-sfx-volume').addEventListener('change', () => SoundEngine.click());
-
-  document.querySelectorAll('#set-text-speed .filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      SoundEngine.click();
-      state.options.textSpeed = btn.dataset.ts;
-      saveState();
-      renderSettingsTab();
-    });
-  });
-
-  document.querySelectorAll('#set-art-mode .filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      SoundEngine.click();
-      ArtRenderer.setArtMode(btn.dataset.art);
-      renderAll();
-    });
-  });
-
-  // 연출 미리보기 테스트 4종
-  document.getElementById('btn-test-fx-normal').addEventListener('click', () => previewSummonFX('normal'));
-  document.getElementById('btn-test-fx-gold').addEventListener('click', () => previewSummonFX('gold'));
-  document.getElementById('btn-test-fx-rainbow').addEventListener('click', () => previewSummonFX('rainbow'));
-  document.getElementById('btn-test-fx-spark').addEventListener('click', () => previewSummonFX('spark'));
-
-  // 설정 탭 데이터 관리
-  document.getElementById('btn-set-export').addEventListener('click', () => {
-    document.getElementById('btn-export-save').click();
-  });
-
-  document.getElementById('input-import-save').addEventListener('change', (e) => {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const parsed = JSON.parse(reader.result);
-        if (!parsed || typeof parsed.sq !== 'number' || !parsed.stats) {
-          throw new Error('invalid save');
+    document.getElementById('btn-ascend').addEventListener('click', () => {
+      const sv = SERVANT_MAP[state.myRoomServantId];
+      const own = state.servants[state.myRoomServantId];
+      if (!sv || !own) return;
+      if (own.ascension >= 4) {
+        toast('이미 최종 영기재림(4차) 상태입니다!');
+        return;
+      }
+      const ascQp = getAscensionQp(sv.rarity, own.ascension);
+      if (state.qp < ascQp) {
+        SoundEngine.error();
+        toast(`QP가 부족합니다! 필요: ${ascQp.toLocaleString()} QP (배틀 보물고에서 파밍하세요!)`);
+        return;
+      }
+      const prevR = getEffectiveRarity(sv, own);
+      state.qp -= ascQp;
+      own.ascension++;
+      own.viewAsc = own.ascension;
+      const nextR = getEffectiveRarity(sv, own);
+      if (sv.variableRarity && nextR > prevR) {
+        if (own.ascension === 4) {
+          state.sq += 3;
+          toast(`👑 ${sv.name} 레어도 승격!! ★★★★ SR → ★★★★★ SSR (팔라딘 해방) · 성정석 +3!`);
+        } else {
+          toast(`✨ ${sv.name} 레어도 승격!! ★★★ R → ★★★★ SR (금테 해방)!`);
         }
-        const def = createDefaultState();
-        state = ensureStarterAndCustom({
-          ...def,
-          ...parsed,
-          customPickup: { ...def.customPickup, ...(parsed.customPickup || {}) },
-          options: { ...def.options, ...(parsed.options || {}) },
-          stats: { ...def.stats, ...(parsed.stats || {}) }
-        });
+      } else if (own.ascension === 4) {
+        state.sq += 3;
+        toast(`✨ ${sv.name} 최종 재림 달성!! 일러스트 오라 해방 & 보너스 성정석 +3!`);
+      } else {
+        toast(`✨ ${sv.name} ${own.ascension}차 영기재림 완료!`);
+      }
+      SoundEngine.levelUp();
+      saveState();
+      renderResources();
+      renderMyRoomTab();
+    });
+
+    document.getElementById('btn-grail').addEventListener('click', () => {
+      const sv = SERVANT_MAP[state.myRoomServantId];
+      const own = state.servants[state.myRoomServantId];
+      if (!sv || !own) return;
+      if (own.ascension < 4) {
+        SoundEngine.error();
+        toast('최종 재림(4차) 이후에만 성배전림이 가능합니다!');
+        return;
+      }
+      if (getMaxLevelCap(sv, own) >= 120) {
+        toast('이미 Lv.120 궁극의 성배전림을 완료했습니다!');
+        return;
+      }
+      if (state.grails < 1) {
+        SoundEngine.error();
+        toast('성배가 부족합니다! 다 빈치 공방에서 레어프리즘으로 주조할 수 있습니다.');
+        return;
+      }
+      state.grails -= 1;
+      own.grailsUsed++;
+      own.level = Math.min(120, own.level + 2);
+      SoundEngine.reveal(5, true);
+      saveState();
+      renderResources();
+      renderMyRoomTab();
+      toast(`🏆 ${sv.name} 성배전림 성공! 최대 레벨 Lv.${getMaxLevelCap(sv, own)} 해방!`);
+    });
+
+    document.getElementById('btn-burn-extra').addEventListener('click', () => {
+      const sv = SERVANT_MAP[state.myRoomServantId];
+      const own = state.servants[state.myRoomServantId];
+      if (!sv || !own || own.extraCopies <= 0) {
+        SoundEngine.error();
+        toast('보구 Lv.5를 초과한 잉여 영기가 없습니다.');
+        return;
+      }
+      const cnt = own.extraCopies;
+      own.extraCopies = 0;
+      if (sv.rarity === 5) { state.rp += cnt * 5; state.mp += cnt * 10; }
+      else if (sv.rarity === 4) { state.rp += cnt * 1; state.mp += cnt * 5; }
+      else { state.mp += cnt * 3; }
+      SoundEngine.shopBuy();
+      saveState();
+      renderAll();
+      toast(`♻️ ${sv.name} 잉여 ${cnt}기 변환 완료!`);
+    });
+
+    // 상점 일괄 변환
+    document.getElementById('btn-burn-ce3').addEventListener('click', () => {
+      let gained = 0;
+      CRAFT_ESSENCES.filter(c => c.rarity === 3).forEach(c => {
+        const own = state.ces[c.id];
+        if (own && own.copies > 1) {
+          const burn = own.copies - 1;
+          own.copies = 1;
+          own.extraCopies = 0;
+          gained += burn;
+        }
+      });
+      if (gained === 0) { toast('변환할 중복 3★ 개념예장이 없습니다.'); return; }
+      state.mp += gained;
+      SoundEngine.shopBuy();
+      saveState();
+      renderAll();
+      toast(`🌶️ 중복 3★ 예장 ${gained}장 변환 → 마나프리즘 +${gained}!`);
+    });
+
+    document.getElementById('btn-burn-ce4').addEventListener('click', () => {
+      let burned = 0;
+      CRAFT_ESSENCES.filter(c => c.rarity === 4).forEach(c => {
+        const own = state.ces[c.id];
+        if (own && own.copies > 5) {
+          const burn = own.copies - 5;
+          own.copies = 5;
+          own.extraCopies = 0;
+          burned += burn;
+        }
+      });
+      if (burned === 0) { toast('풀돌(5장) 초과 중복 4★ 개념예장이 없습니다.'); return; }
+      state.mp += burned * 3;
+      SoundEngine.shopBuy();
+      saveState();
+      renderAll();
+      toast(`✨ 4★ 예장 ${burned}장 변환 → 마나프리즘 +${burned * 3}!`);
+    });
+
+    document.getElementById('btn-burn-sv-overflow').addEventListener('click', () => {
+      let mpGain = 0, rpGain = 0, cnt = 0;
+      SERVANTS.forEach(sv => {
+        const own = state.servants[sv.id];
+        if (own && own.extraCopies > 0) {
+          cnt += own.extraCopies;
+          if (sv.rarity === 5) { rpGain += own.extraCopies * 5; mpGain += own.extraCopies * 10; }
+          else if (sv.rarity === 4) { rpGain += own.extraCopies; mpGain += own.extraCopies * 5; }
+          else { mpGain += own.extraCopies * 3; }
+          own.extraCopies = 0;
+        }
+      });
+      if (cnt === 0) { toast('보구 Lv.5를 초과한 잉여 서번트가 없습니다.'); return; }
+      state.mp += mpGain;
+      state.rp += rpGain;
+      SoundEngine.shopBuy();
+      saveState();
+      renderAll();
+      toast(`♻️ 잉여 서번트 ${cnt}기 변환 → 마프 +${mpGain}, 레프 +${rpGain}!`);
+    });
+
+    // 통계 탭 내보내기 / 초기화
+    document.getElementById('btn-export-save').addEventListener('click', () => {
+      const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(state, null, 2));
+      const a = document.createElement('a');
+      a.href = dataStr;
+      a.download = `chaldea_gacha_save_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      toast('💾 세이브 파일(JSON)을 다운로드했습니다!');
+    });
+
+    document.getElementById('btn-reset-save').addEventListener('click', () => {
+      if (!confirm('정말 모든 가챠 기록, 보유 서번트, 통계를 초기화하시겠습니까?')) return;
+      state = ensureStarterAndCustom(createDefaultState());
+      saveState();
+      renderAll();
+      toast('🗑️ 칼데아 데이터가 초기화되었습니다. (기본 서번트 마슈 지급)');
+    });
+
+    // ================= 설정 탭 이벤트 바인딩 =================
+    document.querySelectorAll('#set-fx-speed .filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        SoundEngine.click();
+        const spd = btn.dataset.speed;
+        state.options.fastFx = (spd === 'fast');
+        state.options.skipFx = (spd === 'skip');
         saveState();
         renderAll();
-        SoundEngine.levelUp();
-        toast('📂 세이브 데이터를 성공적으로 불러왔습니다!');
-      } catch (_) {
-        SoundEngine.error();
-        toast('⚠️ 올바른 칼데아 세이브 JSON 파일이 아닙니다.');
-      }
-    };
-    reader.readAsText(file);
-    e.target.value = '';
-  });
+      });
+    });
 
-  document.getElementById('btn-set-clear-custom-art').addEventListener('click', () => {
-    ArtRenderer.clearAllCustomImages();
-    renderAll();
-    toast('🖼️ 커스텀 이미지를 모두 공식 일러스트로 복원했습니다.');
-  });
+    document.getElementById('set-auto-skip-common').addEventListener('change', (e) => {
+      state.options.autoSkipCommon = e.target.checked;
+      saveState();
+      toast(e.target.checked ? '⚡ ★3 중복 카드는 연출을 자동 건너뜁니다.' : '✨ 모든 카드 소환 연출을 표시합니다.');
+    });
 
-  document.getElementById('btn-set-reset-stats').addEventListener('click', () => {
-    if (!confirm('보유 서번트와 성정석은 유지하고, 가챠 통계/기록만 초기화할까요?')) return;
-    state.stats = createDefaultState().stats;
-    saveState();
-    renderAll();
-    toast('📊 가챠 통계가 초기화되었습니다.');
-  });
+    document.getElementById('set-high-particles').addEventListener('change', (e) => {
+      state.options.highParticles = e.target.checked;
+      saveState();
+    });
 
-  document.getElementById('btn-set-reset-all').addEventListener('click', () => {
-    document.getElementById('btn-reset-save').click();
-  });
-}
+    document.getElementById('set-sfx-enabled').addEventListener('change', (e) => {
+      SoundEngine.setMuted(!e.target.checked);
+      renderResources();
+      if (e.target.checked) SoundEngine.click();
+    });
 
-// 배틀 모듈(battle.js)과 상태를 안전하게 공유하는 브리지
-function getTodayKey() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
+    document.getElementById('set-sfx-volume').addEventListener('input', (e) => {
+      const pct = Number(e.target.value);
+      SoundEngine.setVolume(pct / 100);
+      document.getElementById('set-vol-label').textContent = `${pct}%`;
+    });
+    document.getElementById('set-sfx-volume').addEventListener('change', () => SoundEngine.click());
 
-function refreshCommandSpellsDaily() {
-  const today = getTodayKey();
-  if (state.lastSpellResetDate !== today) {
-    state.commandSpells = 3;
-    state.lastSpellResetDate = today;
-    saveState();
+    document.querySelectorAll('#set-text-speed .filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        SoundEngine.click();
+        state.options.textSpeed = btn.dataset.ts;
+        saveState();
+        renderSettingsTab();
+      });
+    });
+
+    document.querySelectorAll('#set-art-mode .filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        SoundEngine.click();
+        ArtRenderer.setArtMode(btn.dataset.art);
+        renderAll();
+      });
+    });
+
+    // 연출 미리보기 테스트 4종
+    document.getElementById('btn-test-fx-normal').addEventListener('click', () => previewSummonFX('normal'));
+    document.getElementById('btn-test-fx-gold').addEventListener('click', () => previewSummonFX('gold'));
+    document.getElementById('btn-test-fx-rainbow').addEventListener('click', () => previewSummonFX('rainbow'));
+    document.getElementById('btn-test-fx-spark').addEventListener('click', () => previewSummonFX('spark'));
+
+    // 설정 탭 데이터 관리
+    document.getElementById('btn-set-export').addEventListener('click', () => {
+      document.getElementById('btn-export-save').click();
+    });
+
+    document.getElementById('input-import-save').addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(reader.result);
+          if (!parsed || typeof parsed.sq !== 'number' || !parsed.stats) {
+            throw new Error('invalid save');
+          }
+          const def = createDefaultState();
+          state = ensureStarterAndCustom({
+            ...def,
+            ...parsed,
+            customPickup: { ...def.customPickup, ...(parsed.customPickup || {}) },
+            options: { ...def.options, ...(parsed.options || {}) },
+            stats: { ...def.stats, ...(parsed.stats || {}) }
+          });
+          saveState();
+          renderAll();
+          SoundEngine.levelUp();
+          toast('📂 세이브 데이터를 성공적으로 불러왔습니다!');
+        } catch (_) {
+          SoundEngine.error();
+          toast('⚠️ 올바른 칼데아 세이브 JSON 파일이 아닙니다.');
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    });
+
+    document.getElementById('btn-set-clear-custom-art').addEventListener('click', () => {
+      ArtRenderer.clearAllCustomImages();
+      renderAll();
+      toast('🖼️ 커스텀 이미지를 모두 공식 일러스트로 복원했습니다.');
+    });
+
+    document.getElementById('btn-set-reset-stats').addEventListener('click', () => {
+      if (!confirm('보유 서번트와 성정석은 유지하고, 가챠 통계/기록만 초기화할까요?')) return;
+      state.stats = createDefaultState().stats;
+      saveState();
+      renderAll();
+      toast('📊 가챠 통계가 초기화되었습니다.');
+    });
+
+    document.getElementById('btn-set-reset-all').addEventListener('click', () => {
+      document.getElementById('btn-reset-save').click();
+    });
   }
-  return state.commandSpells;
-}
-refreshCommandSpellsDaily();
 
-window.ChaldeaBridge = {
-  getState: () => state,
-  getCommandSpells: () => refreshCommandSpellsDaily(),
-  consumeCommandSpells(count) {
-    refreshCommandSpellsDaily();
-    if (state.commandSpells < count) return false;
-    state.commandSpells -= count;
-    saveState();
-    return true;
-  },
-  spendSqForRevive() {
-    if (state.sq < 1) return false;
-    state.sq -= 1;
-    state.stats.sqSpent += 1;
-    saveState();
-    renderResources();
-    return true;
-  },
-  switchToBattleTab: () => switchTab('battle'),
-  grantBattleRewards(rewards, partyServantIds) {
-    if (rewards.sq) state.sq += rewards.sq;
-    if (rewards.embers) state.embers += rewards.embers;
-    if (rewards.qp) state.qp += rewards.qp;
-    if (rewards.mp) state.mp += rewards.mp;
-    if (rewards.rp) state.rp += rewards.rp;
-    if (rewards.fp) state.fp = (state.fp || 0) + rewards.fp;
-    if (rewards.tickets) state.tickets += rewards.tickets;
-    if (rewards.grails) state.grails += rewards.grails;
+  // 배틀 모듈(battle.js)과 상태를 안전하게 공유하는 브리지
+  function getTodayKey() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
 
   function refreshCommandSpellsDaily() {
     const today = getTodayKey();
@@ -2673,7 +2616,7 @@ window.ChaldeaBridge = {
     toast
   };
 
-// 초기화 시작
-bindEvents();
-renderAll();
-}) ();
+  // 초기화 시작
+  bindEvents();
+  renderAll();
+})();
