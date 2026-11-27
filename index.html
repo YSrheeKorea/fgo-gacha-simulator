@@ -131,9 +131,9 @@
               <input type="checkbox" id="opt-fast-fx">
               <span>⚡ 빠른 연출</span>
             </label>
-            <label class="toggle-chip">
+            <label class="toggle-chip" title="원작 FGO 고증: 은테(★3)·동테(★1~2)만 스킵하고 금테(★4~5) 이상은 그대로 연출합니다">
               <input type="checkbox" id="opt-skip-fx">
-              <span>⏭️ 연출 즉시 스킵</span>
+              <span>⏭️ 은·동테 스킵 (금테 표시)</span>
             </label>
             <button class="text-btn" id="btn-show-rates">📋 소환 상세 / 확률표</button>
           </div>
@@ -596,7 +596,7 @@
             <div class="filter-group" id="set-fx-speed">
               <button class="filter-btn active" data-speed="normal">원작 고증</button>
               <button class="filter-btn" data-speed="fast">빠르게</button>
-              <button class="filter-btn" data-speed="skip">즉시 스킵</button>
+              <button class="filter-btn" data-speed="skip">은·동테 스킵</button>
             </div>
           </div>
 
@@ -722,7 +722,7 @@
       <div class="summon-stage-top">
         <div class="summon-progress" id="summon-progress">1 / 11</div>
         <div class="summon-servant-banner" id="summon-servant-banner"></div>
-        <button class="skip-btn" id="btn-summon-skip">SKIP ⏭️</button>
+        <button class="skip-btn" id="btn-summon-skip" title="원작 고증: 은테·동테만 스킵하고 금테(★4~5) 이상은 그대로 표시합니다">SKIP (은·동테) ⏭️</button>
       </div>
 
       <div class="summon-event-tag" id="summon-event-tag"></div>
@@ -880,8 +880,8 @@
   <script src="kr_lore.js?v=6"></script>
   <script src="audio.js"></script>
   <script src="art.js?v=10"></script>
-  <script src="summon_fx.js?v=7"></script>
-  <script src="game.js?v=11"></script>
+  <script src="summon_fx.js?v=12"></script>
+  <script src="game.js?v=12"></script>
   <script src="battle.js?v=11"></script>
   <script src="pwa.js"></script>
 </body>

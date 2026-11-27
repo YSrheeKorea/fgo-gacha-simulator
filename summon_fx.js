@@ -26,7 +26,13 @@ const SummonFX = (() => {
   let phase = 'idle'; // 'orbs' | 'back' | 'spark' | 'revealed'
   let timerIds = [];
   let finishCallback = null;
-  let opts = { fastMode: false, autoSkipCommon: false, highParticles: true, textSpeed: 'normal' };
+  let skipCommonMode = false; // 원작 FGO 고증: 스킵 시 은테(★3)·동테(★1~2)만 스킵, 금테(★4~5) 이상은 그대로 연출!
+  let opts = { fastMode: false, autoSkipCommon: false, skipCommonOnly: false, highParticles: true, textSpeed: 'normal' };
+
+  function isGoldOrHigher(roll) {
+    if (!roll || !roll.item) return false;
+    return roll.item.rarity >= 4 || (roll.type === 'servant' && roll.item.rarity === 0);
+  }
 
   // 타자기 효과 상태
   let typeTimer = null;
@@ -391,8 +397,18 @@ const SummonFX = (() => {
 
   // ================= 카드별 원작 소환 시퀀스 =================
   function startCardSequence(roll) {
-    // 3성/중복 자동 스킵 옵션 처리 (★4 이상이나 NEW는 반드시 연출!)
-    if (opts.autoSkipCommon && queue.length > 1 && roll.item.rarity <= 3 && !roll.isNew) {
+    // 원작 FGO 고증: 스킵 모드 시 은테(★3)·동테(★1~2)만 건너뛰고 금테(★4~5) 이상은 그대로 연출!
+    if (skipCommonMode && !isGoldOrHigher(roll)) {
+      index++;
+      if (index >= queue.length) {
+        finish();
+      } else {
+        startCardSequence(queue[index]);
+      }
+      return;
+    }
+    // 3성 이하 중복 자동 스킵 옵션 처리 (금테 이상이나 NEW는 반드시 연출!)
+    if (opts.autoSkipCommon && queue.length > 1 && !isGoldOrHigher(roll) && !roll.isNew) {
       index++;
       if (index >= queue.length) {
         finish();
@@ -610,7 +626,29 @@ const SummonFX = (() => {
   function skipAll() {
     if (!active) return;
     SoundEngine.click();
-    finish();
+    // 원작 FGO 고증: 스킵 버튼을 눌러도 은테(★3)·동테(★1~2)만 스킵되고, 금테(★4~5) 이상은 그대로 등장!
+    skipCommonMode = true;
+    const cur = queue[index];
+    if (isGoldOrHigher(cur)) {
+      if (phase !== 'revealed') {
+        revealCurrentCard();
+        return;
+      }
+      if (!typingDone) {
+        stopTypewriter(true);
+        return;
+      }
+    }
+    clearTimers();
+    index++;
+    while (index < queue.length && !isGoldOrHigher(queue[index])) {
+      index++;
+    }
+    if (index >= queue.length) {
+      finish();
+    } else {
+      startCardSequence(queue[index]);
+    }
   }
 
   function finish() {
@@ -635,9 +673,11 @@ const SummonFX = (() => {
     opts = {
       fastMode: !!options.fastMode,
       autoSkipCommon: !!options.autoSkipCommon,
+      skipCommonOnly: !!options.skipCommonOnly,
       highParticles: options.highParticles !== false,
       textSpeed: options.textSpeed || 'normal'
     };
+    skipCommonMode = !!options.skipCommonOnly;
     queue = results;
     index = 0;
     finishCallback = onComplete;

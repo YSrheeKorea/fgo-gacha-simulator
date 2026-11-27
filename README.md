@@ -17,7 +17,7 @@
 - **[HIDDEN_STATUS.md](./HIDDEN_STATUS.md)** — **전체 487기 히든 스테이터스(성별·속성·성향·특성) & 보구 특공(1.5×) 명세표**
 - **[GAME_SPEC.md](./GAME_SPEC.md)** — 가챠 확률·천장, 프렌드 가챠, 커스텀 픽업, 6인 FGO 배틀 공식(버스터/아츠/퀵, 체인 7종, 클래스 상성, 히든 속성, 특공, 적 NP 보정, 스타 집중도, 영주 3획, ★0~★5 공식 QP 강화표) 전체 명세서
 - **[ARCHITECTURE.md](./ARCHITECTURE.md)** — 파일 구조, 모듈 아키텍처, 데이터 출처, `localStorage` 세이브 스키마 및 PWA 캐시 설계
-- **[CHANGELOG.md](./CHANGELOG.md)** — 버전별 개발 및 패치 이력 (`v1` ~ `v11`)
+- **[CHANGELOG.md](./CHANGELOG.md)** — 버전별 개발 및 패치 이력 (`v1` ~ `v12`)
 
 ---
 

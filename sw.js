@@ -2,7 +2,7 @@
 // CHALDEA SUMMON SIMULATOR — OFFLINE-READY PWA SERVICE WORKER (sw.js)
 // Strategy: Network-First for core app files + Cache-First for Atlas Academy card images
 // ============================================================
-const CACHE_NAME = 'chaldea-gacha-pwa-v11';
+const CACHE_NAME = 'chaldea-gacha-pwa-v12';
 const IMG_CACHE_NAME = 'chaldea-gacha-art-v1';
 
 const PRECACHE_ASSETS = [
@@ -17,8 +17,8 @@ const PRECACHE_ASSETS = [
   './kr_lore.js?v=6',
   './audio.js',
   './art.js?v=10',
-  './summon_fx.js?v=7',
-  './game.js?v=11',
+  './summon_fx.js?v=12',
+  './game.js?v=12',
   './battle.js?v=11',
   './pwa.js',
   './icons/icon-192.png',
