@@ -19,10 +19,11 @@ fgo-gacha/
 ├── audio.js                # Web Audio API 프로시저럴 사운드 엔진 (볼륨 제어 · 음소거 · FGO 효과음)
 ├── art.js                  # 공식 일러스트 + ★0 흑테 / ★1~2 동테 / ★3 은테 / ★4~5 금테 SVG 프레임 & 오프라인 폴백
 ├── summon_fx.js            # Canvas 2D 3D 바닥 소환진 · 3광구 회전 · 치직 승격 · 타자기 대사창 연출 엔진
+├── terminal.js             # FGO 터미널 엔진 (마스터 Lv.1~200 AP 5분 회복 · 사과/묘목 · 지구본 순환 · 오딜 콜/관위대관전 · 메인 레코드/인터루드 8종)
 ├── game.js                 # 성정석/커스텀/프렌드 가챠 엔진, 487 마테리얼 도감, 마이룸 육성(★0~★5), 순례의 축제, 통계, 설정, ChaldeaBridge
 ├── battle.js               # 6인 FGO 커맨드 카드 배틀 엔진 (상성·히든속성·Beast/UnBeast·영주·FP 보상·자동저장 이어하기)
 ├── pwa.js                  # PWA 원클릭 설치(beforeinstallprompt) & iOS 홈 화면 안내 컨트롤러
-├── sw.js                   # 오프라인 지원 Service Worker (v22 · 앱 파일 Network-First + 일러스트 Cache-First)
+├── sw.js                   # 오프라인 지원 Service Worker (v23 · 앱 파일 Network-First + 일러스트 Cache-First)
 ├── manifest.webmanifest    # PWA 스탠드얼론 앱 매니페스트
 ├── icons/                  # 전용 PNG 앱 아이콘 (192×192, 512×512, 180×180 Apple Touch)
 ├── .nojekyll               # GitHub Pages 정적 파일 직서빙 설정
@@ -40,6 +41,7 @@ fgo-gacha/
 ├── BERSERKER_CLASS.md      # 버서커 클래스 49기 완전 명세서 · 커맨드 5타입 · 신준/모르간/수부키/수캐밥/헤라클레스/소쥬로 기믹 · 보구 강화(🗡️)
 ├── EXTRA_CLASSES.md        # 엑스트라 클래스 8종 106기 완전 명세서 · 실더~비스트/언비스트 상성·히든스탯·전설 기믹 · 보구 강화(🗡️)
 ├── CHALDEA_GATE.md         # 칼데아 게이트 6대 카테고리 · 공식 요일 스케줄 · 종화/수련장/보물창고 극급 · 마술예장 퀘스트 3종 명세서
+├── TERMINAL.md             # 칼데아 터미널 · 마스터 Lv.1~200 AP · 사과/묘목 · 오딜 콜/관위대관전 · 메인 레코드/인터루드 명세서
 ├── HIDDEN_STATUS.md        # 전체 487기 히든 스테이터스(성별·속성·성향·특성) & 보구 특공 명세표
 ├── GAME_SPEC.md            # 가챠·프렌드 소환·배틀·상성·특공·QP 강화 상세 명세서
 ├── ARCHITECTURE.md         # 본 아키텍처 문서

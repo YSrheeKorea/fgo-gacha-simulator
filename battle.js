@@ -3770,6 +3770,18 @@ window.FgoBattle = (() => {
     },
     renderLobbyIfIdle() {
       if (!battle) renderLobby();
+    },
+    openCategory(catId) {
+      if (catId) {
+        selectedGateTab = catId;
+        const first = QUESTS.find(q => q.category === catId);
+        if (first) selectedQuestId = first.id;
+      }
+      if (!battle) renderLobby();
+    },
+    getPartyServantIds() {
+      ensureDefaultParty();
+      return partySlots.map(p => p && p.id).filter(Boolean);
     }
   };
 })();

@@ -139,6 +139,28 @@
         if (!st.mysticCodes.mc_chaldea) st.mysticCodes.mc_chaldea = { exp: 0, level: 1 };
       }
     }
+    // 원작 FGO 터미널 마스터 상태 초기화 (기존 세이브 100% 호환)
+    if (!st.terminal || typeof st.terminal !== 'object') {
+      st.terminal = {
+        masterLevel: 120,
+        masterExp: 0,
+        masterGender: 'female',
+        part1Cleared: true,
+        ap: 135,
+        lastApTick: Date.now(),
+        fragments: 21,
+        apples: { gold: 10, silver: 15, bronze: 20, blue: 5, sapling: 10 },
+        stormPods: 3,
+        lastPodResetDate: '',
+        starSand: 0,
+        dailyGiftDate: '',
+        grandRedMode: false,
+        claimedMissions: {},
+        freeQuestClears: {},
+        claimedInterludes: {}
+      };
+    }
+    if (!st.terminal.apples) st.terminal.apples = { gold: 10, silver: 15, bronze: 20, blue: 5, sapling: 10 };
     return st;
   }
 
@@ -1972,6 +1994,7 @@
     document.querySelectorAll('.tab-panel').forEach(sec => {
       sec.classList.toggle('active', sec.id === `tab-${tabName}`);
     });
+    if (tabName === 'terminal' && typeof window.FgoTerminal !== 'undefined') window.FgoTerminal.render();
     if (tabName === 'codex') renderCodexTab();
     if (tabName === 'myroom') renderMyRoomTab();
     if (tabName === 'shop') renderShopTab();
@@ -1983,6 +2006,9 @@
   function renderAll() {
     renderResources();
     renderSummonTab();
+    if (document.getElementById('tab-terminal')?.classList.contains('active') && typeof window.FgoTerminal !== 'undefined') {
+      window.FgoTerminal.render();
+    }
     if (document.getElementById('tab-codex').classList.contains('active')) renderCodexTab();
     if (document.getElementById('tab-myroom').classList.contains('active')) renderMyRoomTab();
     if (document.getElementById('tab-shop').classList.contains('active')) renderShopTab();
@@ -2629,11 +2655,35 @@
             toast(`🧤 마술예장 퀘스트 클리어! [${MYSTIC_CODE_MAP[rewards.unlockMcId].name}] 해금 완료!!`);
           }
         }
+        if (typeof window.FgoTerminal !== 'undefined' && window.FgoTerminal.grantMasterExp) {
+          window.FgoTerminal.grantMasterExp(Math.max(15000, Math.round((rewards.mcExp || 100000) * 0.2)));
+        }
         saveState();
         renderResources();
         return mcRes;
       },
       getClearedQuestCount: (qid) => (state.clearedQuests && state.clearedQuests[qid]) || 0,
+      getTerminalState: () => state.terminal,
+      saveState: () => saveState(),
+      renderAll: () => renderAll(),
+      openBattleCategory(catId) {
+        switchTab('battle');
+        if (window.FgoBattle && typeof window.FgoBattle.openCategory === 'function') {
+          window.FgoBattle.openCategory(catId);
+        }
+      },
+      grantWelfareServant(svId) {
+        if (!SERVANT_MAP[svId]) return false;
+        if (!state.servants[svId]) {
+          state.servants[svId] = { copies: 1, extraCopies: 0, npLevel: 1, level: 1, ascension: 1, grailsUsed: 0, bond: 1, bondExp: 0, viewAsc: 1 };
+        } else {
+          state.servants[svId].copies++;
+          if (state.servants[svId].npLevel < 5) state.servants[svId].npLevel++;
+          else state.servants[svId].extraCopies++;
+        }
+        saveState();
+        return true;
+      },
       toast
     };
 
