@@ -426,3 +426,168 @@ window.FGO_FREE_QUESTS_P1B = [
     ]
   }
 ];
+
+// =========================================================================
+// FGO Part 1.5 Free Quests (v35)
+// 아종특이점Ⅰ 신주쿠 · Ⅱ 아가르타 · Ⅲ 시모사노쿠니 · Ⅳ 세일럼
+// =========================================================================
+window.FGO_FREE_QUESTS_P15 = [
+  // ---- 신주쿠 ----
+  {
+    id: 'fq_shinjuku_station', category: 'free_p15', chapter: '1.5부 신주쿠',
+    name: '🗺️ 신주쿠 역 — 콘크리트 던전',
+    desc: 'AP 21 · 추천 Lv.74 · 마술수액 최고 파밍 성지!',
+    difficulty: 'AP 21 · 추천 Lv.74',
+    rewardText: '🧪 마술수액 ×3 · 🪙 10,140 QP',
+    drops: [['마술수액', 3]],
+    rewards: { sq: 1, embers: 5, qp: 10140, fp: 900, mcExp: 20056 },
+    waves: [
+      [{ name: '말벌 A', cls: 'Archer', attr: '인(人)', hp: 24225, atk: 1200, maxCharge: 3, emoji: '🔫' }, { name: '말벌 B', cls: 'Archer', attr: '인(人)', hp: 13867, atk: 980, maxCharge: 3, emoji: '🔫' }],
+      [{ name: '말벌 C', cls: 'Archer', attr: '인(人)', hp: 30937, atk: 1350, maxCharge: 3, emoji: '🔫' }, { name: '말벌 A', cls: 'Archer', attr: '인(人)', hp: 17991, atk: 1080, maxCharge: 3, emoji: '🔫' }],
+      [{ name: '말벌 B', cls: 'Archer', attr: '인(人)', hp: 115889, atk: 2300, maxCharge: 3, emoji: '🔫' }, { name: '말벌 A', cls: 'Archer', attr: '인(人)', hp: 92977, atk: 2000, maxCharge: 3, emoji: '🔫' }]
+    ]
+  },
+  {
+    id: 'fq_shinjuku_gyoen', category: 'free_p15', chapter: '1.5부 신주쿠',
+    name: '🗺️ 신주쿠 교엔 — 데몬즈 가든',
+    desc: 'AP 21 · 추천 Lv.80 · 만신의 심장 & 마술수액 파밍!',
+    difficulty: 'AP 21 · 추천 Lv.80',
+    rewardText: '❤️‍🔥 만신의 심장 ×1 · 🧪 마술수액 ×2 · 🪙 10,920 QP',
+    drops: [['만신의 심장', 1], ['마술수액', 2]],
+    rewards: { sq: 1, embers: 5, qp: 10920, fp: 950, mcExp: 23752 },
+    waves: [
+      [{ name: '야쿠자 A', cls: 'Caster', attr: '인(人)', hp: 19597, atk: 1100, maxCharge: 4, emoji: '🕶️' }, { name: '야쿠자 B', cls: 'Caster', attr: '인(人)', hp: 21394, atk: 1150, maxCharge: 4, emoji: '🕶️' }],
+      [{ name: '야쿠자 A', cls: 'Caster', attr: '인(人)', hp: 31784, atk: 1400, maxCharge: 4, emoji: '🕶️' }, { name: '야쿠자 B', cls: 'Caster', attr: '인(人)', hp: 28917, atk: 1350, maxCharge: 4, emoji: '🕶️' }],
+      [{ name: '데몬', cls: 'Caster', attr: '천(天)', hp: 401055, atk: 3100, maxCharge: 4, emoji: '😈' }]
+    ]
+  },
+  {
+    id: 'fq_shinjuku_barrel', category: 'free_p15', chapter: '1.5부 신주쿠',
+    name: '🗺️ 신주쿠 배럴 타워 — 라이플링 홀',
+    desc: 'AP 21 · 추천 Lv.76 · 무간의 톱니바퀴 대량 파밍!',
+    difficulty: 'AP 21 · 추천 Lv.76',
+    rewardText: '⚙️ 무간의 톱니바퀴 ×3 · 🪙 10,400 QP',
+    drops: [['무간의 톱니바퀴', 3]],
+    rewards: { sq: 1, embers: 5, qp: 10400, fp: 900, mcExp: 21256 },
+    waves: [
+      [{ name: '콜로라투라 A', cls: 'Assassin', attr: '지(地)', hp: 11457, atk: 900, maxCharge: 3, emoji: '⚙️' }, { name: '콜로라투라 B', cls: 'Assassin', attr: '지(地)', hp: 18393, atk: 1050, maxCharge: 3, emoji: '⚙️' }],
+      [{ name: '콜로라투라 A', cls: 'Assassin', attr: '지(地)', hp: 27204, atk: 1300, maxCharge: 3, emoji: '⚙️' }, { name: '콜로라투라 B', cls: 'Assassin', attr: '지(地)', hp: 32474, atk: 1400, maxCharge: 3, emoji: '⚙️' }],
+      [{ name: '콜로라투라 C', cls: 'Assassin', attr: '지(地)', hp: 174084, atk: 2500, maxCharge: 3, emoji: '⚙️' }, { name: '콜로라투라 A', cls: 'Assassin', attr: '지(地)', hp: 74846, atk: 1800, maxCharge: 3, emoji: '⚙️' }]
+    ]
+  },
+  // ---- 아가르타 ----
+  {
+    id: 'fq_agartha_peach', category: 'free_p15', chapter: '1.5부 아가르타',
+    name: '🗺️ 아가르타 도원향 — 몽상의 마을',
+    desc: 'AP 21 · 추천 Lv.72 · 팔연쌍정 최고 파밍 성지!',
+    difficulty: 'AP 21 · 추천 Lv.72',
+    rewardText: '💎 팔연쌍정 ×3 · 🪙 10,140 QP',
+    drops: [['팔연쌍정', 3]],
+    rewards: { sq: 1, embers: 5, qp: 10140, fp: 900, mcExp: 20056 },
+    waves: [
+      [{ name: '스톤 골렘 A', cls: 'Berserker', attr: '천(天)', hp: 16656, atk: 1100, maxCharge: 4, emoji: '🗿' }, { name: '스톤 골렘 B', cls: 'Berserker', attr: '천(天)', hp: 17540, atk: 1150, maxCharge: 4, emoji: '🗿' }],
+      [{ name: '아이언 골렘 A', cls: 'Berserker', attr: '천(天)', hp: 25616, atk: 1350, maxCharge: 4, emoji: '🗿' }, { name: '아이언 골렘 B', cls: 'Berserker', attr: '천(天)', hp: 26500, atk: 1380, maxCharge: 4, emoji: '🗿' }],
+      [{ name: '크리스탈 골렘', cls: 'Berserker', attr: '천(天)', hp: 277318, atk: 2900, maxCharge: 4, emoji: '💎' }]
+    ]
+  },
+  {
+    id: 'fq_agartha_dragon', category: 'free_p15', chapter: '1.5부 아가르타',
+    name: '🗺️ 아가르타 용궁성 — 호중누각',
+    desc: 'AP 21 · 추천 Lv.78 · 기신주 & 영웅의 증표 파밍!',
+    difficulty: 'AP 21 · 추천 Lv.78',
+    rewardText: '🍶 기신주 ×1 · 🛡️ 영웅의 증표 ×2 · 🪙 10,660 QP',
+    drops: [['기신주', 1], ['영웅의 증표', 2]],
+    rewards: { sq: 1, embers: 5, qp: 10660, fp: 950, mcExp: 22488 },
+    waves: [
+      [{ name: '여해적 A', cls: 'Rider', attr: '인(人)', hp: 10451, atk: 880, maxCharge: 4, emoji: '🏴‍☠️' }, { name: '여해적 B', cls: 'Rider', attr: '인(人)', hp: 10055, atk: 850, maxCharge: 4, emoji: '🏴‍☠️' }],
+      [{ name: '여해적 A', cls: 'Rider', attr: '인(人)', hp: 11015, atk: 900, maxCharge: 4, emoji: '🏴‍☠️' }, { name: '여해적 C', cls: 'Rider', attr: '인(人)', hp: 11955, atk: 950, maxCharge: 4, emoji: '🏴‍☠️' }],
+      [{ name: '히드라', cls: 'Archer', attr: '지(地)', hp: 344794, atk: 3000, maxCharge: 3, emoji: '🐉' }]
+    ]
+  },
+  {
+    id: 'fq_agartha_rift', category: 'free_p15', chapter: '1.5부 아가르타',
+    name: '🗺️ 아가르타 대지의 갈라진 틈 — 다이아몬드의 계곡',
+    desc: 'AP 21 · 추천 Lv.80 · 뱀의 보옥 최고 효율!',
+    difficulty: 'AP 21 · 추천 Lv.80',
+    rewardText: '🟢 뱀의 보옥 ×3 · 🪙 10,920 QP',
+    drops: [['뱀의 보옥', 3]],
+    rewards: { sq: 1, embers: 5, qp: 10920, fp: 950, mcExp: 23752 },
+    waves: [
+      [{ name: '라미아 A', cls: 'Caster', attr: '지(地)', hp: 12649, atk: 950, maxCharge: 4, emoji: '🐍' }, { name: '라미아 C', cls: 'Caster', attr: '지(地)', hp: 13202, atk: 980, maxCharge: 4, emoji: '🐍' }],
+      [{ name: '나가', cls: 'Caster', attr: '지(地)', hp: 25665, atk: 1300, maxCharge: 4, emoji: '🐍' }, { name: '라미아 A', cls: 'Caster', attr: '지(地)', hp: 19644, atk: 1100, maxCharge: 4, emoji: '🐍' }],
+      [{ name: '나가라자', cls: 'Caster', attr: '지(地)', hp: 232310, atk: 2700, maxCharge: 4, emoji: '🐍' }, { name: '나가 A', cls: 'Caster', attr: '지(地)', hp: 68311, atk: 1750, maxCharge: 4, emoji: '🐍' }]
+    ]
+  },
+  // ---- 시모사노쿠니 ----
+  {
+    id: 'fq_shimousa_castle', category: 'free_p15', chapter: '1.5부 시모사노쿠니',
+    name: '🗺️ 시모사노쿠니 성 주변 마을 — 영고성쇠',
+    desc: 'AP 21 · 추천 Lv.76 · 고담곡옥 최고 파밍 성지!',
+    difficulty: 'AP 21 · 추천 Lv.76',
+    rewardText: '📿 고담곡옥 ×3 · 🪙 10,400 QP',
+    drops: [['고담곡옥', 3]],
+    rewards: { sq: 1, embers: 5, qp: 10400, fp: 900, mcExp: 21256 },
+    waves: [
+      [{ name: '검은 무사 A', cls: 'Saber', attr: '지(地)', hp: 26978, atk: 1250, maxCharge: 4, emoji: '⚔️' }, { name: '검은 무사 B', cls: 'Saber', attr: '지(地)', hp: 24467, atk: 1200, maxCharge: 4, emoji: '⚔️' }],
+      [{ name: '검은 무사 A', cls: 'Saber', attr: '지(地)', hp: 37051, atk: 1450, maxCharge: 4, emoji: '⚔️' }, { name: '검은 무사 B', cls: 'Saber', attr: '지(地)', hp: 39210, atk: 1500, maxCharge: 4, emoji: '⚔️' }],
+      [{ name: '검은 무사 C', cls: 'Saber', attr: '지(地)', hp: 196041, atk: 2600, maxCharge: 4, emoji: '⚔️' }, { name: '검은 무사 A', cls: 'Saber', attr: '지(地)', hp: 54413, atk: 1650, maxCharge: 4, emoji: '⚔️' }]
+    ]
+  },
+  {
+    id: 'fq_shimousa_backmt', category: 'free_p15', chapter: '1.5부 시모사노쿠니',
+    name: '🗺️ 시모사노쿠니 뒷산 — 전전긍긍',
+    desc: 'AP 21 · 추천 Lv.80 · 구십구경 & 고스트 랜턴 파밍!',
+    difficulty: 'AP 21 · 추천 Lv.80',
+    rewardText: '🪞 구십구경 ×1 · 🏮 고스트 랜턴 ×2 · 🪙 10,920 QP',
+    drops: [['구십구경', 1], ['고스트 랜턴', 2]],
+    rewards: { sq: 1, embers: 5, qp: 10920, fp: 950, mcExp: 23752 },
+    waves: [
+      [{ name: '기령 A', cls: 'Assassin', attr: '천(天)', hp: 30627, atk: 1300, maxCharge: 3, emoji: '👻' }, { name: '기령 B', cls: 'Assassin', attr: '천(天)', hp: 31565, atk: 1320, maxCharge: 3, emoji: '👻' }],
+      [{ name: '기령 A', cls: 'Assassin', attr: '천(天)', hp: 42490, atk: 1550, maxCharge: 3, emoji: '👻' }, { name: '기령 B', cls: 'Assassin', attr: '천(天)', hp: 34379, atk: 1400, maxCharge: 3, emoji: '👻' }],
+      [{ name: '부정한 신', cls: 'Assassin', attr: '천(天)', hp: 160487, atk: 2500, maxCharge: 3, emoji: '🪞' }, { name: '기령', cls: 'Assassin', attr: '천(天)', hp: 70506, atk: 1750, maxCharge: 3, emoji: '👻' }]
+    ]
+  },
+  // ---- 세일럼 ----
+  {
+    id: 'fq_salem_carter', category: 'free_p15', chapter: '1.5부 세일럼',
+    name: '🗺️ 세일럼 카터 가 — 크로우즈 네스트',
+    desc: 'AP 20 · 추천 Lv.72 · 만신의 심장 최고 효율 + 소곡의 말뚝 동시 파밍!',
+    difficulty: 'AP 20 · 추천 Lv.72',
+    rewardText: '❤️‍🔥 만신의 심장 ×1 · 🪵 소곡의 말뚝 ×2 · 🪙 9,880 QP',
+    drops: [['만신의 심장', 1], ['소곡의 말뚝', 2]],
+    rewards: { sq: 1, embers: 5, qp: 9880, fp: 900, mcExp: 18888 },
+    waves: [
+      [{ name: '엘더 구울 A', cls: 'Assassin', attr: '지(地)', hp: 30685, atk: 1300, maxCharge: 3, emoji: '🧟' }, { name: '엘더 구울 B', cls: 'Assassin', attr: '지(地)', hp: 35865, atk: 1400, maxCharge: 3, emoji: '🧟' }],
+      [{ name: '엘더 구울 A', cls: 'Assassin', attr: '지(地)', hp: 40944, atk: 1500, maxCharge: 3, emoji: '🧟' }, { name: '엘더 구울 B', cls: 'Assassin', attr: '지(地)', hp: 38912, atk: 1450, maxCharge: 3, emoji: '🧟' }],
+      [{ name: '데몬', cls: 'Caster', attr: '천(天)', hp: 199841, atk: 2650, maxCharge: 4, emoji: '😈' }]
+    ]
+  },
+  {
+    id: 'fq_salem_gallows', category: 'free_p15', chapter: '1.5부 세일럼',
+    name: '🗺️ 세일럼 교수대의 언덕 — 익스큐션 사이트',
+    desc: 'AP 21 · 추천 Lv.78 · 소곡의 말뚝(철항) 최고 드랍률 성지!',
+    difficulty: 'AP 21 · 추천 Lv.78',
+    rewardText: '🪵 소곡의 말뚝 ×3 · 🪙 10,660 QP',
+    drops: [['소곡의 말뚝', 3]],
+    rewards: { sq: 1, embers: 5, qp: 10660, fp: 950, mcExp: 22488 },
+    waves: [
+      [{ name: '구울 글러튼', cls: 'Berserker', attr: '지(地)', hp: 13057, atk: 1050, maxCharge: 4, emoji: '🧟' }, { name: '구울 엔비야', cls: 'Berserker', attr: '지(地)', hp: 13077, atk: 1050, maxCharge: 4, emoji: '🧟' }],
+      [{ name: '엘더 구울', cls: 'Assassin', attr: '지(地)', hp: 38912, atk: 1450, maxCharge: 3, emoji: '🧟' }, { name: '구울 엔비야', cls: 'Berserker', attr: '지(地)', hp: 16695, atk: 1150, maxCharge: 4, emoji: '🧟' }],
+      [{ name: '엘더 구울 A', cls: 'Assassin', attr: '지(地)', hp: 192012, atk: 2550, maxCharge: 3, emoji: '🧟' }, { name: '엘더 구울 B', cls: 'Assassin', attr: '지(地)', hp: 51180, atk: 1600, maxCharge: 3, emoji: '🧟' }]
+    ]
+  },
+  {
+    id: 'fq_salem_whateley', category: 'free_p15', chapter: '1.5부 세일럼',
+    name: '🗺️ 세일럼 웨이틀리 가 — 알케믹 필드',
+    desc: 'AP 21 · 추천 Lv.76 · 호문쿨루스 베이비 최고 효율!',
+    difficulty: 'AP 21 · 추천 Lv.76',
+    rewardText: '🧫 호문쿨루스 베이비 ×3 · 🪙 10,400 QP',
+    drops: [['호문쿨루스 베이비', 3]],
+    rewards: { sq: 1, embers: 5, qp: 10400, fp: 900, mcExp: 21256 },
+    waves: [
+      [{ name: '호문쿨루스 A', cls: 'Lancer', attr: '지(地)', hp: 10986, atk: 900, maxCharge: 4, emoji: '🧪' }, { name: '호문쿨루스 C', cls: 'Lancer', attr: '지(地)', hp: 11505, atk: 920, maxCharge: 4, emoji: '🧪' }],
+      [{ name: '프로토 호문쿨루스', cls: 'Lancer', attr: '지(地)', hp: 24749, atk: 1300, maxCharge: 4, emoji: '🧪' }, { name: '호문쿨루스 A', cls: 'Lancer', attr: '지(地)', hp: 20913, atk: 1150, maxCharge: 4, emoji: '🧪' }],
+      [{ name: '프로토 호문쿨루스 B', cls: 'Lancer', attr: '지(地)', hp: 189802, atk: 2550, maxCharge: 4, emoji: '🧪' }, { name: '프로토 호문쿨루스 A', cls: 'Lancer', attr: '지(地)', hp: 64306, atk: 1700, maxCharge: 4, emoji: '🧪' }]
+    ]
+  }
+];

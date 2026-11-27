@@ -15,6 +15,7 @@ const CHALDEA_GATE_TABS = [
   { id: 'mc_past',   label: '🧤 마술예장 · 과거이벤트', sub: '전투복/협회/아틀라스 · 감옥탑' },
   { id: 'free_p1a',  label: '🗺️ 1부 프리퀘 (전반)',   sub: '후유키·오를레앙·세프템·오케아노스' },
   { id: 'free_p1b',  label: '🗺️ 1부 프리퀘 (후반)',   sub: '런던·북미·카멜롯·바빌로니아' },
+  { id: 'free_p15',  label: '🗺️ 1.5부 프리퀘',        sub: '신주쿠·아가르타·시모사·세일럼' },
   { id: 'boss',      label: '🐉 메인 보스 · EX',     sub: '특이점 · 비스트 · 케르눈노스' }
 ];
 
