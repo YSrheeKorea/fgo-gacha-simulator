@@ -3579,7 +3579,6 @@ window.FgoBattle = (() => {
           SoundEngine.reveal(5, true);
           const ownedInParty = battle.roster.filter(m => !m.isSupport && !m.isRental).map(m => m.id);
           const fpBonus = q.rewards.fp || 2000;
-          const mcRes = getBridge().grantBattleRewards({ ...q.rewards, fp: fpBonus }, ownedInParty);
           // 보물창고(QP던) 등 QP 보너스 예장 (모나리자 +10%, 프렌드 벨라리자 +15% 등) 합산!
           let qpBonusRate = 0;
           battle.roster.forEach(m => {
