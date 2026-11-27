@@ -1335,8 +1335,6 @@ window.FgoBattle = (() => {
     getBridge().toast(`⚖️ 파티 코스트 자동 최적화 완료! (${calcPartyCost(st)} / ${MASTER_MAX_COST})`);
   }
 
-  // ================= 퀘스트 7종 (종화·QP·특이점·바빌로니아·비스트Ⅰ·비스트Ⅲ/R·EX 챌린지) =================
-  const QUESTS = [
   // ================= 칼데아 게이트 + 메인 보스/EX 퀘스트 통합 카탈로그 =================
   const BOSS_QUESTS = [
     {
