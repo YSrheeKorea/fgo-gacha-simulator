@@ -364,6 +364,34 @@ window.FgoBattle = (() => {
         { key: 'prelati_3', name: names[2], cd: 5, icon: '🔄', target: 'self', desc: '[본인] 영기 변환! 보구 전환 (프랑수아 보조 ⇄ 프란체스카 대군 Arts)!' }
       ];
     }
+    if (sv.id === 'sv_no_371') { // ★5 테스카틀리포카: 본인 50% + 아군 전체 30% 주유 & 전체 근성·무적!
+      return [
+        { key: 'tez_1', name: names[0], cd: 6, icon: '❤️‍🔥', target: 'all', desc: '[단체] 아군 전체 공격력 +20%(3T) & 근성(2,000·3T) 부여!' },
+        { key: 'tez_2', name: names[1], cd: 6, icon: '💎', target: 'all', desc: '[단체] 본인 NP +50% & 아군 전체 NP +30% & 무적(2회)!!' },
+        { key: 'tez_3', name: names[2], cd: 6, icon: '🔵', target: 'all', desc: '[단체] 아군 전체 Arts +20%(3T) & 보구 위력 +20%(3T)' }
+      ];
+    }
+    if (sv.id === 'sv_no_239') { // ★5 카마: 영구 근성 + 개인 OC+1 + 자가 50% 차지 퀵 대인 최강!
+      return [
+        { key: 'kama_1', name: names[0], cd: 6, icon: '🌟', target: 'ally', desc: '[개인] 선택 아군 1명 HP +2,000 회복 & 보구 오버차지 +1단계!' },
+        { key: 'kama_2', name: names[1], cd: 6, icon: '❤️‍🔥', target: 'self', desc: '[본인] 자신 공격력 +30%(3T) & 영구 근성(HP 1,000 · 99턴)!' },
+        { key: 'kama_3', name: names[2], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & Quick +30%(3T) & 크리티컬 위력 +20%(3T)' }
+      ];
+    }
+    if (sv.id === 'sv_no_154') { // ★5 “산의 노인”(킹 핫산): 고유 QABBB · 전투속행 EX(근성 5,000·5T)!
+      return [
+        { key: 'hassan_1', name: names[0], cd: 7, icon: '💀', target: 'self', desc: '[본인] 전투속행 EX! 자신 근성 부여 (HP 5,000 · 5턴 — FGO 최강 근성!)' },
+        { key: 'hassan_2', name: names[1], cd: 5, icon: '🛡️', target: 'self', desc: '[본인] 신앙의 가호! 공격력 +20%(3T) · 방어력 +40%(3T) · HP +2,500' },
+        { key: 'hassan_3', name: names[2], cd: 6, icon: '🔔', target: 'self', desc: '[본인] 만종 EX! 자신 Buster +50%(1T) & 타겟 적 즉사내성 DOWN!' }
+      ];
+    }
+    if (sv.id === 'sv_jack') { // ★5 잭 더 리퍼: 안개밤의 살인 + 정보말소 + 개인 지정 외과수술!
+      return [
+        { key: 'jack_1', name: names[0], cd: 6, icon: '🟢', target: 'self',  desc: '[본인] 안개밤의 살인! 자신 Quick +50%(1T) & 회피(1T)' },
+        { key: 'jack_2', name: names[1], cd: 5, icon: '⏬', target: 'enemy', desc: '[적] 정보말소! 타겟 적 차지 -1칸 & 강화 무효(1회)!' },
+        { key: 'jack_3', name: names[2], cd: 4, icon: '💚', target: 'ally',  desc: '[개인] 외과수술! 선택 아군 1명 HP +2,500 회복!' }
+      ];
+    }
     const cardIcon = sv.npType === 'Buster' ? '🔴' : (sv.npType === 'Arts' ? '🔵' : '🟢');
     const npCharge = sv.id === 'sv_arcueid' ? 100 : (sv.rarity === 5 ? 50 : (sv.rarity === 4 ? 30 : 25));
     const isSup = getNpCategory(sv) === 'support';
@@ -637,6 +665,55 @@ window.FgoBattle = (() => {
         caster.buffs.npCatOverride = nextCat;
         return `${sv.name} [${name}]! 영기 변환 — 보구 [${nextCat === 'aoe' ? '프란체스카 대군 Arts' : '프랑수아 보조'}] 전환!`;
       }
+      case 'tez_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.2; m.buffs.atkT = 3; m.buffs.guts = Math.max(m.buffs.guts, 2000); m.buffs.gutsT = Math.max(m.buffs.gutsT, 3); });
+        return `${sv.name} [${name}]! 아군 전체 공+20%(3T) & 근성(2,000·3T) 부여!`;
+      case 'tez_2':
+        addNp(caster, 50);
+        alive.forEach(m => { ensureMemberBuffs(m); if (m.rosterIdx !== caster.rosterIdx) addNp(m, 30); m.buffs.invulHits = Math.max(m.buffs.invulHits, 2); });
+        return `${sv.name} [${name}]! 본인 NP +50% & 아군 NP +30% & 전체 무적(2회)!!`;
+      case 'tez_3':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.arts += 0.2; m.buffs.cardT = 3; m.buffs.npDmg += 0.2; m.buffs.npDmgT = 3; });
+        return `${sv.name} [${name}]! 아군 전체 Arts+20%(3T) & 보구 위력+20%(3T)!`;
+      case 'kama_1':
+        target.hp = Math.min(target.maxHp, target.hp + 2000);
+        target.buffs.ocUp += 1;
+        return `${sv.name} [${name}] → ${tgtName}! HP +2,000 & 보구 오버차지 +1단계!`;
+      case 'kama_2':
+        caster.buffs.atk += 0.3; caster.buffs.atkT = 3;
+        caster.buffs.guts = Math.max(caster.buffs.guts, 1000); caster.buffs.gutsT = 99;
+        return `${sv.name} [${name}]! 공+30%(3T) & 영구 근성(HP 1,000·99T) 부여!`;
+      case 'kama_3':
+        addNp(caster, 50);
+        caster.buffs.quick += 0.3; caster.buffs.cardT = 3;
+        caster.buffs.crit += 0.2; caster.buffs.critT = 3;
+        return `${sv.name} [${name}]! 본인 NP +50% & Quick+30% & 크리+20%!`;
+      case 'hassan_1':
+        caster.buffs.guts = Math.max(caster.buffs.guts, 5000); caster.buffs.gutsT = 5;
+        return `${sv.name} [${name}]! 💀 전투속행 EX — 근성(HP 5,000 · 5턴) 부여!!`;
+      case 'hassan_2':
+        caster.buffs.atk += 0.2; caster.buffs.atkT = 3;
+        caster.buffs.def += 0.4; caster.buffs.defT = 3;
+        caster.hp = Math.min(caster.maxHp, caster.hp + 2500);
+        return `${sv.name} [${name}]! 신앙의 가호 — 공+20% · 방+40% · HP +2,500!`;
+      case 'hassan_3': {
+        caster.buffs.buster += 0.5; caster.buffs.cardT = Math.max(caster.buffs.cardT, 1);
+        const t = b.enemies[b.targetIdx] || pickAliveTarget();
+        if (t && t.hp > 0) t.deathResistDown = 1.0;
+        return `${sv.name} [${name}]! 🔔 만종 EX — Buster +50%(1T) & 적 즉사내성 대폭 DOWN!`;
+      }
+      case 'jack_1':
+        caster.buffs.quick += 0.5; caster.buffs.cardT = Math.max(caster.buffs.cardT, 1);
+        caster.buffs.evade = Math.max(caster.buffs.evade, 1);
+        return `${sv.name} [${name}]! 안개밤의 살인 — Quick +50%(1T) & 회피(1T)!`;
+      case 'jack_2': {
+        const t = b.enemies[b.targetIdx] || pickAliveTarget();
+        if (t && t.hp > 0) { t.charge = Math.max(0, t.charge - 1); t.buffBlock = (t.buffBlock || 0) + 1; }
+        return `${sv.name} [${name}]! 정보말소 — ${t ? t.name : '적'} 차지 -1칸 & 강화 무효(1회)!`;
+      }
+      case 'jack_3':
+        target.hp = Math.min(target.maxHp, target.hp + 2500);
+        return `${sv.name} [${name}] → ${tgtName}! 외과수술 HP +2,500 회복!`;
       case 'sup_2':
         addNp(target, 30);
         b.stars = Math.min(99, b.stars + 15);
@@ -2573,6 +2650,32 @@ window.FgoBattle = (() => {
             });
             battle.stars = Math.min(99, battle.stars + 15);
             addLog(`📖 ${sv.name} 보구 [${sv.npName}]! 아군 공+40%·방+40%·도트힐·스타+15!`);
+          } else if (m.id === 'sv_no_081') {
+            // ★3 헨리 지킬 & 하이드 [위험한 비약]: 하이드(버서커 모드) 변신! 최대HP+4000·전회복·B+50%(5T)·공+30%(5T)!
+            const hpGain = Math.round(4000 * ocMult);
+            m.buffs.maxHpBonus += hpGain; m.maxHp += hpGain; m.hp = m.maxHp;
+            m.buffs.buster += 0.5; m.buffs.cardT = 5;
+            m.buffs.atk += 0.3; m.buffs.atkT = 5;
+            addLog(`🧪 ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 하이드(버서커) 변신 — 최대HP+${hpGain.toLocaleString()}·전회복·B+50%·공+30%(5T)!!`);
+          } else if (m.id === 'sv_no_189') {
+            // ★5 오사카베히메 [백귀야행성]: 아군 전체 Q+30% · B+30% · 방어+20% · 최대HP+2,000!
+            getActiveMembers(battle).forEach(ally => {
+              ensureMemberBuffs(ally);
+              ally.buffs.quick += 0.3; ally.buffs.buster += 0.3; ally.buffs.cardT = 3;
+              ally.buffs.def += 0.2; ally.buffs.defT = 3;
+              ally.buffs.maxHpBonus += 2000; ally.maxHp += 2000; ally.hp += 2000;
+            });
+            addLog(`🏯 ${sv.name} 보구 [${sv.npName}]! 백귀야행성 — 아군 전체 Q+30%·B+30%·방+20%·최대HP+2,000!`);
+          } else if (m.id === 'sv_no_463') {
+            // ★4 헤비 뇨보: 아군 전체 HP+3,000 · Arts+25%(3T) · 약화무효(1회) · NP+20%!
+            getActiveMembers(battle).forEach(ally => {
+              ensureMemberBuffs(ally);
+              ally.hp = Math.min(ally.maxHp, ally.hp + 3000);
+              ally.buffs.arts += 0.25; ally.buffs.cardT = 3;
+              ally.buffs.debuffImmune = Math.max(ally.buffs.debuffImmune, 1);
+              ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 20);
+            });
+            addLog(`🐍 ${sv.name} 보구 [${sv.npName}]! 아군 전체 HP+3,000·Arts+25%·약화무효·NP+20%!`);
           } else {
             getActiveMembers(battle).forEach(ally => {
               ally.buffs.atk += 0.25 * ocMult; ally.buffs.atkT = 3;
