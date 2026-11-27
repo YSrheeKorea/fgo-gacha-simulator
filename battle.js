@@ -1989,7 +1989,16 @@ window.FgoBattle = (() => {
             skills: getSkillDefs(sv).map((s, si) => {
               const slv = skLevels[si] || 1;
               const cdReduce = slv >= 10 ? 2 : (slv >= 6 ? 1 : 0);
-              return { ...s, level: slv, cd: Math.max(3, s.cd - cdReduce), curCd: 0 };
+              // v45: 스킬 Lv.1→10 효과 배율 비례 성장 (Lv.1=55% → Lv.10=100%) + 쿨타임 Lv.6(-1T) / Lv.10(-2T)
+              const skMult = 0.55 + ((slv - 1) / 9) * 0.45;
+              const scaled = { ...s, level: slv, cd: Math.max(3, s.cd - cdReduce), curCd: 0 };
+              if (typeof scaled.val === 'number') {
+                scaled.val = scaled.val >= 10 ? Math.round(scaled.val * skMult) : Number((scaled.val * skMult).toFixed(3));
+              }
+              if (typeof scaled.val2 === 'number') {
+                scaled.val2 = scaled.val2 >= 10 ? Math.round(scaled.val2 * skMult) : Number((scaled.val2 * skMult).toFixed(3));
+              }
+              return scaled;
             }),
             buffs: ensureMemberBuffs({ buffs: {} })
           };
