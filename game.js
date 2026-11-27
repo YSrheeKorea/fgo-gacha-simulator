@@ -161,6 +161,28 @@
       };
     }
     if (!st.terminal.apples) st.terminal.apples = { gold: 10, silver: 15, bronze: 20, blue: 5, sapling: 10 };
+    // v24: 퓨어프리즘·성배의 물방울·영맥석·티포트·특별재림·관위지정·64종 소재 초기화
+    if (typeof st.purePrisms !== 'number') st.purePrisms = 100;
+    if (typeof st.grailDrops !== 'number') st.grailDrops = 0;
+    if (typeof st.leylineStones !== 'number') st.leylineStones = 5;
+    if (typeof st.teapots !== 'number') st.teapots = 10;
+    if (typeof st.specialAscUsed !== 'boolean') st.specialAscUsed = false;
+    if (typeof st.dailyFreeFpDate !== 'string') st.dailyFreeFpDate = '';
+    if (typeof st.dailyPaidPullDate !== 'string') st.dailyPaidPullDate = '';
+    if (!st.grandGraph || typeof st.grandGraph !== 'object') st.grandGraph = {};
+    if (!st.materials || typeof st.materials !== 'object') st.materials = {};
+    Object.keys(st.servants || {}).forEach(id => {
+      const o = st.servants[id];
+      if (!o) return;
+      if (typeof o.coins !== 'number') {
+        const sv = SERVANT_MAP[id];
+        o.coins = (typeof window.getFgoSummonCoins === 'function' ? window.getFgoSummonCoins(sv) : 30) * (o.copies || 1);
+      }
+      if (typeof o.fouHp !== 'number') o.fouHp = 0;
+      if (typeof o.fouAtk !== 'number') o.fouAtk = 0;
+      if (!Array.isArray(o.appendLevels) || o.appendLevels.length !== 5) o.appendLevels = [0, 0, 0, 0, 0];
+      if (typeof o.bondCap !== 'number') o.bondCap = 10;
+    });
     return st;
   }
 
@@ -371,6 +393,9 @@
           }
         }
       }
+      // v24: 서번트 소환 시 공식 서번트 코인 지급
+      const coinGain = typeof window.getFgoSummonCoins === 'function' ? window.getFgoSummonCoins(item) : 30;
+      state.servants[item.id].coins = (state.servants[item.id].coins || 0) + coinGain;
       npLevelAfter = state.servants[item.id].npLevel;
 
       if (item.rarity === 5) {
@@ -540,6 +565,9 @@
         if (owned.npLevel < 5) owned.npLevel++;
         else owned.extraCopies++;
       }
+      // v24: 서번트 소환 시 공식 서번트 코인 지급
+      const coinGain = typeof window.getFgoSummonCoins === 'function' ? window.getFgoSummonCoins(item) : 30;
+      state.servants[item.id].coins = (state.servants[item.id].coins || 0) + coinGain;
       npLevelAfter = state.servants[item.id].npLevel;
     } else {
       if (!state.ces[item.id]) {
@@ -1333,6 +1361,114 @@
     }
 
     document.getElementById('myroom-speaker').textContent = `${sv.name} (${own.ascension}차 재림)`;
+    renderMyRoomV24Panel(sv, own);
+  }
+
+  function renderMyRoomV24Panel(sv, own) {
+    const box = document.getElementById('mr-v24-panel');
+    if (!box) return;
+    const coins = own.coins || 0;
+    const fouHp = own.fouHp || 0;
+    const fouAtk = own.fouAtk || 0;
+    const bondCap = own.bondCap || 10;
+    const apps = own.appendLevels || [0, 0, 0, 0, 0];
+    const isGrand = state.grandGraph && state.grandGraph[sv.cls] === sv.id;
+    const canGrand = own.level >= 100 && (own.skillLevels || [1, 1, 1]).every(v => v >= 10);
+
+    box.innerHTML = `
+      <div style="margin-top:12px;padding:12px;border-radius:10px;background:rgba(15,24,46,0.7);border:1px solid rgba(255,215,100,0.22);display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+          <strong style="color:#ffd875">🪙 서번트 코인: ${coins.toLocaleString()}개</strong>
+          <span style="font-size:12px;color:#b8d4ff">🐾 포우작: HP +${fouHp.toLocaleString()} / ATK +${fouAtk.toLocaleString()} · 💞 인연 상한 Lv.${bondCap}</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <button class="small-outline-btn" id="btn-v24-fou">🐾 포우 강화 (+1000 → +2000 → +3000)</button>
+          <button class="small-outline-btn" id="btn-v24-special-asc" ${state.specialAscUsed || own.ascension >= 4 ? 'disabled' : ''}>🌟 특별재림 (${state.specialAscUsed ? '사용완료' : '1회 무료 4차'})</button>
+          <button class="small-outline-btn" id="btn-v24-bond-cap" ${bondCap >= 16 ? 'disabled' : ''}>🔥 인연 상한 개방 (${bondCap < 15 ? '몽화 Lv.' + (bondCap + 1) : bondCap === 15 ? '대몽화 Lv.16' : 'MAX'})</button>
+          <button class="small-gold-btn" id="btn-v24-grand">${isGrand ? '👑 관위 서번트 지정됨 (Grand)' : '👑 관위지정 (Lv.100 & 10/10/10)'}</button>
+        </div>
+        <div style="font-size:12px;color:#cde0ff"><strong>⚡ 어펜드 스킬 (1~5 · 개방 코인 120개):</strong></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:6px">
+          ${(window.FGO_APPEND_SKILLS || []).map((ap, i) => `
+            <button class="small-outline-btn v24-append-btn" data-idx="${i}" style="text-align:left;padding:6px 8px;font-size:11px">
+              ${apps[i] > 0 ? `✅ Lv.${apps[i]}` : '🔒 미개방'} ${ap.name}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    box.querySelector('#btn-v24-fou')?.addEventListener('click', () => {
+      if (fouHp >= 3000) { toast('이미 ★5 포우작(+3,000) 최대치입니다!'); return; }
+      const next = fouHp < 1000 ? 1000 : (fouHp < 2000 ? 2000 : 3000);
+      own.fouHp = next;
+      own.fouAtk = next;
+      SoundEngine.levelUp();
+      saveState();
+      renderMyRoomTab();
+      toast(`🐾 ${sv.name} 포우작 HP/ATK +${next.toLocaleString()} 달성!`);
+    });
+
+    box.querySelector('#btn-v24-special-asc')?.addEventListener('click', () => {
+      if (state.specialAscUsed || own.ascension >= 4) return;
+      state.specialAscUsed = true;
+      own.ascension = 4;
+      own.viewAsc = 4;
+      own.level = Math.max(own.level, getMaxLevelCap(sv, own));
+      SoundEngine.reveal(5, true);
+      saveState();
+      renderMyRoomTab();
+      toast(`🌟 특별재림 완료! ${sv.name} 즉시 최종 재림 & 최대 레벨 달성!`);
+    });
+
+    box.querySelector('#btn-v24-bond-cap')?.addEventListener('click', () => {
+      if (bondCap >= 16) return;
+      own.bondCap = bondCap + 1;
+      SoundEngine.levelUp();
+      saveState();
+      renderMyRoomTab();
+      toast(`🔥 ${sv.name} 인연 상한 Lv.${own.bondCap} 개방 완료! (${own.bondCap === 16 ? '칼데아의 대몽화' : '칼데아의 몽화'})`);
+    });
+
+    box.querySelector('#btn-v24-grand')?.addEventListener('click', () => {
+      if (!canGrand) {
+        SoundEngine.error();
+        toast('관위지정(Grand Graph)은 Lv.100 이상 & 스킬 10/10/10 달성 시 가능합니다!');
+        return;
+      }
+      state.grandGraph[sv.cls] = sv.id;
+      SoundEngine.reveal(5, true);
+      saveState();
+      renderMyRoomTab();
+      toast(`👑 [${sv.cls}] 클래스 그랜드 서번트로 ${sv.name} 관위지정 완료!`);
+    });
+
+    box.querySelectorAll('.v24-append-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.dataset.idx);
+        if (apps[idx] === 0) {
+          if ((own.coins || 0) < 120) {
+            SoundEngine.error();
+            toast(`어펜드 스킬 개방에는 서번트 코인 120개가 필요합니다! (현재: ${own.coins || 0}개)`);
+            return;
+          }
+          own.coins -= 120;
+          apps[idx] = 1;
+          SoundEngine.levelUp();
+          saveState();
+          renderMyRoomTab();
+          toast(`⚡ 어펜드 스킬 [${window.FGO_APPEND_SKILLS[idx].name}] 개방! (코인 -120)`);
+        } else if (apps[idx] < 10) {
+          apps[idx]++;
+          SoundEngine.levelUp();
+          saveState();
+          renderMyRoomTab();
+          toast(`⚡ 어펜드 스킬 [${window.FGO_APPEND_SKILLS[idx].name}] Lv.${apps[idx]} 강화!`);
+        } else {
+          toast('이미 Lv.10 MAX 상태입니다!');
+        }
+      });
+    });
   }
 
   // 마이룸 FGO 타자기 대사 출력 상태
@@ -1575,6 +1711,103 @@
       exEl.appendChild(card);
     });
     renderWelfareShop();
+    renderShopV24Section();
+  }
+
+  function renderShopV24Section() {
+    const box = document.getElementById('v24-shop-section');
+    if (!box) return;
+    const totalCoins = Object.values(state.servants || {}).reduce((s, o) => s + (o.coins || 0), 0);
+    const mats = window.FGO_MATERIALS_64 || { bronze: [], silver: [], gold: [] };
+    const allMats = [...mats.bronze, ...mats.silver, ...mats.gold];
+
+    box.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+        <div>
+          <h3>💎 퓨어 프리즘 교환소 (강화소재 64종) · 🏆 성배주조</h3>
+          <p class="panel-desc">보유 퓨어프리즘: <strong>${(state.purePrisms || 0).toLocaleString()}</strong> · 성배의 물방울: <strong>${state.grailDrops || 0}/7</strong> · 전체 서번트 코인: <strong>${totalCoins.toLocaleString()}</strong></p>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="small-gold-btn" id="btn-v24-grail-cast">🏆 성배주조 (코인 2,000 → 성배 1)</button>
+          <button class="small-outline-btn" id="btn-v24-grail-drop">💧 성배의 물방울 교환 (7 → 성배 1)</button>
+          <button class="small-outline-btn" id="btn-v24-pure-gift">✨ 퓨어프리즘 +50 보급</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:6px;max-height:260px;overflow-y:auto;padding-right:4px">
+        ${allMats.map(m => {
+          const owned = (state.materials && state.materials[m.id]) || 0;
+          const border = m.tier === 'gold' ? '#ffd86b' : (m.tier === 'silver' ? '#b8d4ff' : '#cd8c52');
+          return `
+            <div style="padding:7px 9px;border-radius:8px;background:rgba(15,24,46,0.75);border:1px solid ${border}55;display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:12px">
+              <div>
+                <div>${m.icon} <strong>${m.name}</strong></div>
+                <div style="font-size:10px;color:#9bb6df">보유 ${owned} · 퓨프 ${m.pureCost}</div>
+              </div>
+              <button class="small-outline-btn v24-buy-mat" data-id="${m.id}" data-cost="${m.pureCost}" style="padding:3px 7px;font-size:11px">+1</button>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+
+    box.querySelector('#btn-v24-grail-cast')?.addEventListener('click', () => {
+      if (totalCoins < 2000) {
+        SoundEngine.error();
+        toast(`성배주조에는 서번트 코인 2,000개가 필요합니다! (현재 총합: ${totalCoins.toLocaleString()}개)`);
+        return;
+      }
+      let need = 2000;
+      for (const o of Object.values(state.servants)) {
+        if (need <= 0) break;
+        const take = Math.min(o.coins || 0, need);
+        o.coins = (o.coins || 0) - take;
+        need -= take;
+      }
+      state.grails = (state.grails || 0) + 1;
+      SoundEngine.reveal(5, true);
+      saveState();
+      renderAll();
+      toast('🏆 성배주조 완료! 서번트 코인 2,000개로 성배 +1개 획득!');
+    });
+
+    box.querySelector('#btn-v24-grail-drop')?.addEventListener('click', () => {
+      if ((state.grailDrops || 0) < 7) {
+        SoundEngine.error();
+        toast(`성배의 물방울 7개가 필요합니다! (현재: ${state.grailDrops || 0}/7)`);
+        return;
+      }
+      state.grailDrops -= 7;
+      state.grails = (state.grails || 0) + 1;
+      SoundEngine.reveal(5, true);
+      saveState();
+      renderAll();
+      toast('💧 성배의 물방울 7개로 성배 +1개 교환 완료!');
+    });
+
+    box.querySelector('#btn-v24-pure-gift')?.addEventListener('click', () => {
+      state.purePrisms = (state.purePrisms || 0) + 50;
+      SoundEngine.shopBuy();
+      saveState();
+      renderShopV24Section();
+      toast('✨ 퓨어 프리즘 +50개 보급 완료!');
+    });
+
+    box.querySelectorAll('.v24-buy-mat').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        const cost = Number(btn.dataset.cost);
+        if ((state.purePrisms || 0) < cost) {
+          SoundEngine.error();
+          toast('퓨어 프리즘이 부족합니다!');
+          return;
+        }
+        state.purePrisms -= cost;
+        state.materials[id] = (state.materials[id] || 0) + 1;
+        SoundEngine.shopBuy();
+        saveState();
+        renderShopV24Section();
+      });
+    });
   }
 
   // ================= 렌더링: 가챠 통계 & 폭사력 분석 =================
@@ -2229,11 +2462,17 @@
       }
       state.embers -= 5;
       state.qp -= lvQp;
-      own.level = Math.min(cap, own.level + 10);
+      // v24: 원작 FGO 대성공(10% · 2배) / 극대성공(2% · 3배)
+      const r = Math.random();
+      let lvGain = 10;
+      let bonusTag = '';
+      if (r < 0.02) { lvGain = 30; bonusTag = '🌟 극대성공 (3배)! '; }
+      else if (r < 0.12) { lvGain = 20; bonusTag = '✨ 대성공 (2배)! '; }
+      own.level = Math.min(cap, own.level + lvGain);
       SoundEngine.levelUp();
       saveState();
       renderMyRoomTab();
-      toast(`🔥 ${sv.name} Lv.${own.level} 달성! (-${lvQp.toLocaleString()} QP)`);
+      toast(`🔥 ${bonusTag}${sv.name} Lv.${own.level} 달성! (-${lvQp.toLocaleString()} QP)`);
     });
 
     document.getElementById('btn-ascend').addEventListener('click', () => {
@@ -2283,23 +2522,33 @@
         toast('최종 재림(4차) 이후에만 성배전림이 가능합니다!');
         return;
       }
-      if (getMaxLevelCap(sv, own) >= 120) {
+      const curCap = getMaxLevelCap(sv, own);
+      if (curCap >= 120) {
         toast('이미 Lv.120 궁극의 성배전림을 완료했습니다!');
         return;
       }
-      if (state.grails < 1) {
+      const step = typeof window.getFgoGrailStep === 'function'
+        ? window.getFgoGrailStep(curCap)
+        : { nextCap: curCap + 2, grails: 1, coins: curCap >= 100 ? 30 : 0, qp: 2000000 };
+      if (state.grails < step.grails) {
         SoundEngine.error();
-        toast('성배가 부족합니다! 다 빈치 공방에서 레어프리즘으로 주조할 수 있습니다.');
+        toast('성배가 부족합니다! 다 빈치 공방에서 성배주조(코인 2,000) 또는 레어프리즘으로 획득하세요.');
         return;
       }
-      state.grails -= 1;
+      if (step.coins > 0 && (own.coins || 0) < step.coins) {
+        SoundEngine.error();
+        toast(`Lv.100 초과 성배전림에는 서번트 코인 ${step.coins}개가 필요합니다! (현재: ${own.coins || 0}개)`);
+        return;
+      }
+      state.grails -= step.grails;
+      if (step.coins > 0) own.coins = (own.coins || 0) - step.coins;
       own.grailsUsed++;
-      own.level = Math.min(120, own.level + 2);
+      own.level = Math.min(120, own.level + (step.nextCap - curCap));
       SoundEngine.reveal(5, true);
       saveState();
       renderResources();
       renderMyRoomTab();
-      toast(`🏆 ${sv.name} 성배전림 성공! 최대 레벨 Lv.${getMaxLevelCap(sv, own)} 해방!`);
+      toast(`🏆 ${sv.name} 성배전림 성공! 최대 레벨 Lv.${getMaxLevelCap(sv, own)} 해방!${step.coins ? ` (코인 -${step.coins})` : ''}`);
     });
 
     document.getElementById('btn-burn-extra').addEventListener('click', () => {

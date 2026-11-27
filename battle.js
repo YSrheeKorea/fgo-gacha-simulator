@@ -205,14 +205,14 @@ window.FgoBattle = (() => {
     const names = (sv.skills && sv.skills.length >= 3) ? sv.skills : ['카리스마 A', '마력방출 A', '심안(진) B'];
     if (sv.id === 'sv_castoria') {
       return [
-        { key: 'castoria_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & NP +30%' },
+        { key: 'castoria_1', name: names[0], cd: 5, icon: '⚔️', target: 'all', desc: '[단체] 아군 전체 공격력 +20%(3T) & NP +30%' },
         { key: 'castoria_2', name: names[1], cd: 5, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 NP +20% & 아군 전체 NP 획득량 +30%(3T)' },
         { key: 'castoria_3', name: names[2], cd: 6, icon: '🔵', target: 'ally', desc: '[개인] 선택 아군 1명 Arts +50%(3T) & 무적(1T)' }
       ];
     }
     if (sv.id === 'sv_oberon') {
       return [
-        { key: 'oberon_1', name: names[0], cd: 5, icon: '🦋', target: 'all',  desc: '[단체] 아군 전체 보구 위력 +30%(3T) & NP +20%' },
+        { key: 'oberon_1', name: names[0], cd: 5, icon: '🦋', target: 'all', desc: '[단체] 아군 전체 보구 위력 +30%(3T) & NP +20%' },
         { key: 'oberon_2', name: names[1], cd: 5, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 NP +50% & 크리스타 +20' },
         { key: 'oberon_3', name: names[2], cd: 6, icon: '🔥', target: 'ally', desc: '[개인] 선택 아군 1명 Buster +50%(1T) & 보구 위력 2배 부스트(1T)!' }
       ];
@@ -227,13 +227,13 @@ window.FgoBattle = (() => {
     if (sv.id === 'sv_waver') {
       return [
         { key: 'waver_1', name: names[0], cd: 5, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 크리 위력 +40%(3T) & NP +30%' },
-        { key: 'waver_2', name: names[1], cd: 5, icon: '🛡️', target: 'all',  desc: '[단체] 아군 전체 방어력 +30%(3T) & NP +10%' },
-        { key: 'waver_3', name: names[2], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +30%(3T) & NP +10%' }
+        { key: 'waver_2', name: names[1], cd: 5, icon: '🛡️', target: 'all', desc: '[단체] 아군 전체 방어력 +30%(3T) & NP +10%' },
+        { key: 'waver_3', name: names[2], cd: 5, icon: '⚔️', target: 'all', desc: '[단체] 아군 전체 공격력 +30%(3T) & NP +10%' }
       ];
     }
     if (sv.id === 'sv_no_001') {
       return [
-        { key: 'mash_1', name: names[0], cd: 5, icon: '🛡️', target: 'all',  desc: '[단체] 아군 전체 방어력 +20%(3T)' },
+        { key: 'mash_1', name: names[0], cd: 5, icon: '🛡️', target: 'all', desc: '[단체] 아군 전체 방어력 +20%(3T)' },
         { key: 'mash_2', name: names[1], cd: 6, icon: '✨', target: 'ally', desc: '[개인] 선택 아군 1명 무적(1T) & NP +20%' },
         { key: 'mash_3', name: names[2], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP 획득량 +100%(1T) & HP +2000' }
       ];
@@ -241,14 +241,14 @@ window.FgoBattle = (() => {
     if (sv.id === 'sv_tamamo') {
       return [
         { key: 'tamamo_1', name: names[0], cd: 5, icon: '⏬', target: 'enemy', desc: '[적] 타겟 적의 차지 -1칸 감소' },
-        { key: 'tamamo_2', name: names[1], cd: 5, icon: '🛡️', target: 'self',  desc: '[본인] 자신 방어력 +30%(3T)' },
-        { key: 'tamamo_3', name: names[2], cd: 5, icon: '🔵', target: 'ally',  desc: '[개인] 선택 아군 1명 Arts +50%(3T) & HP +2500' }
+        { key: 'tamamo_2', name: names[1], cd: 5, icon: '🛡️', target: 'self', desc: '[본인] 자신 방어력 +30%(3T)' },
+        { key: 'tamamo_3', name: names[2], cd: 5, icon: '🔵', target: 'ally', desc: '[개인] 선택 아군 1명 Arts +50%(3T) & HP +2500' }
       ];
     }
     if (sv.id === 'sv_xu_fu') {
       return [
         { key: 'xufu_1', name: names[0], cd: 5, icon: '💚', target: 'self', desc: '[본인] 자신 HP +3000 & 약화 해제' },
-        { key: 'xufu_2', name: names[1], cd: 5, icon: '🔵', target: 'all',  desc: '[단체] 아군 전체 Arts +20%(3T) & 크리티컬 위력 +20%(3T)' },
+        { key: 'xufu_2', name: names[1], cd: 5, icon: '🔵', target: 'all', desc: '[단체] 아군 전체 Arts +20%(3T) & 크리티컬 위력 +20%(3T)' },
         { key: 'xufu_3', name: names[2], cd: 5, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 NP +30% & NP 획득량 +30%(3T)' }
       ];
     }
@@ -268,14 +268,14 @@ window.FgoBattle = (() => {
     }
     if (sv.id === 'sv_no_394') { // ★5 프톨레마이오스 (대군↔대인 전환)
       return [
-        { key: 'ptol_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & 크리 위력 +30%(3T)' },
+        { key: 'ptol_1', name: names[0], cd: 5, icon: '⚔️', target: 'all', desc: '[단체] 아군 전체 공격력 +20%(3T) & 크리 위력 +30%(3T)' },
         { key: 'ptol_2', name: names[1], cd: 5, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & Buster/Arts +30%(3T)' },
         { key: 'ptol_3', name: names[2], cd: 5, icon: '🔄', target: 'self', desc: '[본인] 보구 형태 전환 (대군 Buster ⇄ 단일 Arts) & 스타 +20!' }
       ];
     }
     if (sv.id === 'sv_no_391') { // ★4 UDK-바게스트 (대군↔대인 전환)
       return [
-        { key: 'udk_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & HP +1500' },
+        { key: 'udk_1', name: names[0], cd: 5, icon: '⚔️', target: 'all', desc: '[단체] 아군 전체 공격력 +20%(3T) & HP +1500' },
         { key: 'udk_2', name: names[1], cd: 5, icon: '💎', target: 'self', desc: '[본인] 자신 NP +30% & Arts +30%(3T)' },
         { key: 'udk_3', name: names[2], cd: 5, icon: '🔄', target: 'self', desc: '[본인] 보구 대상 전환 (대군 ⇄ 단일) & 보구 위력 +30%(1T)!' }
       ];
@@ -296,70 +296,70 @@ window.FgoBattle = (() => {
     }
     if (sv.id === 'sv_no_241') { // ★5 사마의(라이네스): 개인 50% 주유 서포터!
       return [
-        { key: 'reines_1', name: names[0], cd: 5, icon: '🛡️', target: 'all',  desc: '[단체] 아군 전체 방어력 +20%(3T) & NP +10%' },
+        { key: 'reines_1', name: names[0], cd: 5, icon: '🛡️', target: 'all', desc: '[단체] 아군 전체 방어력 +20%(3T) & NP +10%' },
         { key: 'reines_2', name: names[1], cd: 5, icon: '⚔️', target: 'ally', desc: '[개인] 선택 아군 1명 공격력 +40%(3T) & NP +20%' },
         { key: 'reines_3', name: names[2], cd: 6, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 무적(2회·3T) & NP +20%' }
       ];
     }
     if (sv.id === 'sv_no_315') { // ★4 하베트롯: 자가 80% 차지 + 3스킬 선택 아군 버프 후 자폭 오첸!
       return [
-        { key: 'habe_1', name: names[0], cd: 5, icon: '💚', target: 'all',  desc: '[단체] 아군 전체 HP +2,000 & 크리티컬 위력 +30%(3T)' },
+        { key: 'habe_1', name: names[0], cd: 5, icon: '💚', target: 'all', desc: '[단체] 아군 전체 HP +2,000 & 크리티컬 위력 +30%(3T)' },
         { key: 'habe_2', name: names[1], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +80% & Arts +30%(3T)!' },
         { key: 'habe_3', name: names[2], cd: 6, icon: '🌸', target: 'ally', desc: '[개인] 선택 아군 1명 근성(3,000)·회복·무적 부여 후 자신 퇴장(후열 증원!)' }
       ];
     }
     if (sv.id === 'sv_ozymandias') { // ★5 오지만디아스: 아군 전체 NP +20% + 황제특권!
       return [
-        { key: 'ozy_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & 크리 위력 +20%(3T)' },
+        { key: 'ozy_1', name: names[0], cd: 5, icon: '⚔️', target: 'all', desc: '[단체] 아군 전체 공격력 +20%(3T) & 크리 위력 +20%(3T)' },
         { key: 'ozy_2', name: names[1], cd: 5, icon: '👑', target: 'self', desc: '[본인] 황제특권! 공격 +40%(3T) & 방어 +40%(3T) & HP +3,000' },
-        { key: 'ozy_3', name: names[2], cd: 6, icon: '☀️', target: 'all',  desc: '[단체] 아군 전체 NP +20% & 보구 위력 +20%(3T)!' }
+        { key: 'ozy_3', name: names[2], cd: 6, icon: '☀️', target: 'all', desc: '[단체] 아군 전체 NP +20% & 보구 위력 +20%(3T)!' }
       ];
     }
     if (sv.id === 'sv_no_397') { // ★5 타케다 하루노부(타케다 신겐): 개인 쿨타임 -1T + 50차지!
       return [
-        { key: 'shingen_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & Buster +20%(3T)' },
+        { key: 'shingen_1', name: names[0], cd: 5, icon: '⚔️', target: 'all', desc: '[단체] 아군 전체 공격력 +20%(3T) & Buster +20%(3T)' },
         { key: 'shingen_2', name: names[1], cd: 6, icon: '⏱️', target: 'ally', desc: '[개인] 선택 아군 1명 스킬 쿨타임 -1턴 & 회피(1회·3T)!' },
         { key: 'shingen_3', name: names[2], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 크리 위력 +50%(3T)' }
       ];
     }
     if (sv.id === 'sv_no_150') { // ★5 멀린: 몽환의 카리스마 + 전체 무적 + 영웅작성(B+50%·크리+100%)!
       return [
-        { key: 'merlin_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & NP +20%' },
-        { key: 'merlin_2', name: names[1], cd: 7, icon: '🛡️', target: 'all',  desc: '[단체] 아군 전체 무적(1T) & 스타발생률 +50%(1T)' },
+        { key: 'merlin_1', name: names[0], cd: 5, icon: '⚔️', target: 'all', desc: '[단체] 아군 전체 공격력 +20%(3T) & NP +20%' },
+        { key: 'merlin_2', name: names[1], cd: 7, icon: '🛡️', target: 'all', desc: '[단체] 아군 전체 무적(1T) & 스타발생률 +50%(1T)' },
         { key: 'merlin_3', name: names[2], cd: 6, icon: '🔴', target: 'ally', desc: '[개인] 영웅작성 EX! 선택 아군 Buster +50%(3T) · 크리 +100%(1T) · 최대HP +3,000!' }
       ];
     }
     if (sv.id === 'sv_no_215') { // ★5 스카사하=스카디: 원초의 룬(Q+50%·크리+100%) + 개인 NP 50%!
       return [
         { key: 'skadi_1', name: names[0], cd: 6, icon: '🟢', target: 'ally', desc: '[개인] 선택 아군 1명 Quick +50%(3T) & 크리티컬 위력 +100%(3T)!' },
-        { key: 'skadi_2', name: names[1], cd: 6, icon: '❄️', target: 'all',  desc: '[단체] 얼어붙는 눈보라! 아군 공격력 +30%(3T) & 적 크리 약화' },
+        { key: 'skadi_2', name: names[1], cd: 6, icon: '❄️', target: 'all', desc: '[단체] 얼어붙는 눈보라! 아군 공격력 +30%(3T) & 적 크리 약화' },
         { key: 'skadi_3', name: names[2], cd: 6, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 NP +50% 충전!' }
       ];
     }
     if (sv.id === 'sv_no_258') { // ★2 진궁: 아군 사출 대군 아츠 시스템!
       return [
         { key: 'chengong_1', name: names[0], cd: 5, icon: '🛡️', target: 'ally', desc: '[개인] 선택 아군 1명 방어력 +30%(1T) & 스타발생 +30%' },
-        { key: 'chengong_2', name: names[1], cd: 6, icon: '💎', target: 'all',  desc: '[단체] 아군 전체 방어력 +15%(3T) & NP +10%' },
+        { key: 'chengong_2', name: names[1], cd: 6, icon: '💎', target: 'all', desc: '[단체] 아군 전체 방어력 +15%(3T) & NP +10%' },
         { key: 'chengong_3', name: names[2], cd: 6, icon: '🔴', target: 'ally', desc: '[개인] 선택 아군 1명 Buster +50%(1T) & 크리 +50%(1T)' }
       ];
     }
     if (sv.id === 'sv_no_385') { // ★5 구세주 토네리코: 아군 전체 NP +50% + 보구+30%!
       return [
-        { key: 'tonelico_1', name: names[0], cd: 6, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & NP +20%' },
+        { key: 'tonelico_1', name: names[0], cd: 6, icon: '⚔️', target: 'all', desc: '[단체] 아군 전체 공격력 +20%(3T) & NP +20%' },
         { key: 'tonelico_2', name: names[1], cd: 6, icon: '❤️‍🔥', target: 'all', desc: '[단체] 아군 전체 근성(2,000 · 3T) & HP +2,000' },
-        { key: 'tonelico_3', name: names[2], cd: 7, icon: '💎', target: 'all',  desc: '[단체] 아군 전체 NP +50% & 보구 위력 +30%(3T)!' }
+        { key: 'tonelico_3', name: names[2], cd: 7, icon: '💎', target: 'all', desc: '[단체] 아군 전체 NP +50% & 보구 위력 +30%(3T)!' }
       ];
     }
     if (sv.id === 'sv_no_036') { // ★1 모차르트: 작은 별의 밤 스타 +50개 즉시 획득!
       return [
-        { key: 'mozart_1', name: names[0], cd: 5, icon: '🔵', target: 'all',  desc: '[단체] 아군 전체 Arts +44%(1T)!' },
-        { key: 'mozart_2', name: names[1], cd: 6, icon: '🎵', target: 'all',  desc: '[단체] 아군 전체 방어력 +20%(3T) & NP +10%' },
+        { key: 'mozart_1', name: names[0], cd: 5, icon: '🔵', target: 'all', desc: '[단체] 아군 전체 Arts +44%(1T)!' },
+        { key: 'mozart_2', name: names[1], cd: 6, icon: '🎵', target: 'all', desc: '[단체] 아군 전체 방어력 +20%(3T) & NP +10%' },
         { key: 'mozart_3', name: names[2], cd: 6, icon: '⭐', target: 'self', desc: '[본인] 작은 별의 밤 EX! 크리티컬 스타 +50개 즉시 획득(전 카드 100% 크리!!)' }
       ];
     }
     if (sv.id === 'sv_no_467') { // ★5 프랑수아/프란체스카 프렐라티: 보조 ⇄ 대군 영기 변환!
       return [
-        { key: 'prelati_1', name: names[0], cd: 5, icon: '🔵', target: 'all',  desc: '[단체] 아군 전체 Arts +25%(3T) & NP +20%' },
+        { key: 'prelati_1', name: names[0], cd: 5, icon: '🔵', target: 'all', desc: '[단체] 아군 전체 Arts +25%(3T) & NP +20%' },
         { key: 'prelati_2', name: names[1], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 회피(1회·3T)' },
         { key: 'prelati_3', name: names[2], cd: 5, icon: '🔄', target: 'self', desc: '[본인] 영기 변환! 보구 전환 (프랑수아 보조 ⇄ 프란체스카 대군 Arts)!' }
       ];
@@ -387,9 +387,9 @@ window.FgoBattle = (() => {
     }
     if (sv.id === 'sv_jack') { // ★5 잭 더 리퍼: 안개밤의 살인 + 정보말소 + 개인 지정 외과수술!
       return [
-        { key: 'jack_1', name: names[0], cd: 6, icon: '🟢', target: 'self',  desc: '[본인] 안개밤의 살인! 자신 Quick +50%(1T) & 회피(1T)' },
+        { key: 'jack_1', name: names[0], cd: 6, icon: '🟢', target: 'self', desc: '[본인] 안개밤의 살인! 자신 Quick +50%(1T) & 회피(1T)' },
         { key: 'jack_2', name: names[1], cd: 5, icon: '⏬', target: 'enemy', desc: '[적] 정보말소! 타겟 적 차지 -1칸 & 강화 무효(1회)!' },
-        { key: 'jack_3', name: names[2], cd: 4, icon: '💚', target: 'ally',  desc: '[개인] 외과수술! 선택 아군 1명 HP +2,500 회복!' }
+        { key: 'jack_3', name: names[2], cd: 4, icon: '💚', target: 'ally', desc: '[개인] 외과수술! 선택 아군 1명 HP +2,500 회복!' }
       ];
     }
     if (sv.id === 'sv_no_247') { // ★5 아르주나 [얼터](신준): 약체특공 공업 + 버스터 스타집중 + 근성·도트힐!
@@ -401,21 +401,21 @@ window.FgoBattle = (() => {
     }
     if (sv.id === 'sv_morgan') { // ★5 모르간: 아군 전체 공+20%/본인 NP+30% + 개인 NP+20% + 근성·크리!
       return [
-        { key: 'morgan_1', name: names[0], cd: 5, icon: '👑', target: 'all',  desc: '[단체] 갈망의 카리스마! 아군 공+20%(3T) & 본인 NP +30%' },
+        { key: 'morgan_1', name: names[0], cd: 5, icon: '👑', target: 'all', desc: '[단체] 갈망의 카리스마! 아군 공+20%(3T) & 본인 NP +30%' },
         { key: 'morgan_2', name: names[1], cd: 5, icon: '💎', target: 'ally', desc: '[개인] 호수의 가호! 선택 아군 1명 NP +20% & NP 획득량 +30%(3T)' },
         { key: 'morgan_3', name: names[2], cd: 6, icon: '❤️‍🔥', target: 'self', desc: '[본인] 끝에서부터! 자신 근성(3,000·3T) & 크리 +50%(3T) & 스타 +15!' }
       ];
     }
     if (sv.id === 'sv_no_355') { // ★5 이부키도지(수영복): 전체 공/크리 + 개인 쿨감-1T + 자가 50차지!
       return [
-        { key: 'ibuki_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & 크리티컬 위력 +30%(3T)' },
+        { key: 'ibuki_1', name: names[0], cd: 5, icon: '⚔️', target: 'all', desc: '[단체] 아군 전체 공격력 +20%(3T) & 크리티컬 위력 +30%(3T)' },
         { key: 'ibuki_2', name: names[1], cd: 6, icon: '⏱️', target: 'ally', desc: '[개인] 선택 아군 1명 Arts/Buster +30%(3T) & 스킬 쿨타임 -1턴!!' },
         { key: 'ibuki_3', name: names[2], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 크리티컬 스타 +20 획득!' }
       ];
     }
     if (sv.id === 'sv_no_386') { // ★5 알트리아 캐스터(수영복): 전체 NP+20% + 개인 NP+50% + 대숙정방어!
       return [
-        { key: 'bakatoria_1', name: names[0], cd: 5, icon: '🔵', target: 'all',  desc: '[단체] 아군 전체 Arts +20%(3T) & NP +20%' },
+        { key: 'bakatoria_1', name: names[0], cd: 5, icon: '🔵', target: 'all', desc: '[단체] 아군 전체 Arts +20%(3T) & NP +20%' },
         { key: 'bakatoria_2', name: names[1], cd: 6, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 NP +50% & NP 획득량 +30%(3T)!' },
         { key: 'bakatoria_3', name: names[2], cd: 6, icon: '✨', target: 'self', desc: '[본인] 자신 무적(1T) & 크리 +50%(3T) & 보구 위력 +30%(3T)!' }
       ];
@@ -429,7 +429,7 @@ window.FgoBattle = (() => {
     }
     if (sv.id === 'sv_cu_alter') { // ★5 쿠 훌린 [얼터]: 화살막이 회피 2회 + 전투속행 근성 5턴!
       return [
-        { key: 'cualter_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 정령의 광소! 적 약화(아군 공+20% · 방+20% 3T)' },
+        { key: 'cualter_1', name: names[0], cd: 5, icon: '⚔️', target: 'all', desc: '[단체] 정령의 광소! 적 약화(아군 공+20% · 방+20% 3T)' },
         { key: 'cualter_2', name: names[1], cd: 5, icon: '💨', target: 'self', desc: '[본인] 화살막이의 가호! 자신 회피(2회·3T) & 방어력 +20%(3T)' },
         { key: 'cualter_3', name: names[2], cd: 7, icon: '❤️‍🔥', target: 'self', desc: '[본인] 전투속행! 자신 근성 부여 (HP 2,500 · 5턴)' }
       ];
@@ -444,13 +444,13 @@ window.FgoBattle = (() => {
     if (sv.id === 'sv_no_357') { // ★5 스카사하=스카디 [룰러](수카디): 개인 Q+50%/크리+100% + 전체 Q/B/공 + 개인 NP+50%!
       return [
         { key: 'rskadi_1', name: names[0], cd: 6, icon: '🟢', target: 'ally', desc: '[개인] 선택 아군 1명 Quick +50%(3T) & Buster 크리 +100%(3T)!' },
-        { key: 'rskadi_2', name: names[1], cd: 6, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20% · Quick +15% · Buster +15%(3T)' },
+        { key: 'rskadi_2', name: names[1], cd: 6, icon: '⚔️', target: 'all', desc: '[단체] 아군 전체 공격력 +20% · Quick +15% · Buster +15%(3T)' },
         { key: 'rskadi_3', name: names[2], cd: 6, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 NP +50% & 스타 +15 획득!' }
       ];
     }
     if (sv.id === 'sv_no_268') { // ★5 스페이스 이슈타르: 2스킬 보구 속성 3색 전환 (Quick→Arts→Buster)!
       return [
-        { key: 'spishtar_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & 본인 3색 +20%(3T)' },
+        { key: 'spishtar_1', name: names[0], cd: 5, icon: '⚔️', target: 'all', desc: '[단체] 아군 전체 공격력 +20%(3T) & 본인 3색 +20%(3T)' },
         { key: 'spishtar_2', name: names[1], cd: 5, icon: '🌈', target: 'self', desc: '[본인] 보구 속성 전환 (Quick→Arts→Buster 순환) & 보구 +20% & 무적(1회)!' },
         { key: 'spishtar_3', name: names[2], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 매 턴 NP 획득 준비!' }
       ];
@@ -459,7 +459,7 @@ window.FgoBattle = (() => {
       return [
         { key: 'arc_1', name: names[0], cd: 5, icon: '🌕', target: 'self', desc: '[본인] 자신 공격력 +30%(3T) & 크리티컬 위력 +50%(3T)' },
         { key: 'arc_2', name: names[1], cd: 7, icon: '💎', target: 'self', desc: '[본인] 자신 NP +100% 즉시 충전!! & 약화 무효(1회)' },
-        { key: 'arc_3', name: names[2], cd: 6, icon: '✨', target: 'all',  desc: '[단체] 아군 전체(본인 제외) NP +30% & 무적(1회) & 스타 +15!' }
+        { key: 'arc_3', name: names[2], cd: 6, icon: '✨', target: 'all', desc: '[단체] 아군 전체(본인 제외) NP +30% & 무적(1회) & 스타 +15!' }
       ];
     }
     if (sv.id === 'sv_no_418') { // ★5 C.I.E.L(시엘): NP+50% + 스타+30 & 버스터 스타집중!
@@ -471,7 +471,7 @@ window.FgoBattle = (() => {
     }
     if (sv.id === 'sv_no_421') { // ★5 BB 두바이: 3스킬 공격(대군 Arts) ⇄ 보조 보구 실시간 전환!
       return [
-        { key: 'bbdubai_1', name: names[0], cd: 5, icon: '🔵', target: 'all',  desc: '[단체] 아군 전체 Arts +20%(3T) & 공격력 +20%(3T)' },
+        { key: 'bbdubai_1', name: names[0], cd: 5, icon: '🔵', target: 'all', desc: '[단체] 아군 전체 Arts +20%(3T) & 공격력 +20%(3T)' },
         { key: 'bbdubai_2', name: names[1], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 무적(1회·3T)' },
         { key: 'bbdubai_3', name: names[2], cd: 5, icon: '🔄', target: 'self', desc: '[본인] 보구 형태 전환 (대군 Arts 공격 ⇄ 지원형 보조) & 스타 +20!' }
       ];
@@ -485,14 +485,14 @@ window.FgoBattle = (() => {
     }
     if (sv.id === 'sv_no_297') { // ★5 아시야 도만: 자가 NP+80% + 혼돈·악 초강화 + 근성!
       return [
-        { key: 'douman_1', name: names[0], cd: 6, icon: '👹', target: 'all',  desc: '[단체] 아군 전체 공격력 +40%(3T) & 크리티컬 위력 +100%(3T)!!' },
+        { key: 'douman_1', name: names[0], cd: 6, icon: '👹', target: 'all', desc: '[단체] 아군 전체 공격력 +40%(3T) & 크리티컬 위력 +100%(3T)!!' },
         { key: 'douman_2', name: names[1], cd: 6, icon: '❤️‍🔥', target: 'self', desc: '[본인] 자신 근성(3,000·5T) & 스타 +20 획득' },
         { key: 'douman_3', name: names[2], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +80% 즉시 충전!! & Quick +30%(3T)' }
       ];
     }
     if (sv.id === 'sv_no_373') { // ★5 쿠쿨칸: NP+50% + 전체 공/B + 크리/무적!
       return [
-        { key: 'kuku_1', name: names[0], cd: 5, icon: '☀️', target: 'all',  desc: '[단체] 아군 전체 공격력 +30%(3T) & Buster +30%(3T)!' },
+        { key: 'kuku_1', name: names[0], cd: 5, icon: '☀️', target: 'all', desc: '[단체] 아군 전체 공격력 +30%(3T) & Buster +30%(3T)!' },
         { key: 'kuku_2', name: names[1], cd: 6, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 NP +50% & 회피(2회·3T)!' },
         { key: 'kuku_3', name: names[2], cd: 6, icon: '⭐', target: 'self', desc: '[본인] 자신 크리 +50%(3T) & 무적(1T) & 스타 +30 획득!' }
       ];
@@ -506,16 +506,16 @@ window.FgoBattle = (() => {
     }
     if (sv.id === 'sv_no_353') { // ★5 레이디 아발론(프멀린): 아츠판 멀린!
       return [
-        { key: 'lavalon_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & NP +20%' },
-        { key: 'lavalon_2', name: names[1], cd: 7, icon: '🛡️', target: 'all',  desc: '[단체] 아군 전체 무적(1T) & NP 획득량 +30%(3T)' },
+        { key: 'lavalon_1', name: names[0], cd: 5, icon: '⚔️', target: 'all', desc: '[단체] 아군 전체 공격력 +20%(3T) & NP +20%' },
+        { key: 'lavalon_2', name: names[1], cd: 7, icon: '🛡️', target: 'all', desc: '[단체] 아군 전체 무적(1T) & NP 획득량 +30%(3T)' },
         { key: 'lavalon_3', name: names[2], cd: 6, icon: '🔵', target: 'ally', desc: '[개인] 선택 아군 Arts +50%(3T) · 크리 +100%(1T) · 최대HP +3,000!' }
       ];
     }
     if (sv.id === 'sv_no_377' || sv.id === 'sv_no_444') { // ★5 드라코(비스트) / ★5 U-올가마리(언비스트)
       return [
-        { key: 'beast_1', name: names[0], cd: 5, icon: '🔥', target: 'all',  desc: '[단체] 짐승의 권능! 아군 전체 공격력 +30%(3T) & NP +30%' },
+        { key: 'beast_1', name: names[0], cd: 5, icon: '🔥', target: 'all', desc: '[단체] 짐승의 권능! 아군 전체 공격력 +30%(3T) & NP +30%' },
         { key: 'beast_2', name: names[1], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 보구 위력 +30%(3T) & 3색 +30%(3T)' },
-        { key: 'beast_3', name: names[2], cd: 6, icon: '👑', target: 'all',  desc: '[단체] 아군 전체 무적(1회) & 크리 +50%(3T) & 스타 +20!' }
+        { key: 'beast_3', name: names[2], cd: 6, icon: '👑', target: 'all', desc: '[단체] 아군 전체 무적(1회) & 크리 +50%(3T) & 스타 +20!' }
       ];
     }
     const cardIcon = sv.npType === 'Buster' ? '🔴' : (sv.npType === 'Arts' ? '🔵' : '🟢');
@@ -1335,9 +1335,62 @@ window.FgoBattle = (() => {
     getBridge().toast(`⚖️ 파티 코스트 자동 최적화 완료! (${calcPartyCost(st)} / ${MASTER_MAX_COST})`);
   }
 
+  // ================= 퀘스트 7종 (종화·QP·특이점·바빌로니아·비스트Ⅰ·비스트Ⅲ/R·EX 챌린지) =================
+  const QUESTS = [
   // ================= 칼데아 게이트 + 메인 보스/EX 퀘스트 통합 카탈로그 =================
   const BOSS_QUESTS = [
     {
+      id: 'q_embers',
+      name: '🔥 칼데아 게이트 — 종화 수집 (초급)',
+      desc: '3웨이브 주회 던전! 경험치 손은 모두 [하늘(天)] 속성 → 인간(人) 속성 서번트가 1.1배 유리!',
+      difficulty: '초급 · 추천 Lv.30',
+      rewardText: '💎 성정석 +3 · 🔥 종화 +15 · 🪙 QP +500,000',
+      rewards: { sq: 3, embers: 15, qp: 500000, mcExp: 180000 },
+      waves: [
+        [
+          { name: '불꽃의 팔', cls: 'Saber', attr: '천(天)', hp: 14500, atk: 1200, maxCharge: 4, emoji: '🔥' },
+          { name: '창의 팔', cls: 'Lancer', attr: '천(天)', hp: 15500, atk: 1250, maxCharge: 4, emoji: '⚡' },
+          { name: '활의 팔', cls: 'Archer', attr: '천(天)', hp: 14000, atk: 1200, maxCharge: 3, emoji: '🏹' }
+        ],
+        [
+          { name: '황금의 팔', cls: 'Rider', attr: '천(天)', hp: 22000, atk: 1500, maxCharge: 4, emoji: '✨' },
+          { name: '황금의 팔', cls: 'Caster', attr: '천(天)', hp: 23500, atk: 1500, maxCharge: 4, emoji: '🔮' },
+          { name: '황금의 팔', cls: 'Assassin', attr: '천(天)', hp: 21500, atk: 1500, maxCharge: 3, emoji: '🗡️' }
+        ],
+        [
+          { name: '초월의 팔', cls: 'Berserker', attr: '천(天)', hp: 36000, atk: 1900, maxCharge: 4, emoji: '💀' },
+          { name: '예지의 대팔', cls: 'Saber', attr: '천(天)', hp: 52000, atk: 2100, maxCharge: 4, emoji: '👑', isBoss: true },
+          { name: '초월의 팔', cls: 'Lancer', attr: '천(天)', hp: 34000, atk: 1900, maxCharge: 4, emoji: '💀' }
+        ]
+      ]
+    },
+    {
+      id: 'q_qp',
+      name: '💰 보물고의 문 — QP 대수집 (중급)',
+      desc: '캐스터 [하늘(天)] 문 대거 출현! 라이더(2.0x · 스타집중 200)와 얼터에고(1.5x)로 주회하세요.',
+      difficulty: '중급 · 추천 Lv.50',
+      rewardText: '💎 성정석 +5 · 🪙 QP +2,000,000 · 🟢 마프 +20',
+      rewards: { sq: 5, qp: 2000000, mp: 20, mcExp: 320000 },
+      waves: [
+        [
+          { name: '청동의 문', cls: 'Caster', attr: '천(天)', hp: 24000, atk: 1500, maxCharge: 5, emoji: '🚪' },
+          { name: '백은의 문', cls: 'Caster', attr: '천(天)', hp: 28000, atk: 1600, maxCharge: 5, emoji: '🏛️' },
+          { name: '청동의 문', cls: 'Caster', attr: '천(天)', hp: 24000, atk: 1500, maxCharge: 5, emoji: '🚪' }
+        ],
+        [
+          { name: '황금의 문', cls: 'Caster', attr: '천(天)', hp: 42000, atk: 1850, maxCharge: 5, emoji: '💰' },
+          { name: '황금의 문', cls: 'Caster', attr: '천(天)', hp: 45000, atk: 1850, maxCharge: 5, emoji: '💰' },
+          { name: '황금의 문', cls: 'Caster', attr: '천(天)', hp: 42000, atk: 1850, maxCharge: 5, emoji: '💰' }
+        ],
+        [
+          { name: '황금의 문', cls: 'Caster', attr: '천(天)', hp: 48000, atk: 2000, maxCharge: 5, emoji: '💰' },
+          { name: '여왕의 보물고', cls: 'Caster', attr: '천(天)', hp: 96000, atk: 2400, maxCharge: 4, emoji: '👑', isBoss: true },
+          { name: '황금의 문', cls: 'Caster', attr: '천(天)', hp: 48000, atk: 2000, maxCharge: 5, emoji: '💰' }
+        ]
+      ]
+    },
+    {
+      id: 'q_salter',
       id: 'q_salter', category: 'boss',
       name: '⚔️ 특이점 F — 흑화 세이버 결전 (상급)',
       desc: '세이버 [인간(人)] 보스전! 아처(2.0x)·프리텐더(1.5x)와 땅(地) 속성 상성으로 제압하세요.',
@@ -1356,6 +1409,7 @@ window.FgoBattle = (() => {
       ]
     },
     {
+      id: 'q_babylonia',
       id: 'q_babylonia', category: 'boss',
       name: '🐉 바빌로니아 — 티아마트 유체 격퇴전 (고난이도)',
       desc: '비스트Ⅱ [짐승(獸)] 완전 무상성 보스! 별(星) 속성·신성/인류의 위협/초거대 특공이 유리합니다.',
@@ -1375,6 +1429,7 @@ window.FgoBattle = (() => {
       ]
     },
     {
+      id: 'q_goetia',
       id: 'q_goetia', category: 'boss',
       name: '🔥 관위시간신전 — 마신왕 게티아 (비스트Ⅰ)',
       desc: '3술사(라·캐·어)에게 2.0x 약점, 3기사에게 2.0x 반격, 어벤저에게 0.5x 반감! 별(星) 속성·왕/비스트 특공!',
@@ -1389,6 +1444,7 @@ window.FgoBattle = (() => {
       ]
     },
     {
+      id: 'q_kiara',
       id: 'q_kiara', category: 'boss',
       name: '🌸 SE.RA.PH — 마성보살 키아라 (비스트Ⅲ/R)',
       desc: '얼터에고·문캔서에게 1.2x 약점! 여성·마성·초거대·비스트 특공 및 별(星) 속성이 빛납니다.',
@@ -1402,6 +1458,7 @@ window.FgoBattle = (() => {
       ]
     },
     {
+      id: 'q_challenge',
       id: 'q_challenge', category: 'boss',
       name: '👑 이문대 챌린지 — 거신 케르눈노스 (EX)',
       desc: '6인 총력전! 버서커 [땅(地)] 신성·초거대·요정·인류의 위협 최종 보스. 특공 딜러와 영주를 총동원하세요!',
@@ -1416,6 +1473,7 @@ window.FgoBattle = (() => {
     }
   ];
 
+  // 프렌드 서포트 목록 (6인 중 1명 프렌드 슬롯 전용)
   const QUESTS = [
     ...(typeof buildGateQuestCatalog === 'function' ? buildGateQuestCatalog() : []),
     ...BOSS_QUESTS
@@ -1614,10 +1672,10 @@ window.FgoBattle = (() => {
           </div>
           <div class="mc-card-actions">
             ${unlocked
-              ? `<button class="${isEquipped ? 'small-outline-btn' : 'small-gold-btn'}" data-mc-equip="${mc.id}" ${isEquipped ? 'disabled' : ''}>${isEquipped ? '✅ 장착 중' : '🧤 장착하기'}</button>
+          ? `<button class="${isEquipped ? 'small-outline-btn' : 'small-gold-btn'}" data-mc-equip="${mc.id}" ${isEquipped ? 'disabled' : ''}>${isEquipped ? '✅ 장착 중' : '🧤 장착하기'}</button>
                  ${lv < 10 ? `<button class="small-outline-btn" data-mc-train="${mc.id}" title="500,000 QP로 1레벨 훈련">⚡ +1Lv (50만 QP)</button>
                               <button class="small-outline-btn" data-mc-max="${mc.id}" title="남은 레벨 일괄 훈련">MAX</button>` : '<span class="mc-max-badge">🏆 Lv.10 MAX</span>'}`
-              : `<button class="small-gold-btn" data-mc-unlock="${mc.id}">🔓 해금 (🟢 마프 20)</button>`}
+          : `<button class="small-gold-btn" data-mc-unlock="${mc.id}">🔓 해금 (🟢 마프 20)</button>`}
           </div>
         </div>
       `;
@@ -1689,153 +1747,157 @@ window.FgoBattle = (() => {
     document.getElementById('battle-arena').classList.add('hidden');
     renderLobbyMysticCodeBar();
 
+    // 퀘스트 목록
     // 칼데아 게이트 카테고리 탭 + 오늘의 요일 배너 + 퀘스트 목록
     const qList = document.getElementById('battle-quest-list');
     qList.innerHTML = '';
+    QUESTS.forEach(q => {
 
-    if (typeof CHALDEA_GATE_TABS !== 'undefined') {
-      const tabBar = document.createElement('div');
-      tabBar.className = 'gate-tabs-bar';
-      CHALDEA_GATE_TABS.forEach(t => {
-        const cnt = QUESTS.filter(x => x.category === t.id).length;
-        const btn = document.createElement('button');
-        btn.className = 'gate-tab-btn' + (selectedGateTab === t.id ? ' active' : '');
-        btn.innerHTML = `${t.label} <span class="gate-tab-cnt">${cnt}</span>`;
-        btn.title = t.sub;
-        btn.addEventListener('click', () => {
-          SoundEngine.click();
-          selectedGateTab = t.id;
-          const firstInTab = QUESTS.find(x => x.category === t.id);
-          if (firstInTab) selectedQuestId = firstInTab.id;
-          renderLobby();
+      if (typeof CHALDEA_GATE_TABS !== 'undefined') {
+        const tabBar = document.createElement('div');
+        tabBar.className = 'gate-tabs-bar';
+        CHALDEA_GATE_TABS.forEach(t => {
+          const cnt = QUESTS.filter(x => x.category === t.id).length;
+          const btn = document.createElement('button');
+          btn.className = 'gate-tab-btn' + (selectedGateTab === t.id ? ' active' : '');
+          btn.innerHTML = `${t.label} <span class="gate-tab-cnt">${cnt}</span>`;
+          btn.title = t.sub;
+          btn.addEventListener('click', () => {
+            SoundEngine.click();
+            selectedGateTab = t.id;
+            const firstInTab = QUESTS.find(x => x.category === t.id);
+            if (firstInTab) selectedQuestId = firstInTab.id;
+            renderLobby();
+          });
+          tabBar.appendChild(btn);
         });
-        tabBar.appendChild(btn);
-      });
-      qList.appendChild(tabBar);
+        qList.appendChild(tabBar);
 
-      if (selectedGateTab === 'daily' && typeof getTodayGateSchedule === 'function') {
-        const sched = getTodayGateSchedule();
-        const banner = document.createElement('div');
-        banner.className = 'gate-day-banner';
-        banner.innerHTML = `
+        if (selectedGateTab === 'daily' && typeof getTodayGateSchedule === 'function') {
+          const sched = getTodayGateSchedule();
+          const banner = document.createElement('div');
+          banner.className = 'gate-day-banner';
+          banner.innerHTML = `
           <div>
             <strong>📅 오늘(${sched.dayKo}) 공식 요일 일정</strong>
             <div style="font-size:11px;color:#b8d0f5;margin-top:2px">종화: ${sched.allOpen ? '전 7종 개방' : sched.embers.join(' · ')} | 수련장: ${sched.allOpen ? '전 7클래스 개방' : sched.trainings.map(c => CLASS_INFO[c]?.name || c).join(' · ')}</div>
           </div>
           <button class="small-outline-btn" id="btn-gate-all-toggle" style="padding:4px 9px;font-size:11px">${gateAllOpenCampaign ? '🎉 캠페인 전 개방 ON' : '📅 오늘 요일만 보기'}</button>
         `;
-        qList.appendChild(banner);
-        banner.querySelector('#btn-gate-all-toggle')?.addEventListener('click', () => {
-          SoundEngine.click();
-          gateAllOpenCampaign = !gateAllOpenCampaign;
-          renderLobby();
-        });
+          qList.appendChild(banner);
+          banner.querySelector('#btn-gate-all-toggle')?.addEventListener('click', () => {
+            SoundEngine.click();
+            gateAllOpenCampaign = !gateAllOpenCampaign;
+            renderLobby();
+          });
+        }
       }
-    }
 
-    const todayIdx = new Date().getDay();
-    const visibleQuests = QUESTS.filter(q => {
-      if (q.category !== selectedGateTab) return false;
-      if (selectedGateTab === 'daily' && !gateAllOpenCampaign && Array.isArray(q.openDays) && !q.openDays.includes(todayIdx)) return false;
-      return true;
-    });
-    if (visibleQuests.length && !visibleQuests.some(q => q.id === selectedQuestId)) {
-      selectedQuestId = visibleQuests[0].id;
-    }
+      const todayIdx = new Date().getDay();
+      const visibleQuests = QUESTS.filter(q => {
+        if (q.category !== selectedGateTab) return false;
+        if (selectedGateTab === 'daily' && !gateAllOpenCampaign && Array.isArray(q.openDays) && !q.openDays.includes(todayIdx)) return false;
+        return true;
+      });
+      if (visibleQuests.length && !visibleQuests.some(q => q.id === selectedQuestId)) {
+        selectedQuestId = visibleQuests[0].id;
+      }
 
-    const bridge = getBridge();
-    visibleQuests.forEach(q => {
-      const clearCnt = bridge.getClearedQuestCount ? bridge.getClearedQuestCount(q.id) : 0;
-      const isTodayOpen = !Array.isArray(q.openDays) || q.openDays.includes(todayIdx);
-      const card = document.createElement('button');
-      card.className = 'quest-card' + (q.id === selectedQuestId ? ' active' : '');
-      card.innerHTML = `
+      const bridge = getBridge();
+      visibleQuests.forEach(q => {
+        const clearCnt = bridge.getClearedQuestCount ? bridge.getClearedQuestCount(q.id) : 0;
+        const isTodayOpen = !Array.isArray(q.openDays) || q.openDays.includes(todayIdx);
+        const card = document.createElement('button');
+        card.className = 'quest-card' + (q.id === selectedQuestId ? ' active' : '');
+        card.innerHTML = `
         <div class="quest-card-head">
+          <strong>${q.name}</strong>
+          <span class="quest-diff">${q.difficulty}</span>
           <strong>${q.name} ${clearCnt > 0 ? `<span class="gate-clear-badge">✅ CLEAR (${clearCnt})</span>` : ''}</strong>
           <span class="quest-diff">${q.difficulty}${!isTodayOpen ? ' · 캠페인개방' : ''}</span>
         </div>
         <div class="quest-desc">${q.desc}</div>
         <div class="quest-reward">보상: ${q.rewardText}</div>
       `;
-      card.addEventListener('click', () => {
-        SoundEngine.click();
-        selectedQuestId = q.id;
-        renderLobby();
+        card.addEventListener('click', () => {
+          SoundEngine.click();
+          selectedQuestId = q.id;
+          renderLobby();
+        });
+        qList.appendChild(card);
       });
-      qList.appendChild(card);
-    });
 
-    // 6인 파티 슬롯 (전열 1~3 / 후열 4~5 + 프렌드 6)
-    const st = getBridge().getState();
-    const ownedSvIds = Object.keys(st.servants).sort((a, b) => SERVANT_MAP[b].rarity - SERVANT_MAP[a].rarity);
-    const ownedCeIds = Object.keys(st.ces).sort((a, b) => CE_MAP[b].rarity - CE_MAP[a].rarity);
+      // 6인 파티 슬롯 (전열 1~3 / 후열 4~5 + 프렌드 6)
+      const st = getBridge().getState();
+      const ownedSvIds = Object.keys(st.servants).sort((a, b) => SERVANT_MAP[b].rarity - SERVANT_MAP[a].rarity);
+      const ownedCeIds = Object.keys(st.ces).sort((a, b) => CE_MAP[b].rarity - CE_MAP[a].rarity);
 
-    // 파티 코스트 실시간 표시 (최대 115 · 마슈=0 · 프렌드=0)
-    const totalCost = calcPartyCost(st);
-    const overCost = totalCost > MASTER_MAX_COST;
-    const costBar = document.getElementById('battle-cost-bar');
-    if (costBar) {
-      costBar.className = 'party-cost-bar' + (overCost ? ' over-cost' : '');
-      costBar.innerHTML = `
+      // 파티 코스트 실시간 표시 (최대 115 · 마슈=0 · 프렌드=0)
+      const totalCost = calcPartyCost(st);
+      const overCost = totalCost > MASTER_MAX_COST;
+      const costBar = document.getElementById('battle-cost-bar');
+      if (costBar) {
+        costBar.className = 'party-cost-bar' + (overCost ? ' over-cost' : '');
+        costBar.innerHTML = `
         <span>⚖️ <strong>PARTY COST: ${totalCost} / ${MASTER_MAX_COST}</strong> ${overCost ? '⚠️ 코스트 초과! (저성 예장·마슈 코스트0 활용)' : '✅ 편성 가능 (마슈·프렌드 코스트 0)'}</span>
         ${overCost ? '<button class="small-outline-btn" id="btn-opt-cost" style="padding:4px 10px;font-size:11.5px">⚖️ 코스트 자동 조정</button>' : ''}
       `;
-      document.getElementById('btn-opt-cost')?.addEventListener('click', optimizePartyCost);
-    }
-
-    const slotsEl = document.getElementById('battle-party-slots');
-    slotsEl.innerHTML = '';
-    partySlots.forEach((slot, idx) => {
-      const sv = SERVANT_MAP[slot.id];
-      const isFriendSlot = idx === 5;
-      const own = (slot.isSupport || slot.isRental)
-        ? { level: slot.isSupport ? 90 : 50, npLevel: slot.isSupport ? 2 : 1, viewAsc: slot.isSupport ? 4 : 1, ascension: slot.isSupport ? 4 : 1 }
-        : st.servants[slot.id];
-      const effR = getEffectiveRarity(sv, own);
-      const faceUrl = ArtRenderer.getFaceUrl(slot.id);
-      const ceOwn = slot.isSupport ? { copies: 5, level: 100 } : (slot.ceId ? st.ces[slot.ceId] : null);
-      const ceMlb = slot.isSupport || isCeMlb(ceOwn);
-      const ceObj = slot.ceId ? CE_MAP[slot.ceId] : null;
-      const ceStats = getCeCurrentStats(ceObj, ceOwn);
-      const slotCost = isFriendSlot ? 0 : (getServantCost(sv, own) + getCeCost(ceObj));
-      const deckTypes = getServantDeckTypes(sv);
-      const lineTag = idx < 3 ? `전열 ${idx + 1}` : (isFriendSlot ? '프렌드 (코스트 0)' : `후열 ${idx - 2}`);
-
-      let svOptions = '';
-      if (isFriendSlot) {
-        svOptions = SUPPORT_FRIENDS.map(sf =>
-          `<option value="sup:${sf.id}" ${slot.id === sf.id ? 'selected' : ''}>🤝 ★5 ${SERVANT_MAP[sf.id].name} (Lv.90 · 보${sf.npLevel})</option>`
-        ).join('');
-      } else {
-        svOptions = [
-          ...ownedSvIds.map(id => {
-            const s = SERVANT_MAP[id];
-            const o = st.servants[id];
-            const er = getEffectiveRarity(s, o);
-            const c = getServantCost(s, o);
-            return `<option value="own:${id}" ${!slot.isRental && slot.id === id ? 'selected' : ''}>★${er} ${s.name} (Lv.${o.level} · 코스트${c})</option>`;
-          }),
-          ...(slot.isRental ? [`<option value="rent:${slot.id}" selected>[칼데아 대여] ★${sv.rarity} ${sv.name} (Lv.50)</option>`] : [])
-        ].join('');
+        document.getElementById('btn-opt-cost')?.addEventListener('click', optimizePartyCost);
       }
 
-      const ceOptions = [
-        `<option value="">(개념예장 미장착 · 코스트 0)</option>`,
-        ...ownedCeIds.map(id => {
-          const c = CE_MAP[id];
-          const co = st.ces[id];
-          const m = isCeMlb(co);
-          const cs = getCeCurrentStats(c, co);
-          return `<option value="${id}" ${slot.ceId === id ? 'selected' : ''}>${m ? '✛' : ''}★${c.rarity} ${c.name} (코스트${getCeCost(c)} · Lv.${cs.level} · ${getCePassive(id, m).label})</option>`;
-        }),
-        ...((isFriendSlot || slot.isRental) && slot.ceId && !ownedCeIds.includes(slot.ceId)
-          ? [`<option value="${slot.ceId}" selected>[${isFriendSlot ? '프렌드 풀돌' : 'NPC'}] ${CE_MAP[slot.ceId]?.name} (${getCePassive(slot.ceId, true).label})</option>`]
-          : [])
-      ].join('');
+      const slotsEl = document.getElementById('battle-party-slots');
+      slotsEl.innerHTML = '';
+      partySlots.forEach((slot, idx) => {
+        const sv = SERVANT_MAP[slot.id];
+        const isFriendSlot = idx === 5;
+        const own = (slot.isSupport || slot.isRental)
+          ? { level: slot.isSupport ? 90 : 50, npLevel: slot.isSupport ? 2 : 1, viewAsc: slot.isSupport ? 4 : 1, ascension: slot.isSupport ? 4 : 1 }
+          : st.servants[slot.id];
+        const effR = getEffectiveRarity(sv, own);
+        const faceUrl = ArtRenderer.getFaceUrl(slot.id);
+        const ceOwn = slot.isSupport ? { copies: 5, level: 100 } : (slot.ceId ? st.ces[slot.ceId] : null);
+        const ceMlb = slot.isSupport || isCeMlb(ceOwn);
+        const ceObj = slot.ceId ? CE_MAP[slot.ceId] : null;
+        const ceStats = getCeCurrentStats(ceObj, ceOwn);
+        const slotCost = isFriendSlot ? 0 : (getServantCost(sv, own) + getCeCost(ceObj));
+        const deckTypes = getServantDeckTypes(sv);
+        const lineTag = idx < 3 ? `전열 ${idx + 1}` : (isFriendSlot ? '프렌드 (코스트 0)' : `후열 ${idx - 2}`);
 
-      const div = document.createElement('div');
-      div.className = `party-slot-card ${idx < 3 ? 'frontline-slot' : 'backline-slot'} ${isFriendSlot ? 'friend-slot' : ''}`;
-      div.innerHTML = `
+        let svOptions = '';
+        if (isFriendSlot) {
+          svOptions = SUPPORT_FRIENDS.map(sf =>
+            `<option value="sup:${sf.id}" ${slot.id === sf.id ? 'selected' : ''}>🤝 ★5 ${SERVANT_MAP[sf.id].name} (Lv.90 · 보${sf.npLevel})</option>`
+          ).join('');
+        } else {
+          svOptions = [
+            ...ownedSvIds.map(id => {
+              const s = SERVANT_MAP[id];
+              const o = st.servants[id];
+              const er = getEffectiveRarity(s, o);
+              const c = getServantCost(s, o);
+              return `<option value="own:${id}" ${!slot.isRental && slot.id === id ? 'selected' : ''}>★${er} ${s.name} (Lv.${o.level} · 코스트${c})</option>`;
+            }),
+            ...(slot.isRental ? [`<option value="rent:${slot.id}" selected>[칼데아 대여] ★${sv.rarity} ${sv.name} (Lv.50)</option>`] : [])
+          ].join('');
+        }
+
+        const ceOptions = [
+          `<option value="">(개념예장 미장착 · 코스트 0)</option>`,
+          ...ownedCeIds.map(id => {
+            const c = CE_MAP[id];
+            const co = st.ces[id];
+            const m = isCeMlb(co);
+            const cs = getCeCurrentStats(c, co);
+            return `<option value="${id}" ${slot.ceId === id ? 'selected' : ''}>${m ? '✛' : ''}★${c.rarity} ${c.name} (코스트${getCeCost(c)} · Lv.${cs.level} · ${getCePassive(id, m).label})</option>`;
+          }),
+          ...((isFriendSlot || slot.isRental) && slot.ceId && !ownedCeIds.includes(slot.ceId)
+            ? [`<option value="${slot.ceId}" selected>[${isFriendSlot ? '프렌드 풀돌' : 'NPC'}] ${CE_MAP[slot.ceId]?.name} (${getCePassive(slot.ceId, true).label})</option>`]
+            : [])
+        ].join('');
+
+        const div = document.createElement('div');
+        div.className = `party-slot-card ${idx < 3 ? 'frontline-slot' : 'backline-slot'} ${isFriendSlot ? 'friend-slot' : ''}`;
+        div.innerHTML = `
         <div class="party-slot-top">
           ${faceUrl ? `<img src="${faceUrl}" class="party-slot-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
           <div style="flex:1;min-width:0">
@@ -1851,321 +1913,321 @@ window.FgoBattle = (() => {
         <select class="filter-select party-sv-sel" data-idx="${idx}">${svOptions}</select>
         <select class="filter-select party-ce-sel" data-idx="${idx}" ${isFriendSlot ? 'disabled title="프렌드 서포트 개념예장 고정"' : ''}>${ceOptions}</select>
       `;
-      slotsEl.appendChild(div);
-    });
+        slotsEl.appendChild(div);
+      });
 
-    slotsEl.querySelectorAll('.party-sv-sel').forEach(sel => {
-      sel.addEventListener('change', (e) => {
-        const idx = Number(e.target.dataset.idx);
-        const [kind, id] = e.target.value.split(':');
-        if (kind === 'sup') {
-          const sf = SUPPORT_FRIENDS.find(s => s.id === id) || SUPPORT_FRIENDS[0];
-          partySlots[idx] = { id: sf.id, ceId: sf.ceId, isSupport: true, isRental: false };
-        } else if (kind === 'own') {
-          const dupIdx = partySlots.findIndex((p, i) => i !== idx && i < 5 && !p.isRental && p.id === id);
-          if (dupIdx !== -1) {
-            const tmp = partySlots[dupIdx];
-            partySlots[dupIdx] = partySlots[idx];
-            partySlots[idx] = tmp;
-          } else {
-            partySlots[idx] = { id, ceId: partySlots[idx].ceId, isSupport: false, isRental: false };
+      slotsEl.querySelectorAll('.party-sv-sel').forEach(sel => {
+        sel.addEventListener('change', (e) => {
+          const idx = Number(e.target.dataset.idx);
+          const [kind, id] = e.target.value.split(':');
+          if (kind === 'sup') {
+            const sf = SUPPORT_FRIENDS.find(s => s.id === id) || SUPPORT_FRIENDS[0];
+            partySlots[idx] = { id: sf.id, ceId: sf.ceId, isSupport: true, isRental: false };
+          } else if (kind === 'own') {
+            const dupIdx = partySlots.findIndex((p, i) => i !== idx && i < 5 && !p.isRental && p.id === id);
+            if (dupIdx !== -1) {
+              const tmp = partySlots[dupIdx];
+              partySlots[dupIdx] = partySlots[idx];
+              partySlots[idx] = tmp;
+            } else {
+              partySlots[idx] = { id, ceId: partySlots[idx].ceId, isSupport: false, isRental: false };
+            }
           }
-        }
-        SoundEngine.click();
-        renderLobby();
+          SoundEngine.click();
+          renderLobby();
+        });
       });
-    });
 
-    slotsEl.querySelectorAll('.party-ce-sel').forEach(sel => {
-      sel.addEventListener('change', (e) => {
-        const idx = Number(e.target.dataset.idx);
-        partySlots[idx].ceId = e.target.value || null;
-        SoundEngine.click();
-        renderLobby();
+      slotsEl.querySelectorAll('.party-ce-sel').forEach(sel => {
+        sel.addEventListener('change', (e) => {
+          const idx = Number(e.target.dataset.idx);
+          partySlots[idx].ceId = e.target.value || null;
+          SoundEngine.click();
+          renderLobby();
+        });
       });
-    });
-  }
+    }
 
   // ================= 전투 시작 (6인 로스터: 전열 0,1,2 + 후열 큐 3,4,5) =================
   function startBattle() {
-    ensureDefaultParty();
-    const st = getBridge().getState();
-    const quest = QUESTS.find(q => q.id === selectedQuestId) || QUESTS[0];
+        ensureDefaultParty();
+        const st = getBridge().getState();
+        const quest = QUESTS.find(q => q.id === selectedQuestId) || QUESTS[0];
 
-    const roster = partySlots.map((slot, idx) => {
-      const sv = SERVANT_MAP[slot.id];
-      const own = (slot.isSupport || slot.isRental)
-        ? { level: slot.isSupport ? 90 : 50, npLevel: slot.isSupport ? 2 : 1, viewAsc: slot.isSupport ? 4 : 1 }
-        : st.servants[slot.id];
-      const effR = getEffectiveRarity(sv, own);
-      const baseMaxLv = effR === 5 ? 90 : (effR === 4 ? 80 : (effR === 3 ? 70 : (effR === 1 ? 60 : 65)));
-      const scale = 0.65 + (own.level / baseMaxLv) * 0.45;
-      const ceOwn = slot.isSupport ? { copies: 5, level: 100 } : (slot.ceId ? st.ces[slot.ceId] : null);
-      const ceMlb = slot.isSupport || isCeMlb(ceOwn);
-      const ceStats = getCeCurrentStats(slot.ceId ? CE_MAP[slot.ceId] : null, ceOwn);
-      const maxHp = Math.round(sv.hp * scale) + ceStats.hp;
-      const atk = Math.round(sv.atk * scale) + ceStats.atk;
-      const ce = getCePassive(slot.ceId, ceMlb);
-      const maxNp = getMaxNp(own.npLevel);
+        const roster = partySlots.map((slot, idx) => {
+          const sv = SERVANT_MAP[slot.id];
+          const own = (slot.isSupport || slot.isRental)
+            ? { level: slot.isSupport ? 90 : 50, npLevel: slot.isSupport ? 2 : 1, viewAsc: slot.isSupport ? 4 : 1 }
+            : st.servants[slot.id];
+          const effR = getEffectiveRarity(sv, own);
+          const baseMaxLv = effR === 5 ? 90 : (effR === 4 ? 80 : (effR === 3 ? 70 : (effR === 1 ? 60 : 65)));
+          const scale = 0.65 + (own.level / baseMaxLv) * 0.45;
+          const ceOwn = slot.isSupport ? { copies: 5, level: 100 } : (slot.ceId ? st.ces[slot.ceId] : null);
+          const ceMlb = slot.isSupport || isCeMlb(ceOwn);
+          const ceStats = getCeCurrentStats(slot.ceId ? CE_MAP[slot.ceId] : null, ceOwn);
+          const maxHp = Math.round(sv.hp * scale) + ceStats.hp;
+          const atk = Math.round(sv.atk * scale) + ceStats.atk;
+          const ce = getCePassive(slot.ceId, ceMlb);
+          const maxNp = getMaxNp(own.npLevel);
 
-      const skLevels = (slot.isSupport) ? [10, 10, 10] : ((own.skillLevels && own.skillLevels.length === 3) ? own.skillLevels : [1, 1, 1]);
-      return {
-        rosterIdx: idx,
-        id: sv.id,
-        isSupport: !!slot.isSupport,
-        isRental: !!slot.isRental,
-        level: own.level,
-        npLevel: own.npLevel,
-        viewAsc: own.viewAsc || 1,
-        ceId: slot.ceId,
-        ceMlb,
-        maxHp,
-        hp: maxHp,
-        atk,
-        np: Math.min(maxNp, ce.startNp),
-        skills: getSkillDefs(sv).map((s, si) => {
-          const slv = skLevels[si] || 1;
-          const cdReduce = slv >= 10 ? 2 : (slv >= 6 ? 1 : 0);
-          return { ...s, level: slv, cd: Math.max(3, s.cd - cdReduce), curCd: 0 };
-        }),
-        buffs: ensureMemberBuffs({ buffs: {} })
-      };
-    });
+          const skLevels = (slot.isSupport) ? [10, 10, 10] : ((own.skillLevels && own.skillLevels.length === 3) ? own.skillLevels : [1, 1, 1]);
+          return {
+            rosterIdx: idx,
+            id: sv.id,
+            isSupport: !!slot.isSupport,
+            isRental: !!slot.isRental,
+            level: own.level,
+            npLevel: own.npLevel,
+            viewAsc: own.viewAsc || 1,
+            ceId: slot.ceId,
+            ceMlb,
+            maxHp,
+            hp: maxHp,
+            atk,
+            np: Math.min(maxNp, ce.startNp),
+            skills: getSkillDefs(sv).map((s, si) => {
+              const slv = skLevels[si] || 1;
+              const cdReduce = slv >= 10 ? 2 : (slv >= 6 ? 1 : 0);
+              return { ...s, level: slv, cd: Math.max(3, s.cd - cdReduce), curCd: 0 };
+            }),
+            buffs: ensureMemberBuffs({ buffs: {} })
+          };
+        });
 
-    const activeMcId = getBridge().getActiveMysticCodeId();
-    const mcObj = (typeof MYSTIC_CODE_MAP !== 'undefined' && MYSTIC_CODE_MAP[activeMcId]) || (typeof MYSTIC_CODES !== 'undefined' && MYSTIC_CODES[0]);
-    const mcSt = getBridge().getMysticCodeState(activeMcId) || { exp: 0, level: 1 };
-    const activeMcLv = mcObj ? getMcLevelFromExp(mcObj.expCurve, mcSt.exp || 0) : 1;
+        const activeMcId = getBridge().getActiveMysticCodeId();
+        const mcObj = (typeof MYSTIC_CODE_MAP !== 'undefined' && MYSTIC_CODE_MAP[activeMcId]) || (typeof MYSTIC_CODES !== 'undefined' && MYSTIC_CODES[0]);
+        const mcSt = getBridge().getMysticCodeState(activeMcId) || { exp: 0, level: 1 };
+        const activeMcLv = mcObj ? getMcLevelFromExp(mcObj.expCurve, mcSt.exp || 0) : 1;
 
-    battle = {
-      questId: quest.id,
-      mysticCodeId: mcObj ? mcObj.id : 'mc_chaldea',
-      mysticCodeLv: activeMcLv,
-      waveIdx: 0,
-      turn: 1,
-      stars: 0,
-      roster,
-      activeSlots: [0, 1, 2],   // 현재 전열 3칸 (rosterIdx)
-      subQueue: [3, 4, 5],      // 후열 대기 3명 (전열 사망 시 순서대로 증원!)
-      masterSkills: buildBattleMasterSkills(mcObj ? mcObj.id : 'mc_chaldea', activeMcLv),
-      enemies: [],
-      targetIdx: 0,
-      deck: [],
-      hand: [],
-      selectedCards: [],
-      phase: 'command', // 'command' | 'cards' | 'animating' | 'wipeout' | 'ended'
-      logs: []
-    };
-    busy = false;
-    openPopup = null;
-    pendingMasterSkillIdx = null;
-    pendingServantSkill = null;
-    ocSelectedFront = null;
-    ocSelectedSub = null;
+        battle = {
+          questId: quest.id,
+          mysticCodeId: mcObj ? mcObj.id : 'mc_chaldea',
+          mysticCodeLv: activeMcLv,
+          waveIdx: 0,
+          turn: 1,
+          stars: 0,
+          roster,
+          activeSlots: [0, 1, 2],   // 현재 전열 3칸 (rosterIdx)
+          subQueue: [3, 4, 5],      // 후열 대기 3명 (전열 사망 시 순서대로 증원!)
+          masterSkills: buildBattleMasterSkills(mcObj ? mcObj.id : 'mc_chaldea', activeMcLv),
+          enemies: [],
+          targetIdx: 0,
+          deck: [],
+          hand: [],
+          selectedCards: [],
+          phase: 'command', // 'command' | 'cards' | 'animating' | 'wipeout' | 'ended'
+          logs: []
+        };
+        busy = false;
+        openPopup = null;
+        pendingMasterSkillIdx = null;
+        pendingServantSkill = null;
+        ocSelectedFront = null;
+        ocSelectedSub = null;
 
-    spawnWave(0);
-    buildNewDeck();
-    drawTurnHand();
-    addLog(`⚔️ [${quest.name}] 6인 파티 출격! (전열 3 + 후열 3 · WAVE 1/${quest.waves.length})`);
-    saveActiveBattle();
+        spawnWave(0);
+        buildNewDeck();
+        drawTurnHand();
+        addLog(`⚔️ [${quest.name}] 6인 파티 출격! (전열 3 + 후열 3 · WAVE 1/${quest.waves.length})`);
+        saveActiveBattle();
 
-    document.getElementById('battle-lobby').classList.add('hidden');
-    document.getElementById('battle-arena').classList.remove('hidden');
-    SoundEngine.summonStart();
-    renderArena();
-  }
+        document.getElementById('battle-lobby').classList.add('hidden');
+        document.getElementById('battle-arena').classList.remove('hidden');
+        SoundEngine.summonStart();
+        renderArena();
+      }
 
   function getQuest() {
-    return QUESTS.find(q => q.id === battle.questId) || QUESTS[0];
-  }
+        return QUESTS.find(q => q.id === battle.questId) || QUESTS[0];
+      }
 
   function spawnWave(wIdx) {
-    battle.waveIdx = wIdx;
-    const q = getQuest();
-    battle.enemies = q.waves[wIdx].map((e, i) => ({
-      idx: i,
-      name: e.name,
-      cls: e.cls,
-      attr: e.attr || '인(人)',
-      gender: e.gender || '없음',
-      align: e.align || '-/-',
-      traits: Array.isArray(e.traits) ? [...e.traits] : [],
-      maxHp: e.hp,
-      hp: e.hp,
-      breakBars: [...(e.breakBars || [])],
-      atk: e.atk,
-      charge: 0,
-      maxCharge: e.maxCharge || 4,
-      emoji: e.emoji || '👾',
-      isBoss: !!e.isBoss,
-      npName: e.npName || '강력한 일격',
-      stunned: false,
-      buffBlock: 0,
-      deathResistDown: 0
-    }));
-    battle.targetIdx = 0;
-  }
+        battle.waveIdx = wIdx;
+        const q = getQuest();
+        battle.enemies = q.waves[wIdx].map((e, i) => ({
+          idx: i,
+          name: e.name,
+          cls: e.cls,
+          attr: e.attr || '인(人)',
+          gender: e.gender || '없음',
+          align: e.align || '-/-',
+          traits: Array.isArray(e.traits) ? [...e.traits] : [],
+          maxHp: e.hp,
+          hp: e.hp,
+          breakBars: [...(e.breakBars || [])],
+          atk: e.atk,
+          charge: 0,
+          maxCharge: e.maxCharge || 4,
+          emoji: e.emoji || '👾',
+          isBoss: !!e.isBoss,
+          npName: e.npName || '강력한 일격',
+          stunned: false,
+          buffBlock: 0,
+          deathResistDown: 0
+        }));
+        battle.targetIdx = 0;
+      }
 
   // 전열 3명의 15장 덱 생성 & 셔플 (cardSlot 0..4 보존 → 오더 체인지 1:1 매핑 고증!)
   function buildNewDeck() {
-    const cards = [];
-    battle.activeSlots.forEach(rIdx => {
-      if (rIdx === null) return;
-      const m = battle.roster[rIdx];
-      if (!m || m.hp <= 0) return;
-      const sv = SERVANT_MAP[m.id];
-      getServantDeckTypes(sv).forEach((type, cardSlot) => {
-        cards.push({ rosterIdx: rIdx, svId: m.id, type, cardSlot });
-      });
-    });
-    for (let i = cards.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [cards[i], cards[j]] = [cards[j], cards[i]];
-    }
-    battle.deck = cards;
-  }
+        const cards = [];
+        battle.activeSlots.forEach(rIdx => {
+          if (rIdx === null) return;
+          const m = battle.roster[rIdx];
+          if (!m || m.hp <= 0) return;
+          const sv = SERVANT_MAP[m.id];
+          getServantDeckTypes(sv).forEach((type, cardSlot) => {
+            cards.push({ rosterIdx: rIdx, svId: m.id, type, cardSlot });
+          });
+        });
+        for (let i = cards.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [cards[i], cards[j]] = [cards[j], cards[i]];
+        }
+        battle.deck = cards;
+      }
 
   function allocateStarsToHand(b, hand, totalStars) {
-    const starAlloc = Array(hand.length).fill(0);
-    let pool = Math.floor(totalStars);
-    if (pool >= 50) {
-      for (let i = 0; i < hand.length; i++) starAlloc[i] = 10;
-      return starAlloc;
-    }
-    const weights = hand.map(c => {
-      const sv = SERVANT_MAP[c.svId];
-      const m = b.roster[c.rosterIdx];
-      const bf = m ? ensureMemberBuffs(m) : {};
-      let swPct = 100 + (bf.starWeight || 0);
-      if (c.type === 'Buster' && bf.busterStarWeight) swPct += bf.busterStarWeight;
-      if (c.type === 'Arts' && bf.artsStarWeight) swPct += bf.artsStarWeight;
-      return Math.max(1, ((STAR_WEIGHT[sv.cls] || 100) * (swPct / 100)) + Math.floor(Math.random() * 50));
-    });
-    while (pool > 0) {
-      const avail = weights.map((w, i) => (starAlloc[i] < 10 ? w : 0));
-      const sum = avail.reduce((a, x) => a + x, 0);
-      if (sum <= 0) break;
-      let r = Math.random() * sum;
-      for (let i = 0; i < hand.length; i++) {
-        r -= avail[i];
-        if (r <= 0) { starAlloc[i]++; break; }
+        const starAlloc = Array(hand.length).fill(0);
+        let pool = Math.floor(totalStars);
+        if (pool >= 50) {
+          for (let i = 0; i < hand.length; i++) starAlloc[i] = 10;
+          return starAlloc;
+        }
+        const weights = hand.map(c => {
+          const sv = SERVANT_MAP[c.svId];
+          const m = b.roster[c.rosterIdx];
+          const bf = m ? ensureMemberBuffs(m) : {};
+          let swPct = 100 + (bf.starWeight || 0);
+          if (c.type === 'Buster' && bf.busterStarWeight) swPct += bf.busterStarWeight;
+          if (c.type === 'Arts' && bf.artsStarWeight) swPct += bf.artsStarWeight;
+          return Math.max(1, ((STAR_WEIGHT[sv.cls] || 100) * (swPct / 100)) + Math.floor(Math.random() * 50));
+        });
+        while (pool > 0) {
+          const avail = weights.map((w, i) => (starAlloc[i] < 10 ? w : 0));
+          const sum = avail.reduce((a, x) => a + x, 0);
+          if (sum <= 0) break;
+          let r = Math.random() * sum;
+          for (let i = 0; i < hand.length; i++) {
+            r -= avail[i];
+            if (r <= 0) { starAlloc[i]++; break; }
+          }
+          pool--;
+        }
+        return starAlloc;
       }
-      pool--;
-    }
-    return starAlloc;
-  }
 
   // 매 턴 5장 드로우 + 원작 FGO 클래스별 스타 집중도 분배 (라200>아150>세어룰실100>랜90>캐50>버10 + 마술예장 스타 집중 버프 반영!)
   function drawTurnHand() {
-    if (battle.deck.length < 5) buildNewDeck();
-    const drawCount = Math.min(5, battle.deck.length);
-    const hand = battle.deck.splice(0, drawCount);
-    const starAlloc = allocateStarsToHand(battle, hand, battle.stars);
-    battle.stars = 0;
-    battle.hand = hand.map((c, i) => ({ ...c, handIdx: i, critPct: starAlloc[i] * 10 }));
-    battle.selectedCards = [];
-  }
+        if (battle.deck.length < 5) buildNewDeck();
+        const drawCount = Math.min(5, battle.deck.length);
+        const hand = battle.deck.splice(0, drawCount);
+        const starAlloc = allocateStarsToHand(battle, hand, battle.stars);
+        battle.stars = 0;
+        battle.hand = hand.map((c, i) => ({ ...c, handIdx: i, critPct: starAlloc[i] * 10 }));
+        battle.selectedCards = [];
+      }
 
   // 전열 빈자리에 후열 대기 서번트 자동 증원 (원작 고증!)
   function reinforceFromBackline() {
-    let reinforced = false;
-    for (let s = 0; s < 3; s++) {
-      const rIdx = battle.activeSlots[s];
-      if (rIdx === null || battle.roster[rIdx].hp <= 0) {
-        if (battle.subQueue.length > 0) {
-          const nextRIdx = battle.subQueue.shift();
-          battle.activeSlots[s] = nextRIdx;
-          const newcomer = battle.roster[nextRIdx];
-          const sv = SERVANT_MAP[newcomer.id];
-          addLog(`🔄 후열 증원! [${sv.name}]${newcomer.isSupport ? '(프렌드)' : ''} 전열 투입!`);
-          reinforced = true;
-        } else {
-          battle.activeSlots[s] = null;
+        let reinforced = false;
+        for (let s = 0; s < 3; s++) {
+          const rIdx = battle.activeSlots[s];
+          if (rIdx === null || battle.roster[rIdx].hp <= 0) {
+            if (battle.subQueue.length > 0) {
+              const nextRIdx = battle.subQueue.shift();
+              battle.activeSlots[s] = nextRIdx;
+              const newcomer = battle.roster[nextRIdx];
+              const sv = SERVANT_MAP[newcomer.id];
+              addLog(`🔄 후열 증원! [${sv.name}]${newcomer.isSupport ? '(프렌드)' : ''} 전열 투입!`);
+              reinforced = true;
+            } else {
+              battle.activeSlots[s] = null;
+            }
+          }
         }
+        if (reinforced) {
+          buildNewDeck(); // 멤버 교체 시 덱 재구성!
+        }
+        return reinforced;
       }
-    }
-    if (reinforced) {
-      buildNewDeck(); // 멤버 교체 시 덱 재구성!
-    }
-    return reinforced;
-  }
 
   function addLog(msg) {
-    if (!battle) return;
-    battle.logs.unshift(msg);
-    if (battle.logs.length > 20) battle.logs.pop();
-  }
+        if (!battle) return;
+        battle.logs.unshift(msg);
+        if (battle.logs.length > 20) battle.logs.pop();
+      }
 
   // ================= 원작 FGO 체인 7종 판정 =================
   function analyzeChain(cards) {
-    if (cards.length < 3) return { colorChain: null, mighty: false, brave: false, badges: [], title: '' };
-    const types = cards.map(c => c.type);
-    const sameColor = types[0] === types[1] && types[1] === types[2];
-    const colorChain = sameColor ? types[0] : null;
-    const mighty = !sameColor && types.includes('Buster') && types.includes('Arts') && types.includes('Quick');
-    const brave = cards[0].rosterIdx === cards[1].rosterIdx && cards[1].rosterIdx === cards[2].rosterIdx;
+        if (cards.length < 3) return { colorChain: null, mighty: false, brave: false, badges: [], title: '' };
+        const types = cards.map(c => c.type);
+        const sameColor = types[0] === types[1] && types[1] === types[2];
+        const colorChain = sameColor ? types[0] : null;
+        const mighty = !sameColor && types.includes('Buster') && types.includes('Arts') && types.includes('Quick');
+        const brave = cards[0].rosterIdx === cards[1].rosterIdx && cards[1].rosterIdx === cards[2].rosterIdx;
 
-    const badges = [];
-    if (colorChain === 'Buster') badges.push({ cls: 'ch-buster', text: brave ? '🔴 버스터 브레이브 체인 (공+20% & EXTRA 3.5×)' : '🔴 버스터 체인 (해당 턴 공격력 +20%)' });
-    if (colorChain === 'Arts') badges.push({ cls: 'ch-arts', text: brave ? '🔵 아츠 브레이브 체인 (NP+20% & EXTRA 3.5×)' : '🔵 아츠 체인 (참가 서번트 NP +20%)' });
-    if (colorChain === 'Quick') badges.push({ cls: 'ch-quick', text: brave ? '🟢 퀵 브레이브 체인 (스타+20 & EXTRA 3.5×)' : '🟢 퀵 체인 (크리티컬 스타 +20)' });
-    if (mighty) badges.push({ cls: 'ch-mighty', text: brave ? '🌈 마이티 브레이브 체인 (3색 퍼스트 + 크리+20% + EXTRA!)' : '🌈 마이티 체인 (3색 퍼스트 보너스 + 크리 +20%!)' });
-    if (brave && !colorChain && !mighty) badges.push({ cls: 'ch-brave', text: '⚡ 브레이브 체인 (4타 EXTRA ATTACK 발동!)' });
+        const badges = [];
+        if (colorChain === 'Buster') badges.push({ cls: 'ch-buster', text: brave ? '🔴 버스터 브레이브 체인 (공+20% & EXTRA 3.5×)' : '🔴 버스터 체인 (해당 턴 공격력 +20%)' });
+        if (colorChain === 'Arts') badges.push({ cls: 'ch-arts', text: brave ? '🔵 아츠 브레이브 체인 (NP+20% & EXTRA 3.5×)' : '🔵 아츠 체인 (참가 서번트 NP +20%)' });
+        if (colorChain === 'Quick') badges.push({ cls: 'ch-quick', text: brave ? '🟢 퀵 브레이브 체인 (스타+20 & EXTRA 3.5×)' : '🟢 퀵 체인 (크리티컬 스타 +20)' });
+        if (mighty) badges.push({ cls: 'ch-mighty', text: brave ? '🌈 마이티 브레이브 체인 (3색 퍼스트 + 크리+20% + EXTRA!)' : '🌈 마이티 체인 (3색 퍼스트 보너스 + 크리 +20%!)' });
+        if (brave && !colorChain && !mighty) badges.push({ cls: 'ch-brave', text: '⚡ 브레이브 체인 (4타 EXTRA ATTACK 발동!)' });
 
-    // 보구 체인(2개 이상 보구) 표시
-    const npCount = cards.filter(c => c.kind === 'np').length;
-    if (npCount >= 2) {
-      badges.push({ cls: 'ch-brave', text: `✨ 보구 체인! 오버차지 최대 ${npCount * 100}%+` });
-    }
-    return { colorChain, mighty, brave, badges };
-  }
+        // 보구 체인(2개 이상 보구) 표시
+        const npCount = cards.filter(c => c.kind === 'np').length;
+        if (npCount >= 2) {
+          badges.push({ cls: 'ch-brave', text: `✨ 보구 체인! 오버차지 최대 ${npCount * 100}%+` });
+        }
+        return { colorChain, mighty, brave, badges };
+      }
 
   // ================= 전장 UI 렌더링 =================
   function renderArena() {
-    if (!battle) return;
-    const q = getQuest();
-    const spells = getBridge().getCommandSpells();
+        if (!battle) return;
+        const q = getQuest();
+        const spells = getBridge().getCommandSpells();
 
-    document.getElementById('ba-quest-name').textContent = q.name;
-    document.getElementById('ba-wave').textContent = `WAVE ${battle.waveIdx + 1} / ${q.waves.length}`;
-    document.getElementById('ba-turn').textContent = `TURN ${battle.turn}`;
-    document.getElementById('ba-stars').textContent = `★ ${Math.floor(battle.stars)}`;
+        document.getElementById('ba-quest-name').textContent = q.name;
+        document.getElementById('ba-wave').textContent = `WAVE ${battle.waveIdx + 1} / ${q.waves.length}`;
+        document.getElementById('ba-turn').textContent = `TURN ${battle.turn}`;
+        document.getElementById('ba-stars').textContent = `★ ${Math.floor(battle.stars)}`;
 
-    // 우측 상단 영주 3획 표시
-    const spellBtn = document.getElementById('btn-ba-spells');
-    if (spellBtn) {
-      spellBtn.innerHTML = `<span class="cs-pips">${'✦'.repeat(spells)}${'✧'.repeat(3 - spells)}</span> 영주 ${spells}/3`;
-    }
+        // 우측 상단 영주 3획 표시
+        const spellBtn = document.getElementById('btn-ba-spells');
+        if (spellBtn) {
+          spellBtn.innerHTML = `<span class="cs-pips">${'✦'.repeat(spells)}${'✧'.repeat(3 - spells)}</span> 영주 ${spells}/3`;
+        }
 
-    // 후열 대기 멤버(SUB) 뱃지 표시
-    const subEl = document.getElementById('ba-sub-bar');
-    if (subEl) {
-      const subs = getSubMembers(battle);
-      subEl.innerHTML = subs.length
-        ? `<span class="sub-label">후열 대기 (${subs.length}):</span>` + subs.map(m => {
-          const sv = SERVANT_MAP[m.id];
-          const face = ArtRenderer.getFaceUrl(m.id);
-          return `<span class="sub-chip">${face ? `<img src="${face}" class="sub-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}${sv.nickname || sv.name}${m.isSupport ? '🤝' : ''}</span>`;
-        }).join('')
-        : `<span class="sub-label">후열 대기 없음 (전원 출전 완료)</span>`;
-    }
+        // 후열 대기 멤버(SUB) 뱃지 표시
+        const subEl = document.getElementById('ba-sub-bar');
+        if (subEl) {
+          const subs = getSubMembers(battle);
+          subEl.innerHTML = subs.length
+            ? `<span class="sub-label">후열 대기 (${subs.length}):</span>` + subs.map(m => {
+              const sv = SERVANT_MAP[m.id];
+              const face = ArtRenderer.getFaceUrl(m.id);
+              return `<span class="sub-chip">${face ? `<img src="${face}" class="sub-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}${sv.nickname || sv.name}${m.isSupport ? '🤝' : ''}</span>`;
+            }).join('')
+            : `<span class="sub-label">후열 대기 없음 (전원 출전 완료)</span>`;
+        }
 
-    // 1) 적 전장 (카드 선택 중에도 타겟 클릭 변경 가능 — 원작 최신 패치 고증!)
-    const enemiesEl = document.getElementById('ba-enemies');
-    enemiesEl.innerHTML = '';
-    battle.enemies.forEach((en, idx) => {
-      const dead = en.hp <= 0;
-      const isTarget = idx === battle.targetIdx && !dead;
-      const hpPct = Math.max(0, Math.min(100, (en.hp / en.maxHp) * 100));
-      const chargeDots = Array.from({ length: en.maxCharge }, (_, i) =>
-        `<span class="charge-pip ${i < en.charge ? 'filled' : ''}"></span>`
-      ).join('');
-      const breakDots = en.breakBars.map(() => `<span class="break-gem" title="브레이크 게이지">◆</span>`).join('');
+        // 1) 적 전장 (카드 선택 중에도 타겟 클릭 변경 가능 — 원작 최신 패치 고증!)
+        const enemiesEl = document.getElementById('ba-enemies');
+        enemiesEl.innerHTML = '';
+        battle.enemies.forEach((en, idx) => {
+          const dead = en.hp <= 0;
+          const isTarget = idx === battle.targetIdx && !dead;
+          const hpPct = Math.max(0, Math.min(100, (en.hp / en.maxHp) * 100));
+          const chargeDots = Array.from({ length: en.maxCharge }, (_, i) =>
+            `<span class="charge-pip ${i < en.charge ? 'filled' : ''}"></span>`
+          ).join('');
+          const breakDots = en.breakBars.map(() => `<span class="break-gem" title="브레이크 게이지">◆</span>`).join('');
 
-      const card = document.createElement('div');
-      card.className = `enemy-unit ${dead ? 'dead' : ''} ${isTarget ? 'targeted' : ''} ${en.isBoss ? 'boss' : ''}`;
-      card.id = `enemy-unit-${idx}`;
-      card.innerHTML = `
+          const card = document.createElement('div');
+          card.className = `enemy-unit ${dead ? 'dead' : ''} ${isTarget ? 'targeted' : ''} ${en.isBoss ? 'boss' : ''}`;
+          card.id = `enemy-unit-${idx}`;
+          card.innerHTML = `
         ${isTarget ? '<div class="target-reticle">🎯 TARGET</div>' : ''}
         <div class="enemy-head">
           <span class="enemy-cls-badge">${CLASS_INFO[en.cls]?.name || en.cls} · ${en.attr || '인(人)'}</span>
@@ -2182,101 +2244,101 @@ window.FgoBattle = (() => {
         </div>
         <div class="dmg-float-layer" id="enemy-dmg-${idx}"></div>
       `;
-      if (!dead && !busy) {
-        card.addEventListener('click', () => {
-          SoundEngine.click();
-          battle.targetIdx = idx;
-          renderArena();
+          if (!dead && !busy) {
+            card.addEventListener('click', () => {
+              SoundEngine.click();
+              battle.targetIdx = idx;
+              renderArena();
+            });
+          }
+          enemiesEl.appendChild(card);
         });
-      }
-      enemiesEl.appendChild(card);
-    });
 
-    // 아군 개인 지정 스킬(서번트 스킬 또는 마스터 스킬) 대상 선택 대기 중인지 확인
-    const selectingAllyTarget =
-      (pendingServantSkill !== null) ||
-      (openPopup === 'master' && pendingMasterSkillIdx !== null && battle.masterSkills[pendingMasterSkillIdx]?.target === 'ally');
+        // 아군 개인 지정 스킬(서번트 스킬 또는 마스터 스킬) 대상 선택 대기 중인지 확인
+        const selectingAllyTarget =
+          (pendingServantSkill !== null) ||
+          (openPopup === 'master' && pendingMasterSkillIdx !== null && battle.masterSkills[pendingMasterSkillIdx]?.target === 'ally');
 
-    const commitPendingAllyTarget = (targetRIdx) => {
-      if (pendingServantSkill) {
-        const caster = battle.roster[pendingServantSkill.casterRIdx];
-        const sk = caster?.skills[pendingServantSkill.skillIdx];
-        if (!caster || !sk || sk.curCd > 0) { pendingServantSkill = null; openPopup = null; renderArena(); return; }
-        sk.curCd = sk.cd;
-        const msg = applyServantSkill(battle, caster, sk.key, sk.name, targetRIdx);
-        pendingServantSkill = null;
-        openPopup = null;
-        SoundEngine.levelUp();
-        addLog(`✨ ${msg}`);
-        getBridge().toast(msg);
-        showFloatDmg(`ally-dmg-${targetRIdx}`, `✨ ${sk.name}!`, 'dmg-break');
-        saveActiveBattle();
-        renderArena();
-        return;
-      }
-      if (openPopup === 'master' && pendingMasterSkillIdx !== null) {
-        const i = pendingMasterSkillIdx;
-        const sk = battle.masterSkills[i];
-        if (!sk || sk.curCd > 0) { pendingMasterSkillIdx = null; openPopup = null; renderArena(); return; }
-        sk.curCd = sk.cd;
-        const msg = applyMasterSkill(battle, i, targetRIdx, null, null);
-        pendingMasterSkillIdx = null;
-        openPopup = null;
-        SoundEngine.levelUp();
-        addLog(`🧤 ${msg}`);
-        getBridge().toast(msg);
-        showFloatDmg(`ally-dmg-${targetRIdx}`, `🧤 ${sk.name}!`, 'dmg-break');
-        saveActiveBattle();
-        renderArena();
-      }
-    };
+        const commitPendingAllyTarget = (targetRIdx) => {
+          if (pendingServantSkill) {
+            const caster = battle.roster[pendingServantSkill.casterRIdx];
+            const sk = caster?.skills[pendingServantSkill.skillIdx];
+            if (!caster || !sk || sk.curCd > 0) { pendingServantSkill = null; openPopup = null; renderArena(); return; }
+            sk.curCd = sk.cd;
+            const msg = applyServantSkill(battle, caster, sk.key, sk.name, targetRIdx);
+            pendingServantSkill = null;
+            openPopup = null;
+            SoundEngine.levelUp();
+            addLog(`✨ ${msg}`);
+            getBridge().toast(msg);
+            showFloatDmg(`ally-dmg-${targetRIdx}`, `✨ ${sk.name}!`, 'dmg-break');
+            saveActiveBattle();
+            renderArena();
+            return;
+          }
+          if (openPopup === 'master' && pendingMasterSkillIdx !== null) {
+            const i = pendingMasterSkillIdx;
+            const sk = battle.masterSkills[i];
+            if (!sk || sk.curCd > 0) { pendingMasterSkillIdx = null; openPopup = null; renderArena(); return; }
+            sk.curCd = sk.cd;
+            const msg = applyMasterSkill(battle, i, targetRIdx, null, null);
+            pendingMasterSkillIdx = null;
+            openPopup = null;
+            SoundEngine.levelUp();
+            addLog(`🧤 ${msg}`);
+            getBridge().toast(msg);
+            showFloatDmg(`ally-dmg-${targetRIdx}`, `🧤 ${sk.name}!`, 'dmg-break');
+            saveActiveBattle();
+            renderArena();
+          }
+        };
 
-    const targetBadgeMap = { ally: '👤개인', all: '👥단체', self: '🙋본인', enemy: '🎯적' };
+        const targetBadgeMap = { ally: '👤개인', all: '👥단체', self: '🙋본인', enemy: '🎯적' };
 
-    // 2) 아군 전열 3칸 렌더링
-    const partyEl = document.getElementById('ba-party');
-    partyEl.innerHTML = '';
-    battle.activeSlots.forEach((rIdx, slotPos) => {
-      if (rIdx === null) {
-        const empty = document.createElement('div');
-        empty.className = 'ally-unit dead';
-        empty.innerHTML = '<div style="text-align:center;padding:34px 8px;font-size:12px;color:#64748b">전투 불능<br>(증원 없음)</div>';
-        partyEl.appendChild(empty);
-        return;
-      }
-      const m = battle.roster[rIdx];
-      const sv = SERVANT_MAP[m.id];
-      const dead = m.hp <= 0;
-      const maxNp = getMaxNp(m.npLevel);
-      const hpPct = Math.max(0, Math.min(100, (m.hp / m.maxHp) * 100));
-      const npPct = Math.min(100, m.np);
-      const ocStage = Math.floor(m.np / 100);
-      const faceUrl = ArtRenderer.getFaceUrl(m.id);
+        // 2) 아군 전열 3칸 렌더링
+        const partyEl = document.getElementById('ba-party');
+        partyEl.innerHTML = '';
+        battle.activeSlots.forEach((rIdx, slotPos) => {
+          if (rIdx === null) {
+            const empty = document.createElement('div');
+            empty.className = 'ally-unit dead';
+            empty.innerHTML = '<div style="text-align:center;padding:34px 8px;font-size:12px;color:#64748b">전투 불능<br>(증원 없음)</div>';
+            partyEl.appendChild(empty);
+            return;
+          }
+          const m = battle.roster[rIdx];
+          const sv = SERVANT_MAP[m.id];
+          const dead = m.hp <= 0;
+          const maxNp = getMaxNp(m.npLevel);
+          const hpPct = Math.max(0, Math.min(100, (m.hp / m.maxHp) * 100));
+          const npPct = Math.min(100, m.np);
+          const ocStage = Math.floor(m.np / 100);
+          const faceUrl = ArtRenderer.getFaceUrl(m.id);
 
-      ensureMemberBuffs(m);
-      const activeBuffs = [];
-      if (m.buffs.atk > 0) activeBuffs.push(`⚔️공+${Math.round(m.buffs.atk * 100)}%`);
-      if (m.buffs.buster > 0) activeBuffs.push(`🔴B+${Math.round(m.buffs.buster * 100)}%`);
-      if (m.buffs.arts > 0) activeBuffs.push(`🔵A+${Math.round(m.buffs.arts * 100)}%`);
-      if (m.buffs.quick > 0) activeBuffs.push(`🟢Q+${Math.round(m.buffs.quick * 100)}%`);
-      if (m.buffs.npDmg > 0) activeBuffs.push(`✨보구+${Math.round(m.buffs.npDmg * 100)}%`);
-      if (m.buffs.crit > 0) activeBuffs.push(`★크리+${Math.round(m.buffs.crit * 100)}%`);
-      if (m.buffs.npBoost > 1) activeBuffs.push(`🔥보구×2`);
-      if (m.buffs.ocUp > 0) activeBuffs.push(`🌟OC+${m.buffs.ocUp}`);
-      if (m.buffs.extraUp > 0) activeBuffs.push(`⚡EX+${Math.round(m.buffs.extraUp * 100)}%`);
-      if (m.buffs.invul > 0 || m.buffs.invulHits > 0) activeBuffs.push(`🛡️무적${m.buffs.invulHits > 0 ? `(${m.buffs.invulHits}회)` : ''}`);
-      if (m.buffs.evade > 0 || m.buffs.evadeHits > 0) activeBuffs.push(`💨회피${m.buffs.evadeHits > 0 ? `(${m.buffs.evadeHits}회)` : ''}`);
-      if (m.buffs.guts > 0) activeBuffs.push(`❤️‍🔥근성(${m.buffs.guts.toLocaleString()})`);
-      if (m.buffs.regen > 0 && m.buffs.regenT > 0) activeBuffs.push(`💚도트힐(${m.buffs.regenT}T)`);
-      if (m.buffs.invulPierce > 0) activeBuffs.push(`🔱무적관통`);
-      if (m.buffs.sureHit > 0) activeBuffs.push(`👁️필중`);
-      if (m.buffs.debuffImmune > 0) activeBuffs.push(`🔰약화무효`);
-      if (m.buffs.starWeight > 0 || m.buffs.busterStarWeight > 0 || m.buffs.artsStarWeight > 0) activeBuffs.push(`🎯스타집중`);
+          ensureMemberBuffs(m);
+          const activeBuffs = [];
+          if (m.buffs.atk > 0) activeBuffs.push(`⚔️공+${Math.round(m.buffs.atk * 100)}%`);
+          if (m.buffs.buster > 0) activeBuffs.push(`🔴B+${Math.round(m.buffs.buster * 100)}%`);
+          if (m.buffs.arts > 0) activeBuffs.push(`🔵A+${Math.round(m.buffs.arts * 100)}%`);
+          if (m.buffs.quick > 0) activeBuffs.push(`🟢Q+${Math.round(m.buffs.quick * 100)}%`);
+          if (m.buffs.npDmg > 0) activeBuffs.push(`✨보구+${Math.round(m.buffs.npDmg * 100)}%`);
+          if (m.buffs.crit > 0) activeBuffs.push(`★크리+${Math.round(m.buffs.crit * 100)}%`);
+          if (m.buffs.npBoost > 1) activeBuffs.push(`🔥보구×2`);
+          if (m.buffs.ocUp > 0) activeBuffs.push(`🌟OC+${m.buffs.ocUp}`);
+          if (m.buffs.extraUp > 0) activeBuffs.push(`⚡EX+${Math.round(m.buffs.extraUp * 100)}%`);
+          if (m.buffs.invul > 0 || m.buffs.invulHits > 0) activeBuffs.push(`🛡️무적${m.buffs.invulHits > 0 ? `(${m.buffs.invulHits}회)` : ''}`);
+          if (m.buffs.evade > 0 || m.buffs.evadeHits > 0) activeBuffs.push(`💨회피${m.buffs.evadeHits > 0 ? `(${m.buffs.evadeHits}회)` : ''}`);
+          if (m.buffs.guts > 0) activeBuffs.push(`❤️‍🔥근성(${m.buffs.guts.toLocaleString()})`);
+          if (m.buffs.regen > 0 && m.buffs.regenT > 0) activeBuffs.push(`💚도트힐(${m.buffs.regenT}T)`);
+          if (m.buffs.invulPierce > 0) activeBuffs.push(`🔱무적관통`);
+          if (m.buffs.sureHit > 0) activeBuffs.push(`👁️필중`);
+          if (m.buffs.debuffImmune > 0) activeBuffs.push(`🔰약화무효`);
+          if (m.buffs.starWeight > 0 || m.buffs.busterStarWeight > 0 || m.buffs.artsStarWeight > 0) activeBuffs.push(`🎯스타집중`);
 
-      const unit = document.createElement('div');
-      unit.className = `ally-unit ${dead ? 'dead' : ''} ${m.np >= 100 ? 'np-ready' : ''} ${selectingAllyTarget && !dead ? 'target-selectable' : ''}`;
-      unit.id = `ally-unit-${rIdx}`;
-      unit.innerHTML = `
+          const unit = document.createElement('div');
+          unit.className = `ally-unit ${dead ? 'dead' : ''} ${m.np >= 100 ? 'np-ready' : ''} ${selectingAllyTarget && !dead ? 'target-selectable' : ''}`;
+          unit.id = `ally-unit-${rIdx}`;
+          unit.innerHTML = `
         ${selectingAllyTarget && !dead ? '<div class="ally-select-banner">🎯 클릭하여 적용!</div>' : ''}
         <div class="ally-top">
           ${faceUrl ? `<img src="${faceUrl}" class="ally-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
@@ -2304,94 +2366,94 @@ window.FgoBattle = (() => {
         </div>
         <div class="dmg-float-layer" id="ally-dmg-${rIdx}"></div>
       `;
-      if (selectingAllyTarget && !dead) {
-        unit.addEventListener('click', (e) => {
-          if (e.target.closest('.skill-btn')) return;
-          commitPendingAllyTarget(rIdx);
-        });
-      }
-      partyEl.appendChild(unit);
-    });
-
-    partyEl.querySelectorAll('.skill-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (busy || battle.phase !== 'command') return;
-        const rIdx = Number(btn.dataset.ridx);
-        const sIdx = Number(btn.dataset.sidx);
-        const m = battle.roster[rIdx];
-        const sk = m.skills[sIdx];
-        if (!m || !sk || sk.curCd > 0 || m.hp <= 0) return;
-
-        // 원작 FGO 고증: 개인 지정('ally') 스킬은 대상 아군 1명 선택 모드로 진입!
-        if (sk.target === 'ally') {
-          SoundEngine.click();
-          pendingMasterSkillIdx = null;
-          if (pendingServantSkill && pendingServantSkill.casterRIdx === rIdx && pendingServantSkill.skillIdx === sIdx) {
-            pendingServantSkill = null;
-            openPopup = null;
-          } else {
-            pendingServantSkill = { casterRIdx: rIdx, skillIdx: sIdx };
-            openPopup = 'sv_target';
+          if (selectingAllyTarget && !dead) {
+            unit.addEventListener('click', (e) => {
+              if (e.target.closest('.skill-btn')) return;
+              commitPendingAllyTarget(rIdx);
+            });
           }
-          renderArena();
+          partyEl.appendChild(unit);
+        });
+
+        partyEl.querySelectorAll('.skill-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (busy || battle.phase !== 'command') return;
+            const rIdx = Number(btn.dataset.ridx);
+            const sIdx = Number(btn.dataset.sidx);
+            const m = battle.roster[rIdx];
+            const sk = m.skills[sIdx];
+            if (!m || !sk || sk.curCd > 0 || m.hp <= 0) return;
+
+            // 원작 FGO 고증: 개인 지정('ally') 스킬은 대상 아군 1명 선택 모드로 진입!
+            if (sk.target === 'ally') {
+              SoundEngine.click();
+              pendingMasterSkillIdx = null;
+              if (pendingServantSkill && pendingServantSkill.casterRIdx === rIdx && pendingServantSkill.skillIdx === sIdx) {
+                pendingServantSkill = null;
+                openPopup = null;
+              } else {
+                pendingServantSkill = { casterRIdx: rIdx, skillIdx: sIdx };
+                openPopup = 'sv_target';
+              }
+              renderArena();
+              return;
+            }
+
+            // 단체('all') · 본인('self') · 적('enemy') 스킬은 즉시 발동!
+            pendingServantSkill = null;
+            pendingMasterSkillIdx = null;
+            if (openPopup === 'sv_target') openPopup = null;
+            sk.curCd = sk.cd;
+            const msg = applyServantSkill(battle, m, sk.key, sk.name, m.rosterIdx);
+            SoundEngine.levelUp();
+            addLog(`✨ ${msg}`);
+            getBridge().toast(msg);
+            saveActiveBattle();
+            renderArena();
+          });
+        });
+
+        // 3) 우측 상단 드롭다운 팝업 (마스터 스킬 / 영주 / 메뉴)
+        renderTopPopups();
+
+        // 4) 하단 ATTACK 영역 vs B/A/Q 카드 선택 팬
+        const attackWrap = document.getElementById('ba-attack-bar');
+        const cardDrawer = document.getElementById('ba-card-drawer');
+
+        if (battle.phase === 'command') {
+          attackWrap.classList.remove('hidden');
+          cardDrawer.classList.add('hidden');
+        } else if (battle.phase === 'cards') {
+          attackWrap.classList.add('hidden');
+          cardDrawer.classList.remove('hidden');
+          renderCommandCards();
+        } else {
+          attackWrap.classList.add('hidden');
+          cardDrawer.classList.add('hidden');
+        }
+
+        // 5) 전투 로그
+        document.getElementById('ba-log').innerHTML = battle.logs.slice(0, 6).map(l => `<div class="ba-log-line">${l}</div>`).join('');
+      }
+
+  function renderTopPopups() {
+        const popupEl = document.getElementById('ba-top-popup');
+        if (!popupEl) return;
+        if (!openPopup || !battle || battle.phase !== 'command' || busy) {
+          popupEl.classList.add('hidden');
+          popupEl.innerHTML = '';
           return;
         }
 
-        // 단체('all') · 본인('self') · 적('enemy') 스킬은 즉시 발동!
-        pendingServantSkill = null;
-        pendingMasterSkillIdx = null;
-        if (openPopup === 'sv_target') openPopup = null;
-        sk.curCd = sk.cd;
-        const msg = applyServantSkill(battle, m, sk.key, sk.name, m.rosterIdx);
-        SoundEngine.levelUp();
-        addLog(`✨ ${msg}`);
-        getBridge().toast(msg);
-        saveActiveBattle();
-        renderArena();
-      });
-    });
-
-    // 3) 우측 상단 드롭다운 팝업 (마스터 스킬 / 영주 / 메뉴)
-    renderTopPopups();
-
-    // 4) 하단 ATTACK 영역 vs B/A/Q 카드 선택 팬
-    const attackWrap = document.getElementById('ba-attack-bar');
-    const cardDrawer = document.getElementById('ba-card-drawer');
-
-    if (battle.phase === 'command') {
-      attackWrap.classList.remove('hidden');
-      cardDrawer.classList.add('hidden');
-    } else if (battle.phase === 'cards') {
-      attackWrap.classList.add('hidden');
-      cardDrawer.classList.remove('hidden');
-      renderCommandCards();
-    } else {
-      attackWrap.classList.add('hidden');
-      cardDrawer.classList.add('hidden');
-    }
-
-    // 5) 전투 로그
-    document.getElementById('ba-log').innerHTML = battle.logs.slice(0, 6).map(l => `<div class="ba-log-line">${l}</div>`).join('');
-  }
-
-  function renderTopPopups() {
-    const popupEl = document.getElementById('ba-top-popup');
-    if (!popupEl) return;
-    if (!openPopup || !battle || battle.phase !== 'command' || busy) {
-      popupEl.classList.add('hidden');
-      popupEl.innerHTML = '';
-      return;
-    }
-
-    popupEl.classList.remove('hidden');
-    if (openPopup === 'sv_target' && pendingServantSkill) {
-      const caster = battle.roster[pendingServantSkill.casterRIdx];
-      const sk = caster?.skills[pendingServantSkill.skillIdx];
-      const casterSv = caster ? SERVANT_MAP[caster.id] : null;
-      const activeList = getActiveMembers(battle);
-      if (!caster || !sk) { pendingServantSkill = null; openPopup = null; renderArena(); return; }
-      popupEl.innerHTML = `
+        popupEl.classList.remove('hidden');
+        if (openPopup === 'sv_target' && pendingServantSkill) {
+          const caster = battle.roster[pendingServantSkill.casterRIdx];
+          const sk = caster?.skills[pendingServantSkill.skillIdx];
+          const casterSv = caster ? SERVANT_MAP[caster.id] : null;
+          const activeList = getActiveMembers(battle);
+          if (!caster || !sk) { pendingServantSkill = null; openPopup = null; renderArena(); return; }
+          popupEl.innerHTML = `
         <div class="ms-picker-box" style="margin-top:0">
           <div class="ms-picker-head">
             <span>${sk.icon} <strong>${casterSv?.nickname || casterSv?.name} — ${sk.name}</strong> (👤 개인 지정 · 아래 버튼 또는 전열 카드를 클릭하세요!)</span>
@@ -2400,9 +2462,9 @@ window.FgoBattle = (() => {
           <div style="font-size:12px;color:#cbd5e1;margin-bottom:8px">${sk.desc}</div>
           <div class="ms-ally-targets">
             ${activeList.map(m => {
-              const sv = SERVANT_MAP[m.id];
-              const face = ArtRenderer.getFaceUrl(m.id);
-              return `
+            const sv = SERVANT_MAP[m.id];
+            const face = ArtRenderer.getFaceUrl(m.id);
+            return `
                 <button class="ms-target-btn" data-sv-ally="${m.rosterIdx}">
                   ${face ? `<img src="${face}" class="ms-target-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
                   <div>
@@ -2411,42 +2473,42 @@ window.FgoBattle = (() => {
                   </div>
                 </button>
               `;
-            }).join('')}
+          }).join('')}
           </div>
         </div>
       `;
-      document.getElementById('btn-svt-cancel')?.addEventListener('click', () => {
-        pendingServantSkill = null;
-        openPopup = null;
-        renderArena();
-      });
-      popupEl.querySelectorAll('[data-sv-ally]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const targetRIdx = Number(btn.dataset.svAlly);
-          sk.curCd = sk.cd;
-          const msg = applyServantSkill(battle, caster, sk.key, sk.name, targetRIdx);
-          pendingServantSkill = null;
-          openPopup = null;
-          SoundEngine.levelUp();
-          addLog(`✨ ${msg}`);
-          getBridge().toast(msg);
-          showFloatDmg(`ally-dmg-${targetRIdx}`, `✨ ${sk.name}!`, 'dmg-break');
-          saveActiveBattle();
-          renderArena();
-        });
-      });
-      return;
-    }
+          document.getElementById('btn-svt-cancel')?.addEventListener('click', () => {
+            pendingServantSkill = null;
+            openPopup = null;
+            renderArena();
+          });
+          popupEl.querySelectorAll('[data-sv-ally]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const targetRIdx = Number(btn.dataset.svAlly);
+              sk.curCd = sk.cd;
+              const msg = applyServantSkill(battle, caster, sk.key, sk.name, targetRIdx);
+              pendingServantSkill = null;
+              openPopup = null;
+              SoundEngine.levelUp();
+              addLog(`✨ ${msg}`);
+              getBridge().toast(msg);
+              showFloatDmg(`ally-dmg-${targetRIdx}`, `✨ ${sk.name}!`, 'dmg-break');
+              saveActiveBattle();
+              renderArena();
+            });
+          });
+          return;
+        }
 
-    if (openPopup === 'master') {
-      const mc = (typeof MYSTIC_CODE_MAP !== 'undefined' && MYSTIC_CODE_MAP[battle.mysticCodeId]) || null;
-      const mcTitle = mc ? `${mc.name} (Lv.${battle.mysticCodeLv || 1})` : '마술예장';
-      const pendingSk = pendingMasterSkillIdx !== null ? battle.masterSkills[pendingMasterSkillIdx] : null;
+        if (openPopup === 'master') {
+          const mc = (typeof MYSTIC_CODE_MAP !== 'undefined' && MYSTIC_CODE_MAP[battle.mysticCodeId]) || null;
+          const mcTitle = mc ? `${mc.name} (Lv.${battle.mysticCodeLv || 1})` : '마술예장';
+          const pendingSk = pendingMasterSkillIdx !== null ? battle.masterSkills[pendingMasterSkillIdx] : null;
 
-      let pickerHtml = '';
-      if (pendingSk && pendingSk.target === 'ally') {
-        const activeList = getActiveMembers(battle);
-        pickerHtml = `
+          let pickerHtml = '';
+          if (pendingSk && pendingSk.target === 'ally') {
+            const activeList = getActiveMembers(battle);
+            pickerHtml = `
           <div class="ms-picker-box">
             <div class="ms-picker-head">
               <span>${pendingSk.icon} <strong>${pendingSk.name}</strong> — 적용할 아군 서번트를 선택하세요</span>
@@ -2454,9 +2516,9 @@ window.FgoBattle = (() => {
             </div>
             <div class="ms-ally-targets">
               ${activeList.map(m => {
-                const sv = SERVANT_MAP[m.id];
-                const face = ArtRenderer.getFaceUrl(m.id);
-                return `
+              const sv = SERVANT_MAP[m.id];
+              const face = ArtRenderer.getFaceUrl(m.id);
+              return `
                   <button class="ms-target-btn" data-ms-ally="${m.rosterIdx}">
                     ${face ? `<img src="${face}" class="ms-target-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
                     <div>
@@ -2465,13 +2527,13 @@ window.FgoBattle = (() => {
                     </div>
                   </button>
                 `;
-              }).join('')}
+            }).join('')}
             </div>
           </div>
         `;
-      } else if (pendingSk && pendingSk.target === 'order_change') {
-        const aliveSubs = battle.subQueue.map((rIdx, qIdx) => ({ rIdx, qIdx, m: battle.roster[rIdx] })).filter(x => x.m && x.m.hp > 0);
-        pickerHtml = `
+          } else if (pendingSk && pendingSk.target === 'order_change') {
+            const aliveSubs = battle.subQueue.map((rIdx, qIdx) => ({ rIdx, qIdx, m: battle.roster[rIdx] })).filter(x => x.m && x.m.hp > 0);
+            pickerHtml = `
           <div class="ms-picker-box">
             <div class="ms-picker-head">
               <span>🔄 <strong>오더 체인지</strong> — 전열 1명과 후열 서브 1명을 선택해 교체하세요</span>
@@ -2483,23 +2545,23 @@ window.FgoBattle = (() => {
                   <div class="oc-col-label">전열 (OUT)</div>
                   <div class="oc-col-list">
                     ${battle.activeSlots.map((rIdx, fPos) => {
-                      if (rIdx === null) return '';
-                      const m = battle.roster[rIdx];
-                      if (!m || m.hp <= 0) return '';
-                      const sv = SERVANT_MAP[m.id];
-                      const face = ArtRenderer.getFaceUrl(m.id);
-                      return `<button class="ms-target-btn ${ocSelectedFront === fPos ? 'selected' : ''}" data-oc-front="${fPos}">${face ? `<img src="${face}" class="ms-target-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}<span>전열${fPos + 1} · ${sv.nickname || sv.name}</span></button>`;
-                    }).join('')}
+              if (rIdx === null) return '';
+              const m = battle.roster[rIdx];
+              if (!m || m.hp <= 0) return '';
+              const sv = SERVANT_MAP[m.id];
+              const face = ArtRenderer.getFaceUrl(m.id);
+              return `<button class="ms-target-btn ${ocSelectedFront === fPos ? 'selected' : ''}" data-oc-front="${fPos}">${face ? `<img src="${face}" class="ms-target-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}<span>전열${fPos + 1} · ${sv.nickname || sv.name}</span></button>`;
+            }).join('')}
                   </div>
                 </div>
                 <div>
                   <div class="oc-col-label">후열 서브 (IN)</div>
                   <div class="oc-col-list">
                     ${aliveSubs.map(({ rIdx, qIdx, m }) => {
-                      const sv = SERVANT_MAP[m.id];
-                      const face = ArtRenderer.getFaceUrl(m.id);
-                      return `<button class="ms-target-btn ${ocSelectedSub === qIdx ? 'selected' : ''}" data-oc-sub="${qIdx}">${face ? `<img src="${face}" class="ms-target-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}<span>서브 · ${sv.nickname || sv.name}${m.isSupport ? '🤝' : ''}</span></button>`;
-                    }).join('')}
+              const sv = SERVANT_MAP[m.id];
+              const face = ArtRenderer.getFaceUrl(m.id);
+              return `<button class="ms-target-btn ${ocSelectedSub === qIdx ? 'selected' : ''}" data-oc-sub="${qIdx}">${face ? `<img src="${face}" class="ms-target-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}<span>서브 · ${sv.nickname || sv.name}${m.isSupport ? '🤝' : ''}</span></button>`;
+            }).join('')}
                   </div>
                 </div>
               </div>
@@ -2509,9 +2571,9 @@ window.FgoBattle = (() => {
             `}
           </div>
         `;
-      }
+          }
 
-      popupEl.innerHTML = `
+          popupEl.innerHTML = `
         <div class="ba-pop-title" style="display:flex;align-items:center;gap:8px">
           ${mc?.icon ? `<img src="${mc.icon}" style="width:28px;height:28px;border-radius:6px;object-fit:cover" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : '🧤'}
           <span>마스터 스킬 — ${mcTitle}</span>
@@ -2527,68 +2589,68 @@ window.FgoBattle = (() => {
         ${pickerHtml}
       `;
 
-      const commitMasterSkill = (i, targetRIdx = null, ocF = null, ocS = null) => {
-        const sk = battle.masterSkills[i];
-        if (!sk || sk.curCd > 0) return;
-        sk.curCd = sk.cd;
-        const msg = applyMasterSkill(battle, i, targetRIdx, ocF, ocS);
-        pendingMasterSkillIdx = null;
-        ocSelectedFront = null;
-        ocSelectedSub = null;
-        openPopup = null;
-        SoundEngine.levelUp();
-        addLog(`🧤 ${msg}`);
-        getBridge().toast(msg);
-        saveActiveBattle();
-        renderArena();
-      };
-
-      popupEl.querySelectorAll('[data-ms]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const i = Number(btn.dataset.ms);
-          const sk = battle.masterSkills[i];
-          if (!sk || sk.curCd > 0) return;
-          if (sk.target === 'ally' || sk.target === 'order_change') {
-            SoundEngine.click();
-            pendingServantSkill = null;
-            pendingMasterSkillIdx = i;
+          const commitMasterSkill = (i, targetRIdx = null, ocF = null, ocS = null) => {
+            const sk = battle.masterSkills[i];
+            if (!sk || sk.curCd > 0) return;
+            sk.curCd = sk.cd;
+            const msg = applyMasterSkill(battle, i, targetRIdx, ocF, ocS);
+            pendingMasterSkillIdx = null;
             ocSelectedFront = null;
             ocSelectedSub = null;
-            renderArena(); // 전열 서번트 카드도 바로 클릭 가능하도록 전체 전장 하이라이트 갱신!
-            return;
-          }
-          commitMasterSkill(i);
-        });
-      });
+            openPopup = null;
+            SoundEngine.levelUp();
+            addLog(`🧤 ${msg}`);
+            getBridge().toast(msg);
+            saveActiveBattle();
+            renderArena();
+          };
 
-      document.getElementById('btn-ms-cancel')?.addEventListener('click', () => {
-        pendingMasterSkillIdx = null;
-        ocSelectedFront = null;
-        ocSelectedSub = null;
-        renderArena();
-      });
-      popupEl.querySelectorAll('[data-ms-ally]').forEach(btn => {
-        btn.addEventListener('click', () => commitMasterSkill(pendingMasterSkillIdx, Number(btn.dataset.msAlly)));
-      });
-      popupEl.querySelectorAll('[data-oc-front]').forEach(btn => {
-        btn.addEventListener('click', () => { SoundEngine.click(); ocSelectedFront = Number(btn.dataset.ocFront); renderTopPopups(); });
-      });
-      popupEl.querySelectorAll('[data-oc-sub]').forEach(btn => {
-        btn.addEventListener('click', () => { SoundEngine.click(); ocSelectedSub = Number(btn.dataset.ocSub); renderTopPopups(); });
-      });
-      document.getElementById('btn-oc-confirm')?.addEventListener('click', () => {
-        if (ocSelectedFront === null || ocSelectedSub === null) return;
-        commitMasterSkill(pendingMasterSkillIdx, null, ocSelectedFront, ocSelectedSub);
-      });
-    } else if (openPopup === 'spells') {
-      const spells = getBridge().getCommandSpells();
-      const activeList = getActiveMembers(battle);
-      popupEl.innerHTML = `
+          popupEl.querySelectorAll('[data-ms]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const i = Number(btn.dataset.ms);
+              const sk = battle.masterSkills[i];
+              if (!sk || sk.curCd > 0) return;
+              if (sk.target === 'ally' || sk.target === 'order_change') {
+                SoundEngine.click();
+                pendingServantSkill = null;
+                pendingMasterSkillIdx = i;
+                ocSelectedFront = null;
+                ocSelectedSub = null;
+                renderArena(); // 전열 서번트 카드도 바로 클릭 가능하도록 전체 전장 하이라이트 갱신!
+                return;
+              }
+              commitMasterSkill(i);
+            });
+          });
+
+          document.getElementById('btn-ms-cancel')?.addEventListener('click', () => {
+            pendingMasterSkillIdx = null;
+            ocSelectedFront = null;
+            ocSelectedSub = null;
+            renderArena();
+          });
+          popupEl.querySelectorAll('[data-ms-ally]').forEach(btn => {
+            btn.addEventListener('click', () => commitMasterSkill(pendingMasterSkillIdx, Number(btn.dataset.msAlly)));
+          });
+          popupEl.querySelectorAll('[data-oc-front]').forEach(btn => {
+            btn.addEventListener('click', () => { SoundEngine.click(); ocSelectedFront = Number(btn.dataset.ocFront); renderTopPopups(); });
+          });
+          popupEl.querySelectorAll('[data-oc-sub]').forEach(btn => {
+            btn.addEventListener('click', () => { SoundEngine.click(); ocSelectedSub = Number(btn.dataset.ocSub); renderTopPopups(); });
+          });
+          document.getElementById('btn-oc-confirm')?.addEventListener('click', () => {
+            if (ocSelectedFront === null || ocSelectedSub === null) return;
+            commitMasterSkill(pendingMasterSkillIdx, null, ocSelectedFront, ocSelectedSub);
+          });
+        } else if (openPopup === 'spells') {
+          const spells = getBridge().getCommandSpells();
+          const activeList = getActiveMembers(battle);
+          popupEl.innerHTML = `
         <div class="ba-pop-title">✦ 영주 커맨드 (보유 ${spells} / 3획 · 매일 0시 3획 자동 회복)</div>
         <div class="cs-actions-wrap">
           ${activeList.map(m => {
-        const sv = SERVANT_MAP[m.id];
-        return `
+            const sv = SERVANT_MAP[m.id];
+            return `
               <div class="cs-member-row">
                 <strong>${sv.nickname || sv.name}</strong>
                 <div style="display:flex;gap:6px">
@@ -2597,37 +2659,37 @@ window.FgoBattle = (() => {
                 </div>
               </div>
             `;
-      }).join('')}
+          }).join('')}
         </div>
       `;
-      popupEl.querySelectorAll('[data-cs-heal]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          if (!getBridge().consumeCommandSpells(1)) { getBridge().toast('영주가 부족합니다!'); return; }
-          const m = battle.roster[Number(btn.dataset.csHeal)];
-          m.hp = m.maxHp;
-          openPopup = null;
-          SoundEngine.reveal(4, true);
-          addLog(`✦ 영주 [영기수복]! ${SERVANT_MAP[m.id].name} HP 100% 완전 회복!`);
-          getBridge().toast(`✦ 영주 1획 소모! ${SERVANT_MAP[m.id].name} HP 완전 회복!`);
-          saveActiveBattle();
-          renderArena();
-        });
-      });
-      popupEl.querySelectorAll('[data-cs-np]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          if (!getBridge().consumeCommandSpells(1)) { getBridge().toast('영주가 부족합니다!'); return; }
-          const m = battle.roster[Number(btn.dataset.csNp)];
-          m.np = Math.min(getMaxNp(m.npLevel), m.np + 100);
-          openPopup = null;
-          SoundEngine.reveal(5, true);
-          addLog(`✦ 영주 [보구해방]! ${SERVANT_MAP[m.id].name} NP +100% 충전!`);
-          getBridge().toast(`✦ 영주 1획 소모! ${SERVANT_MAP[m.id].name} 보구해방 (NP +100%)!`);
-          saveActiveBattle();
-          renderArena();
-        });
-      });
-    } else if (openPopup === 'menu') {
-      popupEl.innerHTML = `
+          popupEl.querySelectorAll('[data-cs-heal]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              if (!getBridge().consumeCommandSpells(1)) { getBridge().toast('영주가 부족합니다!'); return; }
+              const m = battle.roster[Number(btn.dataset.csHeal)];
+              m.hp = m.maxHp;
+              openPopup = null;
+              SoundEngine.reveal(4, true);
+              addLog(`✦ 영주 [영기수복]! ${SERVANT_MAP[m.id].name} HP 100% 완전 회복!`);
+              getBridge().toast(`✦ 영주 1획 소모! ${SERVANT_MAP[m.id].name} HP 완전 회복!`);
+              saveActiveBattle();
+              renderArena();
+            });
+          });
+          popupEl.querySelectorAll('[data-cs-np]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              if (!getBridge().consumeCommandSpells(1)) { getBridge().toast('영주가 부족합니다!'); return; }
+              const m = battle.roster[Number(btn.dataset.csNp)];
+              m.np = Math.min(getMaxNp(m.npLevel), m.np + 100);
+              openPopup = null;
+              SoundEngine.reveal(5, true);
+              addLog(`✦ 영주 [보구해방]! ${SERVANT_MAP[m.id].name} NP +100% 충전!`);
+              getBridge().toast(`✦ 영주 1획 소모! ${SERVANT_MAP[m.id].name} 보구해방 (NP +100%)!`);
+              saveActiveBattle();
+              renderArena();
+            });
+          });
+        } else if (openPopup === 'menu') {
+          popupEl.innerHTML = `
         <div class="ba-pop-title">☰ 배틀 메뉴</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="small-outline-btn" id="btn-pop-close">전투 계속하기</button>
@@ -2635,44 +2697,44 @@ window.FgoBattle = (() => {
           <button class="small-outline-btn danger" id="btn-pop-flee">🏃 도주하기 (보상 없음)</button>
         </div>
       `;
-      document.getElementById('btn-pop-close').addEventListener('click', () => { openPopup = null; renderArena(); });
-      document.getElementById('btn-pop-affinity').addEventListener('click', () => { openPopup = null; renderArena(); openAffinityModal(); });
-      document.getElementById('btn-pop-flee').addEventListener('click', () => {
-        if (!confirm('전투에서 도주하시겠습니까? (경험치와 보상을 얻을 수 없습니다)')) return;
-        openPopup = null;
-        battle = null;
-        busy = false;
-        clearSavedBattle();
-        renderLobby();
-      });
-    }
-  }
+          document.getElementById('btn-pop-close').addEventListener('click', () => { openPopup = null; renderArena(); });
+          document.getElementById('btn-pop-affinity').addEventListener('click', () => { openPopup = null; renderArena(); openAffinityModal(); });
+          document.getElementById('btn-pop-flee').addEventListener('click', () => {
+            if (!confirm('전투에서 도주하시겠습니까? (경험치와 보상을 얻을 수 없습니다)')) return;
+            openPopup = null;
+            battle = null;
+            busy = false;
+            clearSavedBattle();
+            renderLobby();
+          });
+        }
+      }
 
   // 커맨드 카드 선택 화면 (보구 3칸 + B/A/Q 5장 팬)
   function renderCommandCards() {
-    const target = battle.enemies[battle.targetIdx];
-    const npRow = document.getElementById('ba-np-cards');
-    const cmdRow = document.getElementById('ba-cmd-cards');
-    const chainBar = document.getElementById('ba-chain-preview');
+        const target = battle.enemies[battle.targetIdx];
+        const npRow = document.getElementById('ba-np-cards');
+        const cmdRow = document.getElementById('ba-cmd-cards');
+        const chainBar = document.getElementById('ba-chain-preview');
 
-    // 보구 카드 (현재 전열 3명)
-    npRow.innerHTML = '';
-    battle.activeSlots.forEach(rIdx => {
-      if (rIdx === null) return;
-      const m = battle.roster[rIdx];
-      const sv = SERVANT_MAP[m.id];
-      const ready = m.hp > 0 && m.np >= 100;
-      const selIdx = battle.selectedCards.findIndex(c => c.kind === 'np' && c.rosterIdx === rIdx);
-      const faceUrl = ArtRenderer.getFaceUrl(m.id);
-      const catLabel = getNpCategory(sv, m) === 'support' ? '보조' : (getNpCategory(sv, m) === 'single' ? '단일' : '대군');
-      const effNpType = getEffectiveNpType(sv, m);
-      const npUpTag = (typeof isNpUpgraded === 'function' && isNpUpgraded(sv)) ? ' 🗡️강화' : '';
-      const ocNow = Math.max(1, Math.floor(m.np / 100)) * 100;
+        // 보구 카드 (현재 전열 3명)
+        npRow.innerHTML = '';
+        battle.activeSlots.forEach(rIdx => {
+          if (rIdx === null) return;
+          const m = battle.roster[rIdx];
+          const sv = SERVANT_MAP[m.id];
+          const ready = m.hp > 0 && m.np >= 100;
+          const selIdx = battle.selectedCards.findIndex(c => c.kind === 'np' && c.rosterIdx === rIdx);
+          const faceUrl = ArtRenderer.getFaceUrl(m.id);
+          const catLabel = getNpCategory(sv, m) === 'support' ? '보조' : (getNpCategory(sv, m) === 'single' ? '단일' : '대군');
+          const effNpType = getEffectiveNpType(sv, m);
+          const npUpTag = (typeof isNpUpgraded === 'function' && isNpUpgraded(sv)) ? ' 🗡️강화' : '';
+          const ocNow = Math.max(1, Math.floor(m.np / 100)) * 100;
 
-      const btn = document.createElement('button');
-      btn.className = `np-cmd-card ${effNpType} ${ready ? 'ready' : 'locked'} ${selIdx !== -1 ? 'selected' : ''}`;
-      btn.disabled = !ready;
-      btn.innerHTML = `
+          const btn = document.createElement('button');
+          btn.className = `np-cmd-card ${effNpType} ${ready ? 'ready' : 'locked'} ${selIdx !== -1 ? 'selected' : ''}`;
+          btn.disabled = !ready;
+          btn.innerHTML = `
         ${selIdx !== -1 ? `<span class="cmd-order-badge">${selIdx + 1}st</span>` : ''}
         <div class="np-cmd-top">
           ${faceUrl ? `<img src="${faceUrl}" class="np-cmd-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
@@ -2683,36 +2745,36 @@ window.FgoBattle = (() => {
         </div>
         <div class="np-cmd-sub">${ready ? `NP ${Math.floor(m.np)}% (OC ${ocNow}% 발동!)` : `NP ${Math.floor(m.np)}% / 100%`}</div>
       `;
-      if (ready) {
-        btn.addEventListener('click', () => toggleSelectCard({ kind: 'np', rosterIdx: rIdx, type: effNpType, critPct: 0 }));
-      }
-      npRow.appendChild(btn);
-    });
+          if (ready) {
+            btn.addEventListener('click', () => toggleSelectCard({ kind: 'np', rosterIdx: rIdx, type: effNpType, critPct: 0 }));
+          }
+          npRow.appendChild(btn);
+        });
 
-    // 5장 커맨드 카드 (B/A/Q)
-    cmdRow.innerHTML = '';
-    battle.hand.forEach(card => {
-      const m = battle.roster[card.rosterIdx];
-      const sv = SERVANT_MAP[m.id];
-      const selIdx = battle.selectedCards.findIndex(c => c.kind === 'cmd' && c.handIdx === card.handIdx);
-      const mult = target ? getClassMultiplier(sv.cls, target.cls) : 1.0;
-      const attrMult = target ? getAttrMultiplier(sv.attribute, target.attr) : 1.0;
-      const affTag = mult > 1
-        ? `<span class="aff-weak">WEAK ${mult}×</span>`
-        : (mult < 1 ? `<span class="aff-resist">RESIST ${mult}×</span>` : '');
-      const attrTag = attrMult > 1
-        ? `<span class="aff-attr-up" title="히든 속성 유리 (${sv.attribute} → ${target.attr} 1.1x)">속성↑</span>`
-        : (attrMult < 1 ? `<span class="aff-attr-dn" title="히든 속성 불리 (${sv.attribute} → ${target.attr} 0.9x)">속성↓</span>` : '');
-      const faceUrl = ArtRenderer.getFaceUrl(m.id);
-      const koType = card.type === 'Buster' ? '버스터' : (card.type === 'Arts' ? '아츠' : '퀵');
+        // 5장 커맨드 카드 (B/A/Q)
+        cmdRow.innerHTML = '';
+        battle.hand.forEach(card => {
+          const m = battle.roster[card.rosterIdx];
+          const sv = SERVANT_MAP[m.id];
+          const selIdx = battle.selectedCards.findIndex(c => c.kind === 'cmd' && c.handIdx === card.handIdx);
+          const mult = target ? getClassMultiplier(sv.cls, target.cls) : 1.0;
+          const attrMult = target ? getAttrMultiplier(sv.attribute, target.attr) : 1.0;
+          const affTag = mult > 1
+            ? `<span class="aff-weak">WEAK ${mult}×</span>`
+            : (mult < 1 ? `<span class="aff-resist">RESIST ${mult}×</span>` : '');
+          const attrTag = attrMult > 1
+            ? `<span class="aff-attr-up" title="히든 속성 유리 (${sv.attribute} → ${target.attr} 1.1x)">속성↑</span>`
+            : (attrMult < 1 ? `<span class="aff-attr-dn" title="히든 속성 불리 (${sv.attribute} → ${target.attr} 0.9x)">속성↓</span>` : '');
+          const faceUrl = ArtRenderer.getFaceUrl(m.id);
+          const koType = card.type === 'Buster' ? '버스터' : (card.type === 'Arts' ? '아츠' : '퀵');
 
-      // 첫 카드가 Quick이거나 마이티 체인이면 표시 크리율 +20% 미리보기!
-      const firstIsQuick = battle.selectedCards.length > 0 && battle.selectedCards[0].type === 'Quick';
-      const displayCrit = Math.min(100, card.critPct + (firstIsQuick ? 20 : 0));
+          // 첫 카드가 Quick이거나 마이티 체인이면 표시 크리율 +20% 미리보기!
+          const firstIsQuick = battle.selectedCards.length > 0 && battle.selectedCards[0].type === 'Quick';
+          const displayCrit = Math.min(100, card.critPct + (firstIsQuick ? 20 : 0));
 
-      const btn = document.createElement('button');
-      btn.className = `cmd-card ${card.type} ${selIdx !== -1 ? 'selected' : ''}`;
-      btn.innerHTML = `
+          const btn = document.createElement('button');
+          btn.className = `cmd-card ${card.type} ${selIdx !== -1 ? 'selected' : ''}`;
+          btn.innerHTML = `
         ${selIdx !== -1 ? `<span class="cmd-order-badge">${selIdx + 1}</span>` : ''}
         <div class="cmd-card-top">
           ${affTag}${attrTag}
@@ -2724,104 +2786,104 @@ window.FgoBattle = (() => {
         <div class="cmd-sv-name">${sv.nickname || sv.name}</div>
         <div class="cmd-type-ribbon">${card.type.toUpperCase()}<span>${koType}</span></div>
       `;
-      btn.addEventListener('click', () => toggleSelectCard({ kind: 'cmd', handIdx: card.handIdx, rosterIdx: card.rosterIdx, type: card.type, critPct: card.critPct }));
-      cmdRow.appendChild(btn);
-    });
+          btn.addEventListener('click', () => toggleSelectCard({ kind: 'cmd', handIdx: card.handIdx, rosterIdx: card.rosterIdx, type: card.type, critPct: card.critPct }));
+          cmdRow.appendChild(btn);
+        });
 
-    const chain = analyzeChain(battle.selectedCards);
-    if (battle.selectedCards.length < 3) {
-      chainBar.innerHTML = `<span class="chain-hint">카드 3장 선택 (${battle.selectedCards.length}/3) · 위 적을 클릭해 타겟 변경 가능!</span>`;
-    } else if (chain.badges.length) {
-      chainBar.innerHTML = chain.badges.map(b => `<span class="chain-badge ${b.cls}">${b.text}</span>`).join('');
-    } else {
-      chainBar.innerHTML = `<span class="chain-hint">3장 선택 완료! 공격 개시!</span>`;
-    }
-  }
+        const chain = analyzeChain(battle.selectedCards);
+        if (battle.selectedCards.length < 3) {
+          chainBar.innerHTML = `<span class="chain-hint">카드 3장 선택 (${battle.selectedCards.length}/3) · 위 적을 클릭해 타겟 변경 가능!</span>`;
+        } else if (chain.badges.length) {
+          chainBar.innerHTML = chain.badges.map(b => `<span class="chain-badge ${b.cls}">${b.text}</span>`).join('');
+        } else {
+          chainBar.innerHTML = `<span class="chain-hint">3장 선택 완료! 공격 개시!</span>`;
+        }
+      }
 
   function toggleSelectCard(cardObj) {
-    if (busy || battle.phase !== 'cards') return;
-    const existIdx = battle.selectedCards.findIndex(c =>
-      c.kind === cardObj.kind && (c.kind === 'np' ? c.rosterIdx === cardObj.rosterIdx : c.handIdx === cardObj.handIdx)
-    );
-    if (existIdx !== -1) {
-      SoundEngine.click();
-      battle.selectedCards.splice(existIdx, 1);
-      renderCommandCards();
-      return;
-    }
-    if (battle.selectedCards.length >= 3) return;
-    SoundEngine.click();
-    battle.selectedCards.push(cardObj);
-    renderCommandCards();
+        if (busy || battle.phase !== 'cards') return;
+        const existIdx = battle.selectedCards.findIndex(c =>
+          c.kind === cardObj.kind && (c.kind === 'np' ? c.rosterIdx === cardObj.rosterIdx : c.handIdx === cardObj.handIdx)
+        );
+        if (existIdx !== -1) {
+          SoundEngine.click();
+          battle.selectedCards.splice(existIdx, 1);
+          renderCommandCards();
+          return;
+        }
+        if (battle.selectedCards.length >= 3) return;
+        SoundEngine.click();
+        battle.selectedCards.push(cardObj);
+        renderCommandCards();
 
-    if (battle.selectedCards.length === 3) {
-      busy = true;
-      setTimeout(() => executeTurnSequence(), 360);
-    }
-  }
+        if (battle.selectedCards.length === 3) {
+          busy = true;
+          setTimeout(() => executeTurnSequence(), 360);
+        }
+      }
 
   // ================= 턴 전투 시퀀스 (오버킬 · 크리×오버킬 곱연산 · 보구 OC · 후열 증원) =================
   function sleep(ms) { return new Promise(res => setTimeout(res, ms)); }
 
   function showFloatDmg(containerId, text, cssClass = '') {
-    const el = document.getElementById(containerId);
-    if (!el) return;
-    const pop = document.createElement('div');
-    pop.className = `dmg-pop ${cssClass}`;
-    pop.textContent = text;
-    el.appendChild(pop);
-    setTimeout(() => pop.remove(), 950);
-  }
+        const el = document.getElementById(containerId);
+        if (!el) return;
+        const pop = document.createElement('div');
+        pop.className = `dmg-pop ${cssClass}`;
+        pop.textContent = text;
+        el.appendChild(pop);
+        setTimeout(() => pop.remove(), 950);
+      }
 
   function pickAliveTarget() {
-    if (battle.enemies[battle.targetIdx]?.hp > 0) return battle.enemies[battle.targetIdx];
-    const next = battle.enemies.find(e => e.hp > 0);
-    if (next) battle.targetIdx = next.idx;
-    return next || null;
-  }
+        if (battle.enemies[battle.targetIdx]?.hp > 0) return battle.enemies[battle.targetIdx];
+        const next = battle.enemies.find(e => e.hp > 0);
+        if (next) battle.targetIdx = next.idx;
+        return next || null;
+      }
 
   // 대미지 적용 + 오버킬 여부 반환 (막타로 적을 죽이거나 이미 죽은 적을 추가 타격!)
   function damageEnemy(enemy, dmg, tagClass = '') {
-    if (!enemy) return false;
-    const alreadyDead = enemy.hp <= 0;
-    const finalDmg = Math.max(100, Math.round(dmg));
-    const willKill = !alreadyDead && (enemy.hp - finalDmg <= 0);
-    const isOverkill = alreadyDead || willKill;
+        if (!enemy) return false;
+        const alreadyDead = enemy.hp <= 0;
+        const finalDmg = Math.max(100, Math.round(dmg));
+        const willKill = !alreadyDead && (enemy.hp - finalDmg <= 0);
+        const isOverkill = alreadyDead || willKill;
 
-    if (!alreadyDead) {
-      enemy.hp -= finalDmg;
-    }
-    showFloatDmg(`enemy-dmg-${enemy.idx}`, `${finalDmg.toLocaleString()}${isOverkill ? ' OVERKILL!' : ''}`, isOverkill ? 'dmg-crit' : tagClass);
+        if (!alreadyDead) {
+          enemy.hp -= finalDmg;
+        }
+        showFloatDmg(`enemy-dmg-${enemy.idx}`, `${finalDmg.toLocaleString()}${isOverkill ? ' OVERKILL!' : ''}`, isOverkill ? 'dmg-crit' : tagClass);
 
-    const unitEl = document.getElementById(`enemy-unit-${enemy.idx}`);
-    if (unitEl) {
-      unitEl.classList.remove('hit-shake');
-      void unitEl.offsetWidth;
-      unitEl.classList.add('hit-shake');
-    }
+        const unitEl = document.getElementById(`enemy-unit-${enemy.idx}`);
+        if (unitEl) {
+          unitEl.classList.remove('hit-shake');
+          void unitEl.offsetWidth;
+          unitEl.classList.add('hit-shake');
+        }
 
-    // 브레이크 게이지 해방
-    if (!alreadyDead && enemy.hp <= 0 && enemy.breakBars.length > 0) {
-      const nextHp = enemy.breakBars.shift();
-      enemy.maxHp = nextHp;
-      enemy.hp = nextHp;
-      enemy.charge = Math.min(enemy.maxCharge, enemy.charge + 1);
-      addLog(`💥 ${enemy.name} 브레이크!! 새 HP ${nextHp.toLocaleString()} 해방!`);
-      showFloatDmg(`enemy-dmg-${enemy.idx}`, `BREAK!!`, 'dmg-break');
-      SoundEngine.sparkPromotion();
-    } else if (!alreadyDead && enemy.hp <= 0) {
-      enemy.hp = 0;
-      addLog(`💀 ${enemy.name} 격파! (OVERKILL)`);
-    }
-    return isOverkill;
-  }
+        // 브레이크 게이지 해방
+        if (!alreadyDead && enemy.hp <= 0 && enemy.breakBars.length > 0) {
+          const nextHp = enemy.breakBars.shift();
+          enemy.maxHp = nextHp;
+          enemy.hp = nextHp;
+          enemy.charge = Math.min(enemy.maxCharge, enemy.charge + 1);
+          addLog(`💥 ${enemy.name} 브레이크!! 새 HP ${nextHp.toLocaleString()} 해방!`);
+          showFloatDmg(`enemy-dmg-${enemy.idx}`, `BREAK!!`, 'dmg-break');
+          SoundEngine.sparkPromotion();
+        } else if (!alreadyDead && enemy.hp <= 0) {
+          enemy.hp = 0;
+          addLog(`💀 ${enemy.name} 격파! (OVERKILL)`);
+        }
+        return isOverkill;
+      }
 
   async function playNpCutin(member, ocStage) {
-    const sv = SERVANT_MAP[member.id];
-    const overlay = document.getElementById('np-cutin-overlay');
-    const imgUrl = ArtRenderer.getCardArtUrl(sv, true, member.viewAsc || 4);
-    overlay.className = `np-cutin-overlay ${sv.npType}`;
-    overlay.innerHTML = `
+        const sv = SERVANT_MAP[member.id];
+        const overlay = document.getElementById('np-cutin-overlay');
+        const imgUrl = ArtRenderer.getCardArtUrl(sv, true, member.viewAsc || 4);
+        overlay.className = `np-cutin-overlay ${sv.npType}`;
+        overlay.innerHTML = `
       <div class="np-cutin-inner">
         ${imgUrl ? `<img src="${imgUrl}" class="np-cutin-img" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
         <div class="np-cutin-text">
@@ -2831,712 +2893,713 @@ window.FgoBattle = (() => {
         </div>
       </div>
     `;
-    SoundEngine.reveal(5, true);
-    await sleep(1050);
-    overlay.className = 'np-cutin-overlay hidden';
-  }
+        SoundEngine.reveal(5, true);
+        await sleep(1050);
+        overlay.className = 'np-cutin-overlay hidden';
+      }
 
   async function executeTurnSequence() {
-    battle.phase = 'animating';
-    openPopup = null;
-    renderArena();
+        battle.phase = 'animating';
+        openPopup = null;
+        renderArena();
 
-    const cards = [...battle.selectedCards];
-    const chain = analyzeChain(cards);
-    const firstType = cards[0].type; // 보구-평타-평타 시 보구색도 첫 수 보너스로 후속 평타에 적용!
+        const cards = [...battle.selectedCards];
+        const chain = analyzeChain(cards);
+        const firstType = cards[0].type; // 보구-평타-평타 시 보구색도 첫 수 보너스로 후속 평타에 적용!
 
-    // 체인 즉발 보너스 (아츠 체인 NP+20% / 퀵 체인 스타+20 / 버스터 체인 공+20%)
-    if (chain.colorChain === 'Arts') {
-      const participants = new Set(cards.map(c => c.rosterIdx));
-      participants.forEach(rIdx => {
-        const m = battle.roster[rIdx];
-        if (m && m.hp > 0) m.np = Math.min(getMaxNp(m.npLevel), m.np + 20);
-      });
-      addLog('🔵 아츠 체인! 참가 서번트 NP +20%!');
-    } else if (chain.colorChain === 'Quick') {
-      battle.stars = Math.min(99, battle.stars + 20);
-      addLog('🟢 퀵 체인! 크리티컬 스타 +20 획득!');
-    } else if (chain.colorChain === 'Buster') {
-      addLog('🔴 버스터 체인! 해당 턴 공격력 +20% 보너스!');
-    } else if (chain.mighty) {
-      addLog('🌈 마이티 체인! 3색 퍼스트 보너스 + 크리 확률 +20% 전원 적용!');
-    }
-
-    let npChainCount = 0; // 같은 턴 연속 보구 발동 카운터 (오버차지 +100% / +200%!)
-    let currentTarget = pickAliveTarget();
-
-    for (let step = 0; step < cards.length; step++) {
-      const c = cards[step];
-      const m = battle.roster[c.rosterIdx];
-      if (!m || m.hp <= 0) continue;
-      const sv = SERVANT_MAP[m.id];
-      const ce = getCePassive(m.ceId, !!m.ceMlb);
-      const ps = (typeof getServantPassives === 'function') ? getServantPassives(sv) : { q: 0, a: 0, b: 0, c: 0, sg: 0, ad: 0, nr: 0 };
-      const npUpMult = (typeof isNpUpgraded === 'function' && isNpUpgraded(sv)) ? 1.25 : 1.0;
-      const maxNp = getMaxNp(m.npLevel);
-
-      // 같은 서번트가 이미 죽은 적을 이어서 때리면 오버킬 유지, 다른 서번트거나 첫 타겟이 없으면 살아있는 적 자동 타겟!
-      const prevSameServant = step > 0 && cards[step - 1].rosterIdx === c.rosterIdx;
-      if (!currentTarget || (!prevSameServant && currentTarget.hp <= 0)) {
-        currentTarget = pickAliveTarget();
-      }
-      if (!currentTarget && getNpCategory(sv) !== 'support') break;
-
-      const allyEl = document.getElementById(`ally-unit-${m.rosterIdx}`);
-      if (allyEl) allyEl.classList.add('attacking');
-
-      if (c.kind === 'np') {
-        ensureMemberBuffs(m);
-        // 원작 고증: 105%~199%는 무조건 100%(OC 1단계)! 보구 체인(+1/+2) + 마술예장 심원성취(ocUp +1) 합산 최대 5단계
-        const baseOcStage = Math.max(1, Math.floor(m.np / 100));
-        const ocStage = Math.min(5, baseOcStage + npChainCount + (m.buffs.ocUp || 0));
-        m.buffs.ocUp = 0;
-        npChainCount++;
-        const ocMult = 1 + (ocStage - 1) * 0.25; // OC 100%=1.0, 200%=1.25, 300%=1.5, 400%=1.75, 500%=2.0
-        m.np = 0;
-
-        await playNpCutin(m, ocStage);
-        // 원작 고증: 보구 자체는 커맨드 순서/퍼스트/색상 체인 보너스를 받지 않음!
-        const cat = getNpCategory(sv, m);
-        const npLvMult = [0, 1.0, 1.25, 1.4, 1.5, 1.65][m.npLevel] || 1.0;
-        const cardBuff = (c.type === 'Buster' ? m.buffs.buster + ce.buster + (ps.b || 0) : (c.type === 'Arts' ? m.buffs.arts + ce.arts + (ps.a || 0) : m.buffs.quick + ce.quick + (ps.q || 0)));
-        const arashMult = (m.id === 'sv_no_016') ? 1.6 : ((m.id === 'sv_no_258' || m.id === 'sv_no_414') ? 1.5 : 1.0); // ★1 아라쉬 ×1.6 / ★2 진궁·★4 시즈키 소쥬로 ×1.5!
-        const npDmgMult = (1 + m.buffs.npDmg + ce.npDmg) * m.buffs.npBoost * npUpMult * arashMult;
-
-        if (cat === 'support') {
-          if (m.id === 'sv_no_272') {
-            // ★5 초인 오리온 [아르테미스 아그노스]: 공격력+30% · 크리위력+100% · 약화무효 · 스타 +20!
-            m.buffs.atk += 0.3 * ocMult; m.buffs.atkT = 3;
-            m.buffs.crit += 1.0; m.buffs.critT = 3;
-            m.buffs.debuffImmune = 1;
-            battle.stars = Math.min(99, battle.stars + 20);
-            addLog(`🏹 ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 본인 공업 & 크리 위력 +100% & 스타 +20!!`);
-          } else if (m.id === 'sv_no_294') {
-            // ★1 오다 노부카츠: 아군 전체 버스터+40% · 크리+50% · 스타+20 후 자신 즉사 → 후열 증원!
-            getActiveMembers(battle).forEach(ally => {
-              ensureMemberBuffs(ally);
-              ally.buffs.buster += 0.4; ally.buffs.cardT = 3;
-              ally.buffs.crit += 0.5; ally.buffs.critT = 3;
-              ally.hp = Math.min(ally.maxHp, ally.hp + 2000);
-            });
-            battle.stars = Math.min(99, battle.stars + 20);
-            m.hp = 0;
-            addLog(`🌸 ${sv.name} 보구 [${sv.npName}]! 아군 전체 B+40%·크리+50%·스타+20 부여 후 퇴장!`);
-            reinforceFromBackline();
-          } else if (m.id === 'sv_no_021') {
-            // ★2 레오니다스 1세 [테르모필라이 에노모타이아]: 아군 전체 방어+30% · 스타+25 · 본인 근성!
-            getActiveMembers(battle).forEach(ally => { ensureMemberBuffs(ally); ally.buffs.def += 0.3; ally.buffs.defT = 3; });
-            m.buffs.guts = Math.max(m.buffs.guts, 2000); m.buffs.gutsT = 3;
-            battle.stars = Math.min(99, battle.stars + 25);
-            addLog(`🛡️ ${sv.name} 보구 [${sv.npName}]! 아군 방어+30% · 스타+25 · 본인 근성 부여!`);
-          } else if (m.id === 'sv_no_185') {
-            // ★3 호조인 인슈운 [오보로 우라즈키 주일식]: 본인 공+50% · 크리+100% · 스타집중+500% · 회피 1회!
-            m.buffs.atk += 0.5; m.buffs.atkT = 3;
-            m.buffs.crit += 1.0; m.buffs.critT = 3;
-            m.buffs.starWeight += 500;
-            m.buffs.evadeHits = Math.max(m.buffs.evadeHits, 1); m.buffs.evadeT = 3;
-            addLog(`🔱 ${sv.name} 보구 [${sv.npName}]! 본인 공+50% · 크리+100% · 회피(1회)!!`);
-          } else if (m.id === 'sv_no_019') {
-            // ★2 무사시보 벤케이 [오백나한 보타락도해]: 적 전체 스턴 + 차지 -1!
-            battle.enemies.forEach(en => { if (en.hp > 0) { en.stunned = true; en.charge = Math.max(0, en.charge - 1); } });
-            addLog(`⚡ ${sv.name} 보구 [${sv.npName}]! 적 전체 스턴(1T) & 차지 -1칸!`);
-          } else if (m.id === 'sv_no_228') {
-            // ★4 진양옥 [숭문지진]: 아군 전체 크리+40% · 방어+30% · HP+2500!
-            getActiveMembers(battle).forEach(ally => {
-              ensureMemberBuffs(ally);
-              ally.buffs.crit += 0.4; ally.buffs.critT = 3;
-              ally.buffs.def += 0.3; ally.buffs.defT = 3;
-              ally.hp = Math.min(ally.maxHp, ally.hp + 2500);
-            });
-            addLog(`✨ ${sv.name} 보구 [${sv.npName}]! 아군 전체 크리+40% · 방어+30% · HP 회복!`);
-          } else if (m.id === 'sv_no_241') {
-            // ★5 사마의(라이네스) [혼원일진]: 아군 전체 방어+30% · NP획득+30% · 크리+30% · 적 방어 약화!
-            getActiveMembers(battle).forEach(ally => {
-              ensureMemberBuffs(ally);
-              ally.buffs.def += 0.3; ally.buffs.defT = 3;
-              ally.buffs.npGain += 0.3; ally.buffs.npGainT = 3;
-              ally.buffs.atk += 0.25 * ocMult; ally.buffs.atkT = 3;
-            });
-            addLog(`📜 ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 아군 전체 공·방·NP획득 대폭 강화!`);
-          } else if (m.id === 'sv_no_342' || m.id === 'sv_no_026') {
-            // ★5 콘스탄티누스 11세 / ★3 부디카: 아군 전체 방어+40% · 무적(1T) · 아츠+20% · HP 회복!
-            getActiveMembers(battle).forEach(ally => {
-              ensureMemberBuffs(ally);
-              ally.buffs.def += 0.4; ally.buffs.defT = 3;
-              ally.buffs.arts += 0.2; ally.buffs.cardT = 3;
-              ally.buffs.invul = Math.max(ally.buffs.invul, 1);
-              ally.hp = Math.min(ally.maxHp, ally.hp + 2500);
-            });
-            addLog(`🏰 ${sv.name} 보구 [${sv.npName}]! 아군 전체 방어+40% · 무적(1T) · Arts+20% · 회복!`);
-          } else if (m.id === 'sv_no_150') {
-            // ★5 멀린 [가든 오브 아발론]: 아군 전체 도트힐(1500×3T) + NP+15% + 스타+15!
-            getActiveMembers(battle).forEach(ally => {
-              ensureMemberBuffs(ally);
-              ally.buffs.regen = Math.max(ally.buffs.regen, 1500); ally.buffs.regenT = 3;
-              ally.hp = Math.min(ally.maxHp, ally.hp + 1500);
-              ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 15);
-            });
-            battle.stars = Math.min(99, battle.stars + Math.round(10 + ocStage * 5));
-            addLog(`🌸 ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 아군 도트힐·NP+15%·스타 대량 획득!`);
-          } else if (m.id === 'sv_no_215') {
-            // ★5 스카디 [게이트 오브 스카이]: 아군 전체 회피(1회·3T) · 공+30% · 크리+50%!
-            getActiveMembers(battle).forEach(ally => {
-              ensureMemberBuffs(ally);
-              ally.buffs.evadeHits = Math.max(ally.buffs.evadeHits, 1); ally.buffs.evadeT = 3;
-              ally.buffs.atk += 0.3; ally.buffs.atkT = 3;
-              ally.buffs.crit += 0.5; ally.buffs.critT = 3;
-            });
-            addLog(`❄️ ${sv.name} 보구 [${sv.npName}]! 아군 전체 회피(1회) · 공+30% · 크리+50%!`);
-          } else if (m.id === 'sv_no_307') {
-            // ★5 미스 크레인 [천의무봉·학의 보은]: 선두 아군 공+30%·보구+30%·NP+30% 부여 후 본인 후열 이동!
-            const frontLead = getActiveMembers(battle).find(a => a.rosterIdx !== m.rosterIdx);
-            if (frontLead) {
-              ensureMemberBuffs(frontLead);
-              frontLead.buffs.atk += 0.3; frontLead.buffs.atkT = 3;
-              frontLead.buffs.npDmg += 0.3; frontLead.buffs.npDmgT = 3;
-              frontLead.np = Math.min(getMaxNp(frontLead.npLevel), frontLead.np + 30);
-            }
-            const mySlot = battle.activeSlots.indexOf(m.rosterIdx);
-            if (mySlot !== -1 && battle.subQueue.length > 0) {
-              executeOrderChange(battle, mySlot, 0);
-              addLog(`🕊️ ${sv.name} 보구 [${sv.npName}]! 선두 아군 초강화 후 본인 후열로 우아하게 퇴장!`);
-            } else {
-              addLog(`🕊️ ${sv.name} 보구 [${sv.npName}]! 선두 아군 공+30%·보구+30%·NP+30% 부여!`);
-            }
-          } else if (m.id === 'sv_no_033') {
-            // ★2 안데르센: 아군 전체 공+40% · 방+40% · 도트힐(1000×3T) · 스타+15!
-            getActiveMembers(battle).forEach(ally => {
-              ensureMemberBuffs(ally);
-              ally.buffs.atk += 0.4; ally.buffs.atkT = 3;
-              ally.buffs.def += 0.4; ally.buffs.defT = 3;
-              ally.buffs.regen = Math.max(ally.buffs.regen, 1000); ally.buffs.regenT = 3;
-            });
-            battle.stars = Math.min(99, battle.stars + 15);
-            addLog(`📖 ${sv.name} 보구 [${sv.npName}]! 아군 공+40%·방+40%·도트힐·스타+15!`);
-          } else if (m.id === 'sv_no_081') {
-            // ★3 헨리 지킬 & 하이드 [위험한 비약]: 하이드(버서커 모드) 변신! 최대HP+4000·전회복·B+50%(5T)·공+30%(5T)!
-            const hpGain = Math.round(4000 * ocMult);
-            m.buffs.maxHpBonus += hpGain; m.maxHp += hpGain; m.hp = m.maxHp;
-            m.buffs.buster += 0.5; m.buffs.cardT = 5;
-            m.buffs.atk += 0.3; m.buffs.atkT = 5;
-            addLog(`🧪 ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 하이드(버서커) 변신 — 최대HP+${hpGain.toLocaleString()}·전회복·B+50%·공+30%(5T)!!`);
-          } else if (m.id === 'sv_no_189') {
-            // ★5 오사카베히메 [백귀야행성]: 아군 전체 Q+30% · B+30% · 방어+20% · 최대HP+2,000!
-            getActiveMembers(battle).forEach(ally => {
-              ensureMemberBuffs(ally);
-              ally.buffs.quick += 0.3; ally.buffs.buster += 0.3; ally.buffs.cardT = 3;
-              ally.buffs.def += 0.2; ally.buffs.defT = 3;
-              ally.buffs.maxHpBonus += 2000; ally.maxHp += 2000; ally.hp += 2000;
-            });
-            addLog(`🏯 ${sv.name} 보구 [${sv.npName}]! 백귀야행성 — 아군 전체 Q+30%·B+30%·방+20%·최대HP+2,000!`);
-          } else if (m.id === 'sv_no_463') {
-            // ★4 헤비 뇨보: 아군 전체 HP+3,000 · Arts+25%(3T) · 약화무효(1회) · NP+20%!
-            getActiveMembers(battle).forEach(ally => {
-              ensureMemberBuffs(ally);
-              ally.hp = Math.min(ally.maxHp, ally.hp + 3000);
-              ally.buffs.arts += 0.25; ally.buffs.cardT = 3;
-              ally.buffs.debuffImmune = Math.max(ally.buffs.debuffImmune, 1);
-              ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 20);
-            });
-            addLog(`🐍 ${sv.name} 보구 [${sv.npName}]! 아군 전체 HP+3,000·Arts+25%·약화무효·NP+20%!`);
-          } else if (m.id === 'sv_no_097') {
-            // ★5 나이팅게일 [나이팅게일 플레지]: 아군 전체 HP+4,000 · 방어+40%(3T) · 약화무효(1회)!
-            getActiveMembers(battle).forEach(ally => {
-              ensureMemberBuffs(ally);
-              ally.hp = Math.min(ally.maxHp, ally.hp + Math.round(4000 * ocMult));
-              ally.buffs.def += 0.4; ally.buffs.defT = 3;
-              ally.buffs.debuffImmune = Math.max(ally.buffs.debuffImmune, 1);
-            });
-            addLog(`🏥 ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 아군 전체 대회복 · 방어+40% · 약화무효!`);
-          } else if (m.id === 'sv_no_054') {
-            // ★2 칼리굴라 [플럭투스 디아나]: 적 전체 스턴(1T) · 차지 -1칸 · 강화무효(1회)!
-            battle.enemies.forEach(en => {
-              if (en.hp > 0) { en.stunned = true; en.charge = Math.max(0, en.charge - 1); en.buffBlock = (en.buffBlock || 0) + 1; }
-            });
-            addLog(`🌙 ${sv.name} 보구 [${sv.npName}]! 적 전체 스턴(1T) · 차지 -1칸 · 강화무효!`);
-          } else if (m.id === 'sv_no_053') {
-            // ★1 아스테리오스 [카오스 라비린토스]: 적 전체 공격 대폭 약화(아군 방+50% 3T) & 아군 공+30%(3T)!
-            getActiveMembers(battle).forEach(ally => {
-              ensureMemberBuffs(ally);
-              ally.buffs.def += 0.5; ally.buffs.defT = 3;
-              ally.buffs.atk += 0.3; ally.buffs.atkT = 3;
-            });
-            addLog(`🌀 ${sv.name} 보구 [${sv.npName}]! 미궁 디버프 — 아군 전체 방어+50% · 공격+30%(3T)!`);
-          } else if (m.id === 'sv_no_229') {
-            // ★5 시황제: 본인 무적(1T) · 공+50% · 크리+100% · 스타집중+500%!
-            m.buffs.invul = Math.max(m.buffs.invul, 1);
-            m.buffs.atk += 0.5 * ocMult; m.buffs.atkT = 3;
-            m.buffs.crit += 1.0; m.buffs.critT = 3;
-            m.buffs.starWeight += 500;
-            addLog(`👑 ${sv.name} 보구 [${sv.npName}]! 본인 무적(1T) · 공+50% · 크리+100% · 스타집중+500%!!`);
-          } else if (m.id === 'sv_no_292') {
-            // ★5 히미코 [성명도]: 아군 전체 보구 오버차지 +2단계 · Buster+30% · 크리+50%!
-            getActiveMembers(battle).forEach(ally => {
-              ensureMemberBuffs(ally);
-              ally.buffs.ocUp += 2;
-              ally.buffs.buster += 0.3; ally.buffs.cardT = 3;
-              ally.buffs.crit += 0.5; ally.buffs.critT = 3;
-            });
-            addLog(`🔮 ${sv.name} 보구 [${sv.npName}]! 아군 전체 오버차지 +2단계 · Buster+30% · 크리+50%!!`);
-          } else if (m.id === 'sv_no_173') {
-            // ★5 셜록 홈즈 [엘리멘터리 마이 디어]: 아군 전체 무적관통(3T) · 크리+50% · 공+30%!
-            getActiveMembers(battle).forEach(ally => {
-              ensureMemberBuffs(ally);
-              ally.buffs.invulPierce = 1;
-              ally.buffs.crit += 0.5; ally.buffs.critT = 3;
-              ally.buffs.atk += 0.3; ally.buffs.atkT = 3;
-            });
-            addLog(`🔍 ${sv.name} 보구 [${sv.npName}]! 아군 전체 무적관통 · 크리+50% · 공+30%!!`);
-          } else if (m.id === 'sv_no_295') {
-            // ★5 반 고흐 [별이 빛나는 밤]: 아군 전체 공+30% · 크리+100% · 스타+15!
-            getActiveMembers(battle).forEach(ally => {
-              ensureMemberBuffs(ally);
-              ally.buffs.atk += 0.3; ally.buffs.atkT = 3;
-              ally.buffs.crit += 1.0; ally.buffs.critT = 3;
-            });
-            battle.stars = Math.min(99, battle.stars + 15);
-            addLog(`🌌 ${sv.name} 보구 [${sv.npName}]! 별이 빛나는 밤 — 아군 공+30% · 크리+100% · 스타+15!!`);
-          } else if (m.id === 'sv_no_353') {
-            // ★5 레이디 아발론 [아발론 르 페이]: 아군 전체 도트힐(1500×3T) + NP+15% + 스타!
-            getActiveMembers(battle).forEach(ally => {
-              ensureMemberBuffs(ally);
-              ally.buffs.regen = Math.max(ally.buffs.regen, 1500); ally.buffs.regenT = 3;
-              ally.hp = Math.min(ally.maxHp, ally.hp + 1500);
-              ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 15);
-            });
-            battle.stars = Math.min(99, battle.stars + Math.round(10 + ocStage * 5));
-            addLog(`🌸 ${sv.name} 보구 [${sv.npName}]! 아군 도트힐·NP+15%·스타 대량 획득!`);
-          } else if (m.id === 'sv_no_336') {
-            // ★5 바제트 [프라가라흐]: 선제 반격 자세(회피 1T·공+50%·크리+50%) + 적 전체 반격 강타!
-            m.buffs.evade = Math.max(m.buffs.evade, 1);
-            m.buffs.atk += 0.5; m.buffs.atkT = 3;
-            m.buffs.crit += 0.5; m.buffs.critT = 3;
-            battle.enemies.forEach(en => {
-              if (en.hp <= 0) return;
-              const totalAff = getCombinedDamageMod(sv.cls, en.cls, sv.attribute, en.attr);
-              const counterDmg = m.atk * 4.5 * npLvMult * (1 + m.buffs.atk) * npDmgMult * totalAff * ocMult;
-              damageEnemy(en, counterDmg, 'dmg-np');
-            });
-            addLog(`⚔️ ${sv.name} 보구 [${sv.npName}]! 역광검 프라가라흐 선제 반격 작렬 & 회피·공+50%!!`);
-          } else if (m.id === 'sv_no_413') {
-            // ★5 아오자키 아오코: 제5마법 슈퍼 아오코 변신! (보구 대군 Buster 전환 + 공+50%·크리+50%·스타+20)
-            m.buffs.npCatOverride = 'aoe';
-            m.buffs.npTypeOverride = 'Buster';
-            m.buffs.atk += 0.5; m.buffs.atkT = 3;
-            m.buffs.crit += 0.5; m.buffs.critT = 3;
-            battle.stars = Math.min(99, battle.stars + 20);
-            addLog(`✨ ${sv.name} 보구 [${sv.npName}]! 제5마법 슈퍼 아오코 변신 — 대군 Buster 보구 해방 & 공+50%·스타+20!!`);
-          } else if (m.id === 'sv_no_421') {
-            // ★5 BB 두바이 (지원형 보조 모드): 아군 전체 공+30% · NP+30% · 무적(1회) · 최대HP+2,000!
-            getActiveMembers(battle).forEach(ally => {
-              ensureMemberBuffs(ally);
-              ally.buffs.atk += 0.3; ally.buffs.atkT = 3;
-              ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 30);
-              ally.buffs.invulHits = Math.max(ally.buffs.invulHits, 1);
-              ally.buffs.maxHpBonus += 2000; ally.maxHp += 2000; ally.hp += 2000;
-            });
-            addLog(`🌙 ${sv.name} 보구 [${sv.npName}] (보조)! 아군 전체 공+30%·NP+30%·무적(1회)·최대HP+2,000!`);
-          } else if (sv.collectionNo === 107) {
-            // ★0 앙리마유 [베르그 아베스타]: 피격 대미지 2배 반사(적 전체 고정 반사 대미지) & 본인 근성!
-            m.buffs.guts = Math.max(m.buffs.guts, 1000); m.buffs.gutsT = 3;
-            const lostHp = Math.max(2000, m.maxHp - m.hp);
-            battle.enemies.forEach(en => { if (en.hp > 0) damageEnemy(en, lostHp * (2 + ocStage * 0.5), 'dmg-np'); });
-            addLog(`🖤 ${sv.name} 보구 [${sv.npName}]! 피격 대미지 반사 일격 작렬 & 근성 부여!`);
-          } else {
-            getActiveMembers(battle).forEach(ally => {
-              ally.buffs.atk += 0.25 * ocMult; ally.buffs.atkT = 3;
-              ally.buffs.invul = Math.max(ally.buffs.invul, 1);
-              ally.hp = Math.min(ally.maxHp, ally.hp + Math.round(2500 * ocMult));
-              if (m.id === 'sv_tamamo') ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 25 * ocStage);
-            });
-            addLog(`✨ ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 전열 대숙정방어/무적 + 공업 + 회복!`);
-          }
-        } else if (cat === 'aoe') {
-          const baseMult = c.type === 'Buster' ? 3.8 : (c.type === 'Arts' ? 3.3 : 3.5);
-          const spHits = [];
-          battle.enemies.forEach(en => {
-            if (en.hp <= 0) return;
-            const clsMult = getClassMultiplier(sv.cls, en.cls);
-            const totalAff = getCombinedDamageMod(sv.cls, en.cls, sv.attribute, en.attr);
-            const traitBonus = getNpTraitBonus(sv, en);
-            const dmg = m.atk * baseMult * npLvMult * (1 + m.buffs.atk) * (1 + cardBuff) * npDmgMult * totalAff * traitBonus.mult * ocMult * (0.95 + Math.random() * 0.1) + (ps.ad || 0);
-            const ok = damageEnemy(en, dmg, (clsMult > 1 || traitBonus.mult > 1) ? 'dmg-weak' : 'dmg-np');
-            if (traitBonus.mult > 1) {
-              spHits.push(`${en.name}(${traitBonus.matched[0]})`);
-              showFloatDmg(`enemy-dmg-${en.idx}`, `💥 특공 ${traitBonus.matched[0]}!`, 'dmg-break');
-            }
-            const okNpMult = ok ? 1.5 : 1.0;
-            const okStarMult = ok ? 1.3 : 1.0;
-            const enNpMod = getEnemyNpMod(en.cls); // 적 클래스별 NP 보정(캐1.2/라1.1/어0.9/버0.8)
-            if (c.type === 'Arts') m.np = Math.min(maxNp, m.np + Math.round(16 * (1 + cardBuff) * (1 + m.buffs.npGain) * okNpMult * enNpMod));
-            if (c.type === 'Quick') {
-              m.np = Math.min(maxNp, m.np + Math.round(9 * (1 + cardBuff) * okNpMult * enNpMod));
-              battle.stars = Math.min(99, battle.stars + Math.round(8 * (1 + (ps.sg || 0)) * okStarMult));
-            }
+        // 체인 즉발 보너스 (아츠 체인 NP+20% / 퀵 체인 스타+20 / 버스터 체인 공+20%)
+        if (chain.colorChain === 'Arts') {
+          const participants = new Set(cards.map(c => c.rosterIdx));
+          participants.forEach(rIdx => {
+            const m = battle.roster[rIdx];
+            if (m && m.hp > 0) m.np = Math.min(getMaxNp(m.npLevel), m.np + 20);
           });
-          addLog(`💥 ${sv.name} 대군 보구 [${sv.npName}]${npUpMult > 1 ? ' 🗡️강화' : ''} (OC ${ocStage * 100}%) 작렬!${spHits.length ? ` [💥특공 1.5×: ${spHits.join(', ')}]` : ''}`);
-          if (m.id === 'sv_no_016') {
-            // ★1 아라쉬 [스텔라]: 보구 후 즉사 (근성 있으면 부활, 없으면 후열 서번트 자동 증원!)
-            if (m.buffs.guts > 0) {
-              m.hp = Math.min(m.maxHp, m.buffs.guts);
-              m.buffs.guts = 0; m.buffs.gutsT = 0;
-              addLog(`❤️‍🔥 아라쉬 근성 발동! 스텔라 후 HP ${m.hp.toLocaleString()} 생환!`);
-            } else {
-              m.hp = 0;
-              addLog(`💫 스텔라!! 아라쉬 산화 → 후열 서번트 자동 증원!`);
-              reinforceFromBackline();
-            }
-          } else if (m.id === 'sv_no_258') {
-            // ★2 진궁 [기각일진]: 본인 제외 전열 가장 왼쪽 아군 1명 즉사 사출 → 후열 서포터 자동 증원!
-            const sacrifice = getActiveMembers(battle).find(a => a.rosterIdx !== m.rosterIdx);
-            if (sacrifice) {
-              const sacSv = SERVANT_MAP[sacrifice.id];
-              if (sacrifice.buffs.guts > 0) {
-                sacrifice.hp = Math.min(sacrifice.maxHp, sacrifice.buffs.guts);
-                sacrifice.buffs.guts = 0; sacrifice.buffs.gutsT = 0;
-                addLog(`❤️‍🔥 ${sacSv.name} 근성 발동! 진궁의 사출에서 생환!`);
-              } else {
-                sacrifice.hp = 0;
-                addLog(`💥 진궁 [기각일진]!! ${sacSv.name}을(를) 화살로 사출 → 후열 서번트 자동 증원!!`);
+          addLog('🔵 아츠 체인! 참가 서번트 NP +20%!');
+        } else if (chain.colorChain === 'Quick') {
+          battle.stars = Math.min(99, battle.stars + 20);
+          addLog('🟢 퀵 체인! 크리티컬 스타 +20 획득!');
+        } else if (chain.colorChain === 'Buster') {
+          addLog('🔴 버스터 체인! 해당 턴 공격력 +20% 보너스!');
+        } else if (chain.mighty) {
+          addLog('🌈 마이티 체인! 3색 퍼스트 보너스 + 크리 확률 +20% 전원 적용!');
+        }
+
+        let npChainCount = 0; // 같은 턴 연속 보구 발동 카운터 (오버차지 +100% / +200%!)
+        let currentTarget = pickAliveTarget();
+
+        for (let step = 0; step < cards.length; step++) {
+          const c = cards[step];
+          const m = battle.roster[c.rosterIdx];
+          if (!m || m.hp <= 0) continue;
+          const sv = SERVANT_MAP[m.id];
+          const ce = getCePassive(m.ceId, !!m.ceMlb);
+          const ps = (typeof getServantPassives === 'function') ? getServantPassives(sv) : { q: 0, a: 0, b: 0, c: 0, sg: 0, ad: 0, nr: 0 };
+          const npUpMult = (typeof isNpUpgraded === 'function' && isNpUpgraded(sv)) ? 1.25 : 1.0;
+          const maxNp = getMaxNp(m.npLevel);
+
+          // 같은 서번트가 이미 죽은 적을 이어서 때리면 오버킬 유지, 다른 서번트거나 첫 타겟이 없으면 살아있는 적 자동 타겟!
+          const prevSameServant = step > 0 && cards[step - 1].rosterIdx === c.rosterIdx;
+          if (!currentTarget || (!prevSameServant && currentTarget.hp <= 0)) {
+            currentTarget = pickAliveTarget();
+          }
+          if (!currentTarget && getNpCategory(sv) !== 'support') break;
+
+          const allyEl = document.getElementById(`ally-unit-${m.rosterIdx}`);
+          if (allyEl) allyEl.classList.add('attacking');
+
+          if (c.kind === 'np') {
+            ensureMemberBuffs(m);
+            // 원작 고증: 105%~199%는 무조건 100%(OC 1단계)! 보구 체인(+1/+2) + 마술예장 심원성취(ocUp +1) 합산 최대 5단계
+            const baseOcStage = Math.max(1, Math.floor(m.np / 100));
+            const ocStage = Math.min(5, baseOcStage + npChainCount + (m.buffs.ocUp || 0));
+            m.buffs.ocUp = 0;
+            npChainCount++;
+            const ocMult = 1 + (ocStage - 1) * 0.25; // OC 100%=1.0, 200%=1.25, 300%=1.5, 400%=1.75, 500%=2.0
+            m.np = 0;
+
+            await playNpCutin(m, ocStage);
+            // 원작 고증: 보구 자체는 커맨드 순서/퍼스트/색상 체인 보너스를 받지 않음!
+            const cat = getNpCategory(sv, m);
+            const npLvMult = [0, 1.0, 1.25, 1.4, 1.5, 1.65][m.npLevel] || 1.0;
+            const cardBuff = (c.type === 'Buster' ? m.buffs.buster + ce.buster + (ps.b || 0) : (c.type === 'Arts' ? m.buffs.arts + ce.arts + (ps.a || 0) : m.buffs.quick + ce.quick + (ps.q || 0)));
+            const arashMult = (m.id === 'sv_no_016') ? 1.6 : ((m.id === 'sv_no_258' || m.id === 'sv_no_414') ? 1.5 : 1.0); // ★1 아라쉬 ×1.6 / ★2 진궁·★4 시즈키 소쥬로 ×1.5!
+            const npDmgMult = (1 + m.buffs.npDmg + ce.npDmg) * m.buffs.npBoost * npUpMult * arashMult;
+
+            if (cat === 'support') {
+              if (m.id === 'sv_no_272') {
+                // ★5 초인 오리온 [아르테미스 아그노스]: 공격력+30% · 크리위력+100% · 약화무효 · 스타 +20!
+                m.buffs.atk += 0.3 * ocMult; m.buffs.atkT = 3;
+                m.buffs.crit += 1.0; m.buffs.critT = 3;
+                m.buffs.debuffImmune = 1;
+                battle.stars = Math.min(99, battle.stars + 20);
+                addLog(`🏹 ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 본인 공업 & 크리 위력 +100% & 스타 +20!!`);
+              } else if (m.id === 'sv_no_294') {
+                // ★1 오다 노부카츠: 아군 전체 버스터+40% · 크리+50% · 스타+20 후 자신 즉사 → 후열 증원!
+                getActiveMembers(battle).forEach(ally => {
+                  ensureMemberBuffs(ally);
+                  ally.buffs.buster += 0.4; ally.buffs.cardT = 3;
+                  ally.buffs.crit += 0.5; ally.buffs.critT = 3;
+                  ally.hp = Math.min(ally.maxHp, ally.hp + 2000);
+                });
+                battle.stars = Math.min(99, battle.stars + 20);
+                m.hp = 0;
+                addLog(`🌸 ${sv.name} 보구 [${sv.npName}]! 아군 전체 B+40%·크리+50%·스타+20 부여 후 퇴장!`);
                 reinforceFromBackline();
+              } else if (m.id === 'sv_no_021') {
+                // ★2 레오니다스 1세 [테르모필라이 에노모타이아]: 아군 전체 방어+30% · 스타+25 · 본인 근성!
+                getActiveMembers(battle).forEach(ally => { ensureMemberBuffs(ally); ally.buffs.def += 0.3; ally.buffs.defT = 3; });
+                m.buffs.guts = Math.max(m.buffs.guts, 2000); m.buffs.gutsT = 3;
+                battle.stars = Math.min(99, battle.stars + 25);
+                addLog(`🛡️ ${sv.name} 보구 [${sv.npName}]! 아군 방어+30% · 스타+25 · 본인 근성 부여!`);
+              } else if (m.id === 'sv_no_185') {
+                // ★3 호조인 인슈운 [오보로 우라즈키 주일식]: 본인 공+50% · 크리+100% · 스타집중+500% · 회피 1회!
+                m.buffs.atk += 0.5; m.buffs.atkT = 3;
+                m.buffs.crit += 1.0; m.buffs.critT = 3;
+                m.buffs.starWeight += 500;
+                m.buffs.evadeHits = Math.max(m.buffs.evadeHits, 1); m.buffs.evadeT = 3;
+                addLog(`🔱 ${sv.name} 보구 [${sv.npName}]! 본인 공+50% · 크리+100% · 회피(1회)!!`);
+              } else if (m.id === 'sv_no_019') {
+                // ★2 무사시보 벤케이 [오백나한 보타락도해]: 적 전체 스턴 + 차지 -1!
+                battle.enemies.forEach(en => { if (en.hp > 0) { en.stunned = true; en.charge = Math.max(0, en.charge - 1); } });
+                addLog(`⚡ ${sv.name} 보구 [${sv.npName}]! 적 전체 스턴(1T) & 차지 -1칸!`);
+              } else if (m.id === 'sv_no_228') {
+                // ★4 진양옥 [숭문지진]: 아군 전체 크리+40% · 방어+30% · HP+2500!
+                getActiveMembers(battle).forEach(ally => {
+                  ensureMemberBuffs(ally);
+                  ally.buffs.crit += 0.4; ally.buffs.critT = 3;
+                  ally.buffs.def += 0.3; ally.buffs.defT = 3;
+                  ally.hp = Math.min(ally.maxHp, ally.hp + 2500);
+                });
+                addLog(`✨ ${sv.name} 보구 [${sv.npName}]! 아군 전체 크리+40% · 방어+30% · HP 회복!`);
+              } else if (m.id === 'sv_no_241') {
+                // ★5 사마의(라이네스) [혼원일진]: 아군 전체 방어+30% · NP획득+30% · 크리+30% · 적 방어 약화!
+                getActiveMembers(battle).forEach(ally => {
+                  ensureMemberBuffs(ally);
+                  ally.buffs.def += 0.3; ally.buffs.defT = 3;
+                  ally.buffs.npGain += 0.3; ally.buffs.npGainT = 3;
+                  ally.buffs.atk += 0.25 * ocMult; ally.buffs.atkT = 3;
+                });
+                addLog(`📜 ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 아군 전체 공·방·NP획득 대폭 강화!`);
+              } else if (m.id === 'sv_no_342' || m.id === 'sv_no_026') {
+                // ★5 콘스탄티누스 11세 / ★3 부디카: 아군 전체 방어+40% · 무적(1T) · 아츠+20% · HP 회복!
+                getActiveMembers(battle).forEach(ally => {
+                  ensureMemberBuffs(ally);
+                  ally.buffs.def += 0.4; ally.buffs.defT = 3;
+                  ally.buffs.arts += 0.2; ally.buffs.cardT = 3;
+                  ally.buffs.invul = Math.max(ally.buffs.invul, 1);
+                  ally.hp = Math.min(ally.maxHp, ally.hp + 2500);
+                });
+                addLog(`🏰 ${sv.name} 보구 [${sv.npName}]! 아군 전체 방어+40% · 무적(1T) · Arts+20% · 회복!`);
+              } else if (m.id === 'sv_no_150') {
+                // ★5 멀린 [가든 오브 아발론]: 아군 전체 도트힐(1500×3T) + NP+15% + 스타+15!
+                getActiveMembers(battle).forEach(ally => {
+                  ensureMemberBuffs(ally);
+                  ally.buffs.regen = Math.max(ally.buffs.regen, 1500); ally.buffs.regenT = 3;
+                  ally.hp = Math.min(ally.maxHp, ally.hp + 1500);
+                  ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 15);
+                });
+                battle.stars = Math.min(99, battle.stars + Math.round(10 + ocStage * 5));
+                addLog(`🌸 ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 아군 도트힐·NP+15%·스타 대량 획득!`);
+              } else if (m.id === 'sv_no_215') {
+                // ★5 스카디 [게이트 오브 스카이]: 아군 전체 회피(1회·3T) · 공+30% · 크리+50%!
+                getActiveMembers(battle).forEach(ally => {
+                  ensureMemberBuffs(ally);
+                  ally.buffs.evadeHits = Math.max(ally.buffs.evadeHits, 1); ally.buffs.evadeT = 3;
+                  ally.buffs.atk += 0.3; ally.buffs.atkT = 3;
+                  ally.buffs.crit += 0.5; ally.buffs.critT = 3;
+                });
+                addLog(`❄️ ${sv.name} 보구 [${sv.npName}]! 아군 전체 회피(1회) · 공+30% · 크리+50%!`);
+              } else if (m.id === 'sv_no_307') {
+                // ★5 미스 크레인 [천의무봉·학의 보은]: 선두 아군 공+30%·보구+30%·NP+30% 부여 후 본인 후열 이동!
+                const frontLead = getActiveMembers(battle).find(a => a.rosterIdx !== m.rosterIdx);
+                if (frontLead) {
+                  ensureMemberBuffs(frontLead);
+                  frontLead.buffs.atk += 0.3; frontLead.buffs.atkT = 3;
+                  frontLead.buffs.npDmg += 0.3; frontLead.buffs.npDmgT = 3;
+                  frontLead.np = Math.min(getMaxNp(frontLead.npLevel), frontLead.np + 30);
+                }
+                const mySlot = battle.activeSlots.indexOf(m.rosterIdx);
+                if (mySlot !== -1 && battle.subQueue.length > 0) {
+                  executeOrderChange(battle, mySlot, 0);
+                  addLog(`🕊️ ${sv.name} 보구 [${sv.npName}]! 선두 아군 초강화 후 본인 후열로 우아하게 퇴장!`);
+                } else {
+                  addLog(`🕊️ ${sv.name} 보구 [${sv.npName}]! 선두 아군 공+30%·보구+30%·NP+30% 부여!`);
+                }
+              } else if (m.id === 'sv_no_033') {
+                // ★2 안데르센: 아군 전체 공+40% · 방+40% · 도트힐(1000×3T) · 스타+15!
+                getActiveMembers(battle).forEach(ally => {
+                  ensureMemberBuffs(ally);
+                  ally.buffs.atk += 0.4; ally.buffs.atkT = 3;
+                  ally.buffs.def += 0.4; ally.buffs.defT = 3;
+                  ally.buffs.regen = Math.max(ally.buffs.regen, 1000); ally.buffs.regenT = 3;
+                });
+                battle.stars = Math.min(99, battle.stars + 15);
+                addLog(`📖 ${sv.name} 보구 [${sv.npName}]! 아군 공+40%·방+40%·도트힐·스타+15!`);
+              } else if (m.id === 'sv_no_081') {
+                // ★3 헨리 지킬 & 하이드 [위험한 비약]: 하이드(버서커 모드) 변신! 최대HP+4000·전회복·B+50%(5T)·공+30%(5T)!
+                const hpGain = Math.round(4000 * ocMult);
+                m.buffs.maxHpBonus += hpGain; m.maxHp += hpGain; m.hp = m.maxHp;
+                m.buffs.buster += 0.5; m.buffs.cardT = 5;
+                m.buffs.atk += 0.3; m.buffs.atkT = 5;
+                addLog(`🧪 ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 하이드(버서커) 변신 — 최대HP+${hpGain.toLocaleString()}·전회복·B+50%·공+30%(5T)!!`);
+              } else if (m.id === 'sv_no_189') {
+                // ★5 오사카베히메 [백귀야행성]: 아군 전체 Q+30% · B+30% · 방어+20% · 최대HP+2,000!
+                getActiveMembers(battle).forEach(ally => {
+                  ensureMemberBuffs(ally);
+                  ally.buffs.quick += 0.3; ally.buffs.buster += 0.3; ally.buffs.cardT = 3;
+                  ally.buffs.def += 0.2; ally.buffs.defT = 3;
+                  ally.buffs.maxHpBonus += 2000; ally.maxHp += 2000; ally.hp += 2000;
+                });
+                addLog(`🏯 ${sv.name} 보구 [${sv.npName}]! 백귀야행성 — 아군 전체 Q+30%·B+30%·방+20%·최대HP+2,000!`);
+              } else if (m.id === 'sv_no_463') {
+                // ★4 헤비 뇨보: 아군 전체 HP+3,000 · Arts+25%(3T) · 약화무효(1회) · NP+20%!
+                getActiveMembers(battle).forEach(ally => {
+                  ensureMemberBuffs(ally);
+                  ally.hp = Math.min(ally.maxHp, ally.hp + 3000);
+                  ally.buffs.arts += 0.25; ally.buffs.cardT = 3;
+                  ally.buffs.debuffImmune = Math.max(ally.buffs.debuffImmune, 1);
+                  ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 20);
+                });
+                addLog(`🐍 ${sv.name} 보구 [${sv.npName}]! 아군 전체 HP+3,000·Arts+25%·약화무효·NP+20%!`);
+              } else if (m.id === 'sv_no_097') {
+                // ★5 나이팅게일 [나이팅게일 플레지]: 아군 전체 HP+4,000 · 방어+40%(3T) · 약화무효(1회)!
+                getActiveMembers(battle).forEach(ally => {
+                  ensureMemberBuffs(ally);
+                  ally.hp = Math.min(ally.maxHp, ally.hp + Math.round(4000 * ocMult));
+                  ally.buffs.def += 0.4; ally.buffs.defT = 3;
+                  ally.buffs.debuffImmune = Math.max(ally.buffs.debuffImmune, 1);
+                });
+                addLog(`🏥 ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 아군 전체 대회복 · 방어+40% · 약화무효!`);
+              } else if (m.id === 'sv_no_054') {
+                // ★2 칼리굴라 [플럭투스 디아나]: 적 전체 스턴(1T) · 차지 -1칸 · 강화무효(1회)!
+                battle.enemies.forEach(en => {
+                  if (en.hp > 0) { en.stunned = true; en.charge = Math.max(0, en.charge - 1); en.buffBlock = (en.buffBlock || 0) + 1; }
+                });
+                addLog(`🌙 ${sv.name} 보구 [${sv.npName}]! 적 전체 스턴(1T) · 차지 -1칸 · 강화무효!`);
+              } else if (m.id === 'sv_no_053') {
+                // ★1 아스테리오스 [카오스 라비린토스]: 적 전체 공격 대폭 약화(아군 방+50% 3T) & 아군 공+30%(3T)!
+                getActiveMembers(battle).forEach(ally => {
+                  ensureMemberBuffs(ally);
+                  ally.buffs.def += 0.5; ally.buffs.defT = 3;
+                  ally.buffs.atk += 0.3; ally.buffs.atkT = 3;
+                });
+                addLog(`🌀 ${sv.name} 보구 [${sv.npName}]! 미궁 디버프 — 아군 전체 방어+50% · 공격+30%(3T)!`);
+              } else if (m.id === 'sv_no_229') {
+                // ★5 시황제: 본인 무적(1T) · 공+50% · 크리+100% · 스타집중+500%!
+                m.buffs.invul = Math.max(m.buffs.invul, 1);
+                m.buffs.atk += 0.5 * ocMult; m.buffs.atkT = 3;
+                m.buffs.crit += 1.0; m.buffs.critT = 3;
+                m.buffs.starWeight += 500;
+                addLog(`👑 ${sv.name} 보구 [${sv.npName}]! 본인 무적(1T) · 공+50% · 크리+100% · 스타집중+500%!!`);
+              } else if (m.id === 'sv_no_292') {
+                // ★5 히미코 [성명도]: 아군 전체 보구 오버차지 +2단계 · Buster+30% · 크리+50%!
+                getActiveMembers(battle).forEach(ally => {
+                  ensureMemberBuffs(ally);
+                  ally.buffs.ocUp += 2;
+                  ally.buffs.buster += 0.3; ally.buffs.cardT = 3;
+                  ally.buffs.crit += 0.5; ally.buffs.critT = 3;
+                });
+                addLog(`🔮 ${sv.name} 보구 [${sv.npName}]! 아군 전체 오버차지 +2단계 · Buster+30% · 크리+50%!!`);
+              } else if (m.id === 'sv_no_173') {
+                // ★5 셜록 홈즈 [엘리멘터리 마이 디어]: 아군 전체 무적관통(3T) · 크리+50% · 공+30%!
+                getActiveMembers(battle).forEach(ally => {
+                  ensureMemberBuffs(ally);
+                  ally.buffs.invulPierce = 1;
+                  ally.buffs.crit += 0.5; ally.buffs.critT = 3;
+                  ally.buffs.atk += 0.3; ally.buffs.atkT = 3;
+                });
+                addLog(`🔍 ${sv.name} 보구 [${sv.npName}]! 아군 전체 무적관통 · 크리+50% · 공+30%!!`);
+              } else if (m.id === 'sv_no_295') {
+                // ★5 반 고흐 [별이 빛나는 밤]: 아군 전체 공+30% · 크리+100% · 스타+15!
+                getActiveMembers(battle).forEach(ally => {
+                  ensureMemberBuffs(ally);
+                  ally.buffs.atk += 0.3; ally.buffs.atkT = 3;
+                  ally.buffs.crit += 1.0; ally.buffs.critT = 3;
+                });
+                battle.stars = Math.min(99, battle.stars + 15);
+                addLog(`🌌 ${sv.name} 보구 [${sv.npName}]! 별이 빛나는 밤 — 아군 공+30% · 크리+100% · 스타+15!!`);
+              } else if (m.id === 'sv_no_353') {
+                // ★5 레이디 아발론 [아발론 르 페이]: 아군 전체 도트힐(1500×3T) + NP+15% + 스타!
+                getActiveMembers(battle).forEach(ally => {
+                  ensureMemberBuffs(ally);
+                  ally.buffs.regen = Math.max(ally.buffs.regen, 1500); ally.buffs.regenT = 3;
+                  ally.hp = Math.min(ally.maxHp, ally.hp + 1500);
+                  ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 15);
+                });
+                battle.stars = Math.min(99, battle.stars + Math.round(10 + ocStage * 5));
+                addLog(`🌸 ${sv.name} 보구 [${sv.npName}]! 아군 도트힐·NP+15%·스타 대량 획득!`);
+              } else if (m.id === 'sv_no_336') {
+                // ★5 바제트 [프라가라흐]: 선제 반격 자세(회피 1T·공+50%·크리+50%) + 적 전체 반격 강타!
+                m.buffs.evade = Math.max(m.buffs.evade, 1);
+                m.buffs.atk += 0.5; m.buffs.atkT = 3;
+                m.buffs.crit += 0.5; m.buffs.critT = 3;
+                battle.enemies.forEach(en => {
+                  if (en.hp <= 0) return;
+                  const totalAff = getCombinedDamageMod(sv.cls, en.cls, sv.attribute, en.attr);
+                  const counterDmg = m.atk * 4.5 * npLvMult * (1 + m.buffs.atk) * npDmgMult * totalAff * ocMult;
+                  damageEnemy(en, counterDmg, 'dmg-np');
+                });
+                addLog(`⚔️ ${sv.name} 보구 [${sv.npName}]! 역광검 프라가라흐 선제 반격 작렬 & 회피·공+50%!!`);
+              } else if (m.id === 'sv_no_413') {
+                // ★5 아오자키 아오코: 제5마법 슈퍼 아오코 변신! (보구 대군 Buster 전환 + 공+50%·크리+50%·스타+20)
+                m.buffs.npCatOverride = 'aoe';
+                m.buffs.npTypeOverride = 'Buster';
+                m.buffs.atk += 0.5; m.buffs.atkT = 3;
+                m.buffs.crit += 0.5; m.buffs.critT = 3;
+                battle.stars = Math.min(99, battle.stars + 20);
+                addLog(`✨ ${sv.name} 보구 [${sv.npName}]! 제5마법 슈퍼 아오코 변신 — 대군 Buster 보구 해방 & 공+50%·스타+20!!`);
+              } else if (m.id === 'sv_no_421') {
+                // ★5 BB 두바이 (지원형 보조 모드): 아군 전체 공+30% · NP+30% · 무적(1회) · 최대HP+2,000!
+                getActiveMembers(battle).forEach(ally => {
+                  ensureMemberBuffs(ally);
+                  ally.buffs.atk += 0.3; ally.buffs.atkT = 3;
+                  ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 30);
+                  ally.buffs.invulHits = Math.max(ally.buffs.invulHits, 1);
+                  ally.buffs.maxHpBonus += 2000; ally.maxHp += 2000; ally.hp += 2000;
+                });
+                addLog(`🌙 ${sv.name} 보구 [${sv.npName}] (보조)! 아군 전체 공+30%·NP+30%·무적(1회)·최대HP+2,000!`);
+              } else if (sv.collectionNo === 107) {
+                // ★0 앙리마유 [베르그 아베스타]: 피격 대미지 2배 반사(적 전체 고정 반사 대미지) & 본인 근성!
+                m.buffs.guts = Math.max(m.buffs.guts, 1000); m.buffs.gutsT = 3;
+                const lostHp = Math.max(2000, m.maxHp - m.hp);
+                battle.enemies.forEach(en => { if (en.hp > 0) damageEnemy(en, lostHp * (2 + ocStage * 0.5), 'dmg-np'); });
+                addLog(`🖤 ${sv.name} 보구 [${sv.npName}]! 피격 대미지 반사 일격 작렬 & 근성 부여!`);
+              } else {
+                getActiveMembers(battle).forEach(ally => {
+                  ally.buffs.atk += 0.25 * ocMult; ally.buffs.atkT = 3;
+                  ally.buffs.invul = Math.max(ally.buffs.invul, 1);
+                  ally.hp = Math.min(ally.maxHp, ally.hp + Math.round(2500 * ocMult));
+                  if (m.id === 'sv_tamamo') ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 25 * ocStage);
+                });
+                addLog(`✨ ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 전열 대숙정방어/무적 + 공업 + 회복!`);
+              }
+            } else if (cat === 'aoe') {
+              const baseMult = c.type === 'Buster' ? 3.8 : (c.type === 'Arts' ? 3.3 : 3.5);
+              const spHits = [];
+              battle.enemies.forEach(en => {
+                if (en.hp <= 0) return;
+                const clsMult = getClassMultiplier(sv.cls, en.cls);
+                const totalAff = getCombinedDamageMod(sv.cls, en.cls, sv.attribute, en.attr);
+                const traitBonus = getNpTraitBonus(sv, en);
+                const dmg = m.atk * baseMult * npLvMult * (1 + m.buffs.atk) * (1 + cardBuff) * npDmgMult * totalAff * traitBonus.mult * ocMult * (0.95 + Math.random() * 0.1) + (ps.ad || 0);
+                const ok = damageEnemy(en, dmg, (clsMult > 1 || traitBonus.mult > 1) ? 'dmg-weak' : 'dmg-np');
+                if (traitBonus.mult > 1) {
+                  spHits.push(`${en.name}(${traitBonus.matched[0]})`);
+                  showFloatDmg(`enemy-dmg-${en.idx}`, `💥 특공 ${traitBonus.matched[0]}!`, 'dmg-break');
+                }
+                const okNpMult = ok ? 1.5 : 1.0;
+                const okStarMult = ok ? 1.3 : 1.0;
+                const enNpMod = getEnemyNpMod(en.cls); // 적 클래스별 NP 보정(캐1.2/라1.1/어0.9/버0.8)
+                if (c.type === 'Arts') m.np = Math.min(maxNp, m.np + Math.round(16 * (1 + cardBuff) * (1 + m.buffs.npGain) * okNpMult * enNpMod));
+                if (c.type === 'Quick') {
+                  m.np = Math.min(maxNp, m.np + Math.round(9 * (1 + cardBuff) * okNpMult * enNpMod));
+                  battle.stars = Math.min(99, battle.stars + Math.round(8 * (1 + (ps.sg || 0)) * okStarMult));
+                }
+              });
+              addLog(`💥 ${sv.name} 대군 보구 [${sv.npName}]${npUpMult > 1 ? ' 🗡️강화' : ''} (OC ${ocStage * 100}%) 작렬!${spHits.length ? ` [💥특공 1.5×: ${spHits.join(', ')}]` : ''}`);
+              if (m.id === 'sv_no_016') {
+                // ★1 아라쉬 [스텔라]: 보구 후 즉사 (근성 있으면 부활, 없으면 후열 서번트 자동 증원!)
+                if (m.buffs.guts > 0) {
+                  m.hp = Math.min(m.maxHp, m.buffs.guts);
+                  m.buffs.guts = 0; m.buffs.gutsT = 0;
+                  addLog(`❤️‍🔥 아라쉬 근성 발동! 스텔라 후 HP ${m.hp.toLocaleString()} 생환!`);
+                } else {
+                  m.hp = 0;
+                  addLog(`💫 스텔라!! 아라쉬 산화 → 후열 서번트 자동 증원!`);
+                  reinforceFromBackline();
+                }
+              } else if (m.id === 'sv_no_258') {
+                // ★2 진궁 [기각일진]: 본인 제외 전열 가장 왼쪽 아군 1명 즉사 사출 → 후열 서포터 자동 증원!
+                const sacrifice = getActiveMembers(battle).find(a => a.rosterIdx !== m.rosterIdx);
+                if (sacrifice) {
+                  const sacSv = SERVANT_MAP[sacrifice.id];
+                  if (sacrifice.buffs.guts > 0) {
+                    sacrifice.hp = Math.min(sacrifice.maxHp, sacrifice.buffs.guts);
+                    sacrifice.buffs.guts = 0; sacrifice.buffs.gutsT = 0;
+                    addLog(`❤️‍🔥 ${sacSv.name} 근성 발동! 진궁의 사출에서 생환!`);
+                  } else {
+                    sacrifice.hp = 0;
+                    addLog(`💥 진궁 [기각일진]!! ${sacSv.name}을(를) 화살로 사출 → 후열 서번트 자동 증원!!`);
+                    reinforceFromBackline();
+                  }
+                }
+              }
+            } else if (currentTarget) {
+              const baseMult = c.type === 'Buster' ? 6.2 : (c.type === 'Arts' ? 5.6 : 5.9);
+              const clsMult = getClassMultiplier(sv.cls, currentTarget.cls);
+              const totalAff = getCombinedDamageMod(sv.cls, currentTarget.cls, sv.attribute, currentTarget.attr);
+              const traitBonus = getNpTraitBonus(sv, currentTarget);
+              const dmg = m.atk * baseMult * npLvMult * (1 + m.buffs.atk) * (1 + cardBuff) * npDmgMult * totalAff * traitBonus.mult * ocMult * (0.95 + Math.random() * 0.1) + (ps.ad || 0);
+              const ok = damageEnemy(currentTarget, dmg, (clsMult > 1 || traitBonus.mult > 1) ? 'dmg-weak' : 'dmg-np');
+              if (traitBonus.mult > 1) {
+                showFloatDmg(`enemy-dmg-${currentTarget.idx}`, `💥 특공 ${traitBonus.matched[0]}!`, 'dmg-break');
+              }
+              const okNpMult = ok ? 1.5 : 1.0;
+              const okStarMult = ok ? 1.3 : 1.0;
+              const enNpMod = getEnemyNpMod(currentTarget.cls);
+              if (c.type === 'Arts') m.np = Math.min(maxNp, m.np + Math.round(22 * (1 + cardBuff) * (1 + m.buffs.npGain) * okNpMult * enNpMod));
+              if (c.type === 'Quick') battle.stars = Math.min(99, battle.stars + Math.round(14 * (1 + (ps.sg || 0)) * okStarMult));
+              addLog(`💥 ${sv.name} 단일 보구 [${sv.npName}]${npUpMult > 1 ? ' 🗡️강화' : ''} (OC ${ocStage * 100}%) → ${currentTarget.name} ${Math.round(dmg).toLocaleString()}!${traitBonus.mult > 1 ? ` [💥${traitBonus.matched.join('/')} 특공 1.5×!]` : ''}`);
+              if (m.id === 'sv_no_414') {
+                // ★4 시즈키 소쥬로: 초고배율(×1.5) 단일 버스터 보구 후 자신 즉사 → 후열 서번트 자동 증원!
+                if (m.buffs.guts > 0) {
+                  m.hp = Math.min(m.maxHp, m.buffs.guts);
+                  m.buffs.guts = 0; m.buffs.gutsT = 0;
+                  addLog(`❤️‍🔥 시즈키 소쥬로 근성 발동! 보구 반동에서 HP ${m.hp.toLocaleString()} 생환!`);
+                } else {
+                  m.hp = 0;
+                  addLog(`💥 시즈키 소쥬로 전력 일격 후 퇴장 → 후열 서번트 자동 증원!`);
+                  reinforceFromBackline();
+                }
               }
             }
+            m.buffs.npBoost = 1;
+          } else if (currentTarget) {
+            // 원작 FGO 일반 커맨드 카드 계산:
+            // - 기본 비율: Buster 1.5, Arts 1.0, Quick 0.8
+            // - 순서 배율: 1st 1.0, 2nd 1.2, 3rd 1.4 (예: 버스터 1.5 / 1.8 / 2.1배!)
+            // - 클래스 패시브(기승 Q+ / 진지작성 A+ / 광화 B+ / 단독행동 크리+ / 신성 추가대미지 / 기척차단 스타+) 반영!
+            const orderMult = [1.0, 1.2, 1.4][step];
+            const typeDmgBase = c.type === 'Buster' ? 1.5 : (c.type === 'Arts' ? 1.0 : 0.8);
+            const hasFirstBuster = (firstType === 'Buster' || chain.mighty);
+            const hasFirstArts = (firstType === 'Arts' || chain.mighty);
+            const hasFirstQuick = (firstType === 'Quick' || chain.mighty);
+
+            const firstBusterAdd = hasFirstBuster ? 0.5 : 0;
+            const busterChainMult = chain.colorChain === 'Buster' ? 1.2 : 1.0; // 버스터 체인 공 +20%!
+
+            const cardBuff = (c.type === 'Buster' ? m.buffs.buster + ce.buster + (ps.b || 0) : (c.type === 'Arts' ? m.buffs.arts + ce.arts + (ps.a || 0) : m.buffs.quick + ce.quick + (ps.q || 0)));
+            const clsMult = getClassMultiplier(sv.cls, currentTarget.cls);
+            const totalAff = getCombinedDamageMod(sv.cls, currentTarget.cls, sv.attribute, currentTarget.attr);
+
+            // 퀵 퍼스트 / 마이티 체인: 체인 내 카드 크리티컬 확률 +20%!
+            const critChance = Math.min(100, c.critPct + (hasFirstQuick ? 20 : 0));
+            const isCrit = Math.random() * 100 < critChance;
+            const critDmgMult = isCrit ? (2.0 + m.buffs.crit + ce.crit + (ps.c || 0)) : 1.0;
+
+            const dmg = m.atk * (typeDmgBase * orderMult * (1 + cardBuff) + firstBusterAdd) * (1 + m.buffs.atk) * busterChainMult * totalAff * critDmgMult * (0.92 + Math.random() * 0.16) + (ps.ad || 0);
+            const isOverkill = damageEnemy(currentTarget, dmg, isCrit ? 'dmg-crit' : (clsMult > 1 ? 'dmg-weak' : ''));
+
+            // 크리티컬 × 오버킬 곱연산! (NP: ×2.0 ×1.5, 스타: ×1.2 ×1.3)
+            const npCritMult = isCrit ? 2.0 : 1.0;
+            const npOkMult = isOverkill ? 1.5 : 1.0;
+            const stCritMult = isCrit ? 1.2 : 1.0;
+            const stOkMult = isOverkill ? 1.3 : 1.0;
+
+            const npBase = c.type === 'Arts' ? 13 : (c.type === 'Quick' ? 5 : 0); // 버스터 자체 NP = 0!
+            const npFirstAdd = hasFirstArts ? 6 : 0;
+            const enNpMod = getEnemyNpMod(currentTarget.cls);
+            const npGain = Math.round((npBase * orderMult + npFirstAdd) * (1 + cardBuff * 0.5) * (1 + m.buffs.npGain) * npCritMult * npOkMult * enNpMod);
+
+            const starBase = c.type === 'Quick' ? 11 : (c.type === 'Buster' ? 3 : 1);
+            const starFirstAdd = hasFirstQuick ? 4 : 0;
+            const starGain = Math.round((starBase * orderMult + starFirstAdd) * (1 + (m.buffs.starGen || 0) + (ps.sg || 0)) * stCritMult * stOkMult);
+
+            m.np = Math.min(maxNp, m.np + npGain);
+            battle.stars = Math.min(99, battle.stars + starGain);
+
+            SoundEngine.cardFlip();
+            const tags = `${isCrit ? ' ★CRIT' : ''}${isOverkill ? ' 💥OK' : ''}`;
+            addLog(`${c.type === 'Buster' ? '🔴' : (c.type === 'Arts' ? '🔵' : '🟢')} ${sv.nickname || sv.name} ${c.type}${tags} → ${Math.round(dmg).toLocaleString()} (NP+${npGain}%, ★+${starGain})`);
           }
-        } else if (currentTarget) {
-          const baseMult = c.type === 'Buster' ? 6.2 : (c.type === 'Arts' ? 5.6 : 5.9);
-          const clsMult = getClassMultiplier(sv.cls, currentTarget.cls);
-          const totalAff = getCombinedDamageMod(sv.cls, currentTarget.cls, sv.attribute, currentTarget.attr);
-          const traitBonus = getNpTraitBonus(sv, currentTarget);
-          const dmg = m.atk * baseMult * npLvMult * (1 + m.buffs.atk) * (1 + cardBuff) * npDmgMult * totalAff * traitBonus.mult * ocMult * (0.95 + Math.random() * 0.1) + (ps.ad || 0);
-          const ok = damageEnemy(currentTarget, dmg, (clsMult > 1 || traitBonus.mult > 1) ? 'dmg-weak' : 'dmg-np');
-          if (traitBonus.mult > 1) {
-            showFloatDmg(`enemy-dmg-${currentTarget.idx}`, `💥 특공 ${traitBonus.matched[0]}!`, 'dmg-break');
-          }
-          const okNpMult = ok ? 1.5 : 1.0;
-          const okStarMult = ok ? 1.3 : 1.0;
-          const enNpMod = getEnemyNpMod(currentTarget.cls);
-          if (c.type === 'Arts') m.np = Math.min(maxNp, m.np + Math.round(22 * (1 + cardBuff) * (1 + m.buffs.npGain) * okNpMult * enNpMod));
-          if (c.type === 'Quick') battle.stars = Math.min(99, battle.stars + Math.round(14 * (1 + (ps.sg || 0)) * okStarMult));
-          addLog(`💥 ${sv.name} 단일 보구 [${sv.npName}]${npUpMult > 1 ? ' 🗡️강화' : ''} (OC ${ocStage * 100}%) → ${currentTarget.name} ${Math.round(dmg).toLocaleString()}!${traitBonus.mult > 1 ? ` [💥${traitBonus.matched.join('/')} 특공 1.5×!]` : ''}`);
-          if (m.id === 'sv_no_414') {
-            // ★4 시즈키 소쥬로: 초고배율(×1.5) 단일 버스터 보구 후 자신 즉사 → 후열 서번트 자동 증원!
-            if (m.buffs.guts > 0) {
-              m.hp = Math.min(m.maxHp, m.buffs.guts);
-              m.buffs.guts = 0; m.buffs.gutsT = 0;
-              addLog(`❤️‍🔥 시즈키 소쥬로 근성 발동! 보구 반동에서 HP ${m.hp.toLocaleString()} 생환!`);
-            } else {
-              m.hp = 0;
-              addLog(`💥 시즈키 소쥬로 전력 일격 후 퇴장 → 후열 서번트 자동 증원!`);
-              reinforceFromBackline();
-            }
+
+          renderArena();
+          await sleep(500);
+          if (allyEl) allyEl.classList.remove('attacking');
+        }
+
+        // 브레이브 체인 → 4타 EXTRA ATTACK! (클랜 칼라틴 엑스트라 인핸스먼트 반영!)
+        if (chain.brave) {
+          const m = battle.roster[cards[0].rosterIdx];
+          const sv = SERVANT_MAP[m.id];
+          const target = currentTarget || pickAliveTarget();
+          if (m && m.hp > 0 && target) {
+            ensureMemberBuffs(m);
+            const extraMult = chain.colorChain ? 3.5 : 2.0; // 동일색 브레이브 시 3.5배!
+            const extraCardBuff = 1 + (m.buffs.extraUp || 0);
+            const totalAff = getCombinedDamageMod(sv.cls, target.cls, sv.attribute, target.attr);
+            const dmg = m.atk * extraMult * extraCardBuff * (1 + m.buffs.atk) * totalAff;
+            const isOverkill = damageEnemy(target, dmg, 'dmg-extra');
+            const npGain = Math.round(12 * (isOverkill ? 1.5 : 1.0) * getEnemyNpMod(target.cls));
+            const stGain = Math.round(6 * (isOverkill ? 1.3 : 1.0));
+            m.np = Math.min(getMaxNp(m.npLevel), m.np + npGain);
+            battle.stars = Math.min(99, battle.stars + stGain);
+            SoundEngine.pillarBurst();
+            addLog(`⚡ EXTRA ATTACK! ${sv.name} → ${Math.round(dmg).toLocaleString()} (NP+${npGain}%, ★+${stGain})`);
+            renderArena();
+            await sleep(520);
           }
         }
-        m.buffs.npBoost = 1;
-      } else if (currentTarget) {
-        // 원작 FGO 일반 커맨드 카드 계산:
-        // - 기본 비율: Buster 1.5, Arts 1.0, Quick 0.8
-        // - 순서 배율: 1st 1.0, 2nd 1.2, 3rd 1.4 (예: 버스터 1.5 / 1.8 / 2.1배!)
-        // - 클래스 패시브(기승 Q+ / 진지작성 A+ / 광화 B+ / 단독행동 크리+ / 신성 추가대미지 / 기척차단 스타+) 반영!
-        const orderMult = [1.0, 1.2, 1.4][step];
-        const typeDmgBase = c.type === 'Buster' ? 1.5 : (c.type === 'Arts' ? 1.0 : 0.8);
-        const hasFirstBuster = (firstType === 'Buster' || chain.mighty);
-        const hasFirstArts = (firstType === 'Arts' || chain.mighty);
-        const hasFirstQuick = (firstType === 'Quick' || chain.mighty);
 
-        const firstBusterAdd = hasFirstBuster ? 0.5 : 0;
-        const busterChainMult = chain.colorChain === 'Buster' ? 1.2 : 1.0; // 버스터 체인 공 +20%!
+        // 적 전멸 체크 → 다음 웨이브 or 클리어!
+        if (battle.enemies.every(e => e.hp <= 0)) {
+          const q = getQuest();
+          if (battle.waveIdx + 1 < q.waves.length) {
+            addLog(`🌟 WAVE ${battle.waveIdx + 1} 클리어! 다음 웨이브 진입!`);
+            SoundEngine.levelUp();
+            await sleep(600);
+            spawnWave(battle.waveIdx + 1);
+            advanceTurnCounters();
+            drawTurnHand();
+            battle.phase = 'command';
+            busy = false;
+            saveActiveBattle();
+            renderArena();
+            return;
+          } else {
+            finishBattle(true);
+            return;
+          }
+        }
 
-        const cardBuff = (c.type === 'Buster' ? m.buffs.buster + ce.buster + (ps.b || 0) : (c.type === 'Arts' ? m.buffs.arts + ce.arts + (ps.a || 0) : m.buffs.quick + ce.quick + (ps.q || 0)));
-        const clsMult = getClassMultiplier(sv.cls, currentTarget.cls);
-        const totalAff = getCombinedDamageMod(sv.cls, currentTarget.cls, sv.attribute, currentTarget.attr);
+        // 적 턴 반격 (상성 방어 시 피격 대미지 1/2!)
+        await sleep(340);
+        for (const en of battle.enemies) {
+          if (en.hp <= 0) continue;
+          if (en.stunned) {
+            en.stunned = false;
+            addLog(`⚡ ${en.name}은(는) 스턴으로 행동 불능!`);
+            continue;
+          }
+          const aliveAllies = getActiveMembers(battle);
+          if (aliveAllies.length === 0) break;
 
-        // 퀵 퍼스트 / 마이티 체인: 체인 내 카드 크리티컬 확률 +20%!
-        const critChance = Math.min(100, c.critPct + (hasFirstQuick ? 20 : 0));
-        const isCrit = Math.random() * 100 < critChance;
-        const critDmgMult = isCrit ? (2.0 + m.buffs.crit + ce.crit + (ps.c || 0)) : 1.0;
+          const dealDamageToAlly = (ally, rawDmg) => {
+            ensureMemberBuffs(ally);
+            if (ally.buffs.invul > 0) {
+              showFloatDmg(`ally-dmg-${ally.rosterIdx}`, '무적!', 'dmg-block');
+              return;
+            }
+            if (ally.buffs.invulHits > 0) {
+              ally.buffs.invulHits--;
+              showFloatDmg(`ally-dmg-${ally.rosterIdx}`, '무적!', 'dmg-block');
+              return;
+            }
+            if (ally.buffs.evade > 0) {
+              showFloatDmg(`ally-dmg-${ally.rosterIdx}`, 'EVADE!', 'dmg-block');
+              return;
+            }
+            if (ally.buffs.evadeHits > 0) {
+              ally.buffs.evadeHits--;
+              showFloatDmg(`ally-dmg-${ally.rosterIdx}`, 'EVADE!', 'dmg-block');
+              return;
+            }
+            ally.hp = Math.max(0, ally.hp - rawDmg);
+            showFloatDmg(`ally-dmg-${ally.rosterIdx}`, `-${rawDmg.toLocaleString()}`, 'dmg-enemy-hit');
+            if (ally.hp <= 0 && ally.buffs.guts > 0) {
+              ally.hp = Math.min(ally.maxHp, ally.buffs.guts);
+              ally.buffs.guts = 0;
+              ally.buffs.gutsT = 0;
+              const asv = SERVANT_MAP[ally.id];
+              addLog(`❤️‍🔥 GUTS! ${asv.name} 근성 발동 → HP ${ally.hp.toLocaleString()} 부활!!`);
+              showFloatDmg(`ally-dmg-${ally.rosterIdx}`, `GUTS! +${ally.hp.toLocaleString()}`, 'dmg-break');
+              SoundEngine.sparkPromotion();
+            }
+          };
 
-        const dmg = m.atk * (typeDmgBase * orderMult * (1 + cardBuff) + firstBusterAdd) * (1 + m.buffs.atk) * busterChainMult * totalAff * critDmgMult * (0.92 + Math.random() * 0.16) + (ps.ad || 0);
-        const isOverkill = damageEnemy(currentTarget, dmg, isCrit ? 'dmg-crit' : (clsMult > 1 ? 'dmg-weak' : ''));
+          en.charge++;
+          if (en.charge >= en.maxCharge) {
+            en.charge = 0;
+            SoundEngine.error();
+            addLog(`⚠️ ${en.name}의 보구 [${en.npName}] 발동!!`);
+            aliveAllies.forEach(ally => {
+              const sv = SERVANT_MAP[ally.id];
+              const totalAff = getCombinedDamageMod(en.cls, sv.cls, en.attr, sv.attribute);
+              const dmg = Math.round(en.atk * 1.9 * totalAff * Math.max(0.3, 1 - ally.buffs.def));
+              const hadShield = ally.buffs.invul > 0 || ally.buffs.invulHits > 0 || ally.buffs.evade > 0 || ally.buffs.evadeHits > 0;
+              dealDamageToAlly(ally, dmg);
+              if (!hadShield && ally.hp > 0) ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 14);
+            });
+          } else {
+            const victim = aliveAllies[Math.floor(Math.random() * aliveAllies.length)];
+            const sv = SERVANT_MAP[victim.id];
+            const totalAff = getCombinedDamageMod(en.cls, sv.cls, en.attr, sv.attribute);
+            const dmg = Math.round(en.atk * totalAff * Math.max(0.3, 1 - victim.buffs.def) * (0.9 + Math.random() * 0.2));
+            const hadShield = victim.buffs.invul > 0 || victim.buffs.invulHits > 0 || victim.buffs.evade > 0 || victim.buffs.evadeHits > 0;
+            dealDamageToAlly(victim, dmg);
+            if (!hadShield && victim.hp > 0) victim.np = Math.min(getMaxNp(victim.npLevel), victim.np + 8);
+          }
+          renderArena();
+          await sleep(360);
+        }
 
-        // 크리티컬 × 오버킬 곱연산! (NP: ×2.0 ×1.5, 스타: ×1.2 ×1.3)
-        const npCritMult = isCrit ? 2.0 : 1.0;
-        const npOkMult = isOverkill ? 1.5 : 1.0;
-        const stCritMult = isCrit ? 1.2 : 1.0;
-        const stOkMult = isOverkill ? 1.3 : 1.0;
+        // 전열 사망자 발생 시 후열 대기 멤버 자동 증원!
+        reinforceFromBackline();
 
-        const npBase = c.type === 'Arts' ? 13 : (c.type === 'Quick' ? 5 : 0); // 버스터 자체 NP = 0!
-        const npFirstAdd = hasFirstArts ? 6 : 0;
-        const enNpMod = getEnemyNpMod(currentTarget.cls);
-        const npGain = Math.round((npBase * orderMult + npFirstAdd) * (1 + cardBuff * 0.5) * (1 + m.buffs.npGain) * npCritMult * npOkMult * enNpMod);
+        // 6명 전원 전멸 체크 → 원작 FGO 영기복원(영주 3획 or 성정석 1개) 컨티뉴 모달!
+        if (getActiveMembers(battle).length === 0) {
+          battle.phase = 'wipeout';
+          busy = false;
+          saveActiveBattle();
+          renderArena();
+          openWipeoutContinueModal();
+          return;
+        }
 
-        const starBase = c.type === 'Quick' ? 11 : (c.type === 'Buster' ? 3 : 1);
-        const starFirstAdd = hasFirstQuick ? 4 : 0;
-        const starGain = Math.round((starBase * orderMult + starFirstAdd) * (1 + (m.buffs.starGen || 0) + (ps.sg || 0)) * stCritMult * stOkMult);
-
-        m.np = Math.min(maxNp, m.np + npGain);
-        battle.stars = Math.min(99, battle.stars + starGain);
-
-        SoundEngine.cardFlip();
-        const tags = `${isCrit ? ' ★CRIT' : ''}${isOverkill ? ' 💥OK' : ''}`;
-        addLog(`${c.type === 'Buster' ? '🔴' : (c.type === 'Arts' ? '🔵' : '🟢')} ${sv.nickname || sv.name} ${c.type}${tags} → ${Math.round(dmg).toLocaleString()} (NP+${npGain}%, ★+${starGain})`);
-      }
-
-      renderArena();
-      await sleep(500);
-      if (allyEl) allyEl.classList.remove('attacking');
-    }
-
-    // 브레이브 체인 → 4타 EXTRA ATTACK! (클랜 칼라틴 엑스트라 인핸스먼트 반영!)
-    if (chain.brave) {
-      const m = battle.roster[cards[0].rosterIdx];
-      const sv = SERVANT_MAP[m.id];
-      const target = currentTarget || pickAliveTarget();
-      if (m && m.hp > 0 && target) {
-        ensureMemberBuffs(m);
-        const extraMult = chain.colorChain ? 3.5 : 2.0; // 동일색 브레이브 시 3.5배!
-        const extraCardBuff = 1 + (m.buffs.extraUp || 0);
-        const totalAff = getCombinedDamageMod(sv.cls, target.cls, sv.attribute, target.attr);
-        const dmg = m.atk * extraMult * extraCardBuff * (1 + m.buffs.atk) * totalAff;
-        const isOverkill = damageEnemy(target, dmg, 'dmg-extra');
-        const npGain = Math.round(12 * (isOverkill ? 1.5 : 1.0) * getEnemyNpMod(target.cls));
-        const stGain = Math.round(6 * (isOverkill ? 1.3 : 1.0));
-        m.np = Math.min(getMaxNp(m.npLevel), m.np + npGain);
-        battle.stars = Math.min(99, battle.stars + stGain);
-        SoundEngine.pillarBurst();
-        addLog(`⚡ EXTRA ATTACK! ${sv.name} → ${Math.round(dmg).toLocaleString()} (NP+${npGain}%, ★+${stGain})`);
-        renderArena();
-        await sleep(520);
-      }
-    }
-
-    // 적 전멸 체크 → 다음 웨이브 or 클리어!
-    if (battle.enemies.every(e => e.hp <= 0)) {
-      const q = getQuest();
-      if (battle.waveIdx + 1 < q.waves.length) {
-        addLog(`🌟 WAVE ${battle.waveIdx + 1} 클리어! 다음 웨이브 진입!`);
-        SoundEngine.levelUp();
-        await sleep(600);
-        spawnWave(battle.waveIdx + 1);
         advanceTurnCounters();
         drawTurnHand();
         battle.phase = 'command';
         busy = false;
         saveActiveBattle();
         renderArena();
-        return;
-      } else {
-        finishBattle(true);
-        return;
       }
-    }
-
-    // 적 턴 반격 (상성 방어 시 피격 대미지 1/2!)
-    await sleep(340);
-    for (const en of battle.enemies) {
-      if (en.hp <= 0) continue;
-      if (en.stunned) {
-        en.stunned = false;
-        addLog(`⚡ ${en.name}은(는) 스턴으로 행동 불능!`);
-        continue;
-      }
-      const aliveAllies = getActiveMembers(battle);
-      if (aliveAllies.length === 0) break;
-
-      const dealDamageToAlly = (ally, rawDmg) => {
-        ensureMemberBuffs(ally);
-        if (ally.buffs.invul > 0) {
-          showFloatDmg(`ally-dmg-${ally.rosterIdx}`, '무적!', 'dmg-block');
-          return;
-        }
-        if (ally.buffs.invulHits > 0) {
-          ally.buffs.invulHits--;
-          showFloatDmg(`ally-dmg-${ally.rosterIdx}`, '무적!', 'dmg-block');
-          return;
-        }
-        if (ally.buffs.evade > 0) {
-          showFloatDmg(`ally-dmg-${ally.rosterIdx}`, 'EVADE!', 'dmg-block');
-          return;
-        }
-        if (ally.buffs.evadeHits > 0) {
-          ally.buffs.evadeHits--;
-          showFloatDmg(`ally-dmg-${ally.rosterIdx}`, 'EVADE!', 'dmg-block');
-          return;
-        }
-        ally.hp = Math.max(0, ally.hp - rawDmg);
-        showFloatDmg(`ally-dmg-${ally.rosterIdx}`, `-${rawDmg.toLocaleString()}`, 'dmg-enemy-hit');
-        if (ally.hp <= 0 && ally.buffs.guts > 0) {
-          ally.hp = Math.min(ally.maxHp, ally.buffs.guts);
-          ally.buffs.guts = 0;
-          ally.buffs.gutsT = 0;
-          const asv = SERVANT_MAP[ally.id];
-          addLog(`❤️‍🔥 GUTS! ${asv.name} 근성 발동 → HP ${ally.hp.toLocaleString()} 부활!!`);
-          showFloatDmg(`ally-dmg-${ally.rosterIdx}`, `GUTS! +${ally.hp.toLocaleString()}`, 'dmg-break');
-          SoundEngine.sparkPromotion();
-        }
-      };
-
-      en.charge++;
-      if (en.charge >= en.maxCharge) {
-        en.charge = 0;
-        SoundEngine.error();
-        addLog(`⚠️ ${en.name}의 보구 [${en.npName}] 발동!!`);
-        aliveAllies.forEach(ally => {
-          const sv = SERVANT_MAP[ally.id];
-          const totalAff = getCombinedDamageMod(en.cls, sv.cls, en.attr, sv.attribute);
-          const dmg = Math.round(en.atk * 1.9 * totalAff * Math.max(0.3, 1 - ally.buffs.def));
-          const hadShield = ally.buffs.invul > 0 || ally.buffs.invulHits > 0 || ally.buffs.evade > 0 || ally.buffs.evadeHits > 0;
-          dealDamageToAlly(ally, dmg);
-          if (!hadShield && ally.hp > 0) ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 14);
-        });
-      } else {
-        const victim = aliveAllies[Math.floor(Math.random() * aliveAllies.length)];
-        const sv = SERVANT_MAP[victim.id];
-        const totalAff = getCombinedDamageMod(en.cls, sv.cls, en.attr, sv.attribute);
-        const dmg = Math.round(en.atk * totalAff * Math.max(0.3, 1 - victim.buffs.def) * (0.9 + Math.random() * 0.2));
-        const hadShield = victim.buffs.invul > 0 || victim.buffs.invulHits > 0 || victim.buffs.evade > 0 || victim.buffs.evadeHits > 0;
-        dealDamageToAlly(victim, dmg);
-        if (!hadShield && victim.hp > 0) victim.np = Math.min(getMaxNp(victim.npLevel), victim.np + 8);
-      }
-      renderArena();
-      await sleep(360);
-    }
-
-    // 전열 사망자 발생 시 후열 대기 멤버 자동 증원!
-    reinforceFromBackline();
-
-    // 6명 전원 전멸 체크 → 원작 FGO 영기복원(영주 3획 or 성정석 1개) 컨티뉴 모달!
-    if (getActiveMembers(battle).length === 0) {
-      battle.phase = 'wipeout';
-      busy = false;
-      saveActiveBattle();
-      renderArena();
-      openWipeoutContinueModal();
-      return;
-    }
-
-    advanceTurnCounters();
-    drawTurnHand();
-    battle.phase = 'command';
-    busy = false;
-    saveActiveBattle();
-    renderArena();
-  }
 
   function advanceTurnCounters() {
-    battle.turn++;
-    battle.masterSkills.forEach(sk => { if (sk.curCd > 0) sk.curCd--; });
-    getActiveMembers(battle).forEach(m => {
-      ensureMemberBuffs(m);
-      const ce = getCePassive(m.ceId, !!m.ceMlb);
-      const ps = (typeof getServantPassives === 'function') ? getServantPassives(SERVANT_MAP[m.id]) : { nr: 0 };
-      const maxNp = getMaxNp(m.npLevel);
-      m.skills.forEach(sk => { if (sk.curCd > 0) sk.curCd--; });
-      if (ce.starsPerTurn) battle.stars = Math.min(99, battle.stars + ce.starsPerTurn);
-      if (ce.npPerTurn) m.np = Math.min(maxNp, m.np + ce.npPerTurn);
-      if (ps.nr) m.np = Math.min(maxNp, m.np + ps.nr);
-      if (ce.hpDrain) m.hp = Math.max(1, m.hp - ce.hpDrain);
-      if (m.buffs.regen > 0 && m.buffs.regenT > 0) {
-        m.hp = Math.min(m.maxHp, m.hp + m.buffs.regen);
-        if (--m.buffs.regenT === 0) m.buffs.regen = 0;
-      }
-      if (m.buffs.maxHpBonus > 0) {
-        m.maxHp = Math.max(1000, m.maxHp - m.buffs.maxHpBonus);
-        m.hp = Math.min(m.maxHp, m.hp);
-        m.buffs.maxHpBonus = 0;
-      }
+        battle.turn++;
+        battle.masterSkills.forEach(sk => { if (sk.curCd > 0) sk.curCd--; });
+        getActiveMembers(battle).forEach(m => {
+          ensureMemberBuffs(m);
+          const ce = getCePassive(m.ceId, !!m.ceMlb);
+          const ps = (typeof getServantPassives === 'function') ? getServantPassives(SERVANT_MAP[m.id]) : { nr: 0 };
+          const maxNp = getMaxNp(m.npLevel);
+          m.skills.forEach(sk => { if (sk.curCd > 0) sk.curCd--; });
+          if (ce.starsPerTurn) battle.stars = Math.min(99, battle.stars + ce.starsPerTurn);
+          if (ce.npPerTurn) m.np = Math.min(maxNp, m.np + ce.npPerTurn);
+          if (ps.nr) m.np = Math.min(maxNp, m.np + ps.nr);
+          if (ce.hpDrain) m.hp = Math.max(1, m.hp - ce.hpDrain);
+          if (m.buffs.regen > 0 && m.buffs.regenT > 0) {
+            m.hp = Math.min(m.maxHp, m.hp + m.buffs.regen);
+            if (--m.buffs.regenT === 0) m.buffs.regen = 0;
+          }
+          if (m.buffs.maxHpBonus > 0) {
+            m.maxHp = Math.max(1000, m.maxHp - m.buffs.maxHpBonus);
+            m.hp = Math.min(m.maxHp, m.hp);
+            m.buffs.maxHpBonus = 0;
+          }
 
-      m.buffs.invul = 0;
-      m.buffs.invulHits = 0;
-      m.buffs.evade = 0;
-      if (m.buffs.evadeT > 0 && --m.buffs.evadeT === 0) m.buffs.evadeHits = 0;
-      if (m.buffs.gutsT > 0 && --m.buffs.gutsT === 0) m.buffs.guts = 0;
-      m.buffs.sureHit = 0;
-      m.buffs.invulPierce = 0;
-      m.buffs.extraUp = 0;
-      m.buffs.ocUp = 0;
-      m.buffs.starGen = 0;
-      m.buffs.starWeight = 0;
-      m.buffs.busterStarWeight = 0;
-      m.buffs.artsStarWeight = 0;
-      m.buffs.buffProtect = 0;
-      m.buffs.npBoost = 1;
-      if (m.id === 'sv_emiya') m.buffs.npTypeOverride = null; // 에미야 1턴 아츠 보구 종료 후 버스터 복귀
-      if (m.buffs.atkT > 0 && --m.buffs.atkT === 0) m.buffs.atk = 0;
-      if (m.buffs.defT > 0 && --m.buffs.defT === 0) m.buffs.def = 0;
-      if (m.buffs.cardT > 0 && --m.buffs.cardT === 0) { m.buffs.buster = 0; m.buffs.arts = 0; m.buffs.quick = 0; }
-      if (m.buffs.npDmgT > 0 && --m.buffs.npDmgT === 0) m.buffs.npDmg = 0;
-      if (m.buffs.npGainT > 0 && --m.buffs.npGainT === 0) m.buffs.npGain = 0;
-      if (m.buffs.critT > 0 && --m.buffs.critT === 0) m.buffs.crit = 0;
-    });
-  }
+          m.buffs.invul = 0;
+          m.buffs.invulHits = 0;
+          m.buffs.evade = 0;
+          if (m.buffs.evadeT > 0 && --m.buffs.evadeT === 0) m.buffs.evadeHits = 0;
+          if (m.buffs.gutsT > 0 && --m.buffs.gutsT === 0) m.buffs.guts = 0;
+          m.buffs.sureHit = 0;
+          m.buffs.invulPierce = 0;
+          m.buffs.extraUp = 0;
+          m.buffs.ocUp = 0;
+          m.buffs.starGen = 0;
+          m.buffs.starWeight = 0;
+          m.buffs.busterStarWeight = 0;
+          m.buffs.artsStarWeight = 0;
+          m.buffs.buffProtect = 0;
+          m.buffs.npBoost = 1;
+          if (m.id === 'sv_emiya') m.buffs.npTypeOverride = null; // 에미야 1턴 아츠 보구 종료 후 버스터 복귀
+          if (m.buffs.atkT > 0 && --m.buffs.atkT === 0) m.buffs.atk = 0;
+          if (m.buffs.defT > 0 && --m.buffs.defT === 0) m.buffs.def = 0;
+          if (m.buffs.cardT > 0 && --m.buffs.cardT === 0) { m.buffs.buster = 0; m.buffs.arts = 0; m.buffs.quick = 0; }
+          if (m.buffs.npDmgT > 0 && --m.buffs.npDmgT === 0) m.buffs.npDmg = 0;
+          if (m.buffs.npGainT > 0 && --m.buffs.npGainT === 0) m.buffs.npGain = 0;
+          if (m.buffs.critT > 0 && --m.buffs.critT === 0) m.buffs.crit = 0;
+        });
+      }
 
   // ================= 전멸 시 영기복원 (영주 3획 또는 성정석 1개) =================
   function reviveAllParty(viaSpell) {
-    battle.roster.forEach(m => {
-      m.hp = m.maxHp;
-      m.np = Math.max(m.np, 100); // 전원 완전 부활 + NP 100%!
-    });
-    battle.activeSlots = [0, 1, 2];
-    battle.subQueue = [3, 4, 5];
-    battle.phase = 'command';
-    buildNewDeck();
-    drawTurnHand();
-    SoundEngine.reveal(5, true);
-    addLog(viaSpell ? '✦ 영주 3획 [영기복원]!! 6명 전원 완전 부활 + NP 100%!' : '💎 성정석 1개 [영기복원]!! 6명 전원 완전 부활 + NP 100%!');
-    getBridge().toast('✨ 영기복원 완료! 파티 전원 부활 & NP 100% 충전!');
-    document.getElementById('battle-continue-modal').classList.add('hidden');
-    saveActiveBattle();
-    renderArena();
-  }
+        battle.roster.forEach(m => {
+          m.hp = m.maxHp;
+          m.np = Math.max(m.np, 100); // 전원 완전 부활 + NP 100%!
+        });
+        battle.activeSlots = [0, 1, 2];
+        battle.subQueue = [3, 4, 5];
+        battle.phase = 'command';
+        buildNewDeck();
+        drawTurnHand();
+        SoundEngine.reveal(5, true);
+        addLog(viaSpell ? '✦ 영주 3획 [영기복원]!! 6명 전원 완전 부활 + NP 100%!' : '💎 성정석 1개 [영기복원]!! 6명 전원 완전 부활 + NP 100%!');
+        getBridge().toast('✨ 영기복원 완료! 파티 전원 부활 & NP 100% 충전!');
+        document.getElementById('battle-continue-modal').classList.add('hidden');
+        saveActiveBattle();
+        renderArena();
+      }
 
   function openWipeoutContinueModal() {
-    const spells = getBridge().getCommandSpells();
-    const sq = getBridge().getState().sq;
-    const modal = document.getElementById('battle-continue-modal');
-    const spellBtn = document.getElementById('btn-cont-spells');
-    const sqBtn = document.getElementById('btn-cont-sq');
-    const infoEl = document.getElementById('battle-continue-info');
+        const spells = getBridge().getCommandSpells();
+        const sq = getBridge().getState().sq;
+        const modal = document.getElementById('battle-continue-modal');
+        const spellBtn = document.getElementById('btn-cont-spells');
+        const sqBtn = document.getElementById('btn-cont-sq');
+        const infoEl = document.getElementById('battle-continue-info');
 
-    infoEl.textContent = `전열과 후열 6명이 모두 쓰러졌습니다. 영기복원을 사용하면 전원 HP 100% + NP 100% 상태로 전투를 계속할 수 있습니다! (보유 영주 ${spells}/3획 · 성정석 ${sq}개)`;
-    spellBtn.disabled = spells < 3;
-    spellBtn.textContent = spells >= 3 ? '✦ 영주 3획으로 영기복원 (무료)' : `✦ 영주 부족 (${spells}/3획 · 0시 회복)`;
-    sqBtn.disabled = sq < 1;
-    sqBtn.textContent = `💎 성정석 1개로 영기복원 (보유 ${sq})`;
-    modal.classList.remove('hidden');
-  }
+        infoEl.textContent = `전열과 후열 6명이 모두 쓰러졌습니다. 영기복원을 사용하면 전원 HP 100% + NP 100% 상태로 전투를 계속할 수 있습니다! (보유 영주 ${spells}/3획 · 성정석 ${sq}개)`;
+        spellBtn.disabled = spells < 3;
+        spellBtn.textContent = spells >= 3 ? '✦ 영주 3획으로 영기복원 (무료)' : `✦ 영주 부족 (${spells}/3획 · 0시 회복)`;
+        sqBtn.disabled = sq < 1;
+        sqBtn.textContent = `💎 성정석 1개로 영기복원 (보유 ${sq})`;
+        modal.classList.remove('hidden');
+      }
 
   function finishBattle(victory) {
-    battle.phase = 'ended';
-    busy = false;
-    clearSavedBattle();
-    renderArena();
+        battle.phase = 'ended';
+        busy = false;
+        clearSavedBattle();
+        renderArena();
 
-    const q = getQuest();
-    const modal = document.getElementById('battle-result-modal');
-    const titleEl = document.getElementById('battle-result-title');
-    const bodyEl = document.getElementById('battle-result-body');
+        const q = getQuest();
+        const modal = document.getElementById('battle-result-modal');
+        const titleEl = document.getElementById('battle-result-title');
+        const bodyEl = document.getElementById('battle-result-body');
 
-    if (victory) {
-      SoundEngine.reveal(5, true);
-      const ownedInParty = battle.roster.filter(m => !m.isSupport && !m.isRental).map(m => m.id);
-      const fpBonus = q.rewards.fp || 2000;
-      // 보물창고(QP던) 등 QP 보너스 예장 (모나리자 +10%, 프렌드 벨라리자 +15% 등) 합산!
-      let qpBonusRate = 0;
-      battle.roster.forEach(m => {
-        if (!m.ceId) return;
-        const cp = getCePassive(m.ceId, !!m.ceMlb);
-        if (m.isSupport && cp.qpSupportBonus) qpBonusRate += cp.qpSupportBonus;
-        else if (cp.qpBonus) qpBonusRate += cp.qpBonus;
-      });
-      const finalRewards = { ...q.rewards, fp: fpBonus, questId: q.id, unlockMcId: q.unlockMcId || null };
-      let qpExtra = 0;
-      if (finalRewards.qp && qpBonusRate > 0) {
-        qpExtra = Math.round(finalRewards.qp * qpBonusRate);
-        finalRewards.qp += qpExtra;
-      }
-      const mcRes = getBridge().grantBattleRewards(finalRewards, ownedInParty);
-      titleEl.textContent = '🏆 QUEST CLEAR!!';
-      bodyEl.innerHTML = `
+        if (victory) {
+          SoundEngine.reveal(5, true);
+          const ownedInParty = battle.roster.filter(m => !m.isSupport && !m.isRental).map(m => m.id);
+          const fpBonus = q.rewards.fp || 2000;
+          const mcRes = getBridge().grantBattleRewards({ ...q.rewards, fp: fpBonus }, ownedInParty);
+          // 보물창고(QP던) 등 QP 보너스 예장 (모나리자 +10%, 프렌드 벨라리자 +15% 등) 합산!
+          let qpBonusRate = 0;
+          battle.roster.forEach(m => {
+            if (!m.ceId) return;
+            const cp = getCePassive(m.ceId, !!m.ceMlb);
+            if (m.isSupport && cp.qpSupportBonus) qpBonusRate += cp.qpSupportBonus;
+            else if (cp.qpBonus) qpBonusRate += cp.qpBonus;
+          });
+          const finalRewards = { ...q.rewards, fp: fpBonus, questId: q.id, unlockMcId: q.unlockMcId || null };
+          let qpExtra = 0;
+          if (finalRewards.qp && qpBonusRate > 0) {
+            qpExtra = Math.round(finalRewards.qp * qpBonusRate);
+            finalRewards.qp += qpExtra;
+          }
+          const mcRes = getBridge().grantBattleRewards(finalRewards, ownedInParty);
+          titleEl.textContent = '🏆 QUEST CLEAR!!';
+          bodyEl.innerHTML = `
         <div class="br-quest">${q.name}</div>
         <div class="br-meta">${battle.turn}턴 만에 클리어 성공!</div>
         <div class="br-rewards-box">
@@ -3547,65 +3610,65 @@ window.FgoBattle = (() => {
           <div style="font-size:12px;color:#9cb2d9;margin-top:4px">출격한 보유 서번트 전원(전열+후열)의 인연 포인트가 상승했습니다!</div>
         </div>
       `;
-    } else {
-      SoundEngine.error();
-      titleEl.textContent = '💀 DEFEAT — 전멸';
-      bodyEl.innerHTML = `
+        } else {
+          SoundEngine.error();
+          titleEl.textContent = '💀 DEFEAT — 전멸';
+          bodyEl.innerHTML = `
         <div class="br-quest">${q.name}</div>
         <div class="br-meta">파티 6명이 모두 쓰러졌습니다. 마이룸에서 서번트를 육성하거나 상성 파티로 다시 도전해 보세요!</div>
       `;
-    }
-    modal.classList.remove('hidden');
-  }
+        }
+        modal.classList.remove('hidden');
+      }
 
   // 앱 재실행 시 중단된 전투 이어하기 확인 (원작 FGO 고증!)
   function checkResumeSavedBattle() {
-    const saved = loadSavedBattle();
-    if (!saved) return;
-    const q = QUESTS.find(x => x.id === saved.questId);
-    const modal = document.getElementById('battle-resume-modal');
-    const desc = document.getElementById('battle-resume-desc');
-    if (!modal || !desc) return;
-    desc.textContent = `이전 세션에서 중단된 전투 [${q ? q.name : saved.questId} · WAVE ${saved.waveIdx + 1} · TURN ${saved.turn}] 기록이 남아 있습니다. 이어서 진행하시겠습니까?`;
-    modal.classList.remove('hidden');
-  }
+        const saved = loadSavedBattle();
+        if (!saved) return;
+        const q = QUESTS.find(x => x.id === saved.questId);
+        const modal = document.getElementById('battle-resume-modal');
+        const desc = document.getElementById('battle-resume-desc');
+        if (!modal || !desc) return;
+        desc.textContent = `이전 세션에서 중단된 전투 [${q ? q.name : saved.questId} · WAVE ${saved.waveIdx + 1} · TURN ${saved.turn}] 기록이 남아 있습니다. 이어서 진행하시겠습니까?`;
+        modal.classList.remove('hidden');
+      }
 
   // 상성표 모달 렌더링 (16×16 클래스 상성 + 공격 보정치 + 5×5 히든 속성)
   function openAffinityModal() {
-    SoundEngine.click();
-    const modal = document.getElementById('affinity-modal');
-    const body = document.getElementById('affinity-modal-body');
-    const clsOrder = ['Saber', 'Archer', 'Lancer', 'Rider', 'Caster', 'Assassin', 'Berserker', 'Shielder', 'Ruler', 'Avenger', 'MoonCancer', 'AlterEgo', 'Pretender', 'Foreigner', 'BeastI', 'BeastIIIR'];
-    const shortName = {
-      Saber: '세', Archer: '아', Lancer: '랜', Rider: '라', Caster: '캐', Assassin: '어',
-      Berserker: '버', Shielder: '실/Ⅱ', Ruler: '룰', Avenger: '어벤', MoonCancer: '문',
-      AlterEgo: '얼', Pretender: '프', Foreigner: '포', BeastI: '비Ⅰ', BeastIIIR: '비Ⅲ'
-    };
+        SoundEngine.click();
+        const modal = document.getElementById('affinity-modal');
+        const body = document.getElementById('affinity-modal-body');
+        const clsOrder = ['Saber', 'Archer', 'Lancer', 'Rider', 'Caster', 'Assassin', 'Berserker', 'Shielder', 'Ruler', 'Avenger', 'MoonCancer', 'AlterEgo', 'Pretender', 'Foreigner', 'BeastI', 'BeastIIIR'];
+        const shortName = {
+          Saber: '세', Archer: '아', Lancer: '랜', Rider: '라', Caster: '캐', Assassin: '어',
+          Berserker: '버', Shielder: '실/Ⅱ', Ruler: '룰', Avenger: '어벤', MoonCancer: '문',
+          AlterEgo: '얼', Pretender: '프', Foreigner: '포', BeastI: '비Ⅰ', BeastIIIR: '비Ⅲ'
+        };
 
-    const clsRows = clsOrder.map(atk => {
-      const cells = clsOrder.map(def => {
-        const m = getClassMultiplier(atk, def);
-        let c = 'aff-cell';
-        if (m >= 2.0) c += ' aff-c20';
-        else if (m >= 1.5) c += ' aff-c15';
-        else if (m > 1.0) c += ' aff-c12';
-        else if (m < 1.0) c += ' aff-c05';
-        return `<td class="${c}">${m.toFixed(1)}</td>`;
-      }).join('');
-      return `<tr><th>${shortName[atk]}</th><td class="aff-mod">${getClassAtkMod(atk).toFixed(2)}</td>${cells}</tr>`;
-    }).join('');
+        const clsRows = clsOrder.map(atk => {
+          const cells = clsOrder.map(def => {
+            const m = getClassMultiplier(atk, def);
+            let c = 'aff-cell';
+            if (m >= 2.0) c += ' aff-c20';
+            else if (m >= 1.5) c += ' aff-c15';
+            else if (m > 1.0) c += ' aff-c12';
+            else if (m < 1.0) c += ' aff-c05';
+            return `<td class="${c}">${m.toFixed(1)}</td>`;
+          }).join('');
+          return `<tr><th>${shortName[atk]}</th><td class="aff-mod">${getClassAtkMod(atk).toFixed(2)}</td>${cells}</tr>`;
+        }).join('');
 
-    const attrs = ['인(人)', '천(天)', '지(地)', '성(星)', '수(獸)'];
-    const attrRows = attrs.map(a1 => {
-      const cells = attrs.map(a2 => {
-        const m = getAttrMultiplier(a1, a2);
-        const cls = m > 1 ? 'aff-cell aff-c20' : (m < 1 ? 'aff-cell aff-c05' : 'aff-cell');
-        return `<td class="${cls}">${m.toFixed(1)}x</td>`;
-      }).join('');
-      return `<tr><th>${a1}</th>${cells}</tr>`;
-    }).join('');
+        const attrs = ['인(人)', '천(天)', '지(地)', '성(星)', '수(獸)'];
+        const attrRows = attrs.map(a1 => {
+          const cells = attrs.map(a2 => {
+            const m = getAttrMultiplier(a1, a2);
+            const cls = m > 1 ? 'aff-cell aff-c20' : (m < 1 ? 'aff-cell aff-c05' : 'aff-cell');
+            return `<td class="${cls}">${m.toFixed(1)}x</td>`;
+          }).join('');
+          return `<tr><th>${a1}</th>${cells}</tr>`;
+        }).join('');
 
-    body.innerHTML = `
+        body.innerHTML = `
       <h3 style="font-size:14px;margin-bottom:6px;color:#ffe680">⚔️ 클래스 상성표 & 공격측 보정치 (행: 공격군 → 열: 피격군)</h3>
       <div class="aff-table-wrap">
         <table class="aff-table">
@@ -3619,169 +3682,169 @@ window.FgoBattle = (() => {
         <tbody>${attrRows}</tbody>
       </table>
     `;
-    modal.classList.remove('hidden');
-  }
+        modal.classList.remove('hidden');
+      }
 
   // ================= 이벤트 바인딩 =================
   function bindEvents() {
-    document.getElementById('btn-start-battle')?.addEventListener('click', startBattle);
-    document.getElementById('btn-open-mystic-codes')?.addEventListener('click', openMysticCodeModal);
-    document.getElementById('btn-close-mc')?.addEventListener('click', () => {
-      document.getElementById('mystic-code-modal')?.classList.add('hidden');
-    });
-    document.getElementById('mystic-code-modal')?.addEventListener('click', (e) => {
-      if (e.target.id === 'mystic-code-modal') e.target.classList.add('hidden');
-    });
-    document.getElementById('mc-search')?.addEventListener('input', (e) => {
-      mcModalQuery = e.target.value || '';
-      renderMysticCodeModal();
-    });
-    document.querySelectorAll('#mc-cat-filter .filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        SoundEngine.click();
-        mcModalFilter = btn.dataset.cat;
-        document.querySelectorAll('#mc-cat-filter .filter-btn').forEach(b => b.classList.toggle('active', b === btn));
-        renderMysticCodeModal();
-      });
-    });
-    document.getElementById('btn-mc-unlock-all')?.addEventListener('click', () => {
-      const added = getBridge().unlockAllMysticCodes();
-      SoundEngine.reveal(5, true);
-      getBridge().toast(added > 0 ? `✨ 마술예장 ${added}종 추가 해금! 총 28종 모두 사용 가능!` : '✅ 이미 마술예장 28종을 모두 보유 중입니다!');
-      renderLobbyMysticCodeBar();
-      renderMysticCodeModal();
-    });
-    document.getElementById('btn-open-affinity')?.addEventListener('click', openAffinityModal);
-    document.getElementById('btn-close-affinity')?.addEventListener('click', () => {
-      document.getElementById('affinity-modal').classList.add('hidden');
-    });
-    document.getElementById('btn-ba-attack')?.addEventListener('click', () => {
-      if (!battle || busy || battle.phase !== 'command') return;
-      openPopup = null;
-      SoundEngine.click();
-      battle.phase = 'cards';
-      renderArena();
-    });
-    document.getElementById('btn-ba-back')?.addEventListener('click', () => {
-      if (!battle || busy || battle.phase !== 'cards') return;
-      SoundEngine.click();
-      battle.selectedCards = [];
-      battle.phase = 'command';
-      renderArena();
-    });
-
-    // 우측 상단 3버튼: 마스터 Skill / 영주 / Menu
-    document.getElementById('btn-ba-master-menu')?.addEventListener('click', () => {
-      if (!battle || busy || battle.phase !== 'command') return;
-      SoundEngine.click();
-      pendingServantSkill = null;
-      pendingMasterSkillIdx = null;
-      openPopup = openPopup === 'master' ? null : 'master';
-      renderArena();
-    });
-    document.getElementById('btn-ba-spells')?.addEventListener('click', () => {
-      if (!battle || busy || battle.phase !== 'command') return;
-      SoundEngine.click();
-      pendingServantSkill = null;
-      pendingMasterSkillIdx = null;
-      openPopup = openPopup === 'spells' ? null : 'spells';
-      renderArena();
-    });
-    document.getElementById('btn-ba-menu')?.addEventListener('click', () => {
-      if (!battle || busy || battle.phase !== 'command') return;
-      SoundEngine.click();
-      pendingServantSkill = null;
-      pendingMasterSkillIdx = null;
-      openPopup = openPopup === 'menu' ? null : 'menu';
-      renderArena();
-    });
-
-    // 전멸 컨티뉴 모달
-    document.getElementById('btn-cont-spells')?.addEventListener('click', () => {
-      if (getBridge().consumeCommandSpells(3)) reviveAllParty(true);
-    });
-    document.getElementById('btn-cont-sq')?.addEventListener('click', () => {
-      if (getBridge().spendSqForRevive()) reviveAllParty(false);
-    });
-    document.getElementById('btn-cont-giveup')?.addEventListener('click', () => {
-      document.getElementById('battle-continue-modal').classList.add('hidden');
-      finishBattle(false);
-    });
-
-    // 전투 이어하기 모달
-    document.getElementById('btn-resume-yes')?.addEventListener('click', () => {
-      const saved = loadSavedBattle();
-      document.getElementById('battle-resume-modal').classList.add('hidden');
-      if (!saved) return;
-      battle = saved;
-      if (!battle.mysticCodeId || !battle.masterSkills?.[0]?.effects) {
-        battle.mysticCodeId = battle.mysticCodeId || getBridge().getActiveMysticCodeId();
-        battle.mysticCodeLv = battle.mysticCodeLv || 1;
-        battle.masterSkills = buildBattleMasterSkills(battle.mysticCodeId, battle.mysticCodeLv);
-      }
-      battle.roster.forEach(m => {
-        ensureMemberBuffs(m);
-        const defs = getSkillDefs(SERVANT_MAP[m.id]);
-        m.skills.forEach((sk, si) => {
-          if (!sk.target && defs[si]) {
-            sk.target = defs[si].target;
-            sk.desc = defs[si].desc;
-          }
+        document.getElementById('btn-start-battle')?.addEventListener('click', startBattle);
+        document.getElementById('btn-open-mystic-codes')?.addEventListener('click', openMysticCodeModal);
+        document.getElementById('btn-close-mc')?.addEventListener('click', () => {
+          document.getElementById('mystic-code-modal')?.classList.add('hidden');
         });
-      });
-      busy = false;
-      openPopup = null;
-      pendingMasterSkillIdx = null;
-      pendingServantSkill = null;
-      getBridge().switchToBattleTab();
-      document.getElementById('battle-lobby').classList.add('hidden');
-      document.getElementById('battle-arena').classList.remove('hidden');
-      renderArena();
-      if (battle.phase === 'wipeout') openWipeoutContinueModal();
-      getBridge().toast('⚔️ 중단된 전투를 이어서 진행합니다!');
-    });
-    document.getElementById('btn-resume-no')?.addEventListener('click', () => {
-      document.getElementById('battle-resume-modal').classList.add('hidden');
-      clearSavedBattle();
-      getBridge().toast('중단된 전투를 포기하고 메인 화면으로 돌아왔습니다.');
-    });
+        document.getElementById('mystic-code-modal')?.addEventListener('click', (e) => {
+          if (e.target.id === 'mystic-code-modal') e.target.classList.add('hidden');
+        });
+        document.getElementById('mc-search')?.addEventListener('input', (e) => {
+          mcModalQuery = e.target.value || '';
+          renderMysticCodeModal();
+        });
+        document.querySelectorAll('#mc-cat-filter .filter-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            SoundEngine.click();
+            mcModalFilter = btn.dataset.cat;
+            document.querySelectorAll('#mc-cat-filter .filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+            renderMysticCodeModal();
+          });
+        });
+        document.getElementById('btn-mc-unlock-all')?.addEventListener('click', () => {
+          const added = getBridge().unlockAllMysticCodes();
+          SoundEngine.reveal(5, true);
+          getBridge().toast(added > 0 ? `✨ 마술예장 ${added}종 추가 해금! 총 28종 모두 사용 가능!` : '✅ 이미 마술예장 28종을 모두 보유 중입니다!');
+          renderLobbyMysticCodeBar();
+          renderMysticCodeModal();
+        });
+        document.getElementById('btn-open-affinity')?.addEventListener('click', openAffinityModal);
+        document.getElementById('btn-close-affinity')?.addEventListener('click', () => {
+          document.getElementById('affinity-modal').classList.add('hidden');
+        });
+        document.getElementById('btn-ba-attack')?.addEventListener('click', () => {
+          if (!battle || busy || battle.phase !== 'command') return;
+          openPopup = null;
+          SoundEngine.click();
+          battle.phase = 'cards';
+          renderArena();
+        });
+        document.getElementById('btn-ba-back')?.addEventListener('click', () => {
+          if (!battle || busy || battle.phase !== 'cards') return;
+          SoundEngine.click();
+          battle.selectedCards = [];
+          battle.phase = 'command';
+          renderArena();
+        });
 
-    // 결과 모달
-    document.getElementById('btn-br-lobby')?.addEventListener('click', () => {
-      document.getElementById('battle-result-modal').classList.add('hidden');
-      battle = null;
-      renderLobby();
-    });
-    document.getElementById('btn-br-retry')?.addEventListener('click', () => {
-      document.getElementById('battle-result-modal').classList.add('hidden');
-      startBattle();
-    });
+        // 우측 상단 3버튼: 마스터 Skill / 영주 / Menu
+        document.getElementById('btn-ba-master-menu')?.addEventListener('click', () => {
+          if (!battle || busy || battle.phase !== 'command') return;
+          SoundEngine.click();
+          pendingServantSkill = null;
+          pendingMasterSkillIdx = null;
+          openPopup = openPopup === 'master' ? null : 'master';
+          renderArena();
+        });
+        document.getElementById('btn-ba-spells')?.addEventListener('click', () => {
+          if (!battle || busy || battle.phase !== 'command') return;
+          SoundEngine.click();
+          pendingServantSkill = null;
+          pendingMasterSkillIdx = null;
+          openPopup = openPopup === 'spells' ? null : 'spells';
+          renderArena();
+        });
+        document.getElementById('btn-ba-menu')?.addEventListener('click', () => {
+          if (!battle || busy || battle.phase !== 'command') return;
+          SoundEngine.click();
+          pendingServantSkill = null;
+          pendingMasterSkillIdx = null;
+          openPopup = openPopup === 'menu' ? null : 'menu';
+          renderArena();
+        });
 
-    // 실행 시 중단된 전투 여부 확인
-    setTimeout(checkResumeSavedBattle, 250);
-  }
+        // 전멸 컨티뉴 모달
+        document.getElementById('btn-cont-spells')?.addEventListener('click', () => {
+          if (getBridge().consumeCommandSpells(3)) reviveAllParty(true);
+        });
+        document.getElementById('btn-cont-sq')?.addEventListener('click', () => {
+          if (getBridge().spendSqForRevive()) reviveAllParty(false);
+        });
+        document.getElementById('btn-cont-giveup')?.addEventListener('click', () => {
+          document.getElementById('battle-continue-modal').classList.add('hidden');
+          finishBattle(false);
+        });
+
+        // 전투 이어하기 모달
+        document.getElementById('btn-resume-yes')?.addEventListener('click', () => {
+          const saved = loadSavedBattle();
+          document.getElementById('battle-resume-modal').classList.add('hidden');
+          if (!saved) return;
+          battle = saved;
+          if (!battle.mysticCodeId || !battle.masterSkills?.[0]?.effects) {
+            battle.mysticCodeId = battle.mysticCodeId || getBridge().getActiveMysticCodeId();
+            battle.mysticCodeLv = battle.mysticCodeLv || 1;
+            battle.masterSkills = buildBattleMasterSkills(battle.mysticCodeId, battle.mysticCodeLv);
+          }
+          battle.roster.forEach(m => {
+            ensureMemberBuffs(m);
+            const defs = getSkillDefs(SERVANT_MAP[m.id]);
+            m.skills.forEach((sk, si) => {
+              if (!sk.target && defs[si]) {
+                sk.target = defs[si].target;
+                sk.desc = defs[si].desc;
+              }
+            });
+          });
+          busy = false;
+          openPopup = null;
+          pendingMasterSkillIdx = null;
+          pendingServantSkill = null;
+          getBridge().switchToBattleTab();
+          document.getElementById('battle-lobby').classList.add('hidden');
+          document.getElementById('battle-arena').classList.remove('hidden');
+          renderArena();
+          if (battle.phase === 'wipeout') openWipeoutContinueModal();
+          getBridge().toast('⚔️ 중단된 전투를 이어서 진행합니다!');
+        });
+        document.getElementById('btn-resume-no')?.addEventListener('click', () => {
+          document.getElementById('battle-resume-modal').classList.add('hidden');
+          clearSavedBattle();
+          getBridge().toast('중단된 전투를 포기하고 메인 화면으로 돌아왔습니다.');
+        });
+
+        // 결과 모달
+        document.getElementById('btn-br-lobby')?.addEventListener('click', () => {
+          document.getElementById('battle-result-modal').classList.add('hidden');
+          battle = null;
+          renderLobby();
+        });
+        document.getElementById('btn-br-retry')?.addEventListener('click', () => {
+          document.getElementById('battle-result-modal').classList.add('hidden');
+          startBattle();
+        });
+
+        // 실행 시 중단된 전투 여부 확인
+        setTimeout(checkResumeSavedBattle, 250);
+      }
 
   window.addEventListener('DOMContentLoaded', bindEvents);
 
-  return {
-    onEnterTab() {
-      if (!battle) renderLobby();
-      else renderArena();
-    },
-    renderLobbyIfIdle() {
-      if (!battle) renderLobby();
-    },
-    openCategory(catId) {
-      if (catId) {
-        selectedGateTab = catId;
-        const first = QUESTS.find(q => q.category === catId);
-        if (first) selectedQuestId = first.id;
+    return {
+      onEnterTab() {
+        if (!battle) renderLobby();
+        else renderArena();
+      },
+      renderLobbyIfIdle() {
+        if (!battle) renderLobby();
+      },
+      openCategory(catId) {
+        if (catId) {
+          selectedGateTab = catId;
+          const first = QUESTS.find(q => q.category === catId);
+          if (first) selectedQuestId = first.id;
+        }
+        if (!battle) renderLobby();
+      },
+      getPartyServantIds() {
+        ensureDefaultParty();
+        return partySlots.map(p => p && p.id).filter(Boolean);
       }
-      if (!battle) renderLobby();
-    },
-    getPartyServantIds() {
-      ensureDefaultParty();
-      return partySlots.map(p => p && p.id).filter(Boolean);
-    }
-  };
-})();
+    };
+  }) ();
