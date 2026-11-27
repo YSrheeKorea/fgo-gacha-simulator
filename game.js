@@ -1355,10 +1355,13 @@
       });
     });
 
-    // 스탯 계산
-    const lvRatio = 0.35 + (own.level / getBaseMaxLevel(effR)) * 0.65;
-    const curAtk = Math.round(sv.atk * lvRatio);
-    const curHp = Math.round(sv.hp * lvRatio);
+    // 스탯 계산 (v42: 원작 FGO Lv.1→기본최대→성배 Lv.120 비례 성장 + 포우작 반영)
+    const baseMaxLv = getBaseMaxLevel(effR);
+    const lvRatio = own.level <= baseMaxLv
+      ? (0.16 + ((own.level - 1) / Math.max(1, baseMaxLv - 1)) * 0.84)
+      : (1.0 + (own.level - baseMaxLv) * 0.0095);
+    const curAtk = Math.round(sv.atk * lvRatio) + (own.fouAtk || 0);
+    const curHp = Math.round(sv.hp * lvRatio) + (own.fouHp || 0);
 
     const tierLabel = RARITY_TIERS[effR] || '';
     document.getElementById('mr-name').textContent = `${effR === 0 ? '☆0' : '★'.repeat(effR)} ${tierLabel}${sv.variableRarity ? '(가변)' : ''} ${sv.name}`;
@@ -1408,21 +1411,23 @@
     const svSkills = (sv.skills && sv.skills.length >= 3) ? sv.skills : ['스킬 1', '스킬 2', '스킬 3'];
     skillsRow.innerHTML = svSkills.map((sk, idx) => {
       const slv = own.skillLevels[idx] || 1;
+      const reqAsc = idx === 1 ? 2 : (idx === 2 ? 3 : 1);
+      const isLocked = (own.ascension || 1) < reqAsc;
       const matData = window.SERVANT_MATERIALS && window.SERVANT_MATERIALS[sv.collectionNo];
       const skMat = slv < 10 && matData && matData.skill && matData.skill[slv];
       const cost = slv < 10 ? ((skMat && skMat.qp) ? skMat.qp : getSkillUpQp(sv.rarity, slv)) : 0;
       const reqStr = skMat && skMat.items && skMat.items.length
         ? skMat.items.map(([n, a]) => `${n}×${a}`).join(', ') + ' · '
         : '';
-      const cdTip = slv >= 10 ? '쿨타임 -2T' : (slv >= 6 ? '쿨타임 -1T' : 'Lv.6에 쿨-1T');
+      const cdTip = isLocked ? `🔒 ${reqAsc}차 영기재림 시 개방` : (slv >= 10 ? '쿨타임 -2T' : (slv >= 6 ? '쿨타임 -1T' : 'Lv.6에 쿨-1T'));
       return `
-        <div class="mr-skill-card">
+        <div class="mr-skill-card" style="${isLocked ? 'opacity:0.65;' : ''}">
           <div class="mr-skill-info">
-            <strong>스킬${idx + 1} · ${sk}</strong>
-            <span>Lv.${slv} / 10 (${cdTip})</span>
+            <strong>${isLocked ? '🔒 ' : ''}스킬${idx + 1} · ${sk}</strong>
+            <span>${isLocked ? cdTip : `Lv.${slv} / 10 (${cdTip})`}</span>
           </div>
-          <button class="mr-skill-up-btn" data-skidx="${idx}" ${slv >= 10 ? 'disabled' : ''}>
-            ${slv >= 10 ? 'MAX' : `강화 (${reqStr}${formatQpShort(cost)} QP)`}
+          <button class="mr-skill-up-btn" data-skidx="${idx}" ${isLocked || slv >= 10 ? 'disabled' : ''}>
+            ${isLocked ? `${reqAsc}차 재림 필요` : (slv >= 10 ? 'MAX' : `강화 (${reqStr}${formatQpShort(cost)} QP)`)}
           </button>
         </div>
       `;

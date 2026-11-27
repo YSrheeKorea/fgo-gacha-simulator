@@ -1960,12 +1960,14 @@ window.FgoBattle = (() => {
             : st.servants[slot.id];
           const effR = getEffectiveRarity(sv, own);
           const baseMaxLv = effR === 5 ? 90 : (effR === 4 ? 80 : (effR === 3 ? 70 : (effR === 1 ? 60 : 65)));
-          const scale = 0.65 + (own.level / baseMaxLv) * 0.45;
+          const scale = own.level <= baseMaxLv
+            ? (0.16 + ((own.level - 1) / Math.max(1, baseMaxLv - 1)) * 0.84)
+            : (1.0 + (own.level - baseMaxLv) * 0.0095);
           const ceOwn = slot.isSupport ? { copies: 5, level: 100 } : (slot.ceId ? st.ces[slot.ceId] : null);
           const ceMlb = slot.isSupport || isCeMlb(ceOwn);
           const ceStats = getCeCurrentStats(slot.ceId ? CE_MAP[slot.ceId] : null, ceOwn);
-          const maxHp = Math.round(sv.hp * scale) + ceStats.hp;
-          const atk = Math.round(sv.atk * scale) + ceStats.atk;
+          const maxHp = Math.round(sv.hp * scale) + (own.fouHp || 0) + ceStats.hp;
+          const atk = Math.round(sv.atk * scale) + (own.fouAtk || 0) + ceStats.atk;
           const ce = getCePassive(slot.ceId, ceMlb);
           const maxNp = getMaxNp(own.npLevel);
 
