@@ -1462,6 +1462,23 @@
             </details>
           `;
         })()}
+        ${(() => {
+          const voices = window.SERVANT_VOICES && window.SERVANT_VOICES[sv.collectionNo];
+          if (!voices || !voices.length) return '';
+          return `
+            <details style="margin-top:4px;font-size:11.5px;color:#cde0ff">
+              <summary style="cursor:pointer;color:#93c5fd;font-weight:700">📜 공식 대사 리스트 전체 보기 (${voices.length}종 · 재림별·스토리 해금 포함)</summary>
+              <div style="margin-top:6px;max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:4px;padding-right:4px">
+                ${voices.map((v, i) => `
+                  <button class="small-outline-btn v30-voice-btn" data-vidx="${i}" style="text-align:left;padding:5px 8px;font-size:11px;display:flex;justify-content:space-between;gap:6px">
+                    <span>💬 ${v[0]}</span>
+                    <span style="color:#ffd875;font-size:10px">${v[2] ? `${v[2]}차` : '공통'}${v[3] ? ' · 스토리' : ''}</span>
+                  </button>
+                `).join('')}
+              </div>
+            </details>
+          `;
+        })()}
       </div>
     `;
 
@@ -1534,6 +1551,17 @@
         } else {
           toast('이미 Lv.10 MAX 상태입니다!');
         }
+      });
+    });
+
+    box.querySelectorAll('.v30-voice-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const voices = window.SERVANT_VOICES && window.SERVANT_VOICES[sv.collectionNo];
+        const v = voices && voices[Number(btn.dataset.vidx)];
+        if (!v) return;
+        SoundEngine.myRoomTap();
+        const badge = `${v[0]}${v[2] ? ` · ${v[2]}차` : ''}${v[3] ? ' · 스토리해금' : ''}`;
+        playMyRoomTypewriter(sv.name, badge, v[1]);
       });
     });
   }
@@ -1628,8 +1656,13 @@
 
     const krVoices = window.SERVANT_VOICES && window.SERVANT_VOICES[sv.collectionNo];
     if (krVoices && krVoices.length) {
-      const [label, text] = pickRandom(krVoices);
-      playMyRoomTypewriter(sv.name, label, text);
+      const curAsc = own.viewAsc || 1;
+      // 현재 재림 단계(viewAsc)에 맞는 대사 우선 필터링 (오베론 3차, 캐밥 3차 등 재림별 대사 분기!)
+      const ascMatched = krVoices.filter(v => !v[2] || v[2] === curAsc || (curAsc >= 3 && v[2] === 3));
+      const pool = ascMatched.length ? ascMatched : krVoices;
+      const [label, text, ascTag, storyTag] = pickRandom(pool);
+      const badge = `${label}${ascTag ? ` · ${ascTag}차` : ''}${storyTag ? ' · 스토리해금' : ''}`;
+      playMyRoomTypewriter(sv.name, badge, text);
     } else if (sv.officialLines && sv.officialLines.length) {
       const picked = pickRandom(sv.officialLines);
       playMyRoomTypewriter(sv.name, picked.label, picked.text);
