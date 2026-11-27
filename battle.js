@@ -322,6 +322,48 @@ window.FgoBattle = (() => {
         { key: 'shingen_3', name: names[2], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 크리 위력 +50%(3T)' }
       ];
     }
+    if (sv.id === 'sv_no_150') { // ★5 멀린: 몽환의 카리스마 + 전체 무적 + 영웅작성(B+50%·크리+100%)!
+      return [
+        { key: 'merlin_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & NP +20%' },
+        { key: 'merlin_2', name: names[1], cd: 7, icon: '🛡️', target: 'all',  desc: '[단체] 아군 전체 무적(1T) & 스타발생률 +50%(1T)' },
+        { key: 'merlin_3', name: names[2], cd: 6, icon: '🔴', target: 'ally', desc: '[개인] 영웅작성 EX! 선택 아군 Buster +50%(3T) · 크리 +100%(1T) · 최대HP +3,000!' }
+      ];
+    }
+    if (sv.id === 'sv_no_215') { // ★5 스카사하=스카디: 원초의 룬(Q+50%·크리+100%) + 개인 NP 50%!
+      return [
+        { key: 'skadi_1', name: names[0], cd: 6, icon: '🟢', target: 'ally', desc: '[개인] 선택 아군 1명 Quick +50%(3T) & 크리티컬 위력 +100%(3T)!' },
+        { key: 'skadi_2', name: names[1], cd: 6, icon: '❄️', target: 'all',  desc: '[단체] 얼어붙는 눈보라! 아군 공격력 +30%(3T) & 적 크리 약화' },
+        { key: 'skadi_3', name: names[2], cd: 6, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 NP +50% 충전!' }
+      ];
+    }
+    if (sv.id === 'sv_no_258') { // ★2 진궁: 아군 사출 대군 아츠 시스템!
+      return [
+        { key: 'chengong_1', name: names[0], cd: 5, icon: '🛡️', target: 'ally', desc: '[개인] 선택 아군 1명 방어력 +30%(1T) & 스타발생 +30%' },
+        { key: 'chengong_2', name: names[1], cd: 6, icon: '💎', target: 'all',  desc: '[단체] 아군 전체 방어력 +15%(3T) & NP +10%' },
+        { key: 'chengong_3', name: names[2], cd: 6, icon: '🔴', target: 'ally', desc: '[개인] 선택 아군 1명 Buster +50%(1T) & 크리 +50%(1T)' }
+      ];
+    }
+    if (sv.id === 'sv_no_385') { // ★5 구세주 토네리코: 아군 전체 NP +50% + 보구+30%!
+      return [
+        { key: 'tonelico_1', name: names[0], cd: 6, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & NP +20%' },
+        { key: 'tonelico_2', name: names[1], cd: 6, icon: '❤️‍🔥', target: 'all', desc: '[단체] 아군 전체 근성(2,000 · 3T) & HP +2,000' },
+        { key: 'tonelico_3', name: names[2], cd: 7, icon: '💎', target: 'all',  desc: '[단체] 아군 전체 NP +50% & 보구 위력 +30%(3T)!' }
+      ];
+    }
+    if (sv.id === 'sv_no_036') { // ★1 모차르트: 작은 별의 밤 스타 +50개 즉시 획득!
+      return [
+        { key: 'mozart_1', name: names[0], cd: 5, icon: '🔵', target: 'all',  desc: '[단체] 아군 전체 Arts +44%(1T)!' },
+        { key: 'mozart_2', name: names[1], cd: 6, icon: '🎵', target: 'all',  desc: '[단체] 아군 전체 방어력 +20%(3T) & NP +10%' },
+        { key: 'mozart_3', name: names[2], cd: 6, icon: '⭐', target: 'self', desc: '[본인] 작은 별의 밤 EX! 크리티컬 스타 +50개 즉시 획득(전 카드 100% 크리!!)' }
+      ];
+    }
+    if (sv.id === 'sv_no_467') { // ★5 프랑수아/프란체스카 프렐라티: 보조 ⇄ 대군 영기 변환!
+      return [
+        { key: 'prelati_1', name: names[0], cd: 5, icon: '🔵', target: 'all',  desc: '[단체] 아군 전체 Arts +25%(3T) & NP +20%' },
+        { key: 'prelati_2', name: names[1], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & 회피(1회·3T)' },
+        { key: 'prelati_3', name: names[2], cd: 5, icon: '🔄', target: 'self', desc: '[본인] 영기 변환! 보구 전환 (프랑수아 보조 ⇄ 프란체스카 대군 Arts)!' }
+      ];
+    }
     const cardIcon = sv.npType === 'Buster' ? '🔴' : (sv.npType === 'Arts' ? '🔵' : '🟢');
     const npCharge = sv.id === 'sv_arcueid' ? 100 : (sv.rarity === 5 ? 50 : (sv.rarity === 4 ? 30 : 25));
     const isSup = getNpCategory(sv) === 'support';
@@ -533,6 +575,68 @@ window.FgoBattle = (() => {
       case 'shingen_3':
         addNp(caster, 50); caster.buffs.crit += 0.5; caster.buffs.critT = 3;
         return `${sv.name} [${name}]! 본인 NP +50% & 크리 +50%!`;
+      case 'merlin_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.2; m.buffs.atkT = 3; addNp(m, 20); });
+        return `${sv.name} [${name}]! 아군 전체 공+20%(3T) & NP +20%!`;
+      case 'merlin_2':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.invul = Math.max(m.buffs.invul, 1); m.buffs.starGen += 0.5; });
+        return `${sv.name} [${name}]! 아군 전체 무적(1T) & 스타발생 +50%!`;
+      case 'merlin_3':
+        target.buffs.buster += 0.5; target.buffs.cardT = 3;
+        target.buffs.crit += 1.0; target.buffs.critT = Math.max(target.buffs.critT, 1);
+        target.buffs.maxHpBonus += 3000; target.maxHp += 3000; target.hp += 3000;
+        return `${sv.name} [${name}] → ${tgtName}! 영웅작성 B+50% · 크리+100% · 최대HP+3,000!!`;
+      case 'skadi_1':
+        target.buffs.quick += 0.5; target.buffs.cardT = 3;
+        target.buffs.crit += 1.0; target.buffs.critT = 3;
+        return `${sv.name} [${name}] → ${tgtName}! 원초의 룬 Q+50%(3T) & 크리+100%(3T)!!`;
+      case 'skadi_2':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.3; m.buffs.atkT = 3; });
+        return `${sv.name} [${name}]! 얼어붙는 눈보라 — 적 전체 방어 DOWN(아군 화력 +30%)!`;
+      case 'skadi_3':
+        addNp(target, 50);
+        return `${sv.name} [${name}] → ${tgtName}! ${tgtName} NP +50% 충전!`;
+      case 'chengong_1':
+        target.buffs.def += 0.3; target.buffs.defT = 1; target.buffs.starGen += 0.3;
+        return `${sv.name} [${name}] → ${tgtName}! 방어+30%(1T)!`;
+      case 'chengong_2':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.def += 0.15; m.buffs.defT = 3; addNp(m, 10); });
+        return `${sv.name} [${name}]! 아군 전체 방어+15% & NP +10%!`;
+      case 'chengong_3':
+        target.buffs.buster += 0.5; target.buffs.cardT = Math.max(target.buffs.cardT, 1);
+        target.buffs.crit += 0.5; target.buffs.critT = Math.max(target.buffs.critT, 1);
+        return `${sv.name} [${name}] → ${tgtName}! B+50% & 크리+50%!`;
+      case 'tonelico_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.2; m.buffs.atkT = 3; addNp(m, 20); });
+        return `${sv.name} [${name}]! 아군 전체 공+20% & NP +20%!`;
+      case 'tonelico_2':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.guts = Math.max(m.buffs.guts, 2000); m.buffs.gutsT = 3; m.hp = Math.min(m.maxHp, m.hp + 2000); });
+        return `${sv.name} [${name}]! 아군 전체 근성(2,000·3T) & HP +2,000!`;
+      case 'tonelico_3':
+        alive.forEach(m => { ensureMemberBuffs(m); addNp(m, 50); m.buffs.npDmg += 0.3; m.buffs.npDmgT = 3; });
+        return `${sv.name} [${name}]! 아군 전체 NP +50% & 보구 위력 +30%(3T)!!`;
+      case 'mozart_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.arts += 0.44; m.buffs.cardT = Math.max(m.buffs.cardT, 1); });
+        return `${sv.name} [${name}]! 아군 전체 Arts +44%(1T)!`;
+      case 'mozart_2':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.def += 0.2; m.buffs.defT = 3; addNp(m, 10); });
+        return `${sv.name} [${name}]! 아군 전체 방어+20% & NP +10%!`;
+      case 'mozart_3':
+        b.stars = Math.min(99, b.stars + 50);
+        reallocateCurrentHandStars(b);
+        return `${sv.name} [${name}]! ⭐ 작은 별의 밤 — 크리티컬 스타 +50개 즉시 획득 (전 카드 100% 크리)!!`;
+      case 'prelati_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.arts += 0.25; m.buffs.cardT = 3; addNp(m, 20); });
+        return `${sv.name} [${name}]! 아군 전체 Arts+25% & NP +20%!`;
+      case 'prelati_2':
+        addNp(caster, 50); caster.buffs.evadeHits = Math.max(caster.buffs.evadeHits, 1); caster.buffs.evadeT = 3;
+        return `${sv.name} [${name}]! 본인 NP +50% & 회피(1회·3T)!`;
+      case 'prelati_3': {
+        const curCat = getNpCategory(sv, caster);
+        const nextCat = curCat === 'aoe' ? 'support' : 'aoe';
+        caster.buffs.npCatOverride = nextCat;
+        return `${sv.name} [${name}]! 영기 변환 — 보구 [${nextCat === 'aoe' ? '프란체스카 대군 Arts' : '프랑수아 보조'}] 전환!`;
+      }
       case 'sup_2':
         addNp(target, 30);
         b.stars = Math.min(99, b.stars + 15);
@@ -2356,7 +2460,7 @@ window.FgoBattle = (() => {
         const cat = getNpCategory(sv, m);
         const npLvMult = [0, 1.0, 1.25, 1.4, 1.5, 1.65][m.npLevel] || 1.0;
         const cardBuff = (c.type === 'Buster' ? m.buffs.buster + ce.buster + (ps.b || 0) : (c.type === 'Arts' ? m.buffs.arts + ce.arts + (ps.a || 0) : m.buffs.quick + ce.quick + (ps.q || 0)));
-        const arashMult = (m.id === 'sv_no_016') ? 1.6 : 1.0; // ★1 아라쉬 스텔라 초고배율!
+        const arashMult = (m.id === 'sv_no_016') ? 1.6 : (m.id === 'sv_no_258' ? 1.5 : 1.0); // ★1 아라쉬 스텔라 ×1.6 / ★2 진궁 기각일진 ×1.5!
         const npDmgMult = (1 + m.buffs.npDmg + ce.npDmg) * m.buffs.npBoost * npUpMult * arashMult;
 
         if (cat === 'support') {
@@ -2424,6 +2528,51 @@ window.FgoBattle = (() => {
               ally.hp = Math.min(ally.maxHp, ally.hp + 2500);
             });
             addLog(`🏰 ${sv.name} 보구 [${sv.npName}]! 아군 전체 방어+40% · 무적(1T) · Arts+20% · 회복!`);
+          } else if (m.id === 'sv_no_150') {
+            // ★5 멀린 [가든 오브 아발론]: 아군 전체 도트힐(1500×3T) + NP+15% + 스타+15!
+            getActiveMembers(battle).forEach(ally => {
+              ensureMemberBuffs(ally);
+              ally.buffs.regen = Math.max(ally.buffs.regen, 1500); ally.buffs.regenT = 3;
+              ally.hp = Math.min(ally.maxHp, ally.hp + 1500);
+              ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 15);
+            });
+            battle.stars = Math.min(99, battle.stars + Math.round(10 + ocStage * 5));
+            addLog(`🌸 ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 아군 도트힐·NP+15%·스타 대량 획득!`);
+          } else if (m.id === 'sv_no_215') {
+            // ★5 스카디 [게이트 오브 스카이]: 아군 전체 회피(1회·3T) · 공+30% · 크리+50%!
+            getActiveMembers(battle).forEach(ally => {
+              ensureMemberBuffs(ally);
+              ally.buffs.evadeHits = Math.max(ally.buffs.evadeHits, 1); ally.buffs.evadeT = 3;
+              ally.buffs.atk += 0.3; ally.buffs.atkT = 3;
+              ally.buffs.crit += 0.5; ally.buffs.critT = 3;
+            });
+            addLog(`❄️ ${sv.name} 보구 [${sv.npName}]! 아군 전체 회피(1회) · 공+30% · 크리+50%!`);
+          } else if (m.id === 'sv_no_307') {
+            // ★5 미스 크레인 [천의무봉·학의 보은]: 선두 아군 공+30%·보구+30%·NP+30% 부여 후 본인 후열 이동!
+            const frontLead = getActiveMembers(battle).find(a => a.rosterIdx !== m.rosterIdx);
+            if (frontLead) {
+              ensureMemberBuffs(frontLead);
+              frontLead.buffs.atk += 0.3; frontLead.buffs.atkT = 3;
+              frontLead.buffs.npDmg += 0.3; frontLead.buffs.npDmgT = 3;
+              frontLead.np = Math.min(getMaxNp(frontLead.npLevel), frontLead.np + 30);
+            }
+            const mySlot = battle.activeSlots.indexOf(m.rosterIdx);
+            if (mySlot !== -1 && battle.subQueue.length > 0) {
+              executeOrderChange(battle, mySlot, 0);
+              addLog(`🕊️ ${sv.name} 보구 [${sv.npName}]! 선두 아군 초강화 후 본인 후열로 우아하게 퇴장!`);
+            } else {
+              addLog(`🕊️ ${sv.name} 보구 [${sv.npName}]! 선두 아군 공+30%·보구+30%·NP+30% 부여!`);
+            }
+          } else if (m.id === 'sv_no_033') {
+            // ★2 안데르센: 아군 전체 공+40% · 방+40% · 도트힐(1000×3T) · 스타+15!
+            getActiveMembers(battle).forEach(ally => {
+              ensureMemberBuffs(ally);
+              ally.buffs.atk += 0.4; ally.buffs.atkT = 3;
+              ally.buffs.def += 0.4; ally.buffs.defT = 3;
+              ally.buffs.regen = Math.max(ally.buffs.regen, 1000); ally.buffs.regenT = 3;
+            });
+            battle.stars = Math.min(99, battle.stars + 15);
+            addLog(`📖 ${sv.name} 보구 [${sv.npName}]! 아군 공+40%·방+40%·도트힐·스타+15!`);
           } else {
             getActiveMembers(battle).forEach(ally => {
               ally.buffs.atk += 0.25 * ocMult; ally.buffs.atkT = 3;
@@ -2467,6 +2616,21 @@ window.FgoBattle = (() => {
               m.hp = 0;
               addLog(`💫 스텔라!! 아라쉬 산화 → 후열 서번트 자동 증원!`);
               reinforceFromBackline();
+            }
+          } else if (m.id === 'sv_no_258') {
+            // ★2 진궁 [기각일진]: 본인 제외 전열 가장 왼쪽 아군 1명 즉사 사출 → 후열 서포터 자동 증원!
+            const sacrifice = getActiveMembers(battle).find(a => a.rosterIdx !== m.rosterIdx);
+            if (sacrifice) {
+              const sacSv = SERVANT_MAP[sacrifice.id];
+              if (sacrifice.buffs.guts > 0) {
+                sacrifice.hp = Math.min(sacrifice.maxHp, sacrifice.buffs.guts);
+                sacrifice.buffs.guts = 0; sacrifice.buffs.gutsT = 0;
+                addLog(`❤️‍🔥 ${sacSv.name} 근성 발동! 진궁의 사출에서 생환!`);
+              } else {
+                sacrifice.hp = 0;
+                addLog(`💥 진궁 [기각일진]!! ${sacSv.name}을(를) 화살로 사출 → 후열 서번트 자동 증원!!`);
+                reinforceFromBackline();
+              }
             }
           }
         } else if (currentTarget) {
