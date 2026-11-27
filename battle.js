@@ -187,6 +187,7 @@ window.FgoBattle = (() => {
 
   function getNpCategory(sv, member = null) {
     if (member && member.buffs && member.buffs.npCatOverride) return member.buffs.npCatOverride;
+    if (sv.id === 'sv_melusine' && member) return (member.viewAsc >= 3) ? 'aoe' : 'single';
     if (sv.npCat) return sv.npCat;
     if (SUPPORT_NPS.has(sv.id)) return 'support';
     if (SINGLE_NPS.has(sv.id)) return 'single';
@@ -195,6 +196,7 @@ window.FgoBattle = (() => {
 
   function getEffectiveNpType(sv, member = null) {
     if (member && member.buffs && member.buffs.npTypeOverride) return member.buffs.npTypeOverride;
+    if (sv.id === 'sv_melusine' && member) return (member.viewAsc >= 3) ? 'Buster' : 'Arts';
     return sv.npType || 'Buster';
   }
 
@@ -276,6 +278,20 @@ window.FgoBattle = (() => {
         { key: 'udk_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & HP +1500' },
         { key: 'udk_2', name: names[1], cd: 5, icon: '💎', target: 'self', desc: '[본인] 자신 NP +30% & Arts +30%(3T)' },
         { key: 'udk_3', name: names[2], cd: 5, icon: '🔄', target: 'self', desc: '[본인] 보구 대상 전환 (대군 ⇄ 단일) & 보구 위력 +30%(1T)!' }
+      ];
+    }
+    if (sv.id === 'sv_melusine') { // ★5 요정기사 랜슬롯(멜뤼진): 1~2차 단일 Arts → 3스킬 100%차지 + 대군 Buster 용 변신!
+      return [
+        { key: 'melu_1', name: names[0], cd: 5, icon: '⚔️', target: 'self', desc: '[본인] 자신 공격력 +40%(3T) & NP +30%' },
+        { key: 'melu_2', name: names[1], cd: 5, icon: '⭐', target: 'self', desc: '[본인] 자신 스타집중 +500% & 스타 +15 획득' },
+        { key: 'melu_3', name: names[2], cd: 6, icon: '🐉', target: 'self', desc: '[본인] 영기 3단계 용 변신(대군 Buster 보구 전환) & NP +100% & 보구 위력 +30%(3T)!' }
+      ];
+    }
+    if (sv.id === 'sv_cu') { // ★3 쿠 훌린: 원작 불사신(전투속행 근성 + 화살막이 회피 3회!)
+      return [
+        { key: 'cu_1', name: names[0], cd: 7, icon: '❤️‍🔥', target: 'self', desc: '[본인] 자신 근성 부여 (HP 2,500 · 5턴)' },
+        { key: 'cu_2', name: names[1], cd: 5, icon: '💨', target: 'self', desc: '[본인] 자신 회피 부여 (3회·3턴) & 방어력 +16%(3T)' },
+        { key: 'cu_3', name: names[2], cd: 5, icon: '💚', target: 'self', desc: '[본인] 자신 약화 해제 & HP +2,500 회복' }
       ];
     }
     const cardIcon = sv.npType === 'Buster' ? '🔴' : (sv.npType === 'Arts' ? '🔵' : '🟢');
@@ -418,6 +434,35 @@ window.FgoBattle = (() => {
         caster.buffs.npDmg += 0.3; caster.buffs.npDmgT = Math.max(caster.buffs.npDmgT, 1);
         return `${sv.name} [${name}]! 보구 대상 [${nextCat === 'single' ? '단일' : '대군'}] 전환 & 보구 위력 +30%!`;
       }
+      case 'melu_1':
+        caster.buffs.atk += 0.4; caster.buffs.atkT = 3; addNp(caster, 30);
+        return `${sv.name} [${name}]! 본인 공격력 +40%(3T) & NP +30%!`;
+      case 'melu_2':
+        caster.buffs.starWeight += 500; b.stars = Math.min(99, b.stars + 15);
+        reallocateCurrentHandStars(b);
+        return `${sv.name} [${name}]! 본인 스타집중 +500% & 스타 +15!`;
+      case 'melu_3':
+        if (caster.buffs.npCatOverride !== 'aoe' && caster.viewAsc < 3) {
+          addNp(caster, 100);
+          caster.viewAsc = 3;
+          caster.buffs.npCatOverride = 'aoe';
+          caster.buffs.npTypeOverride = 'Buster';
+          caster.buffs.npDmg += 0.3; caster.buffs.npDmgT = 3;
+          return `${sv.name} [${name}]! 🐉 영기 3단계 용 변신(대군 Buster 보구 전환) & NP +100%!!`;
+        }
+        caster.buffs.invul = Math.max(caster.buffs.invul, 1);
+        caster.buffs.npDmg += 0.3; caster.buffs.npDmgT = 3;
+        return `${sv.name} [${name}]! 무적(1T) & 보구 위력 +30%(3T)!`;
+      case 'cu_1':
+        caster.buffs.guts = Math.max(caster.buffs.guts, 2500); caster.buffs.gutsT = 5;
+        return `${sv.name} [${name}]! 본인 근성(2,500 · 5턴) 부여!`;
+      case 'cu_2':
+        caster.buffs.evadeHits = Math.max(caster.buffs.evadeHits, 3); caster.buffs.evadeT = 3;
+        caster.buffs.def += 0.16; caster.buffs.defT = 3;
+        return `${sv.name} [${name}]! 화살막이 회피(3회·3턴) & 방어력 +16%!`;
+      case 'cu_3':
+        caster.hp = Math.min(caster.maxHp, caster.hp + 2500);
+        return `${sv.name} [${name}]! 약화 해제 & HP +2,500 회복!`;
       case 'sup_2':
         addNp(target, 30);
         b.stars = Math.min(99, b.stars + 15);
@@ -2264,6 +2309,32 @@ window.FgoBattle = (() => {
             m.hp = 0;
             addLog(`🌸 ${sv.name} 보구 [${sv.npName}]! 아군 전체 B+40%·크리+50%·스타+20 부여 후 퇴장!`);
             reinforceFromBackline();
+          } else if (m.id === 'sv_no_021') {
+            // ★2 레오니다스 1세 [테르모필라이 에노모타이아]: 아군 전체 방어+30% · 스타+25 · 본인 근성!
+            getActiveMembers(battle).forEach(ally => { ensureMemberBuffs(ally); ally.buffs.def += 0.3; ally.buffs.defT = 3; });
+            m.buffs.guts = Math.max(m.buffs.guts, 2000); m.buffs.gutsT = 3;
+            battle.stars = Math.min(99, battle.stars + 25);
+            addLog(`🛡️ ${sv.name} 보구 [${sv.npName}]! 아군 방어+30% · 스타+25 · 본인 근성 부여!`);
+          } else if (m.id === 'sv_no_185') {
+            // ★3 호조인 인슈운 [오보로 우라즈키 주일식]: 본인 공+50% · 크리+100% · 스타집중+500% · 회피 1회!
+            m.buffs.atk += 0.5; m.buffs.atkT = 3;
+            m.buffs.crit += 1.0; m.buffs.critT = 3;
+            m.buffs.starWeight += 500;
+            m.buffs.evadeHits = Math.max(m.buffs.evadeHits, 1); m.buffs.evadeT = 3;
+            addLog(`🔱 ${sv.name} 보구 [${sv.npName}]! 본인 공+50% · 크리+100% · 회피(1회)!!`);
+          } else if (m.id === 'sv_no_019') {
+            // ★2 무사시보 벤케이 [오백나한 보타락도해]: 적 전체 스턴 + 차지 -1!
+            battle.enemies.forEach(en => { if (en.hp > 0) { en.stunned = true; en.charge = Math.max(0, en.charge - 1); } });
+            addLog(`⚡ ${sv.name} 보구 [${sv.npName}]! 적 전체 스턴(1T) & 차지 -1칸!`);
+          } else if (m.id === 'sv_no_228') {
+            // ★4 진양옥 [숭문지진]: 아군 전체 크리+40% · 방어+30% · HP+2500!
+            getActiveMembers(battle).forEach(ally => {
+              ensureMemberBuffs(ally);
+              ally.buffs.crit += 0.4; ally.buffs.critT = 3;
+              ally.buffs.def += 0.3; ally.buffs.defT = 3;
+              ally.hp = Math.min(ally.maxHp, ally.hp + 2500);
+            });
+            addLog(`✨ ${sv.name} 보구 [${sv.npName}]! 아군 전체 크리+40% · 방어+30% · HP 회복!`);
           } else {
             getActiveMembers(battle).forEach(ally => {
               ally.buffs.atk += 0.25 * ocMult; ally.buffs.atkT = 3;
