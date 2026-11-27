@@ -9,8 +9,9 @@
 fgo-gacha/
 ├── index.html              # 7개 탭(소환·배틀·영기일람·마이룸·공방·통계·설정) + 모달/소환 스테이지 마크업
 ├── style.css               # 칼데아 테마, 원작 FGO 대사창, 3D 카드 플립, B/A/Q 배틀 UI, 반응형 스타일
-├── servant_catalog.js      # FGO 전체 마테리얼 카탈로그 (No.001~487: 플레이어블 475기 + 미실장 프로필 12기, 179KB 경량 포맷)
-├── data.js                 # 19개 클래스 메타(Beast/UnBeast 포함), 475기 서번트 하이드레이션, 28종 개념예장, 12개 배너(커스텀·프렌드 포함)
+├── servant_catalog.js      # FGO 전체 마테리얼 카탈로그 (No.001~487: 플레이어블 475기 + 미실장 프로필 12기, 217KB)
+├── mystic_codes.js         # 원작 FGO 마술예장 28종 전체 데이터(스킬 84종 · Lv.1~10 보간 · 4종 EXP 테이블 · Atlas 공식 아이콘)
+├── data.js                 # 19개 클래스 메타(Beast/UnBeast 포함), 475기 서번트 하이드레이션, 39종 개념예장, 12개 배너(커스텀·프렌드 포함)
 ├── atlas_images.js         # 핵심 45기 서번트 & 28종 예장 Atlas Academy KR CDN URL 맵 (나머지 430기는 art.js에서 KR/JP CDN 자동 해석)
 ├── kr_lore.js              # 핵심 45기 한그오 공식 원문 대사·프로필 (신규 430기는 상세/마이룸 진입 시 Atlas API 온디맨드 자동 로드)
 ├── audio.js                # Web Audio API 프로시저럴 사운드 엔진 (볼륨 제어 · 음소거 · FGO 효과음)
@@ -27,6 +28,7 @@ fgo-gacha/
 ├── SERVANT_CATALOG.md      # No.001~487 전체 서번트 마테리얼 ID 명세표
 ├── RARITY_LIST.md          # 레어도별(가변·SSR·SR·R·UC·C·★0·NPC) 서번트 전체 목록
 ├── CRAFT_ESSENCE.md        # 개념예장(★1~★5 + NPC) 코스트 · 한계돌파(✛) · 파티 코스트(115) 명세서
+├── MYSTIC_CODES.md         # 마술예장 28종 전체 · 84종 마스터 스킬 · 4종 EXP 테이블 명세서
 ├── HIDDEN_STATUS.md        # 전체 487기 히든 스테이터스(성별·속성·성향·특성) & 보구 특공 명세표
 ├── GAME_SPEC.md            # 가챠·프렌드 소환·배틀·상성·특공·QP 강화 상세 명세서
 ├── ARCHITECTURE.md         # 본 아키텍처 문서

@@ -3997,3 +3997,318 @@ body {
   border-color: rgba(255, 92, 119, 0.78);
   color: #ffd6de;
 }
+
+
+/* ================= 마술예장 28종 로비 바 · 선택 모달 · 오더 체인지 UI ================= */
+.battle-mc-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 15px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(16, 28, 62, 0.94), rgba(10, 18, 42, 0.96));
+  border: 1px solid rgba(245, 200, 76, 0.35);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.mc-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 240px;
+}
+
+.mc-bar-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1.5px solid var(--gold);
+  background: rgba(5, 10, 24, 0.85);
+}
+
+.mc-bar-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+
+.mc-bar-badge {
+  font-size: 10.5px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(245, 200, 76, 0.16);
+  color: var(--gold-light);
+  font-weight: 800;
+}
+
+.mc-lv-pill {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(88, 176, 255, 0.2);
+  color: #93d5ff;
+  font-weight: 800;
+}
+
+.mc-cat-pill {
+  font-size: 10.5px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+}
+
+.mc-bar-exp-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.mc-exp-track {
+  flex: 1;
+  min-width: 90px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.mc-exp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #38bdf8, #f5c84c);
+  border-radius: 999px;
+}
+
+.mc-exp-text {
+  font-size: 11px;
+  color: #9cb2d9;
+  white-space: nowrap;
+}
+
+.mc-bar-skills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.mc-skill-chip {
+  flex: 1;
+  min-width: 150px;
+  padding: 6px 9px;
+  border-radius: 9px;
+  background: rgba(6, 12, 30, 0.78);
+  border: 1px solid rgba(130, 170, 255, 0.22);
+  font-size: 11.5px;
+}
+
+.mc-skill-chip-desc {
+  font-size: 10.5px;
+  color: #9cb2d9;
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+.mc-modal-toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.mc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 12px;
+  max-height: 64vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.mc-card {
+  background: rgba(8, 16, 38, 0.92);
+  border: 1.5px solid var(--border-blue);
+  border-radius: 13px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.mc-card.equipped {
+  border-color: var(--gold);
+  box-shadow: 0 0 18px rgba(245, 200, 76, 0.26);
+  background: linear-gradient(155deg, rgba(28, 42, 88, 0.92), rgba(10, 18, 42, 0.96));
+}
+
+.mc-card.locked {
+  opacity: 0.82;
+}
+
+.mc-card-top {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.mc-card-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid rgba(245, 200, 76, 0.45);
+  background: #060b19;
+  flex-shrink: 0;
+}
+
+.mc-card-meta {
+  font-size: 10.5px;
+  color: #93c5fd;
+}
+
+.mc-card-name {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.mc-eq-tag {
+  font-size: 10.5px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: #101828;
+  margin-left: 4px;
+}
+
+.mc-card-obtain {
+  font-size: 11px;
+  color: #9cb2d9;
+}
+
+.mc-card-skills {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 7px 8px;
+  border-radius: 9px;
+  background: rgba(4, 9, 24, 0.72);
+}
+
+.mc-card-sk-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 11.5px;
+}
+
+.mc-sk-head {
+  color: #f8fafc;
+}
+
+.mc-sk-head small {
+  color: #ffe680;
+}
+
+.mc-sk-desc {
+  font-size: 11px;
+  color: #9cb2d9;
+}
+
+.mc-card-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.mc-max-badge {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #ffe680;
+  margin-left: auto;
+}
+
+/* 전장 내 단일 대상 선택 & 오더 체인지 피커 */
+.ms-picker-box {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(6, 12, 30, 0.92);
+  border: 1px solid rgba(245, 200, 76, 0.42);
+}
+
+.ms-picker-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 12.5px;
+  color: #ffe680;
+}
+
+.ms-ally-targets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  gap: 7px;
+}
+
+.ms-target-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 9px;
+  border-radius: 9px;
+  border: 1px solid var(--border-blue);
+  background: rgba(16, 28, 64, 0.9);
+  color: #fff;
+  cursor: pointer;
+  text-align: left;
+  font-size: 12px;
+  transition: all 0.14s;
+}
+
+.ms-target-btn:hover,
+.ms-target-btn.selected {
+  border-color: var(--gold);
+  background: rgba(44, 62, 124, 0.95);
+  box-shadow: 0 0 12px rgba(245, 200, 76, 0.3);
+}
+
+.ms-target-face {
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.oc-picker-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.oc-col-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: #93c5fd;
+  margin-bottom: 5px;
+}
+
+.oc-col-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}

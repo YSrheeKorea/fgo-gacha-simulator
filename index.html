@@ -11,7 +11,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <title>CHALDEA SUMMON SIMULATOR — 페그오 2차 창작 가챠 시뮬레이터</title>
-  <link rel="stylesheet" href="style.css?v=10">
+  <link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
   <div class="cosmos-bg" aria-hidden="true"></div>
@@ -207,10 +207,14 @@
             <p class="panel-desc">소환한 서번트와 개념예장으로 3인 파티를 편성해 FGO 턴제 커맨드 배틀에 출격하고 성정석·종화·QP를 획득하세요!</p>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="small-outline-btn" id="btn-open-mystic-codes">🧤 마술예장 (28종)</button>
             <button class="small-outline-btn" id="btn-open-affinity">📊 상성표 · 히든속성</button>
             <button class="small-gold-btn btn-quest-go" id="btn-start-battle">⚔️ 퀘스트 출격!</button>
           </div>
         </div>
+
+        <!-- 장착 중인 마술예장 요약 바 -->
+        <div class="battle-mc-bar" id="battle-mc-bar"></div>
 
         <div class="battle-lobby-grid">
           <div class="panel-card">
@@ -799,6 +803,27 @@
     </div>
   </div>
 
+  <!-- ================= 마술예장 28종 선택 & 육성 모달 ================= -->
+  <div id="mystic-code-modal" class="modal-overlay hidden">
+    <div class="modal-box modal-wide">
+      <div class="modal-header">
+        <h2>🧤 마스터 장비 — 마술예장 28종 (Lv.1 → Lv.10)</h2>
+        <button class="modal-close" id="btn-close-mc">✕</button>
+      </div>
+      <div class="mc-modal-toolbar">
+        <input type="search" class="fgo-search-input" id="mc-search" placeholder="마술예장·스킬 검색 (예: 오더 체인지, 아틀라스, 셔플, 근성)..." style="flex:1;min-width:180px">
+        <div class="filter-group" id="mc-cat-filter">
+          <button class="filter-btn active" data-cat="all">전체 28종</button>
+          <button class="filter-btn" data-cat="core">상시·스토리 (7)</button>
+          <button class="filter-btn" data-cat="oc">🔄 오더체인지 (3)</button>
+          <button class="filter-btn" data-cat="event">한정·이벤트 (21)</button>
+        </div>
+        <button class="small-gold-btn" id="btn-mc-unlock-all">✨ 28종 전체 무료 해금</button>
+      </div>
+      <div class="mc-grid" id="mc-modal-grid"></div>
+    </div>
+  </div>
+
   <!-- ================= 보구 발동 전체화면 컷인 오버레이 ================= -->
   <div id="np-cutin-overlay" class="np-cutin-overlay hidden"></div>
 
@@ -849,14 +874,15 @@
   <div id="toast-container" class="toast-container"></div>
 
   <script src="servant_catalog.js?v=8"></script>
+  <script src="mystic_codes.js?v=11"></script>
   <script src="data.js?v=10"></script>
   <script src="atlas_images.js?v=10"></script>
   <script src="kr_lore.js?v=6"></script>
   <script src="audio.js"></script>
   <script src="art.js?v=10"></script>
   <script src="summon_fx.js?v=7"></script>
-  <script src="game.js?v=10"></script>
-  <script src="battle.js?v=10"></script>
+  <script src="game.js?v=11"></script>
+  <script src="battle.js?v=11"></script>
   <script src="pwa.js"></script>
 </body>
 </html>

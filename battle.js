@@ -296,20 +296,192 @@ window.FgoBattle = (() => {
     }
   }
 
-  function applyMasterSkill(b, idx) {
+  // ================= 마술예장 28종 마스터 스킬 완전 실행 엔진 =================
+  function ensureMemberBuffs(m) {
+    if (!m.buffs) m.buffs = {};
+    const defaults = {
+      atk: 0, atkT: 0, def: 0, defT: 0,
+      buster: 0, arts: 0, quick: 0, cardT: 0,
+      npDmg: 0, npDmgT: 0, npGain: 0, npGainT: 0,
+      crit: 0, critT: 0, invul: 0, invulHits: 0,
+      evade: 0, evadeHits: 0, evadeT: 0,
+      guts: 0, gutsT: 0, sureHit: 0, invulPierce: 0,
+      extraUp: 0, ocUp: 0, starGen: 0,
+      starWeight: 0, busterStarWeight: 0, artsStarWeight: 0,
+      debuffImmune: 0, buffProtect: 0,
+      regen: 0, regenT: 0, maxHpBonus: 0, npBoost: 1
+    };
+    Object.keys(defaults).forEach(k => {
+      if (m.buffs[k] === undefined) m.buffs[k] = defaults[k];
+    });
+    return m.buffs;
+  }
+
+  function buildBattleMasterSkills(mcId, mcLv) {
+    const mc = (typeof MYSTIC_CODE_MAP !== 'undefined' && MYSTIC_CODE_MAP[mcId])
+      || (typeof MYSTIC_CODES !== 'undefined' && MYSTIC_CODES[0]);
+    if (!mc) {
+      return [
+        { idx: 0, name: '전체 강화', cd: 12, curCd: 0, icon: '🔥', target: 'all', effects: { atk: [0.2, 0.3] }, desc: '아군 전체 공격력 +30% (1턴)' },
+        { idx: 1, name: '간드', cd: 15, curCd: 0, icon: '⚡', target: 'enemy', effects: { stun: 1 }, desc: '타겟 적 스턴 (1턴)' },
+        { idx: 2, name: '오더 체인지', cd: 15, curCd: 0, icon: '🔄', target: 'order_change', effects: { orderChange: 1 }, desc: '전열과 후열 멤버 1:1 교체' }
+      ];
+    }
+    const lv = Math.max(1, Math.min(10, Number(mcLv) || 1));
+    return mc.skills.map((sk, idx) => ({
+      idx,
+      name: sk.name,
+      icon: sk.icon,
+      target: sk.target,
+      cd: getMcSkillCd(sk.cdBase, lv),
+      curCd: 0,
+      effects: sk.effects,
+      desc: sk.descFn ? sk.descFn(lv) : ''
+    }));
+  }
+
+  // 원작 FGO 고증 오더 체인지: 덱 리셋 없이 전열/후열 1:1 카드 스왑 & 버프 유지!
+  function executeOrderChange(b, frontSlotPos, subQueueIdx) {
+    const outRIdx = b.activeSlots[frontSlotPos];
+    const inRIdx = b.subQueue[subQueueIdx];
+    if (outRIdx === null || outRIdx === undefined || inRIdx === undefined) return null;
+
+    const outM = b.roster[outRIdx];
+    const inM = b.roster[inRIdx];
+    if (!outM || !inM || inM.hp <= 0) return null;
+
+    // 1) 슬롯 스왑 (나가는 서번트의 버프는 그대로 보존된 채 후열로 이동!)
+    b.activeSlots[frontSlotPos] = inRIdx;
+    b.subQueue[subQueueIdx] = outRIdx;
+
+    // 2) 커맨드 덱 & 핸드 1:1 매핑 스왑 (원작 고증: 덱 리셋 없음! 카드 배열 차이만큼만 색 변경)
+    const inDeckTypes = getServantDeckTypes(SERVANT_MAP[inM.id]);
+    const swapCard = (c) => {
+      if (c.rosterIdx !== outRIdx) return;
+      const slotNo = typeof c.cardSlot === 'number' ? c.cardSlot : 0;
+      c.rosterIdx = inRIdx;
+      c.svId = inM.id;
+      c.type = inDeckTypes[slotNo % 5] || inDeckTypes[0];
+    };
+    b.hand.forEach(swapCard);
+    b.deck.forEach(swapCard);
+
+    // 3) 현재 핸드의 스타 재분배 (총 스타 합계 보존)
+    reallocateCurrentHandStars(b);
+
+    const outSv = SERVANT_MAP[outM.id];
+    const inSv = SERVANT_MAP[inM.id];
+    return `🔄 오더 체인지! [${outSv.nickname || outSv.name}] ⇄ [${inSv.nickname || inSv.name}] 교체 완료! (버프 보존 · 덱 유지)`;
+  }
+
+  // 원작 FGO 고증 커맨드 셔플: 현재 턴 스타 합계 유지하며 전열 5장 재분배
+  function executeCommandShuffle(b) {
+    const preservedStars = b.hand.reduce((sum, c) => sum + Math.round((c.critPct || 0) / 10), 0);
+    b.stars = Math.min(99, b.stars + preservedStars);
+    buildNewDeck();
+    drawTurnHand();
+    return `🃏 커맨드 셔플! 현재 턴의 커맨드 카드 5장을 새롭게 재분배했습니다!`;
+  }
+
+  // 스타 집중도 버프 사용 직후 현재 핸드에 즉시 반영
+  function reallocateCurrentHandStars(b) {
+    if (!b || !b.hand || !b.hand.length) return;
+    const totalStars = b.hand.reduce((sum, c) => sum + Math.round((c.critPct || 0) / 10), 0);
+    if (totalStars <= 0) return;
+    const starAlloc = allocateStarsToHand(b, b.hand, totalStars);
+    b.hand.forEach((c, i) => { c.critPct = starAlloc[i] * 10; });
+  }
+
+  function applyMasterSkill(b, idx, targetRIdx = null, ocFrontPos = null, ocSubIdx = null) {
+    const sk = b.masterSkills[idx];
+    if (!sk) return '마스터 스킬 오류';
+    const lv = b.mysticCodeLv || 1;
+    const eff = sk.effects || {};
     const alive = getActiveMembers(b);
-    if (idx === 0) {
-      alive.forEach(m => { m.buffs.atk += 0.3; m.buffs.atkT = Math.max(m.buffs.atkT, 1); });
-      return '마스터 스킬 [전체 강화]! 전열 공격력 +30% (1T)!';
+    const mcName = (typeof MYSTIC_CODE_MAP !== 'undefined' && MYSTIC_CODE_MAP[b.mysticCodeId]?.name) || '마술예장';
+
+    if (sk.target === 'order_change') {
+      const msg = executeOrderChange(b, ocFrontPos, ocSubIdx);
+      return msg || '교체할 수 있는 후열 서번트가 없습니다!';
     }
-    if (idx === 1) {
-      alive.forEach(m => { m.hp = Math.min(m.maxHp, m.hp + 3500); m.buffs.invul = Math.max(m.buffs.invul, 1); });
-      return '마스터 스킬 [긴급 회피]! 전열 HP +3500 & 회피(1T)!';
+    if (sk.target === 'shuffle') {
+      return executeCommandShuffle(b);
     }
-    const t = b.enemies[b.targetIdx];
-    if (t && t.hp > 0) t.stunned = true;
-    b.stars = Math.min(99, b.stars + 15);
-    return `마스터 스킬 [간드]! ${t ? t.name : '적'} 스턴(1T) & 크리스타 +15!`;
+
+    const targets = sk.target === 'all'
+      ? alive
+      : (sk.target === 'ally'
+        ? [b.roster[targetRIdx] || alive[0]].filter(Boolean)
+        : []);
+
+    const val = (pair, step = 0) => Array.isArray(pair) ? interpMcVal(pair[0], pair[1], lv, step) : pair;
+    const addNp = (m, amt) => { m.np = Math.min(getMaxNp(m.npLevel), m.np + amt); };
+    const notes = [];
+    let needReallocStars = false;
+
+    targets.forEach(m => {
+      ensureMemberBuffs(m);
+      if (eff.heal) {
+        const h = val(eff.heal, 100);
+        m.hp = Math.min(m.maxHp, m.hp + h);
+      }
+      if (eff.maxHpUp) {
+        const mh = val(eff.maxHpUp, 100);
+        m.buffs.maxHpBonus += mh;
+        m.maxHp += mh;
+        m.hp += mh;
+      }
+      if (eff.atk) { m.buffs.atk += val(eff.atk); m.buffs.atkT = Math.max(m.buffs.atkT, 1); }
+      if (eff.buster) { m.buffs.buster += val(eff.buster); m.buffs.cardT = Math.max(m.buffs.cardT, 1); }
+      if (eff.arts) { m.buffs.arts += val(eff.arts); m.buffs.cardT = Math.max(m.buffs.cardT, 1); }
+      if (eff.quick) { m.buffs.quick += val(eff.quick); m.buffs.cardT = Math.max(m.buffs.cardT, 1); }
+      if (eff.npDmg) { m.buffs.npDmg += val(eff.npDmg); m.buffs.npDmgT = Math.max(m.buffs.npDmgT, 1); }
+      if (eff.npGain) { m.buffs.npGain += val(eff.npGain); m.buffs.npGainT = Math.max(m.buffs.npGainT, 1); }
+      if (eff.crit) { m.buffs.crit += val(eff.crit); m.buffs.critT = Math.max(m.buffs.critT, 1); }
+      if (eff.np) addNp(m, val(eff.np, 1));
+      if (eff.evade) m.buffs.evade = Math.max(m.buffs.evade, 1);
+      if (eff.evadeHits) { m.buffs.evadeHits = Math.max(m.buffs.evadeHits, eff.evadeHits); m.buffs.evadeT = Math.max(m.buffs.evadeT, eff.evadeT || 3); }
+      if (eff.invul) m.buffs.invul = Math.max(m.buffs.invul, 1);
+      if (eff.invulHits) m.buffs.invulHits = Math.max(m.buffs.invulHits, eff.invulHits);
+      if (eff.guts) { m.buffs.guts = Math.max(m.buffs.guts, val(eff.guts, 100)); m.buffs.gutsT = Math.max(m.buffs.gutsT, 1); }
+      if (eff.sureHit) m.buffs.sureHit = 1;
+      if (eff.invulPierce) m.buffs.invulPierce = 1;
+      if (eff.extraUp) m.buffs.extraUp += val(eff.extraUp);
+      if (eff.ocUp) m.buffs.ocUp += eff.ocUp;
+      if (eff.starGen) m.buffs.starGen += val(eff.starGen);
+      if (eff.starWeight) { m.buffs.starWeight += val(eff.starWeight, 50); needReallocStars = true; }
+      if (eff.busterStarWeight) { m.buffs.busterStarWeight += val(eff.busterStarWeight, 500); needReallocStars = true; }
+      if (eff.artsStarWeight) { m.buffs.artsStarWeight += val(eff.artsStarWeight, 500); needReallocStars = true; }
+      if (eff.debuffImmune) m.buffs.debuffImmune = Math.max(m.buffs.debuffImmune, 1);
+      if (eff.buffProtect) m.buffs.buffProtect = Math.max(m.buffs.buffProtect, val(eff.buffProtect));
+      if (eff.regen) { m.buffs.regen = Math.max(m.buffs.regen, val(eff.regen, 100)); m.buffs.regenT = Math.max(m.buffs.regenT, eff.regenT || 3); }
+      if (eff.cdReduce) {
+        m.skills.forEach(s => { if (s.curCd > 0) s.curCd = Math.max(0, s.curCd - eff.cdReduce); });
+      }
+    });
+
+    if (eff.stars) {
+      const stGain = Math.round(val(eff.stars, 1));
+      b.stars = Math.min(99, b.stars + stGain);
+      notes.push(`★+${stGain}`);
+    }
+
+    if (sk.target === 'enemy') {
+      const t = b.enemies[b.targetIdx] || pickAliveTarget();
+      if (t && t.hp > 0) {
+        if (eff.stun) { t.stunned = true; notes.push(`${t.name} 스턴(1T)`); }
+        if (eff.buffBlock) { t.buffBlock = (t.buffBlock || 0) + 1; notes.push(`${t.name} 강화 무효(1회)`); }
+        if (eff.drainCharge) { t.charge = Math.max(0, t.charge - 1); notes.push(`${t.name} 차지 -1`); }
+        if (eff.deathResistDown) { t.deathResistDown = val(eff.deathResistDown); notes.push(`${t.name} 즉사내성 DOWN`); }
+      }
+    }
+
+    if (needReallocStars) reallocateCurrentHandStars(b);
+
+    const tgtLabel = sk.target === 'ally' && targets[0]
+      ? ` → ${SERVANT_MAP[targets[0].id]?.nickname || SERVANT_MAP[targets[0].id]?.name}`
+      : (sk.target === 'all' ? ' (아군 전체)' : '');
+    return `[${mcName} Lv.${lv}] ${sk.icon} ${sk.name}${tgtLabel}! ${sk.desc}${notes.length ? ` (${notes.join(', ')})` : ''}`;
   }
 
   function getCePassive(ceId, mlb = false) {
@@ -378,7 +550,7 @@ window.FgoBattle = (() => {
       desc: '3웨이브 주회 던전! 경험치 손은 모두 [하늘(天)] 속성 → 인간(人) 속성 서번트가 1.1배 유리!',
       difficulty: '초급 · 추천 Lv.30',
       rewardText: '💎 성정석 +3 · 🔥 종화 +15 · 🪙 QP +500,000',
-      rewards: { sq: 3, embers: 15, qp: 500000 },
+      rewards: { sq: 3, embers: 15, qp: 500000, mcExp: 180000 },
       waves: [
         [
           { name: '불꽃의 팔', cls: 'Saber', attr: '천(天)', hp: 14500, atk: 1200, maxCharge: 4, emoji: '🔥' },
@@ -403,7 +575,7 @@ window.FgoBattle = (() => {
       desc: '캐스터 [하늘(天)] 문 대거 출현! 라이더(2.0x · 스타집중 200)와 얼터에고(1.5x)로 주회하세요.',
       difficulty: '중급 · 추천 Lv.50',
       rewardText: '💎 성정석 +5 · 🪙 QP +2,000,000 · 🟢 마프 +20',
-      rewards: { sq: 5, qp: 2000000, mp: 20 },
+      rewards: { sq: 5, qp: 2000000, mp: 20, mcExp: 320000 },
       waves: [
         [
           { name: '청동의 문', cls: 'Caster', attr: '천(天)', hp: 24000, atk: 1500, maxCharge: 5, emoji: '🚪' },
@@ -428,7 +600,7 @@ window.FgoBattle = (() => {
       desc: '세이버 [인간(人)] 보스전! 아처(2.0x)·프리텐더(1.5x)와 땅(地) 속성 상성으로 제압하세요.',
       difficulty: '상급 · 추천 Lv.70',
       rewardText: '💎 성정석 +10 · 🔥 종화 +25 · 🟢 마프 +35',
-      rewards: { sq: 10, embers: 25, mp: 35 },
+      rewards: { sq: 10, embers: 25, mp: 35, mcExp: 550000 },
       waves: [
         [
           { name: '스켈레톤 검사', cls: 'Saber', attr: '지(地)', gender: '없음', align: '-/-', traits: ['마성'], hp: 38000, atk: 1900, maxCharge: 4, emoji: '☠️' },
@@ -446,7 +618,7 @@ window.FgoBattle = (() => {
       desc: '비스트Ⅱ [짐승(獸)] 완전 무상성 보스! 별(星) 속성·신성/인류의 위협/초거대 특공이 유리합니다.',
       difficulty: '고난이도 · 추천 Lv.85',
       rewardText: '💎 성정석 +20 · 🟡 레프 +1 · 🔥 종화 +35',
-      rewards: { sq: 20, rp: 1, embers: 35 },
+      rewards: { sq: 20, rp: 1, embers: 35, mcExp: 950000 },
       waves: [
         [
           { name: '라흐무', cls: 'Lancer', attr: '지(地)', gender: '없음', align: '혼돈/악', traits: ['마성', '신성'], hp: 62000, atk: 2400, maxCharge: 4, emoji: '👾' },
@@ -465,7 +637,7 @@ window.FgoBattle = (() => {
       desc: '3술사(라·캐·어)에게 2.0x 약점, 3기사에게 2.0x 반격, 어벤저에게 0.5x 반감! 별(星) 속성·왕/비스트 특공!',
       difficulty: '비스트Ⅰ · 추천 Lv.90',
       rewardText: '💎 성정석 +25 · 🟡 레프 +2 · 🔥 종화 +40',
-      rewards: { sq: 25, rp: 2, embers: 40 },
+      rewards: { sq: 25, rp: 2, embers: 40, mcExp: 1400000 },
       waves: [
         [
           { name: '마신주 플라우로스', cls: 'Caster', attr: '천(天)', gender: '무성', align: '-/-', traits: ['마성', '초거대', '인류의 위협', '인간형 없음'], hp: 85000, atk: 2600, maxCharge: 4, emoji: '👁️' },
@@ -479,7 +651,7 @@ window.FgoBattle = (() => {
       desc: '얼터에고·문캔서에게 1.2x 약점! 여성·마성·초거대·비스트 특공 및 별(星) 속성이 빛납니다.',
       difficulty: '비스트Ⅲ/R · 추천 Lv.90',
       rewardText: '💎 성정석 +25 · 🎫 호부 +1 · 🟡 레프 +1',
-      rewards: { sq: 25, tickets: 1, rp: 1 },
+      rewards: { sq: 25, tickets: 1, rp: 1, mcExp: 1600000 },
       waves: [
         [
           { name: '마성보살 셋쇼인 키아라', cls: 'BeastIIIR', attr: '수(獸)', gender: '여성', align: '혼돈/악', traits: ['마성', '초거대', '인류의 위협', '비스트'], hp: 215000, breakBars: [255000], atk: 3500, maxCharge: 4, emoji: '🌸', isBoss: true, npName: '아미타 아미달라 · 헤븐즈 홀' }
@@ -492,7 +664,7 @@ window.FgoBattle = (() => {
       desc: '6인 총력전! 버서커 [땅(地)] 신성·초거대·요정·인류의 위협 최종 보스. 특공 딜러와 영주를 총동원하세요!',
       difficulty: 'EX 챌린지 · 추천 Lv.90+',
       rewardText: '💎 성정석 +30 · 🎫 호부 +1 · 🟡 레프 +2',
-      rewards: { sq: 30, tickets: 1, rp: 2 },
+      rewards: { sq: 30, tickets: 1, rp: 2, mcExp: 2200000 },
       waves: [
         [
           { name: '재액의 거신 케르눈노스', cls: 'Berserker', attr: '지(地)', gender: '무성', align: '혼돈/악', traits: ['신성', '초거대', '거인', '요정', '인류의 위협'], hp: 220000, breakBars: [260000, 310000], atk: 3900, maxCharge: 4, emoji: '👁️', isBoss: true, npName: '칼라미티 커스' }
@@ -517,6 +689,11 @@ window.FgoBattle = (() => {
   let battle = null;
   let busy = false;
   let openPopup = null; // 'master' | 'spells' | 'menu' | null
+  let pendingMasterSkillIdx = null; // 단일 아군 타겟 또는 오더 체인지 선택 대기
+  let ocSelectedFront = null;
+  let ocSelectedSub = null;
+  let mcModalFilter = 'all';
+  let mcModalQuery = '';
 
   function getBridge() { return window.ChaldeaBridge; }
 
@@ -583,11 +760,182 @@ window.FgoBattle = (() => {
     }
   }
 
+  // ================= 로비 마술예장 바 & 28종 선택·육성 모달 =================
+  function renderLobbyMysticCodeBar() {
+    const bar = document.getElementById('battle-mc-bar');
+    if (!bar || typeof MYSTIC_CODE_MAP === 'undefined') return;
+    const bridge = getBridge();
+    const mcId = bridge.getActiveMysticCodeId();
+    const mc = MYSTIC_CODE_MAP[mcId] || MYSTIC_CODES[0];
+    const mcState = bridge.getMysticCodeState(mc.id) || { exp: 0, level: 1 };
+    const curve = MYSTIC_CODE_EXP_CURVES[mc.expCurve] || MYSTIC_CODE_EXP_CURVES.event;
+    const lv = getMcLevelFromExp(mc.expCurve, mcState.exp || 0);
+    const maxExp = curve[curve.length - 1];
+    const pct = lv >= 10 ? 100 : Math.min(100, Math.round(((mcState.exp - curve[lv - 1]) / Math.max(1, curve[lv] - curve[lv - 1])) * 100));
+    const unlockedCount = MYSTIC_CODES.filter(x => bridge.getMysticCodeState(x.id)).length;
+
+    bar.innerHTML = `
+      <div class="mc-bar-left">
+        <img src="${mc.icon}" class="mc-bar-icon" alt="" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+        <div class="mc-bar-info">
+          <div class="mc-bar-head">
+            <span class="mc-bar-badge">🧤 장착 마술예장</span>
+            <strong>${mc.name}</strong>
+            <span class="mc-lv-pill">Lv.${lv} / 10</span>
+            <span class="mc-cat-pill">${mc.category}</span>
+          </div>
+          <div class="mc-bar-exp-row">
+            <div class="mc-exp-track"><div class="mc-exp-fill" style="width:${pct}%"></div></div>
+            <span class="mc-exp-text">${lv >= 10 ? `MAX (${maxExp.toLocaleString()})` : `${(mcState.exp || 0).toLocaleString()} / ${curve[lv].toLocaleString()} (만렙 ${maxExp.toLocaleString()})`}</span>
+          </div>
+        </div>
+      </div>
+      <div class="mc-bar-skills">
+        ${mc.skills.map(sk => `
+          <div class="mc-skill-chip" title="${sk.descFn(lv)}">
+            <span>${sk.icon} <strong>${sk.name}</strong> <small>(CD ${getMcSkillCd(sk.cdBase, lv)})</small></span>
+            <div class="mc-skill-chip-desc">${sk.descFn(lv)}</div>
+          </div>
+        `).join('')}
+      </div>
+      <button class="small-outline-btn" id="btn-change-mc-inline">🧤 변경 (${unlockedCount}/28)</button>
+    `;
+    document.getElementById('btn-change-mc-inline')?.addEventListener('click', openMysticCodeModal);
+  }
+
+  function openMysticCodeModal() {
+    SoundEngine.click();
+    renderMysticCodeModal();
+    document.getElementById('mystic-code-modal')?.classList.remove('hidden');
+  }
+
+  function renderMysticCodeModal() {
+    const grid = document.getElementById('mc-modal-grid');
+    if (!grid || typeof MYSTIC_CODES === 'undefined') return;
+    const bridge = getBridge();
+    const activeId = bridge.getActiveMysticCodeId();
+    const q = mcModalQuery.trim().toLowerCase();
+
+    const list = MYSTIC_CODES.filter(mc => {
+      if (mcModalFilter === 'core' && !DEFAULT_UNLOCKED_MYSTIC_CODES.includes(mc.id)) return false;
+      if (mcModalFilter === 'event' && DEFAULT_UNLOCKED_MYSTIC_CODES.includes(mc.id)) return false;
+      if (mcModalFilter === 'oc' && !mc.skills.some(s => s.target === 'order_change')) return false;
+      if (q) {
+        const hay = `${mc.name} ${mc.desc} ${mc.obtain} ${mc.skills.map(s => s.name + ' ' + s.descFn(10)).join(' ')}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+
+    grid.innerHTML = list.map(mc => {
+      const st = bridge.getMysticCodeState(mc.id);
+      const unlocked = !!st;
+      const isEquipped = activeId === mc.id;
+      const curve = MYSTIC_CODE_EXP_CURVES[mc.expCurve] || MYSTIC_CODE_EXP_CURVES.event;
+      const maxExp = curve[curve.length - 1];
+      const lv = unlocked ? getMcLevelFromExp(mc.expCurve, st.exp || 0) : 1;
+      const pct = unlocked ? (lv >= 10 ? 100 : Math.min(100, Math.round(((st.exp - curve[lv - 1]) / Math.max(1, curve[lv] - curve[lv - 1])) * 100))) : 0;
+
+      return `
+        <div class="mc-card ${isEquipped ? 'equipped' : ''} ${!unlocked ? 'locked' : ''}">
+          <div class="mc-card-top">
+            <img src="${mc.icon}" class="mc-card-icon" alt="" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+            <div style="flex:1;min-width:0">
+              <div class="mc-card-meta">No.${String(mc.no).padStart(2, '0')} · ${mc.category} · 총 EXP ${maxExp.toLocaleString()}</div>
+              <div class="mc-card-name">${mc.name} ${isEquipped ? '<span class="mc-eq-tag">장착 중</span>' : ''}</div>
+              <div class="mc-card-obtain">${mc.obtain}</div>
+            </div>
+          </div>
+          ${unlocked ? `
+            <div class="mc-bar-exp-row" style="margin:4px 0 6px">
+              <span class="mc-lv-pill">Lv.${lv}/10</span>
+              <div class="mc-exp-track"><div class="mc-exp-fill" style="width:${pct}%"></div></div>
+            </div>
+          ` : ''}
+          <div class="mc-card-skills">
+            ${mc.skills.map(sk => `
+              <div class="mc-card-sk-row">
+                <span class="mc-sk-head">${sk.icon} <strong>${sk.name}</strong> <small>CD ${getMcSkillCd(sk.cdBase, lv)}</small></span>
+                <span class="mc-sk-desc">${sk.descFn(lv)}</span>
+              </div>
+            `).join('')}
+          </div>
+          <div class="mc-card-actions">
+            ${unlocked
+              ? `<button class="${isEquipped ? 'small-outline-btn' : 'small-gold-btn'}" data-mc-equip="${mc.id}" ${isEquipped ? 'disabled' : ''}>${isEquipped ? '✅ 장착 중' : '🧤 장착하기'}</button>
+                 ${lv < 10 ? `<button class="small-outline-btn" data-mc-train="${mc.id}" title="500,000 QP로 1레벨 훈련">⚡ +1Lv (50만 QP)</button>
+                              <button class="small-outline-btn" data-mc-max="${mc.id}" title="남은 레벨 일괄 훈련">MAX</button>` : '<span class="mc-max-badge">🏆 Lv.10 MAX</span>'}`
+              : `<button class="small-gold-btn" data-mc-unlock="${mc.id}">🔓 해금 (🟢 마프 20)</button>`}
+          </div>
+        </div>
+      `;
+    }).join('') || '<div class="empty-hint">검색 조건에 맞는 마술예장이 없습니다.</div>';
+
+    grid.querySelectorAll('[data-mc-equip]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.mcEquip;
+        if (bridge.setActiveMysticCode(id)) {
+          SoundEngine.levelUp();
+          bridge.toast(`🧤 마술예장 [${MYSTIC_CODE_MAP[id].name}] 장착 완료!`);
+          renderLobbyMysticCodeBar();
+          renderMysticCodeModal();
+        }
+      });
+    });
+    grid.querySelectorAll('[data-mc-unlock]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.mcUnlock;
+        const res = bridge.unlockMysticCode(id, false);
+        if (!res.ok) {
+          SoundEngine.error();
+          bridge.toast('🟢 마나프리즘이 부족합니다! (필요: 20 · 상단 "28종 전체 무료 해금"도 사용 가능)');
+          return;
+        }
+        bridge.setActiveMysticCode(id);
+        SoundEngine.reveal(4, true);
+        bridge.toast(`🔓 마술예장 [${MYSTIC_CODE_MAP[id].name}] 해금 및 장착 완료!`);
+        renderLobbyMysticCodeBar();
+        renderMysticCodeModal();
+      });
+    });
+    grid.querySelectorAll('[data-mc-train]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.mcTrain;
+        const res = bridge.trainMysticCodeLevel(id, false);
+        if (!res.ok) {
+          SoundEngine.error();
+          bridge.toast(res.reason === 'qp' ? `🪙 QP가 부족합니다! (필요: ${res.need.toLocaleString()} QP)` : '이미 최고 레벨입니다!');
+          return;
+        }
+        SoundEngine.levelUp();
+        bridge.toast(`⚡ [${MYSTIC_CODE_MAP[id].name}] Lv.${res.level} 훈련 완료!`);
+        renderLobbyMysticCodeBar();
+        renderMysticCodeModal();
+      });
+    });
+    grid.querySelectorAll('[data-mc-max]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.mcMax;
+        const res = bridge.trainMysticCodeLevel(id, true);
+        if (!res.ok) {
+          SoundEngine.error();
+          bridge.toast(res.reason === 'qp' ? `🪙 QP가 부족합니다! (필요: ${res.need.toLocaleString()} QP)` : '이미 최고 레벨입니다!');
+          return;
+        }
+        SoundEngine.reveal(5, true);
+        bridge.toast(`🏆 [${MYSTIC_CODE_MAP[id].name}] Lv.10 MAX 달성!!`);
+        renderLobbyMysticCodeBar();
+        renderMysticCodeModal();
+      });
+    });
+  }
+
   // ================= 로비 렌더링 (퀘스트 + 6인 파티 편성) =================
   function renderLobby() {
     ensureDefaultParty();
     document.getElementById('battle-lobby').classList.remove('hidden');
     document.getElementById('battle-arena').classList.add('hidden');
+    renderLobbyMysticCodeBar();
 
     // 퀘스트 목록
     const qList = document.getElementById('battle-quest-list');
@@ -774,23 +1122,26 @@ window.FgoBattle = (() => {
           const cdReduce = slv >= 10 ? 2 : (slv >= 6 ? 1 : 0);
           return { ...s, level: slv, cd: Math.max(3, s.cd - cdReduce), curCd: 0 };
         }),
-        buffs: { atk: 0, atkT: 0, def: 0, defT: 0, buster: 0, arts: 0, quick: 0, cardT: 0, npDmg: 0, npDmgT: 0, npGain: 0, npGainT: 0, crit: 0, critT: 0, invul: 0, npBoost: 1 }
+        buffs: ensureMemberBuffs({ buffs: {} })
       };
     });
 
+    const activeMcId = getBridge().getActiveMysticCodeId();
+    const mcObj = (typeof MYSTIC_CODE_MAP !== 'undefined' && MYSTIC_CODE_MAP[activeMcId]) || (typeof MYSTIC_CODES !== 'undefined' && MYSTIC_CODES[0]);
+    const mcSt = getBridge().getMysticCodeState(activeMcId) || { exp: 0, level: 1 };
+    const activeMcLv = mcObj ? getMcLevelFromExp(mcObj.expCurve, mcSt.exp || 0) : 1;
+
     battle = {
       questId: quest.id,
+      mysticCodeId: mcObj ? mcObj.id : 'mc_chaldea',
+      mysticCodeLv: activeMcLv,
       waveIdx: 0,
       turn: 1,
       stars: 0,
       roster,
       activeSlots: [0, 1, 2],   // 현재 전열 3칸 (rosterIdx)
       subQueue: [3, 4, 5],      // 후열 대기 3명 (전열 사망 시 순서대로 증원!)
-      masterSkills: [
-        { name: '전체 강화', cd: 6, curCd: 0, icon: '🔥', desc: '전열 아군 전체 공격력 +30% (1턴)' },
-        { name: '긴급 회피', cd: 7, curCd: 0, icon: '🛡️', desc: '전열 아군 전체 HP +3500 & 회피(1턴)' },
-        { name: '간드 (스턴)', cd: 8, curCd: 0, icon: '⚡', desc: '타겟 적 1턴 스턴 & 크리스타 +15' }
-      ],
+      masterSkills: buildBattleMasterSkills(mcObj ? mcObj.id : 'mc_chaldea', activeMcLv),
       enemies: [],
       targetIdx: 0,
       deck: [],
@@ -801,6 +1152,9 @@ window.FgoBattle = (() => {
     };
     busy = false;
     openPopup = null;
+    pendingMasterSkillIdx = null;
+    ocSelectedFront = null;
+    ocSelectedSub = null;
 
     spawnWave(0);
     buildNewDeck();
@@ -838,12 +1192,14 @@ window.FgoBattle = (() => {
       emoji: e.emoji || '👾',
       isBoss: !!e.isBoss,
       npName: e.npName || '강력한 일격',
-      stunned: false
+      stunned: false,
+      buffBlock: 0,
+      deathResistDown: 0
     }));
     battle.targetIdx = 0;
   }
 
-  // 전열 3명의 15장 덱 생성 & 셔플
+  // 전열 3명의 15장 덱 생성 & 셔플 (cardSlot 0..4 보존 → 오더 체인지 1:1 매핑 고증!)
   function buildNewDeck() {
     const cards = [];
     battle.activeSlots.forEach(rIdx => {
@@ -851,8 +1207,8 @@ window.FgoBattle = (() => {
       const m = battle.roster[rIdx];
       if (!m || m.hp <= 0) return;
       const sv = SERVANT_MAP[m.id];
-      getServantDeckTypes(sv).forEach(type => {
-        cards.push({ rosterIdx: rIdx, svId: m.id, type });
+      getServantDeckTypes(sv).forEach((type, cardSlot) => {
+        cards.push({ rosterIdx: rIdx, svId: m.id, type, cardSlot });
       });
     });
     for (let i = cards.length - 1; i > 0; i--) {
@@ -862,36 +1218,42 @@ window.FgoBattle = (() => {
     battle.deck = cards;
   }
 
-  // 매 턴 5장 드로우 + 원작 FGO 클래스별 스타 집중도 분배 (라200>아150>세어룰실100>랜90>캐50>버10)
+  function allocateStarsToHand(b, hand, totalStars) {
+    const starAlloc = Array(hand.length).fill(0);
+    let pool = Math.floor(totalStars);
+    if (pool >= 50) {
+      for (let i = 0; i < hand.length; i++) starAlloc[i] = 10;
+      return starAlloc;
+    }
+    const weights = hand.map(c => {
+      const sv = SERVANT_MAP[c.svId];
+      const m = b.roster[c.rosterIdx];
+      const bf = m ? ensureMemberBuffs(m) : {};
+      let swPct = 100 + (bf.starWeight || 0);
+      if (c.type === 'Buster' && bf.busterStarWeight) swPct += bf.busterStarWeight;
+      if (c.type === 'Arts' && bf.artsStarWeight) swPct += bf.artsStarWeight;
+      return Math.max(1, ((STAR_WEIGHT[sv.cls] || 100) * (swPct / 100)) + Math.floor(Math.random() * 50));
+    });
+    while (pool > 0) {
+      const avail = weights.map((w, i) => (starAlloc[i] < 10 ? w : 0));
+      const sum = avail.reduce((a, x) => a + x, 0);
+      if (sum <= 0) break;
+      let r = Math.random() * sum;
+      for (let i = 0; i < hand.length; i++) {
+        r -= avail[i];
+        if (r <= 0) { starAlloc[i]++; break; }
+      }
+      pool--;
+    }
+    return starAlloc;
+  }
+
+  // 매 턴 5장 드로우 + 원작 FGO 클래스별 스타 집중도 분배 (라200>아150>세어룰실100>랜90>캐50>버10 + 마술예장 스타 집중 버프 반영!)
   function drawTurnHand() {
     if (battle.deck.length < 5) buildNewDeck();
     const drawCount = Math.min(5, battle.deck.length);
     const hand = battle.deck.splice(0, drawCount);
-    const starAlloc = Array(hand.length).fill(0);
-    let pool = Math.floor(battle.stars);
-
-    // 원작 FGO 고증: 스타 50개 이상 시 집중도/랜덤 무관 전 커맨드 카드 100% 고정!
-    if (pool >= 50) {
-      for (let i = 0; i < hand.length; i++) starAlloc[i] = 10;
-    } else {
-      const weights = hand.map(c => {
-        const sv = SERVANT_MAP[c.svId];
-        // 원작 난수 보정 (+0~50 랜덤 슬롯 가중치) 포함
-        return (STAR_WEIGHT[sv.cls] || 100) + Math.floor(Math.random() * 50);
-      });
-
-      while (pool > 0) {
-        const avail = weights.map((w, i) => (starAlloc[i] < 10 ? w : 0));
-        const sum = avail.reduce((a, b) => a + b, 0);
-        if (sum <= 0) break;
-        let r = Math.random() * sum;
-        for (let i = 0; i < hand.length; i++) {
-          r -= avail[i];
-          if (r <= 0) { starAlloc[i]++; break; }
-        }
-        pool--;
-      }
-    }
+    const starAlloc = allocateStarsToHand(battle, hand, battle.stars);
     battle.stars = 0;
     battle.hand = hand.map((c, i) => ({ ...c, handIdx: i, critPct: starAlloc[i] * 10 }));
     battle.selectedCards = [];
@@ -1043,14 +1405,25 @@ window.FgoBattle = (() => {
       const ocStage = Math.floor(m.np / 100);
       const faceUrl = ArtRenderer.getFaceUrl(m.id);
 
+      ensureMemberBuffs(m);
       const activeBuffs = [];
       if (m.buffs.atk > 0) activeBuffs.push(`⚔️공+${Math.round(m.buffs.atk * 100)}%`);
       if (m.buffs.buster > 0) activeBuffs.push(`🔴B+${Math.round(m.buffs.buster * 100)}%`);
       if (m.buffs.arts > 0) activeBuffs.push(`🔵A+${Math.round(m.buffs.arts * 100)}%`);
       if (m.buffs.quick > 0) activeBuffs.push(`🟢Q+${Math.round(m.buffs.quick * 100)}%`);
       if (m.buffs.npDmg > 0) activeBuffs.push(`✨보구+${Math.round(m.buffs.npDmg * 100)}%`);
+      if (m.buffs.crit > 0) activeBuffs.push(`★크리+${Math.round(m.buffs.crit * 100)}%`);
       if (m.buffs.npBoost > 1) activeBuffs.push(`🔥보구×2`);
-      if (m.buffs.invul > 0) activeBuffs.push(`🛡️무적`);
+      if (m.buffs.ocUp > 0) activeBuffs.push(`🌟OC+${m.buffs.ocUp}`);
+      if (m.buffs.extraUp > 0) activeBuffs.push(`⚡EX+${Math.round(m.buffs.extraUp * 100)}%`);
+      if (m.buffs.invul > 0 || m.buffs.invulHits > 0) activeBuffs.push(`🛡️무적${m.buffs.invulHits > 0 ? `(${m.buffs.invulHits}회)` : ''}`);
+      if (m.buffs.evade > 0 || m.buffs.evadeHits > 0) activeBuffs.push(`💨회피${m.buffs.evadeHits > 0 ? `(${m.buffs.evadeHits}회)` : ''}`);
+      if (m.buffs.guts > 0) activeBuffs.push(`❤️‍🔥근성(${m.buffs.guts.toLocaleString()})`);
+      if (m.buffs.regen > 0 && m.buffs.regenT > 0) activeBuffs.push(`💚도트힐(${m.buffs.regenT}T)`);
+      if (m.buffs.invulPierce > 0) activeBuffs.push(`🔱무적관통`);
+      if (m.buffs.sureHit > 0) activeBuffs.push(`👁️필중`);
+      if (m.buffs.debuffImmune > 0) activeBuffs.push(`🔰약화무효`);
+      if (m.buffs.starWeight > 0 || m.buffs.busterStarWeight > 0 || m.buffs.artsStarWeight > 0) activeBuffs.push(`🎯스타집중`);
 
       const unit = document.createElement('div');
       unit.className = `ally-unit ${dead ? 'dead' : ''} ${m.np >= 100 ? 'np-ready' : ''}`;
@@ -1130,31 +1503,145 @@ window.FgoBattle = (() => {
 
     popupEl.classList.remove('hidden');
     if (openPopup === 'master') {
+      const mc = (typeof MYSTIC_CODE_MAP !== 'undefined' && MYSTIC_CODE_MAP[battle.mysticCodeId]) || null;
+      const mcTitle = mc ? `${mc.name} (Lv.${battle.mysticCodeLv || 1})` : '마술예장';
+      const pendingSk = pendingMasterSkillIdx !== null ? battle.masterSkills[pendingMasterSkillIdx] : null;
+
+      let pickerHtml = '';
+      if (pendingSk && pendingSk.target === 'ally') {
+        const activeList = getActiveMembers(battle);
+        pickerHtml = `
+          <div class="ms-picker-box">
+            <div class="ms-picker-head">
+              <span>${pendingSk.icon} <strong>${pendingSk.name}</strong> — 적용할 아군 서번트를 선택하세요</span>
+              <button class="small-outline-btn" id="btn-ms-cancel" style="padding:3px 9px;font-size:11px">취소</button>
+            </div>
+            <div class="ms-ally-targets">
+              ${activeList.map(m => {
+                const sv = SERVANT_MAP[m.id];
+                const face = ArtRenderer.getFaceUrl(m.id);
+                return `
+                  <button class="ms-target-btn" data-ms-ally="${m.rosterIdx}">
+                    ${face ? `<img src="${face}" class="ms-target-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
+                    <div>
+                      <strong>${sv.nickname || sv.name}</strong>
+                      <div style="font-size:11px;color:#9cb2d9">HP ${m.hp.toLocaleString()}/${m.maxHp.toLocaleString()} · NP ${Math.floor(m.np)}%</div>
+                    </div>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      } else if (pendingSk && pendingSk.target === 'order_change') {
+        const aliveSubs = battle.subQueue.map((rIdx, qIdx) => ({ rIdx, qIdx, m: battle.roster[rIdx] })).filter(x => x.m && x.m.hp > 0);
+        pickerHtml = `
+          <div class="ms-picker-box">
+            <div class="ms-picker-head">
+              <span>🔄 <strong>오더 체인지</strong> — 전열 1명과 후열 서브 1명을 선택해 교체하세요</span>
+              <button class="small-outline-btn" id="btn-ms-cancel" style="padding:3px 9px;font-size:11px">취소</button>
+            </div>
+            ${aliveSubs.length === 0 ? '<div class="empty-hint" style="padding:10px">교체할 수 있는 후열 대기 서번트가 없습니다.</div>' : `
+              <div class="oc-picker-grid">
+                <div>
+                  <div class="oc-col-label">전열 (OUT)</div>
+                  <div class="oc-col-list">
+                    ${battle.activeSlots.map((rIdx, fPos) => {
+                      if (rIdx === null) return '';
+                      const m = battle.roster[rIdx];
+                      if (!m || m.hp <= 0) return '';
+                      const sv = SERVANT_MAP[m.id];
+                      const face = ArtRenderer.getFaceUrl(m.id);
+                      return `<button class="ms-target-btn ${ocSelectedFront === fPos ? 'selected' : ''}" data-oc-front="${fPos}">${face ? `<img src="${face}" class="ms-target-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}<span>전열${fPos + 1} · ${sv.nickname || sv.name}</span></button>`;
+                    }).join('')}
+                  </div>
+                </div>
+                <div>
+                  <div class="oc-col-label">후열 서브 (IN)</div>
+                  <div class="oc-col-list">
+                    ${aliveSubs.map(({ rIdx, qIdx, m }) => {
+                      const sv = SERVANT_MAP[m.id];
+                      const face = ArtRenderer.getFaceUrl(m.id);
+                      return `<button class="ms-target-btn ${ocSelectedSub === qIdx ? 'selected' : ''}" data-oc-sub="${qIdx}">${face ? `<img src="${face}" class="ms-target-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}<span>서브 · ${sv.nickname || sv.name}${m.isSupport ? '🤝' : ''}</span></button>`;
+                    }).join('')}
+                  </div>
+                </div>
+              </div>
+              <div style="margin-top:8px;text-align:right">
+                <button class="small-gold-btn" id="btn-oc-confirm" ${ocSelectedFront === null || ocSelectedSub === null ? 'disabled' : ''}>🔄 교체 실행!</button>
+              </div>
+            `}
+          </div>
+        `;
+      }
+
       popupEl.innerHTML = `
-        <div class="ba-pop-title">🧤 마스터 스킬 (칼데아 전투복)</div>
+        <div class="ba-pop-title" style="display:flex;align-items:center;gap:8px">
+          ${mc?.icon ? `<img src="${mc.icon}" style="width:28px;height:28px;border-radius:6px;object-fit:cover" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : '🧤'}
+          <span>마스터 스킬 — ${mcTitle}</span>
+        </div>
         <div class="ba-pop-grid">
           ${battle.masterSkills.map((sk, i) => `
-            <button class="upgrade-btn" data-ms="${i}" ${sk.curCd > 0 ? 'disabled' : ''}>
-              ${sk.icon} ${sk.name}${sk.curCd > 0 ? ` (${sk.curCd}T)` : ''}<br>
+            <button class="upgrade-btn ${pendingMasterSkillIdx === i ? 'selected' : ''}" data-ms="${i}" ${sk.curCd > 0 ? 'disabled' : ''}>
+              ${sk.icon} ${sk.name}${sk.curCd > 0 ? ` (${sk.curCd}T)` : ` (CD ${sk.cd})`}<br>
               <small style="color:#9cb2d9;font-weight:400">${sk.desc}</small>
             </button>
           `).join('')}
         </div>
+        ${pickerHtml}
       `;
+
+      const commitMasterSkill = (i, targetRIdx = null, ocF = null, ocS = null) => {
+        const sk = battle.masterSkills[i];
+        if (!sk || sk.curCd > 0) return;
+        sk.curCd = sk.cd;
+        const msg = applyMasterSkill(battle, i, targetRIdx, ocF, ocS);
+        pendingMasterSkillIdx = null;
+        ocSelectedFront = null;
+        ocSelectedSub = null;
+        openPopup = null;
+        SoundEngine.levelUp();
+        addLog(`🧤 ${msg}`);
+        getBridge().toast(msg);
+        saveActiveBattle();
+        renderArena();
+      };
+
       popupEl.querySelectorAll('[data-ms]').forEach(btn => {
         btn.addEventListener('click', () => {
           const i = Number(btn.dataset.ms);
           const sk = battle.masterSkills[i];
           if (!sk || sk.curCd > 0) return;
-          sk.curCd = sk.cd;
-          const msg = applyMasterSkill(battle, i);
-          openPopup = null;
-          SoundEngine.levelUp();
-          addLog(`🧤 ${msg}`);
-          getBridge().toast(msg);
-          saveActiveBattle();
-          renderArena();
+          if (sk.target === 'ally' || sk.target === 'order_change') {
+            SoundEngine.click();
+            pendingMasterSkillIdx = i;
+            ocSelectedFront = null;
+            ocSelectedSub = null;
+            renderTopPopups();
+            return;
+          }
+          commitMasterSkill(i);
         });
+      });
+
+      document.getElementById('btn-ms-cancel')?.addEventListener('click', () => {
+        pendingMasterSkillIdx = null;
+        ocSelectedFront = null;
+        ocSelectedSub = null;
+        renderTopPopups();
+      });
+      popupEl.querySelectorAll('[data-ms-ally]').forEach(btn => {
+        btn.addEventListener('click', () => commitMasterSkill(pendingMasterSkillIdx, Number(btn.dataset.msAlly)));
+      });
+      popupEl.querySelectorAll('[data-oc-front]').forEach(btn => {
+        btn.addEventListener('click', () => { SoundEngine.click(); ocSelectedFront = Number(btn.dataset.ocFront); renderTopPopups(); });
+      });
+      popupEl.querySelectorAll('[data-oc-sub]').forEach(btn => {
+        btn.addEventListener('click', () => { SoundEngine.click(); ocSelectedSub = Number(btn.dataset.ocSub); renderTopPopups(); });
+      });
+      document.getElementById('btn-oc-confirm')?.addEventListener('click', () => {
+        if (ocSelectedFront === null || ocSelectedSub === null) return;
+        commitMasterSkill(pendingMasterSkillIdx, null, ocSelectedFront, ocSelectedSub);
       });
     } else if (openPopup === 'spells') {
       const spells = getBridge().getCommandSpells();
@@ -1458,9 +1945,11 @@ window.FgoBattle = (() => {
       if (allyEl) allyEl.classList.add('attacking');
 
       if (c.kind === 'np') {
-        // 원작 고증: 105%~199%는 무조건 100%(OC 1단계)! 보구 체인 시 2번째 +100%, 3번째 +200% (최대 5단계)
+        ensureMemberBuffs(m);
+        // 원작 고증: 105%~199%는 무조건 100%(OC 1단계)! 보구 체인(+1/+2) + 마술예장 심원성취(ocUp +1) 합산 최대 5단계
         const baseOcStage = Math.max(1, Math.floor(m.np / 100));
-        const ocStage = Math.min(5, baseOcStage + npChainCount);
+        const ocStage = Math.min(5, baseOcStage + npChainCount + (m.buffs.ocUp || 0));
+        m.buffs.ocUp = 0;
         npChainCount++;
         const ocMult = 1 + (ocStage - 1) * 0.25; // OC 100%=1.0, 200%=1.25, 300%=1.5, 400%=1.75, 500%=2.0
         m.np = 0;
@@ -1561,7 +2050,7 @@ window.FgoBattle = (() => {
 
         const starBase = c.type === 'Quick' ? 11 : (c.type === 'Buster' ? 3 : 1);
         const starFirstAdd = hasFirstQuick ? 4 : 0;
-        const starGain = Math.round((starBase * orderMult + starFirstAdd) * stCritMult * stOkMult);
+        const starGain = Math.round((starBase * orderMult + starFirstAdd) * (1 + (m.buffs.starGen || 0)) * stCritMult * stOkMult);
 
         m.np = Math.min(maxNp, m.np + npGain);
         battle.stars = Math.min(99, battle.stars + starGain);
@@ -1576,15 +2065,17 @@ window.FgoBattle = (() => {
       if (allyEl) allyEl.classList.remove('attacking');
     }
 
-    // 브레이브 체인 → 4타 EXTRA ATTACK!
+    // 브레이브 체인 → 4타 EXTRA ATTACK! (클랜 칼라틴 엑스트라 인핸스먼트 반영!)
     if (chain.brave) {
       const m = battle.roster[cards[0].rosterIdx];
       const sv = SERVANT_MAP[m.id];
       const target = currentTarget || pickAliveTarget();
       if (m && m.hp > 0 && target) {
+        ensureMemberBuffs(m);
         const extraMult = chain.colorChain ? 3.5 : 2.0; // 동일색 브레이브 시 3.5배!
+        const extraCardBuff = 1 + (m.buffs.extraUp || 0);
         const totalAff = getCombinedDamageMod(sv.cls, target.cls, sv.attribute, target.attr);
-        const dmg = m.atk * extraMult * (1 + m.buffs.atk) * totalAff;
+        const dmg = m.atk * extraMult * extraCardBuff * (1 + m.buffs.atk) * totalAff;
         const isOverkill = damageEnemy(target, dmg, 'dmg-extra');
         const npGain = Math.round(12 * (isOverkill ? 1.5 : 1.0) * getEnemyNpMod(target.cls));
         const stGain = Math.round(6 * (isOverkill ? 1.3 : 1.0));
@@ -1630,6 +2121,39 @@ window.FgoBattle = (() => {
       const aliveAllies = getActiveMembers(battle);
       if (aliveAllies.length === 0) break;
 
+      const dealDamageToAlly = (ally, rawDmg) => {
+        ensureMemberBuffs(ally);
+        if (ally.buffs.invul > 0) {
+          showFloatDmg(`ally-dmg-${ally.rosterIdx}`, '무적!', 'dmg-block');
+          return;
+        }
+        if (ally.buffs.invulHits > 0) {
+          ally.buffs.invulHits--;
+          showFloatDmg(`ally-dmg-${ally.rosterIdx}`, '무적!', 'dmg-block');
+          return;
+        }
+        if (ally.buffs.evade > 0) {
+          showFloatDmg(`ally-dmg-${ally.rosterIdx}`, 'EVADE!', 'dmg-block');
+          return;
+        }
+        if (ally.buffs.evadeHits > 0) {
+          ally.buffs.evadeHits--;
+          showFloatDmg(`ally-dmg-${ally.rosterIdx}`, 'EVADE!', 'dmg-block');
+          return;
+        }
+        ally.hp = Math.max(0, ally.hp - rawDmg);
+        showFloatDmg(`ally-dmg-${ally.rosterIdx}`, `-${rawDmg.toLocaleString()}`, 'dmg-enemy-hit');
+        if (ally.hp <= 0 && ally.buffs.guts > 0) {
+          ally.hp = Math.min(ally.maxHp, ally.buffs.guts);
+          ally.buffs.guts = 0;
+          ally.buffs.gutsT = 0;
+          const asv = SERVANT_MAP[ally.id];
+          addLog(`❤️‍🔥 GUTS! ${asv.name} 근성 발동 → HP ${ally.hp.toLocaleString()} 부활!!`);
+          showFloatDmg(`ally-dmg-${ally.rosterIdx}`, `GUTS! +${ally.hp.toLocaleString()}`, 'dmg-break');
+          SoundEngine.sparkPromotion();
+        }
+      };
+
       en.charge++;
       if (en.charge >= en.maxCharge) {
         en.charge = 0;
@@ -1637,28 +2161,20 @@ window.FgoBattle = (() => {
         addLog(`⚠️ ${en.name}의 보구 [${en.npName}] 발동!!`);
         aliveAllies.forEach(ally => {
           const sv = SERVANT_MAP[ally.id];
-          if (ally.buffs.invul > 0) {
-            showFloatDmg(`ally-dmg-${ally.rosterIdx}`, '무적 회피!', 'dmg-block');
-          } else {
-            const totalAff = getCombinedDamageMod(en.cls, sv.cls, en.attr, sv.attribute);
-            const dmg = Math.round(en.atk * 1.9 * totalAff * Math.max(0.3, 1 - ally.buffs.def));
-            ally.hp = Math.max(0, ally.hp - dmg);
-            ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 14);
-            showFloatDmg(`ally-dmg-${ally.rosterIdx}`, `-${dmg.toLocaleString()}`, 'dmg-enemy-hit');
-          }
+          const totalAff = getCombinedDamageMod(en.cls, sv.cls, en.attr, sv.attribute);
+          const dmg = Math.round(en.atk * 1.9 * totalAff * Math.max(0.3, 1 - ally.buffs.def));
+          const hadShield = ally.buffs.invul > 0 || ally.buffs.invulHits > 0 || ally.buffs.evade > 0 || ally.buffs.evadeHits > 0;
+          dealDamageToAlly(ally, dmg);
+          if (!hadShield && ally.hp > 0) ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 14);
         });
       } else {
         const victim = aliveAllies[Math.floor(Math.random() * aliveAllies.length)];
         const sv = SERVANT_MAP[victim.id];
-        if (victim.buffs.invul > 0) {
-          showFloatDmg(`ally-dmg-${victim.rosterIdx}`, 'EVADE!', 'dmg-block');
-        } else {
-          const totalAff = getCombinedDamageMod(en.cls, sv.cls, en.attr, sv.attribute);
-          const dmg = Math.round(en.atk * totalAff * Math.max(0.3, 1 - victim.buffs.def) * (0.9 + Math.random() * 0.2));
-          victim.hp = Math.max(0, victim.hp - dmg);
-          victim.np = Math.min(getMaxNp(victim.npLevel), victim.np + 8);
-          showFloatDmg(`ally-dmg-${victim.rosterIdx}`, `-${dmg.toLocaleString()}`, 'dmg-enemy-hit');
-        }
+        const totalAff = getCombinedDamageMod(en.cls, sv.cls, en.attr, sv.attribute);
+        const dmg = Math.round(en.atk * totalAff * Math.max(0.3, 1 - victim.buffs.def) * (0.9 + Math.random() * 0.2));
+        const hadShield = victim.buffs.invul > 0 || victim.buffs.invulHits > 0 || victim.buffs.evade > 0 || victim.buffs.evadeHits > 0;
+        dealDamageToAlly(victim, dmg);
+        if (!hadShield && victim.hp > 0) victim.np = Math.min(getMaxNp(victim.npLevel), victim.np + 8);
       }
       renderArena();
       await sleep(360);
@@ -1689,14 +2205,37 @@ window.FgoBattle = (() => {
     battle.turn++;
     battle.masterSkills.forEach(sk => { if (sk.curCd > 0) sk.curCd--; });
     getActiveMembers(battle).forEach(m => {
+      ensureMemberBuffs(m);
       const ce = getCePassive(m.ceId, !!m.ceMlb);
       const maxNp = getMaxNp(m.npLevel);
       m.skills.forEach(sk => { if (sk.curCd > 0) sk.curCd--; });
       if (ce.starsPerTurn) battle.stars = Math.min(99, battle.stars + ce.starsPerTurn);
       if (ce.npPerTurn) m.np = Math.min(maxNp, m.np + ce.npPerTurn);
       if (ce.hpDrain) m.hp = Math.max(1, m.hp - ce.hpDrain);
+      if (m.buffs.regen > 0 && m.buffs.regenT > 0) {
+        m.hp = Math.min(m.maxHp, m.hp + m.buffs.regen);
+        if (--m.buffs.regenT === 0) m.buffs.regen = 0;
+      }
+      if (m.buffs.maxHpBonus > 0) {
+        m.maxHp = Math.max(1000, m.maxHp - m.buffs.maxHpBonus);
+        m.hp = Math.min(m.maxHp, m.hp);
+        m.buffs.maxHpBonus = 0;
+      }
 
       m.buffs.invul = 0;
+      m.buffs.invulHits = 0;
+      m.buffs.evade = 0;
+      if (m.buffs.evadeT > 0 && --m.buffs.evadeT === 0) m.buffs.evadeHits = 0;
+      if (m.buffs.gutsT > 0 && --m.buffs.gutsT === 0) m.buffs.guts = 0;
+      m.buffs.sureHit = 0;
+      m.buffs.invulPierce = 0;
+      m.buffs.extraUp = 0;
+      m.buffs.ocUp = 0;
+      m.buffs.starGen = 0;
+      m.buffs.starWeight = 0;
+      m.buffs.busterStarWeight = 0;
+      m.buffs.artsStarWeight = 0;
+      m.buffs.buffProtect = 0;
       m.buffs.npBoost = 1;
       if (m.buffs.atkT > 0 && --m.buffs.atkT === 0) m.buffs.atk = 0;
       if (m.buffs.defT > 0 && --m.buffs.defT === 0) m.buffs.def = 0;
@@ -1757,7 +2296,7 @@ window.FgoBattle = (() => {
       SoundEngine.reveal(5, true);
       const ownedInParty = battle.roster.filter(m => !m.isSupport && !m.isRental).map(m => m.id);
       const fpBonus = q.rewards.fp || 2000;
-      getBridge().grantBattleRewards({ ...q.rewards, fp: fpBonus }, ownedInParty);
+      const mcRes = getBridge().grantBattleRewards({ ...q.rewards, fp: fpBonus }, ownedInParty);
       titleEl.textContent = '🏆 QUEST CLEAR!!';
       bodyEl.innerHTML = `
         <div class="br-quest">${q.name}</div>
@@ -1765,6 +2304,7 @@ window.FgoBattle = (() => {
         <div class="br-rewards-box">
           <div class="br-rw-title">✨ 획득 보상 (자동 지급 완료)</div>
           <div>${q.rewardText} · 🤝 FP +${fpBonus.toLocaleString()}</div>
+          ${mcRes ? `<div style="font-size:12.5px;color:#ffe680;margin-top:5px">🧤 마술예장 [${mcRes.mc.name}] EXP +${mcRes.gained.toLocaleString()} → Lv.${mcRes.newLv}${mcRes.newLv > mcRes.prevLv ? ' 🎉 LEVEL UP!!' : ''}</div>` : ''}
           <div style="font-size:12px;color:#9cb2d9;margin-top:4px">출격한 보유 서번트 전원(전열+후열)의 인연 포인트가 상승했습니다!</div>
         </div>
       `;
@@ -1846,6 +2386,32 @@ window.FgoBattle = (() => {
   // ================= 이벤트 바인딩 =================
   function bindEvents() {
     document.getElementById('btn-start-battle')?.addEventListener('click', startBattle);
+    document.getElementById('btn-open-mystic-codes')?.addEventListener('click', openMysticCodeModal);
+    document.getElementById('btn-close-mc')?.addEventListener('click', () => {
+      document.getElementById('mystic-code-modal')?.classList.add('hidden');
+    });
+    document.getElementById('mystic-code-modal')?.addEventListener('click', (e) => {
+      if (e.target.id === 'mystic-code-modal') e.target.classList.add('hidden');
+    });
+    document.getElementById('mc-search')?.addEventListener('input', (e) => {
+      mcModalQuery = e.target.value || '';
+      renderMysticCodeModal();
+    });
+    document.querySelectorAll('#mc-cat-filter .filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        SoundEngine.click();
+        mcModalFilter = btn.dataset.cat;
+        document.querySelectorAll('#mc-cat-filter .filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+        renderMysticCodeModal();
+      });
+    });
+    document.getElementById('btn-mc-unlock-all')?.addEventListener('click', () => {
+      const added = getBridge().unlockAllMysticCodes();
+      SoundEngine.reveal(5, true);
+      getBridge().toast(added > 0 ? `✨ 마술예장 ${added}종 추가 해금! 총 28종 모두 사용 가능!` : '✅ 이미 마술예장 28종을 모두 보유 중입니다!');
+      renderLobbyMysticCodeBar();
+      renderMysticCodeModal();
+    });
     document.getElementById('btn-open-affinity')?.addEventListener('click', openAffinityModal);
     document.getElementById('btn-close-affinity')?.addEventListener('click', () => {
       document.getElementById('affinity-modal').classList.add('hidden');
@@ -1903,8 +2469,15 @@ window.FgoBattle = (() => {
       document.getElementById('battle-resume-modal').classList.add('hidden');
       if (!saved) return;
       battle = saved;
+      if (!battle.mysticCodeId || !battle.masterSkills?.[0]?.effects) {
+        battle.mysticCodeId = battle.mysticCodeId || getBridge().getActiveMysticCodeId();
+        battle.mysticCodeLv = battle.mysticCodeLv || 1;
+        battle.masterSkills = buildBattleMasterSkills(battle.mysticCodeId, battle.mysticCodeLv);
+      }
+      battle.roster.forEach(m => ensureMemberBuffs(m));
       busy = false;
       openPopup = null;
+      pendingMasterSkillIdx = null;
       getBridge().switchToBattleTab();
       document.getElementById('battle-lobby').classList.add('hidden');
       document.getElementById('battle-arena').classList.remove('hidden');

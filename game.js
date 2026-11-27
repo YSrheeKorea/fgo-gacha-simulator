@@ -71,6 +71,8 @@
       bannerState: {},   // { [bannerId]: { pity: 0, singleBonus: 0, totalPulls: 0 } }
       servants: {},      // { [id]: { copies, extraCopies, npLevel, level, ascension, grailsUsed, bond, bondExp, viewAsc } }
       ces: {},           // { [id]: { copies, extraCopies } }
+      activeMysticCodeId: 'mc_chaldea',
+      mysticCodes: {},   // { [mcId]: { exp, level } }
       myRoomServantId: null,
       options: {
         fastFx: false,
@@ -123,6 +125,19 @@
     if (BANNER_MAP.bn_custom) {
       BANNER_MAP.bn_custom.pickup5 = [st.customPickup.sv5];
       BANNER_MAP.bn_custom.pickup4 = [st.customPickup.sv4];
+    }
+    // 원작 FGO 마술예장 28종 상태 초기화 (기본·스토리 7종 자동 해금)
+    if (!st.mysticCodes || typeof st.mysticCodes !== 'object') st.mysticCodes = {};
+    if (typeof DEFAULT_UNLOCKED_MYSTIC_CODES !== 'undefined') {
+      DEFAULT_UNLOCKED_MYSTIC_CODES.forEach(id => {
+        if (!st.mysticCodes[id]) st.mysticCodes[id] = { exp: 0, level: 1 };
+      });
+    }
+    if (typeof MYSTIC_CODE_MAP !== 'undefined') {
+      if (!st.activeMysticCodeId || !MYSTIC_CODE_MAP[st.activeMysticCodeId] || !st.mysticCodes[st.activeMysticCodeId]) {
+        st.activeMysticCodeId = 'mc_chaldea';
+        if (!st.mysticCodes.mc_chaldea) st.mysticCodes.mc_chaldea = { exp: 0, level: 1 };
+      }
     }
     return st;
   }
@@ -2495,6 +2510,74 @@
       return true;
     },
     switchToBattleTab: () => switchTab('battle'),
+    getActiveMysticCodeId: () => state.activeMysticCodeId || 'mc_chaldea',
+    getMysticCodeState: (id) => (state.mysticCodes && state.mysticCodes[id]) || null,
+    setActiveMysticCode(id) {
+      if (typeof MYSTIC_CODE_MAP === 'undefined' || !MYSTIC_CODE_MAP[id]) return false;
+      if (!state.mysticCodes[id]) return false;
+      state.activeMysticCodeId = id;
+      saveState();
+      return true;
+    },
+    unlockMysticCode(id, free = false) {
+      if (typeof MYSTIC_CODE_MAP === 'undefined' || !MYSTIC_CODE_MAP[id]) return { ok: false, reason: 'invalid' };
+      if (state.mysticCodes[id]) return { ok: true, already: true };
+      const costMp = free ? 0 : 20;
+      if (state.mp < costMp) return { ok: false, reason: 'mp' };
+      state.mp -= costMp;
+      state.mysticCodes[id] = { exp: 0, level: 1 };
+      saveState();
+      renderResources();
+      return { ok: true };
+    },
+    unlockAllMysticCodes() {
+      if (typeof MYSTIC_CODES === 'undefined') return 0;
+      let added = 0;
+      MYSTIC_CODES.forEach(mc => {
+        if (!state.mysticCodes[mc.id]) {
+          state.mysticCodes[mc.id] = { exp: 0, level: 1 };
+          added++;
+        }
+      });
+      saveState();
+      return added;
+    },
+    trainMysticCodeLevel(id, toMax = false) {
+      if (typeof MYSTIC_CODE_MAP === 'undefined' || !MYSTIC_CODE_MAP[id] || !state.mysticCodes[id]) return { ok: false };
+      const mc = MYSTIC_CODE_MAP[id];
+      const entry = state.mysticCodes[id];
+      const curve = MYSTIC_CODE_EXP_CURVES[mc.expCurve] || MYSTIC_CODE_EXP_CURVES.event;
+      const curLv = getMcLevelFromExp(mc.expCurve, entry.exp || 0);
+      if (curLv >= 10) return { ok: false, reason: 'max' };
+      const targetLv = toMax ? 10 : curLv + 1;
+      const qpCost = toMax ? (10 - curLv) * 500000 : 500000;
+      if (state.qp < qpCost) return { ok: false, reason: 'qp', need: qpCost };
+      state.qp -= qpCost;
+      entry.exp = curve[targetLv - 1];
+      entry.level = targetLv;
+      saveState();
+      renderResources();
+      return { ok: true, level: targetLv, qpCost };
+    },
+    grantMysticCodeExp(expAmount) {
+      if (typeof MYSTIC_CODE_MAP === 'undefined' || !expAmount) return null;
+      const id = state.activeMysticCodeId || 'mc_chaldea';
+      const mc = MYSTIC_CODE_MAP[id];
+      if (!mc) return null;
+      if (!state.mysticCodes[id]) state.mysticCodes[id] = { exp: 0, level: 1 };
+      const entry = state.mysticCodes[id];
+      const curve = MYSTIC_CODE_EXP_CURVES[mc.expCurve] || MYSTIC_CODE_EXP_CURVES.event;
+      const maxExp = curve[curve.length - 1];
+      const prevLv = getMcLevelFromExp(mc.expCurve, entry.exp || 0);
+      entry.exp = Math.min(maxExp, (entry.exp || 0) + expAmount);
+      const newLv = getMcLevelFromExp(mc.expCurve, entry.exp);
+      entry.level = newLv;
+      saveState();
+      if (newLv > prevLv) {
+        toast(`🧤 마술예장 [${mc.name}] Lv.${newLv} 달성!!`);
+      }
+      return { mc, prevLv, newLv, gained: expAmount, exp: entry.exp, maxExp };
+    },
     grantBattleRewards(rewards, partyServantIds) {
       if (rewards.sq) state.sq += rewards.sq;
       if (rewards.embers) state.embers += rewards.embers;
@@ -2521,8 +2604,11 @@
           }
         }
       });
+      // 장착 마술예장 경험치 지급
+      const mcRes = rewards.mcExp ? window.ChaldeaBridge.grantMysticCodeExp(rewards.mcExp) : null;
       saveState();
       renderResources();
+      return mcRes;
     },
     toast
   };
