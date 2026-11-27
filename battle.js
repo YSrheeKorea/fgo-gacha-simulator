@@ -2311,6 +2311,10 @@ window.FgoBattle = (() => {
           const npPct = Math.min(100, m.np);
           const ocStage = Math.floor(m.np / 100);
           const faceUrl = ArtRenderer.getFaceUrl(m.id);
+          const narrowUrl = ArtRenderer.getNarrowFigureUrl ? ArtRenderer.getNarrowFigureUrl(m.id, m.viewAsc || 1) : null;
+          const npImgUrl = narrowUrl || faceUrl;
+          const statusSpriteUrl = ArtRenderer.getStatusSpriteUrl ? ArtRenderer.getStatusSpriteUrl(m.id, m.viewAsc || 1) : null;
+          const allyImgUrl = statusSpriteUrl || faceUrl;
 
           ensureMemberBuffs(m);
           const activeBuffs = [];
@@ -2338,7 +2342,7 @@ window.FgoBattle = (() => {
           unit.innerHTML = `
         ${selectingAllyTarget && !dead ? '<div class="ally-select-banner">🎯 클릭하여 적용!</div>' : ''}
         <div class="ally-top">
-          ${faceUrl ? `<img src="${faceUrl}" class="ally-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
+          ${allyImgUrl ? `<img src="${allyImgUrl}" class="ally-face ba-status-sprite" alt="" referrerpolicy="no-referrer" onerror="if(this.dataset.fb){this.remove()}else{this.dataset.fb='1';this.src='${faceUrl || ''}';}">` : ''}
           <div style="flex:1;min-width:0">
             <div class="ally-name">${sv.nickname || sv.name}${m.isSupport ? '🤝' : ''} <small>(${CLASS_INFO[sv.cls]?.name})</small></div>
             <div class="hp-bar-track"><div class="hp-bar-fill ally-hp" style="width:${hpPct}%"></div></div>
@@ -2723,6 +2727,8 @@ window.FgoBattle = (() => {
           const ready = m.hp > 0 && m.np >= 100;
           const selIdx = battle.selectedCards.findIndex(c => c.kind === 'np' && c.rosterIdx === rIdx);
           const faceUrl = ArtRenderer.getFaceUrl(m.id);
+          const narrowUrl = ArtRenderer.getNarrowFigureUrl ? ArtRenderer.getNarrowFigureUrl(m.id, m.viewAsc || 1) : null;
+          const npImgUrl = narrowUrl || faceUrl;
           const catLabel = getNpCategory(sv, m) === 'support' ? '보조' : (getNpCategory(sv, m) === 'single' ? '단일' : '대군');
           const effNpType = getEffectiveNpType(sv, m);
           const npUpTag = (typeof isNpUpgraded === 'function' && isNpUpgraded(sv)) ? ' 🗡️강화' : '';
@@ -2734,7 +2740,7 @@ window.FgoBattle = (() => {
           btn.innerHTML = `
         ${selIdx !== -1 ? `<span class="cmd-order-badge">${selIdx + 1}st</span>` : ''}
         <div class="np-cmd-top">
-          ${faceUrl ? `<img src="${faceUrl}" class="np-cmd-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
+          ${npImgUrl ? `<img src="${npImgUrl}" class="np-cmd-face np-narrow-cutin" alt="" referrerpolicy="no-referrer" onerror="if(this.dataset.fb){this.remove()}else{this.dataset.fb='1';this.src='${faceUrl || ''}';}">` : ''}
           <div>
             <div class="np-cmd-type">${effNpType.toUpperCase()} 보구 · ${catLabel}${npUpTag}</div>
             <div class="np-cmd-name">${sv.npName}</div>
@@ -2763,7 +2769,11 @@ window.FgoBattle = (() => {
             ? `<span class="aff-attr-up" title="히든 속성 유리 (${sv.attribute} → ${target.attr} 1.1x)">속성↑</span>`
             : (attrMult < 1 ? `<span class="aff-attr-dn" title="히든 속성 불리 (${sv.attribute} → ${target.attr} 0.9x)">속성↓</span>` : '');
           const faceUrl = ArtRenderer.getFaceUrl(m.id);
+          const narrowUrl = ArtRenderer.getNarrowFigureUrl ? ArtRenderer.getNarrowFigureUrl(m.id, m.viewAsc || 1) : null;
+          const npImgUrl = narrowUrl || faceUrl;
           const koType = card.type === 'Buster' ? '버스터' : (card.type === 'Arts' ? '아츠' : '퀵');
+          const cmdSpriteUrl = ArtRenderer.getCommandSpriteUrl ? ArtRenderer.getCommandSpriteUrl(m.id, m.viewAsc || 1) : null;
+          const cmdImgUrl = cmdSpriteUrl || faceUrl;
 
           // 첫 카드가 Quick이거나 마이티 체인이면 표시 크리율 +20% 미리보기!
           const firstIsQuick = battle.selectedCards.length > 0 && battle.selectedCards[0].type === 'Quick';
@@ -2778,7 +2788,7 @@ window.FgoBattle = (() => {
           ${displayCrit > 0 ? `<span class="cmd-crit-badge">★${displayCrit}%</span>` : ''}
         </div>
         <div class="cmd-face-wrap">
-          ${faceUrl ? `<img src="${faceUrl}" class="cmd-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : `<div class="cmd-face-fallback">${sv.name[0]}</div>`}
+          ${cmdImgUrl ? `<img src="${cmdImgUrl}" class="cmd-face cmd-sprite-img" alt="" referrerpolicy="no-referrer" onerror="if(this.dataset.fb){this.remove()}else{this.dataset.fb='1';this.src='${faceUrl || ''}';}">` : `<div class="cmd-face-fallback">${sv.name[0]}</div>`}
         </div>
         <div class="cmd-sv-name">${sv.nickname || sv.name}</div>
         <div class="cmd-type-ribbon">${card.type.toUpperCase()}<span>${koType}</span></div>

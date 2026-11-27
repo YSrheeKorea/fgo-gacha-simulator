@@ -90,6 +90,47 @@ const ArtRenderer = (() => {
     return null;
   }
 
+  function _resolveAtlasId(servantId) {
+    if (typeof ATLAS_IMAGES !== 'undefined') {
+      const entry = ATLAS_IMAGES.servants && ATLAS_IMAGES.servants[servantId];
+      if (entry && entry.atlasId) return entry.atlasId;
+    }
+    const sv = (typeof SERVANT_MAP !== 'undefined') && SERVANT_MAP[servantId];
+    return sv && sv.atlasId ? sv.atlasId : null;
+  }
+
+  function getCommandSpriteUrl(servantId, asc = 1) {
+    if (artMode !== 'official') return null;
+    const aid = _resolveAtlasId(servantId);
+    if (!aid) return null;
+    const stage = Math.max(1, Math.min(3, Number(asc) || 1));
+    return `https://static.atlasacademy.io/JP/Servants/Commands/${aid}/card_servant_${stage}.png`;
+  }
+
+  function getStatusSpriteUrl(servantId, asc = 1) {
+    if (artMode !== 'official') return null;
+    const aid = _resolveAtlasId(servantId);
+    if (!aid) return null;
+    const stage = Math.max(1, Math.min(3, Number(asc) || 1));
+    return `https://static.atlasacademy.io/JP/Servants/Status/${aid}/status_servant_${stage}.png`;
+  }
+
+  function getNarrowFigureUrl(servantId, asc = 1) {
+    if (artMode !== 'official') return null;
+    const aid = _resolveAtlasId(servantId);
+    if (!aid) return null;
+    const idx = Math.max(0, Math.min(2, (Number(asc) || 1) - 1));
+    return `https://static.atlasacademy.io/JP/NarrowFigure/${aid}/${aid}@${idx}.png`;
+  }
+
+  function getCharaFigureUrl(servantId, asc = 1) {
+    if (artMode !== 'official') return null;
+    const aid = _resolveAtlasId(servantId);
+    if (!aid) return null;
+    const stageIdx = Math.max(0, Math.min(2, (Number(asc) || 1) - 1));
+    return `https://static.atlasacademy.io/JP/CharaFigure/${aid}${stageIdx}/${aid}${stageIdx}_merged.png`;
+  }
+
   function preloadUrls(urls) {
     if (typeof Image === 'undefined') return;
     urls.filter(Boolean).forEach(url => {
@@ -369,6 +410,10 @@ const ArtRenderer = (() => {
     clearAllCustomImages,
     getCardArtUrl,
     getFaceUrl,
+    getCommandSpriteUrl,
+    getStatusSpriteUrl,
+    getNarrowFigureUrl,
+    getCharaFigureUrl,
     preloadUrls,
     getClassIconSVG,
     renderCardBackSVG,

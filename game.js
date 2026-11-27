@@ -1254,11 +1254,47 @@
       btn.classList.toggle('active', asc === own.viewAsc);
     });
 
-    // 대형 포트레이트
-    document.getElementById('myroom-portrait-wrap').innerHTML = ArtRenderer.renderCardSVG(sv, true, {
-      ascension: own.viewAsc,
-      npLevel: own.npLevel,
-      rarityOverride: effR
+    // 대형 포트레이트 (v25: 카드 보기 ⇄ Atlas Academy 스탠딩 & 표정 시트 전환!)
+    const mrViewMode = state.options.myRoomViewMode || 'card'; // 'card' | 'standing' | 'sheet'
+    const portraitWrap = document.getElementById('myroom-portrait-wrap');
+    const figUrl = ArtRenderer.getCharaFigureUrl ? ArtRenderer.getCharaFigureUrl(sv.id, own.viewAsc || 1) : null;
+    const modeBtnsHtml = `
+      <div style="display:flex;gap:5px;justify-content:center;margin-bottom:8px" onclick="event.stopPropagation()">
+        <button class="small-outline-btn mr-v25-mode" data-mode="card" style="padding:3px 9px;font-size:11px;${mrViewMode === 'card' ? 'border-color:#ffd86b;color:#ffd86b;' : ''}">🃏 카드</button>
+        <button class="small-outline-btn mr-v25-mode" data-mode="standing" style="padding:3px 9px;font-size:11px;${mrViewMode === 'standing' ? 'border-color:#ffd86b;color:#ffd86b;' : ''}">🧍 스탠딩</button>
+        <button class="small-outline-btn mr-v25-mode" data-mode="sheet" style="padding:3px 9px;font-size:11px;${mrViewMode === 'sheet' ? 'border-color:#ffd86b;color:#ffd86b;' : ''}">😊 표정 시트</button>
+      </div>
+    `;
+    if (mrViewMode === 'standing' && figUrl) {
+      portraitWrap.innerHTML = modeBtnsHtml + `
+        <div class="mr-standing-box" style="width:260px;height:380px;margin:0 auto;overflow:hidden;border-radius:14px;background:radial-gradient(circle at 50% 30%,rgba(60,95,165,0.45),rgba(10,16,32,0.9));border:1px solid rgba(255,215,100,0.35);display:flex;align-items:flex-start;justify-content:center">
+          <img src="${figUrl}" alt="${sv.name}" referrerpolicy="no-referrer"
+            style="width:260px;height:auto;object-fit:cover;object-position:top center;filter:drop-shadow(0 6px 14px rgba(0,0,0,0.65));transition:transform 0.2s"
+            onerror="this.parentElement.innerHTML='<div style=\\'padding:40px 12px;text-align:center;color:#9bb6df;font-size:12px\\'>스탠딩 에셋이 없는 서번트입니다.<br>카드 모드로 전환해 주세요.</div>'">
+        </div>
+      `;
+    } else if (mrViewMode === 'sheet' && figUrl) {
+      portraitWrap.innerHTML = modeBtnsHtml + `
+        <div class="mr-standing-box" style="width:280px;max-height:380px;margin:0 auto;overflow:auto;border-radius:12px;background:rgba(10,16,32,0.92);border:1px solid rgba(255,215,100,0.35);padding:6px">
+          <img src="${figUrl}" alt="${sv.name} 표정 시트" referrerpolicy="no-referrer" style="width:100%;height:auto;display:block"
+            onerror="this.parentElement.innerHTML='<div style=\\'padding:40px 12px;text-align:center;color:#9bb6df;font-size:12px\\'>표정 시트가 없는 서번트입니다.</div>'">
+        </div>
+      `;
+    } else {
+      portraitWrap.innerHTML = modeBtnsHtml + ArtRenderer.renderCardSVG(sv, true, {
+        ascension: own.viewAsc,
+        npLevel: own.npLevel,
+        rarityOverride: effR
+      });
+    }
+    portraitWrap.querySelectorAll('.mr-v25-mode').forEach(b => {
+      b.addEventListener('click', (e) => {
+        e.stopPropagation();
+        SoundEngine.click();
+        state.options.myRoomViewMode = b.dataset.mode;
+        saveState();
+        renderMyRoomTab();
+      });
     });
 
     // 스탯 계산
