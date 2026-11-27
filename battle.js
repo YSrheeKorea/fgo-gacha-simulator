@@ -1477,6 +1477,7 @@ window.FgoBattle = (() => {
     ...(typeof window !== 'undefined' && Array.isArray(window.FGO_FREE_QUESTS_P1A) ? window.FGO_FREE_QUESTS_P1A : []),
     ...(typeof window !== 'undefined' && Array.isArray(window.FGO_FREE_QUESTS_P1B) ? window.FGO_FREE_QUESTS_P1B : []),
     ...(typeof window !== 'undefined' && Array.isArray(window.FGO_FREE_QUESTS_P15) ? window.FGO_FREE_QUESTS_P15 : []),
+    ...(typeof window !== 'undefined' && Array.isArray(window.FGO_FREE_QUESTS_P2A) ? window.FGO_FREE_QUESTS_P2A : []),
     ...BOSS_QUESTS
   ];
 

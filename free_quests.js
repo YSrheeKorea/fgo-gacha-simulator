@@ -591,3 +591,155 @@ window.FGO_FREE_QUESTS_P15 = [
     ]
   }
 ];
+
+// =========================================================================
+// FGO Part 2 First Half Free Quests (v36)
+// LB1 아나스타샤 · LB2 괴터데머룽 · LB3 신 · LB4 유가 크셰트라 · LB5 아틀란티스
+// =========================================================================
+window.FGO_FREE_QUESTS_P2A = [
+  // ---- LB1 아나스타샤 ----
+  {
+    id: 'fq_lb1_smolensk', category: 'free_p2a', chapter: '2부 1장 아나스타샤',
+    name: '🗺️ LB1 야가 스몰렌스크 — 짐승의 도시',
+    desc: 'AP 20 · 추천 Lv.72 · 여진화약 최고 드랍률 성지!',
+    difficulty: 'AP 20 · 추천 Lv.72',
+    rewardText: '🧨 여진화약 ×3 · 🪙 9,880 QP',
+    drops: [['여진화약', 3]],
+    rewards: { sq: 1, embers: 5, qp: 9880, fp: 900, mcExp: 18888 },
+    waves: [
+      [{ name: '야가 A', cls: 'Saber', attr: '지(地)', hp: 16923, atk: 1050, maxCharge: 3, emoji: '🐺' }, { name: '야가 B', cls: 'Assassin', attr: '지(地)', hp: 16732, atk: 1050, maxCharge: 3, emoji: '🐺' }],
+      [{ name: '야가 A', cls: 'Saber', attr: '지(地)', hp: 25886, atk: 1250, maxCharge: 3, emoji: '🐺' }, { name: '야가 B', cls: 'Saber', attr: '지(地)', hp: 26456, atk: 1280, maxCharge: 3, emoji: '🐺' }],
+      [{ name: '야가 A', cls: 'Saber', attr: '지(地)', hp: 160815, atk: 2450, maxCharge: 3, emoji: '🐺' }, { name: '야가 B', cls: 'Assassin', attr: '지(地)', hp: 45301, atk: 1500, maxCharge: 3, emoji: '🐺' }]
+    ]
+  },
+  {
+    id: 'fq_lb1_moscow', category: 'free_p2a', chapter: '2부 1장 아나스타샤',
+    name: '🗺️ LB1 야가 모스크바 — 잠자는 도시',
+    desc: 'AP 21 · 추천 Lv.78 · 영원결빙 최고 파밍 성지!',
+    difficulty: 'AP 21 · 추천 Lv.78',
+    rewardText: '❄️ 영원결빙 ×3 · 🪙 10,660 QP',
+    drops: [['영원결빙', 3]],
+    rewards: { sq: 1, embers: 5, qp: 10660, fp: 950, mcExp: 22488 },
+    waves: [
+      [{ name: '살육엽병 A', cls: 'Assassin', attr: '지(地)', hp: 25227, atk: 1200, maxCharge: 3, emoji: '❄️' }, { name: '살육엽병 C', cls: 'Assassin', attr: '지(地)', hp: 28871, atk: 1300, maxCharge: 3, emoji: '❄️' }],
+      [{ name: '살육엽병 A', cls: 'Assassin', attr: '지(地)', hp: 31331, atk: 1380, maxCharge: 3, emoji: '❄️' }, { name: '살육엽병 C', cls: 'Assassin', attr: '지(地)', hp: 32245, atk: 1400, maxCharge: 3, emoji: '❄️' }],
+      [{ name: '살육엽병 A', cls: 'Assassin', attr: '지(地)', hp: 168434, atk: 2500, maxCharge: 3, emoji: '❄️' }, { name: '살육엽병 B', cls: 'Assassin', attr: '지(地)', hp: 50274, atk: 1600, maxCharge: 3, emoji: '❄️' }]
+    ]
+  },
+  // ---- LB2 괴터데머룽 ----
+  {
+    id: 'fq_lb2_giant', category: 'free_p2a', chapter: '2부 2장 괴터데머룽',
+    name: '🗺️ LB2 거인의 화원 — 불꽃과 얼음의 틈새',
+    desc: 'AP 20 · 추천 Lv.72 · 거인의 반지 집중 파밍!',
+    difficulty: 'AP 20 · 추천 Lv.72',
+    rewardText: '💍 거인의 반지 ×3 · 🪙 9,880 QP',
+    drops: [['거인의 반지', 3]],
+    rewards: { sq: 1, embers: 5, qp: 9880, fp: 900, mcExp: 18888 },
+    waves: [
+      [{ name: '서리 거인 A', cls: 'Berserker', attr: '천(天)', hp: 21819, atk: 1200, maxCharge: 4, emoji: '🧊' }, { name: '서리 거인 B', cls: 'Berserker', attr: '천(天)', hp: 24771, atk: 1250, maxCharge: 4, emoji: '🧊' }],
+      [{ name: '산 거인', cls: 'Berserker', attr: '천(天)', hp: 33774, atk: 1450, maxCharge: 4, emoji: '🏔️' }, { name: '서리 거인', cls: 'Berserker', attr: '천(天)', hp: 31821, atk: 1400, maxCharge: 4, emoji: '🧊' }],
+      [{ name: '산 거인 A', cls: 'Berserker', attr: '천(天)', hp: 152001, atk: 2450, maxCharge: 4, emoji: '🏔️' }, { name: '산 거인 B', cls: 'Berserker', attr: '천(天)', hp: 53401, atk: 1650, maxCharge: 4, emoji: '🏔️' }]
+    ]
+  },
+  {
+    id: 'fq_lb2_castle', category: 'free_p2a', chapter: '2부 2장 괴터데머룽',
+    name: '🗺️ LB2 눈과 얼음의 성 — 얼음의 가교',
+    desc: 'AP 21 · 추천 Lv.76 · 오로라강 최고 파밍 성지!',
+    difficulty: 'AP 21 · 추천 Lv.76',
+    rewardText: '🔷 오로라강 ×3 · 🪙 10,400 QP',
+    drops: [['오로라강', 3]],
+    rewards: { sq: 1, embers: 5, qp: 10400, fp: 950, mcExp: 21256 },
+    waves: [
+      [{ name: '발키리 A', cls: 'Rider', attr: '천(天)', hp: 9884, atk: 900, maxCharge: 4, emoji: '🪽' }, { name: '발키리 B', cls: 'Rider', attr: '천(天)', hp: 10889, atk: 920, maxCharge: 4, emoji: '🪽' }],
+      [{ name: '발키리 A', cls: 'Rider', attr: '천(天)', hp: 30279, atk: 1350, maxCharge: 4, emoji: '🪽' }, { name: '발키리 C', cls: 'Rider', attr: '천(天)', hp: 33264, atk: 1400, maxCharge: 4, emoji: '🪽' }],
+      [{ name: '발키리 C', cls: 'Rider', attr: '천(天)', hp: 180432, atk: 2550, maxCharge: 4, emoji: '🪽' }, { name: '발키리 B', cls: 'Rider', attr: '천(天)', hp: 49586, atk: 1600, maxCharge: 4, emoji: '🪽' }]
+    ]
+  },
+  // ---- LB3 인지통합진국 신 ----
+  {
+    id: 'fq_lb3_prison', category: 'free_p2a', chapter: '2부 3장 신',
+    name: '🗺️ LB3 수용소 — 청천백일',
+    desc: 'AP 21 · 추천 Lv.76 · 효광노심 & 한고령 파밍 성지!',
+    difficulty: 'AP 21 · 추천 Lv.76',
+    rewardText: '⚛️ 효광노심 ×2 · 🛎️ 한고령 ×2 · 🪙 10,400 QP',
+    drops: [['효광노심', 2], ['한고령', 2]],
+    rewards: { sq: 1, embers: 5, qp: 10400, fp: 950, mcExp: 21256 },
+    waves: [
+      [{ name: '근위병 A', cls: 'Assassin', attr: '인(人)', hp: 15136, atk: 1000, maxCharge: 3, emoji: '🗡️' }, { name: '근위병 B', cls: 'Assassin', attr: '인(人)', hp: 16342, atk: 1050, maxCharge: 3, emoji: '🗡️' }],
+      [{ name: '다다익선 호', cls: 'Archer', attr: '인(人)', hp: 50502, atk: 1600, maxCharge: 3, emoji: '🤖' }, { name: '근위병 A', cls: 'Assassin', attr: '인(人)', hp: 20141, atk: 1150, maxCharge: 3, emoji: '🗡️' }],
+      [{ name: '다다익선 호 A', cls: 'Archer', attr: '인(人)', hp: 178837, atk: 2550, maxCharge: 3, emoji: '🤖' }, { name: '다다익선 호 B', cls: 'Archer', attr: '인(人)', hp: 80684, atk: 1900, maxCharge: 3, emoji: '🤖' }]
+    ]
+  },
+  {
+    id: 'fq_lb3_palmun', category: 'free_p2a', chapter: '2부 3장 신',
+    name: '🗺️ LB3 팔문동 — 지하단련장',
+    desc: 'AP 21 · 추천 Lv.80 · 한고령 최고 파밍 성지!',
+    difficulty: 'AP 21 · 추천 Lv.80',
+    rewardText: '🛎️ 한고령 ×3 · 🪙 10,920 QP',
+    drops: [['한고령', 3]],
+    rewards: { sq: 1, embers: 5, qp: 10920, fp: 950, mcExp: 23752 },
+    waves: [
+      [{ name: '근위병 A', cls: 'Assassin', attr: '인(人)', hp: 17588, atk: 1080, maxCharge: 3, emoji: '🗡️' }, { name: '근위병 C', cls: 'Assassin', attr: '인(人)', hp: 20232, atk: 1150, maxCharge: 3, emoji: '🗡️' }],
+      [{ name: '근위병 A', cls: 'Assassin', attr: '인(人)', hp: 25060, atk: 1250, maxCharge: 3, emoji: '🗡️' }, { name: '근위병 B', cls: 'Assassin', attr: '인(人)', hp: 26132, atk: 1280, maxCharge: 3, emoji: '🗡️' }],
+      [{ name: '근위병 A', cls: 'Assassin', attr: '인(人)', hp: 183480, atk: 2600, maxCharge: 3, emoji: '🗡️' }, { name: '근위병 C', cls: 'Assassin', attr: '인(人)', hp: 47607, atk: 1550, maxCharge: 3, emoji: '🗡️' }]
+    ]
+  },
+  // ---- LB4 유가 크셰트라 ----
+  {
+    id: 'fq_lb4_divar', category: 'free_p2a', chapter: '2부 4장 유가 크셰트라',
+    name: '🗺️ LB4 디바르 — 벽을 둘러친 마을',
+    desc: 'AP 21 · 추천 Lv.76 · 진리의 알 & 화진의 화살촉 최고 성지!',
+    difficulty: 'AP 21 · 추천 Lv.76',
+    rewardText: '🥚 진리의 알 ×2 · 🏹 화진의 화살촉 ×2 · 🪙 10,400 QP',
+    drops: [['진리의 알', 2], ['화진의 화살촉', 2]],
+    rewards: { sq: 1, embers: 5, qp: 10400, fp: 950, mcExp: 21256 },
+    waves: [
+      [{ name: '칼리 A', cls: 'Berserker', attr: '지(地)', hp: 29820, atk: 1350, maxCharge: 4, emoji: '👹' }, { name: '칼리 C', cls: 'Berserker', attr: '지(地)', hp: 32058, atk: 1400, maxCharge: 4, emoji: '👹' }],
+      [{ name: '칼리 A', cls: 'Berserker', attr: '지(地)', hp: 40201, atk: 1550, maxCharge: 4, emoji: '👹' }, { name: '칼리 C', cls: 'Berserker', attr: '지(地)', hp: 41067, atk: 1580, maxCharge: 4, emoji: '👹' }],
+      [{ name: '마하나가', cls: 'Lancer', attr: '천(天)', hp: 175857, atk: 2600, maxCharge: 4, emoji: '🥚' }]
+    ]
+  },
+  {
+    id: 'fq_lb4_skyrock', category: 'free_p2a', chapter: '2부 4장 유가 크셰트라',
+    name: '🗺️ LB4 신의 하늘 바위 흔적 — 악마의 세력권',
+    desc: 'AP 21 · 추천 Lv.78 · 화진의 화살촉 최고 효율!',
+    difficulty: 'AP 21 · 추천 Lv.78',
+    rewardText: '🏹 화진의 화살촉 ×3 · 🪙 10,660 QP',
+    drops: [['화진의 화살촉', 3]],
+    rewards: { sq: 1, embers: 5, qp: 10660, fp: 950, mcExp: 22488 },
+    waves: [
+      [{ name: '칼리 A', cls: 'Berserker', attr: '지(地)', hp: 24889, atk: 1250, maxCharge: 4, emoji: '👹' }, { name: '칼리 B', cls: 'Berserker', attr: '지(地)', hp: 24240, atk: 1220, maxCharge: 4, emoji: '👹' }],
+      [{ name: '칼리 A', cls: 'Berserker', attr: '지(地)', hp: 34617, atk: 1450, maxCharge: 4, emoji: '👹' }, { name: '칼리 C', cls: 'Berserker', attr: '지(地)', hp: 35363, atk: 1480, maxCharge: 4, emoji: '👹' }],
+      [{ name: '칼리 상가', cls: 'Berserker', attr: '지(地)', hp: 107374, atk: 2250, maxCharge: 4, emoji: '👹' }, { name: '칼리 A', cls: 'Berserker', attr: '지(地)', hp: 58118, atk: 1700, maxCharge: 4, emoji: '👹' }]
+    ]
+  },
+  // ---- LB5 아틀란티스 ----
+  {
+    id: 'fq_lb5_nemesis', category: 'free_p2a', chapter: '2부 5장 아틀란티스',
+    name: '🗺️ LB5 네메시스 섬 — 신벌의 거친 바다',
+    desc: 'AP 21 · 추천 Lv.80 · 황성의 조각 & 광은의 관 최고 성지!',
+    difficulty: 'AP 21 · 추천 Lv.80',
+    rewardText: '🌠 황성의 조각 ×2 · 👑 광은의 관 ×2 · 🪙 10,920 QP',
+    drops: [['황성의 조각', 2], ['광은의 관', 2]],
+    rewards: { sq: 1, embers: 5, qp: 10920, fp: 950, mcExp: 23752 },
+    waves: [
+      [{ name: '아틀란티스 방위병 A', cls: 'Berserker', attr: '인(人)', hp: 31931, atk: 1350, maxCharge: 4, emoji: '🛡️' }, { name: '아틀란티스 방위병 B', cls: 'Berserker', attr: '인(人)', hp: 37720, atk: 1450, maxCharge: 4, emoji: '🛡️' }],
+      [{ name: '아틀란티스 방위병 A', cls: 'Berserker', attr: '인(人)', hp: 41204, atk: 1550, maxCharge: 4, emoji: '🛡️' }, { name: '아틀란티스 방위병 C', cls: 'Berserker', attr: '인(人)', hp: 47765, atk: 1650, maxCharge: 4, emoji: '🛡️' }],
+      [{ name: '케르베로스', cls: 'Rider', attr: '지(地)', hp: 111912, atk: 2350, maxCharge: 4, emoji: '🐺' }, { name: '아틀란티스 방위병', cls: 'Berserker', attr: '인(人)', hp: 54976, atk: 1700, maxCharge: 4, emoji: '🛡️' }]
+    ]
+  },
+  {
+    id: 'fq_lb5_thanatos', category: 'free_p2a', chapter: '2부 5장 아틀란티스',
+    name: '🗺️ LB5 타나토스 섬 — 죽음의 제단',
+    desc: 'AP 21 · 추천 Lv.80 · 광은의 관 최고 효율!',
+    difficulty: 'AP 21 · 추천 Lv.80',
+    rewardText: '👑 광은의 관 ×3 · 🪙 10,920 QP',
+    drops: [['광은의 관', 3]],
+    rewards: { sq: 1, embers: 5, qp: 10920, fp: 950, mcExp: 23752 },
+    waves: [
+      [{ name: '아틀란티스 방위병 A', cls: 'Assassin', attr: '인(人)', hp: 30104, atk: 1300, maxCharge: 3, emoji: '🛡️' }, { name: '아틀란티스 방위병 B', cls: 'Saber', attr: '인(人)', hp: 32078, atk: 1350, maxCharge: 4, emoji: '🛡️' }],
+      [{ name: '아틀란티스 방위병 A', cls: 'Saber', attr: '인(人)', hp: 54964, atk: 1700, maxCharge: 4, emoji: '🛡️' }, { name: '아틀란티스 방위병 B', cls: 'Berserker', attr: '인(人)', hp: 42648, atk: 1550, maxCharge: 4, emoji: '🛡️' }],
+      [{ name: '아틀란티스 방위병 C', cls: 'Saber', attr: '인(人)', hp: 60862, atk: 1850, maxCharge: 4, emoji: '🛡️' }, { name: '아틀란티스 방위병 B', cls: 'Assassin', attr: '인(人)', hp: 51840, atk: 1650, maxCharge: 3, emoji: '🛡️' }]
+    ]
+  }
+];
