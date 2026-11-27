@@ -1961,7 +1961,7 @@
     box.querySelector('#btn-v24-pure-gift')?.addEventListener('click', () => {
       state.purePrisms = (state.purePrisms || 0) + 50;
       // v29: 피스·모뉴먼트·휘석·마석·비석·전승결정 및 64종 소재 각 +10 보급!
-      const clsKo = ['세이버', '아처', '랜서', '라이더', '캐스터', '어새신', '버서커'];
+      const clsKo = ['세이버', '아처', '랜서', '라이더', '캐스터', '어쌔신', '버서커'];
       clsKo.forEach(c => {
         ['피스', '모뉴먼트'].forEach(t => { state.materials[`${c} ${t}`] = (state.materials[`${c} ${t}`] || 0) + 10; });
       });

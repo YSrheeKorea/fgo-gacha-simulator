@@ -41,7 +41,7 @@ window.FGO_FREE_QUESTS_P1A = [
     desc: 'AP 6 · 추천 Lv.8 · 흉골 · 허영의 먼지 · 랜서/어새신 피스',
     difficulty: 'AP 6 · 추천 Lv.8',
     rewardText: '🦴 흉골 ×2 · 💨 허영의 먼지 ×1 · 피스',
-    drops: [['흉골', 2], ['허영의 먼지', 1], ['랜서 피스', 1], ['어새신 피스', 1]],
+    drops: [['흉골', 2], ['허영의 먼지', 1], ['랜서 피스', 1], ['어쌔신 피스', 1]],
     rewards: { sq: 1, embers: 2, qp: 1560, fp: 400, mcExp: 1200 },
     waves: [
       [{ name: '스켈레톤 A', cls: 'Archer', attr: '지(地)', hp: 1754, atk: 320, maxCharge: 3, emoji: '💀' }, { name: '스켈레톤 C', cls: 'Archer', attr: '지(地)', hp: 2937, atk: 380, maxCharge: 3, emoji: '💀' }],
@@ -496,7 +496,7 @@ window.FGO_FREE_QUESTS_P15 = [
     desc: 'AP 21 · 추천 Lv.78 · 기신주 & 영웅의 증표 파밍!',
     difficulty: 'AP 21 · 추천 Lv.78',
     rewardText: '🍶 기신주 ×1 · 🛡️ 영웅의 증표 ×2 · 🪙 10,660 QP',
-    drops: [['기신주', 1], ['영웅의 증표', 2]],
+    drops: [['기기신주', 1], ['영웅의 증표', 2]],
     rewards: { sq: 1, embers: 5, qp: 10660, fp: 950, mcExp: 22488 },
     waves: [
       [{ name: '여해적 A', cls: 'Rider', attr: '인(人)', hp: 10451, atk: 880, maxCharge: 4, emoji: '🏴‍☠️' }, { name: '여해적 B', cls: 'Rider', attr: '인(人)', hp: 10055, atk: 850, maxCharge: 4, emoji: '🏴‍☠️' }],
@@ -554,7 +554,7 @@ window.FGO_FREE_QUESTS_P15 = [
     desc: 'AP 20 · 추천 Lv.72 · 만신의 심장 최고 효율 + 소곡의 말뚝 동시 파밍!',
     difficulty: 'AP 20 · 추천 Lv.72',
     rewardText: '❤️‍🔥 만신의 심장 ×1 · 🪵 소곡의 말뚝 ×2 · 🪙 9,880 QP',
-    drops: [['만신의 심장', 1], ['소곡의 말뚝', 2]],
+    drops: [['만신의 심장', 1], ['소곡의 철항', 2]],
     rewards: { sq: 1, embers: 5, qp: 9880, fp: 900, mcExp: 18888 },
     waves: [
       [{ name: '엘더 구울 A', cls: 'Assassin', attr: '지(地)', hp: 30685, atk: 1300, maxCharge: 3, emoji: '🧟' }, { name: '엘더 구울 B', cls: 'Assassin', attr: '지(地)', hp: 35865, atk: 1400, maxCharge: 3, emoji: '🧟' }],
@@ -568,7 +568,7 @@ window.FGO_FREE_QUESTS_P15 = [
     desc: 'AP 21 · 추천 Lv.78 · 소곡의 말뚝(철항) 최고 드랍률 성지!',
     difficulty: 'AP 21 · 추천 Lv.78',
     rewardText: '🪵 소곡의 말뚝 ×3 · 🪙 10,660 QP',
-    drops: [['소곡의 말뚝', 3]],
+    drops: [['소곡의 철항', 3]],
     rewards: { sq: 1, embers: 5, qp: 10660, fp: 950, mcExp: 22488 },
     waves: [
       [{ name: '구울 글러튼', cls: 'Berserker', attr: '지(地)', hp: 13057, atk: 1050, maxCharge: 4, emoji: '🧟' }, { name: '구울 엔비야', cls: 'Berserker', attr: '지(地)', hp: 13077, atk: 1050, maxCharge: 4, emoji: '🧟' }],
@@ -691,7 +691,7 @@ window.FGO_FREE_QUESTS_P2A = [
     desc: 'AP 21 · 추천 Lv.76 · 진리의 알 & 화진의 화살촉 최고 성지!',
     difficulty: 'AP 21 · 추천 Lv.76',
     rewardText: '🥚 진리의 알 ×2 · 🏹 화진의 화살촉 ×2 · 🪙 10,400 QP',
-    drops: [['진리의 알', 2], ['화진의 화살촉', 2]],
+    drops: [['진리의 알', 2], ['재앙의 화살촉', 2]],
     rewards: { sq: 1, embers: 5, qp: 10400, fp: 950, mcExp: 21256 },
     waves: [
       [{ name: '칼리 A', cls: 'Berserker', attr: '지(地)', hp: 29820, atk: 1350, maxCharge: 4, emoji: '👹' }, { name: '칼리 C', cls: 'Berserker', attr: '지(地)', hp: 32058, atk: 1400, maxCharge: 4, emoji: '👹' }],
@@ -705,7 +705,7 @@ window.FGO_FREE_QUESTS_P2A = [
     desc: 'AP 21 · 추천 Lv.78 · 화진의 화살촉 최고 효율!',
     difficulty: 'AP 21 · 추천 Lv.78',
     rewardText: '🏹 화진의 화살촉 ×3 · 🪙 10,660 QP',
-    drops: [['화진의 화살촉', 3]],
+    drops: [['재앙의 화살촉', 3]],
     rewards: { sq: 1, embers: 5, qp: 10660, fp: 950, mcExp: 22488 },
     waves: [
       [{ name: '칼리 A', cls: 'Berserker', attr: '지(地)', hp: 24889, atk: 1250, maxCharge: 4, emoji: '👹' }, { name: '칼리 B', cls: 'Berserker', attr: '지(地)', hp: 24240, atk: 1220, maxCharge: 4, emoji: '👹' }],
