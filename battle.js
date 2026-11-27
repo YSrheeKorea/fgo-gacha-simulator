@@ -1475,6 +1475,7 @@ window.FgoBattle = (() => {
   const QUESTS = [
     ...(typeof buildGateQuestCatalog === 'function' ? buildGateQuestCatalog() : []),
     ...(typeof window !== 'undefined' && Array.isArray(window.FGO_FREE_QUESTS_P1A) ? window.FGO_FREE_QUESTS_P1A : []),
+    ...(typeof window !== 'undefined' && Array.isArray(window.FGO_FREE_QUESTS_P1B) ? window.FGO_FREE_QUESTS_P1B : []),
     ...BOSS_QUESTS
   ];
 

@@ -235,3 +235,194 @@ window.FGO_FREE_QUESTS_P1A = [
     ]
   }
 ];
+
+// =========================================================================
+// FGO Part 1 Second Half Free Quests (v34)
+// 제4특이점 런던 · 제5특이점 북미 · 제6특이점 카멜롯 · 제7특이점 바빌로니아
+// =========================================================================
+window.FGO_FREE_QUESTS_P1B = [
+  // ---- 제4특이점 사계마무도시 런던 ----
+  {
+    id: 'fq_london_oldst', category: 'free_p1b', chapter: '제4특이점 런던',
+    name: '🗺️ 런던 올드 스트리트 — 안개와 마차 그리고 가스등',
+    desc: 'AP 15 · 추천 Lv.42 · 무간의 톱니바퀴 집중 파밍',
+    difficulty: 'AP 15 · 추천 Lv.42',
+    rewardText: '⚙️ 무간의 톱니바퀴 ×2 · 🪙 5,980 QP',
+    drops: [['무간의 톱니바퀴', 2]],
+    rewards: { sq: 1, embers: 3, qp: 5980, fp: 600, mcExp: 5208 },
+    waves: [
+      [{ name: '오토마타 A', cls: 'Assassin', attr: '지(地)', hp: 7286, atk: 750, maxCharge: 3, emoji: '⚙️' }, { name: '오토마타 B', cls: 'Assassin', attr: '지(地)', hp: 7286, atk: 750, maxCharge: 3, emoji: '⚙️' }],
+      [{ name: '오토마타 A', cls: 'Assassin', attr: '지(地)', hp: 12286, atk: 900, maxCharge: 3, emoji: '⚙️' }, { name: '오토마타 B', cls: 'Assassin', attr: '지(地)', hp: 12286, atk: 900, maxCharge: 3, emoji: '⚙️' }],
+      [{ name: '오토마타 B', cls: 'Assassin', attr: '지(地)', hp: 22286, atk: 1200, maxCharge: 3, emoji: '⚙️' }, { name: '오토마타 A', cls: 'Assassin', attr: '지(地)', hp: 18286, atk: 1050, maxCharge: 3, emoji: '⚙️' }]
+    ]
+  },
+  {
+    id: 'fq_london_southwark', category: 'free_p1b', chapter: '제4특이점 런던',
+    name: '🗺️ 런던 서더크 — 버러 마켓',
+    desc: 'AP 19 · 추천 Lv.64 · 호문쿨루스 베이비 & 흉골 파밍',
+    difficulty: 'AP 19 · 추천 Lv.64',
+    rewardText: '🧫 호문쿨루스 베이비 ×2 · 🦴 흉골 ×2 · 🪙 8,840 QP',
+    drops: [['호문쿨루스 베이비', 2], ['흉골', 2]],
+    rewards: { sq: 1, embers: 4, qp: 8840, fp: 750, mcExp: 14536 },
+    waves: [
+      [{ name: '호문쿨루스', cls: 'Lancer', attr: '지(地)', hp: 56191, atk: 1400, maxCharge: 4, emoji: '🧪' }, { name: '스켈레톤 A', cls: 'Archer', attr: '지(地)', hp: 6412, atk: 720, maxCharge: 3, emoji: '💀' }],
+      [{ name: '호문쿨루스 A', cls: 'Lancer', attr: '지(地)', hp: 56191, atk: 1450, maxCharge: 4, emoji: '🧪' }, { name: '호문쿨루스 B', cls: 'Lancer', attr: '지(地)', hp: 56191, atk: 1450, maxCharge: 4, emoji: '🧪' }],
+      [{ name: '프로토 호문쿨루스 A', cls: 'Lancer', attr: '지(地)', hp: 80684, atk: 1900, maxCharge: 4, emoji: '🧪' }, { name: '프로토 호문쿨루스 B', cls: 'Lancer', attr: '지(地)', hp: 80684, atk: 1900, maxCharge: 4, emoji: '🧪' }]
+    ]
+  },
+  {
+    id: 'fq_london_hydepark', category: 'free_p1b', chapter: '제4특이점 런던',
+    name: '🗺️ 런던 하이드 파크 — 수정궁의 잔영',
+    desc: 'AP 20 · 추천 Lv.68 · 금단의 페이지 & 흉골 파밍 성지!',
+    difficulty: 'AP 20 · 추천 Lv.68',
+    rewardText: '📜 금단의 페이지 ×2 · 🦴 흉골 ×2 · 🪙 9,360 QP',
+    drops: [['금단의 페이지', 2], ['흉골', 2]],
+    rewards: { sq: 1, embers: 4, qp: 9360, fp: 800, mcExp: 16648 },
+    waves: [
+      [{ name: '스켈레톤 A', cls: 'Lancer', attr: '지(地)', hp: 7213, atk: 780, maxCharge: 3, emoji: '💀' }, { name: '스켈레톤 B', cls: 'Lancer', attr: '지(地)', hp: 7213, atk: 780, maxCharge: 3, emoji: '💀' }],
+      [{ name: '선더 북', cls: 'Caster', attr: '천(天)', hp: 90392, atk: 1850, maxCharge: 4, emoji: '📖' }, { name: '스펠 북', cls: 'Caster', attr: '천(天)', hp: 40605, atk: 1350, maxCharge: 4, emoji: '📖' }],
+      [{ name: '그리모어', cls: 'Caster', attr: '천(天)', hp: 108705, atk: 2150, maxCharge: 4, emoji: '📕' }, { name: '선더 북 A', cls: 'Caster', attr: '천(天)', hp: 90843, atk: 1900, maxCharge: 4, emoji: '📖' }]
+    ]
+  },
+  // ---- 제5특이점 북미신화대전 ----
+  {
+    id: 'fq_america_charlotte', category: 'free_p1b', chapter: '제5특이점 북미',
+    name: '🗺️ 북미 샬럿 — 골드러시',
+    desc: 'AP 20 · 추천 Lv.70 · 허영의 먼지 & 영웅의 증표 최고 성지!',
+    difficulty: 'AP 20 · 추천 Lv.70',
+    rewardText: '💨 허영의 먼지 ×3 · 🛡️ 영웅의 증표 ×2 · 버서커/랜서 피스·모뉴',
+    drops: [['허영의 먼지', 3], ['영웅의 증표', 2], ['버서커 피스', 1], ['버서커 모뉴먼트', 1]],
+    rewards: { sq: 1, embers: 5, qp: 9620, fp: 850, mcExp: 17752 },
+    waves: [
+      [{ name: '드루이드', cls: 'Caster', attr: '인(人)', hp: 17052, atk: 980, maxCharge: 4, emoji: '🧙' }, { name: '켈트 병사 A', cls: 'Archer', attr: '인(人)', hp: 17052, atk: 950, maxCharge: 3, emoji: '🏹' }],
+      [{ name: '섀도 스파르타쿠스', cls: 'Berserker', attr: '인(人)', hp: 50193, atk: 1650, maxCharge: 4, emoji: '👤' }, { name: '섀도 에릭', cls: 'Berserker', attr: '인(人)', hp: 46802, atk: 1600, maxCharge: 4, emoji: '👤' }],
+      [{ name: '섀도 여포', cls: 'Berserker', attr: '인(人)', hp: 103775, atk: 2350, maxCharge: 4, emoji: '👤' }, { name: '섀도 레오니다스', cls: 'Lancer', attr: '인(人)', hp: 103138, atk: 2100, maxCharge: 4, emoji: '👤' }]
+    ]
+  },
+  {
+    id: 'fq_america_chicago', category: 'free_p1b', chapter: '제5특이점 북미',
+    name: '🗺️ 북미 시카고 — 윈디 시티',
+    desc: 'AP 21 · 추천 Lv.76 · 무간의 톱니바퀴 최고 효율!',
+    difficulty: 'AP 21 · 추천 Lv.76',
+    rewardText: '⚙️ 무간의 톱니바퀴 ×3 · 🪙 10,400 QP',
+    drops: [['무간의 톱니바퀴', 3]],
+    rewards: { sq: 1, embers: 5, qp: 10400, fp: 900, mcExp: 21256 },
+    waves: [
+      [{ name: '기계화 보병 A', cls: 'Archer', attr: '인(人)', hp: 20682, atk: 1050, maxCharge: 3, emoji: '🤖' }, { name: '기계화 보병 B', cls: 'Archer', attr: '인(人)', hp: 20682, atk: 1050, maxCharge: 3, emoji: '🤖' }],
+      [{ name: '기계화 보병 A', cls: 'Archer', attr: '인(人)', hp: 65135, atk: 1650, maxCharge: 3, emoji: '🤖' }, { name: '기계화 보병 B', cls: 'Archer', attr: '인(人)', hp: 65135, atk: 1650, maxCharge: 3, emoji: '🤖' }],
+      [{ name: '기계화 보병 대장', cls: 'Archer', attr: '인(人)', hp: 219912, atk: 2650, maxCharge: 3, emoji: '🤖' }]
+    ]
+  },
+  {
+    id: 'fq_america_washington', category: 'free_p1b', chapter: '제5특이점 북미',
+    name: '🗺️ 북미 워싱턴 — 특별 행정구',
+    desc: 'AP 20 · 추천 Lv.73 · 정령근 & 영웅의 증표 파밍',
+    difficulty: 'AP 20 · 추천 Lv.73',
+    rewardText: '🌿 정령근 ×1 · 🛡️ 영웅의 증표 ×2 · 🪙 10,010 QP',
+    drops: [['정령근', 1], ['영웅의 증표', 2]],
+    rewards: { sq: 1, embers: 5, qp: 10010, fp: 850, mcExp: 19468 },
+    waves: [
+      [{ name: '켈트 병사 A', cls: 'Saber', attr: '인(人)', hp: 20361, atk: 1050, maxCharge: 3, emoji: '⚔️' }, { name: '켈트 병사 B', cls: 'Archer', attr: '인(人)', hp: 19756, atk: 1020, maxCharge: 3, emoji: '🏹' }],
+      [{ name: '드루이드', cls: 'Caster', attr: '인(人)', hp: 44237, atk: 1450, maxCharge: 4, emoji: '🧙' }, { name: '켈트 병사 A', cls: 'Lancer', attr: '인(人)', hp: 46042, atk: 1480, maxCharge: 3, emoji: '🔱' }],
+      [{ name: '스프리건', cls: 'Saber', attr: '지(地)', hp: 227689, atk: 2700, maxCharge: 4, emoji: '🌿' }]
+    ]
+  },
+  // ---- 제6특이점 신성원탁영역 카멜롯 ----
+  {
+    id: 'fq_camelot_wilderness', category: 'free_p1b', chapter: '제6특이점 카멜롯',
+    name: '🗺️ 카멜롯 죽음의 황야 — 피가 끓어오르는 광연',
+    desc: 'AP 19 · 추천 Lv.64 · 우자의 사슬 파밍 성지!',
+    difficulty: 'AP 19 · 추천 Lv.64',
+    rewardText: '⛓️ 우자의 사슬 ×3 · 🪙 8,840 QP',
+    drops: [['우자의 사슬', 3]],
+    rewards: { sq: 1, embers: 4, qp: 8840, fp: 800, mcExp: 14536 },
+    waves: [
+      [{ name: '마음을 잃은 자 A', cls: 'Assassin', attr: '인(人)', hp: 15594, atk: 920, maxCharge: 3, emoji: '⛓️' }, { name: '마음을 잃은 자 B', cls: 'Assassin', attr: '인(人)', hp: 15594, atk: 920, maxCharge: 3, emoji: '⛓️' }],
+      [{ name: '마음을 잃은 죄인', cls: 'Berserker', attr: '인(人)', hp: 48600, atk: 1600, maxCharge: 4, emoji: '⛓️' }, { name: '마음을 잃은 자', cls: 'Assassin', attr: '인(人)', hp: 23464, atk: 1100, maxCharge: 3, emoji: '⛓️' }],
+      [{ name: '마음을 잃은 죄인 A', cls: 'Berserker', attr: '인(人)', hp: 93312, atk: 2150, maxCharge: 4, emoji: '⛓️' }, { name: '마음을 잃은 죄인 B', cls: 'Berserker', attr: '인(人)', hp: 87091, atk: 2050, maxCharge: 4, emoji: '⛓️' }]
+    ]
+  },
+  {
+    id: 'fq_camelot_gate', category: 'free_p1b', chapter: '제6특이점 카멜롯',
+    name: '🗺️ 카멜롯 성도 정문 — 성별의 문',
+    desc: 'AP 20 · 추천 Lv.70 · 2라운드 구성 · 대기사 훈장 최고 파밍 성지!',
+    difficulty: 'AP 20 · 추천 Lv.70',
+    rewardText: '🎖️ 대기사 훈장 ×3 · 🪙 9,620 QP',
+    drops: [['대기사 훈장', 3]],
+    rewards: { sq: 1, embers: 5, qp: 9620, fp: 850, mcExp: 17752 },
+    waves: [
+      [{ name: '숙정기사 A', cls: 'Saber', attr: '인(人)', hp: 65448, atk: 1700, maxCharge: 4, emoji: '🛡️' }, { name: '숙정기사 B', cls: 'Saber', attr: '인(人)', hp: 65448, atk: 1700, maxCharge: 4, emoji: '🛡️' }],
+      [{ name: '숙정기사 C', cls: 'Archer', attr: '인(人)', hp: 73500, atk: 1900, maxCharge: 3, emoji: '🛡️' }, { name: '숙정기사 A', cls: 'Lancer', attr: '인(人)', hp: 75735, atk: 1950, maxCharge: 4, emoji: '🛡️' }]
+    ]
+  },
+  {
+    id: 'fq_camelot_temple', category: 'free_p1b', chapter: '제6특이점 카멜롯',
+    name: '🗺️ 카멜롯 대신전 — 태양왕의 성',
+    desc: 'AP 22 · 추천 Lv.84 · 지혜의 스카라베 & 우자의 사슬 파밍!',
+    difficulty: 'AP 22 · 추천 Lv.84',
+    rewardText: '🪲 지혜의 스카라베 ×1 · ⛓️ 우자의 사슬 ×2 · 🪙 11,440 QP',
+    drops: [['지혜의 스카라베', 1], ['우자의 사슬', 2]],
+    rewards: { sq: 1, embers: 5, qp: 11440, fp: 950, mcExp: 26376 },
+    waves: [
+      [{ name: '마음을 잃은 죄인', cls: 'Berserker', attr: '인(人)', hp: 14337, atk: 980, maxCharge: 4, emoji: '⛓️' }, { name: '마음을 잃은 자', cls: 'Assassin', attr: '인(人)', hp: 11010, atk: 880, maxCharge: 3, emoji: '⛓️' }],
+      [{ name: '마음을 잃은 죄인 A', cls: 'Berserker', attr: '인(人)', hp: 20071, atk: 1150, maxCharge: 4, emoji: '⛓️' }, { name: '마음을 잃은 죄인 B', cls: 'Berserker', attr: '인(人)', hp: 20071, atk: 1150, maxCharge: 4, emoji: '⛓️' }],
+      [{ name: '마리카 스핑크스', cls: 'Caster', attr: '천(天)', hp: 197521, atk: 2650, maxCharge: 4, emoji: '🦁' }, { name: '스핑크스', cls: 'Caster', attr: '천(天)', hp: 183173, atk: 2500, maxCharge: 4, emoji: '🦁' }]
+    ]
+  },
+  // ---- 제7특이점 절대마수전선 바빌로니아 ----
+  {
+    id: 'fq_babylonia_reed', category: 'free_p1b', chapter: '제7특이점 바빌로니아',
+    name: '🗺️ 바빌로니아 갈대밭 — 풍요 기원',
+    desc: 'AP 21 · 추천 Lv.76 · 만사의 독침 최고 파밍 성지!',
+    difficulty: 'AP 21 · 추천 Lv.76',
+    rewardText: '💉 만사의 독침 ×3 · 🪙 10,400 QP',
+    drops: [['만사의 독침', 3]],
+    rewards: { sq: 1, embers: 5, qp: 10400, fp: 900, mcExp: 21256 },
+    waves: [
+      [{ name: '무슈후슈 A', cls: 'Lancer', attr: '지(地)', hp: 28764, atk: 1250, maxCharge: 4, emoji: '🐉' }, { name: '무슈후슈 B', cls: 'Lancer', attr: '지(地)', hp: 28764, atk: 1250, maxCharge: 4, emoji: '🐉' }],
+      [{ name: '무슈후슈 A', cls: 'Lancer', attr: '지(地)', hp: 37864, atk: 1450, maxCharge: 4, emoji: '🐉' }, { name: '무슈후슈 B', cls: 'Lancer', attr: '지(地)', hp: 37864, atk: 1450, maxCharge: 4, emoji: '🐉' }],
+      [{ name: '무슈후슈 A', cls: 'Lancer', attr: '지(地)', hp: 122015, atk: 2350, maxCharge: 4, emoji: '🐉' }, { name: '무슈후슈 B', cls: 'Lancer', attr: '지(地)', hp: 86034, atk: 1950, maxCharge: 4, emoji: '🐉' }]
+    ]
+  },
+  {
+    id: 'fq_babylonia_nippur', category: 'free_p1b', chapter: '제7특이점 바빌로니아',
+    name: '🗺️ 바빌로니아 니푸르 — 하늘과 땅의 매듭',
+    desc: 'AP 21 · 추천 Lv.80 · 용의 역린 & 만사의 독침 파밍!',
+    difficulty: 'AP 21 · 추천 Lv.80',
+    rewardText: '🐉 용의 역린 ×1 · 💉 만사의 독침 ×2 · 🪙 10,920 QP',
+    drops: [['용의 역린', 1], ['만사의 독침', 2]],
+    rewards: { sq: 1, embers: 5, qp: 10920, fp: 950, mcExp: 23752 },
+    waves: [
+      [{ name: '무슈후슈 A', cls: 'Lancer', attr: '지(地)', hp: 25169, atk: 1200, maxCharge: 4, emoji: '🐉' }, { name: '무슈후슈 B', cls: 'Lancer', attr: '지(地)', hp: 25169, atk: 1200, maxCharge: 4, emoji: '🐉' }],
+      [{ name: '무슈후슈 A', cls: 'Lancer', attr: '지(地)', hp: 39137, atk: 1450, maxCharge: 4, emoji: '🐉' }, { name: '무슈후슈 B', cls: 'Lancer', attr: '지(地)', hp: 39137, atk: 1450, maxCharge: 4, emoji: '🐉' }],
+      [{ name: '바슈무', cls: 'Rider', attr: '지(地)', hp: 288970, atk: 2950, maxCharge: 4, emoji: '🐲' }]
+    ]
+  },
+  {
+    id: 'fq_babylonia_blood', category: 'free_p1b', chapter: '제7특이점 바빌로니아',
+    name: '🗺️ 바빌로니아 선혈신전 — 태동하는 산',
+    desc: 'AP 21 · 추천 Lv.80 · 2라운드 구성 · 원초의 산모 최고 효율!',
+    difficulty: 'AP 21 · 추천 Lv.80',
+    rewardText: '☁️ 원초의 산모 ×2 · 🌱 세계수의 씨앗 ×2 · 🪙 10,920 QP',
+    drops: [['원초의 산모', 2], ['세계수의 씨앗', 2]],
+    rewards: { sq: 1, embers: 5, qp: 10920, fp: 950, mcExp: 23752 },
+    waves: [
+      [{ name: '우리딤무 A', cls: 'Rider', attr: '지(地)', hp: 19243, atk: 1050, maxCharge: 4, emoji: '🐺' }, { name: '우리딤무 B', cls: 'Rider', attr: '지(地)', hp: 19243, atk: 1050, maxCharge: 4, emoji: '🐺' }],
+      [{ name: '우갈루 B', cls: 'Rider', attr: '지(地)', hp: 254016, atk: 2800, maxCharge: 4, emoji: '🦁' }, { name: '우갈루 A', cls: 'Rider', attr: '지(地)', hp: 182476, atk: 2450, maxCharge: 4, emoji: '🦁' }]
+    ]
+  },
+  {
+    id: 'fq_babylonia_ebih', category: 'free_p1b', chapter: '제7특이점 바빌로니아',
+    name: '🗺️ 바빌로니아 에비흐 산 — 흔들리는 영봉',
+    desc: 'AP 21 · 추천 Lv.80 · 주수담석 & 세계수의 씨앗 파밍!',
+    difficulty: 'AP 21 · 추천 Lv.80',
+    rewardText: '🪨 주수담석 ×1 · 🌱 세계수의 씨앗 ×2 · 🪙 10,920 QP',
+    drops: [['주수담석', 1], ['세계수의 씨앗', 2]],
+    rewards: { sq: 1, embers: 5, qp: 10920, fp: 950, mcExp: 23752 },
+    waves: [
+      [{ name: '괴물 멧돼지 A', cls: 'Berserker', attr: '지(地)', hp: 22852, atk: 1200, maxCharge: 4, emoji: '🐗' }, { name: '괴물 멧돼지 B', cls: 'Berserker', attr: '지(地)', hp: 22852, atk: 1200, maxCharge: 4, emoji: '🐗' }],
+      [{ name: '괴물 멧돼지 A', cls: 'Berserker', attr: '지(地)', hp: 42798, atk: 1550, maxCharge: 4, emoji: '🐗' }, { name: '괴물 멧돼지 B', cls: 'Berserker', attr: '지(地)', hp: 42798, atk: 1550, maxCharge: 4, emoji: '🐗' }],
+      [{ name: '거대 괴물 멧돼지', cls: 'Berserker', attr: '지(地)', hp: 269478, atk: 2950, maxCharge: 4, emoji: '🐗' }]
+    ]
+  }
+];
