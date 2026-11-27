@@ -1749,7 +1749,6 @@ window.FgoBattle = (() => {
     // 칼데아 게이트 카테고리 탭 + 오늘의 요일 배너 + 퀘스트 목록
     const qList = document.getElementById('battle-quest-list');
     qList.innerHTML = '';
-    QUESTS.forEach(q => {
 
       if (typeof CHALDEA_GATE_TABS !== 'undefined') {
         const tabBar = document.createElement('div');
