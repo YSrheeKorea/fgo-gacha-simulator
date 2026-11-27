@@ -4659,3 +4659,236 @@ body {
   padding: 7px 10px; border-radius: 8px; background: rgba(12, 20, 46, 0.75);
   border: 1px solid rgba(102, 170, 255, 0.18); display: flex; justify-content: space-between;
 }
+
+/* =========================================================================
+   v28: Comprehensive Mobile Responsive Fixes (iOS / Android / Narrow Viewports)
+   ========================================================================= */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+.tab-panel, .panel-card, .modal-box {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .top-bar {
+    padding: 8px 10px;
+    gap: 8px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .brand {
+    justify-content: space-between;
+  }
+
+  .brand-title {
+    font-size: 15px;
+  }
+
+  .brand-sub {
+    font-size: 10px;
+  }
+
+  .resource-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: flex-start;
+  }
+
+  .res-pill {
+    padding: 4px 8px;
+    font-size: 11.5px;
+    gap: 4px;
+  }
+
+  /* 가로 스와이프 탭 네비게이션 (8개 탭이 세로로 쌓이지 않도록) */
+  .main-nav, .nav-tabs {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 6px;
+    padding: 6px 10px;
+    justify-content: flex-start !important;
+  }
+
+  .main-nav::-webkit-scrollbar, .nav-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-btn, .tab-btn {
+    flex: 0 0 auto !important;
+    white-space: nowrap;
+    padding: 8px 12px !important;
+    font-size: 12.5px !important;
+    min-height: 38px;
+  }
+
+  main, .main-container {
+    padding: 10px 8px !important;
+  }
+
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 8px;
+  }
+
+  .panel-card {
+    padding: 12px 10px !important;
+  }
+
+  /* 배틀 로비 · 마이룸 · 터미널 1열 전환 */
+  .battle-lobby-grid,
+  .myroom-layout,
+  .terminal-grid,
+  .summon-layout {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* 배틀 전장: 적 3체 · 아군 3체 가로 3열 유지 + 컴팩트 */
+  .ba-hud {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .ba-hud-left, .ba-hud-right {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .ba-enemies-stage,
+  .ba-party-stage {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+  }
+
+  .enemy-unit, .ally-unit {
+    padding: 6px !important;
+    min-width: 0;
+  }
+
+  .ally-top {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+  }
+
+  .ally-face, .ba-status-sprite {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .ally-name, .enemy-name {
+    font-size: 11px !important;
+    word-break: keep-all;
+  }
+
+  .ally-stat-line {
+    font-size: 10px !important;
+  }
+
+  .ba-attack-bar {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .ba-bottom-right {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  /* 보구 3장 + 커맨드 5장 모바일 최적화 */
+  .ba-np-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 5px !important;
+  }
+
+  .np-cmd-card {
+    padding: 6px !important;
+    font-size: 11px !important;
+  }
+
+  .ba-cmd-cards {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 4px !important;
+  }
+
+  .cmd-card {
+    min-width: 0 !important;
+    padding: 5px 3px !important;
+  }
+
+  .cmd-face, .cmd-sprite-img {
+    width: 100% !important;
+    max-width: 52px;
+    height: 52px !important;
+    object-fit: contain;
+  }
+
+  .cmd-sv-name {
+    font-size: 9.5px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cmd-type-ribbon {
+    font-size: 9px !important;
+    padding: 2px !important;
+  }
+
+  /* 모달 오버플로우 방지 */
+  .modal-box {
+    width: calc(100vw - 16px) !important;
+    max-height: 88dvh !important;
+    overflow-y: auto !important;
+    padding: 14px 12px !important;
+  }
+
+  .codex-grid {
+    grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .upgrade-actions {
+    grid-template-columns: 1fr !important;
+  }
+
+  .mr-standing-box {
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .res-label {
+    display: none;
+  }
+
+  .ba-top-btn {
+    padding: 5px 7px !important;
+    font-size: 11px !important;
+  }
+
+  .fgo-attack-btn {
+    padding: 10px 18px !important;
+    font-size: 14px !important;
+  }
+}
