@@ -1375,13 +1375,24 @@
           toast(`QP가 부족합니다! 필요: ${cost.toLocaleString()} QP (배틀 보물고에서 파밍하세요!)`);
           return;
         }
+        // v29: 공식 스킬 강화 재료 실제 체크 및 소비!
+        const matData = window.SERVANT_MATERIALS && window.SERVANT_MATERIALS[sv.collectionNo];
+        const reqItems = matData && matData.skill && matData.skill[slv] && matData.skill[slv].items ? matData.skill[slv].items : [];
+        const missing = reqItems.filter(([name, amt]) => ((state.materials && state.materials[name]) || 0) < amt);
+        if (missing.length) {
+          SoundEngine.error();
+          toast(`재료가 부족합니다! 필요: ${missing.map(([n, a]) => `${n} ${a}개(보유 ${(state.materials && state.materials[n]) || 0})`).join(', ')} — 다 빈치 공방에서 교환하세요!`);
+          return;
+        }
+        reqItems.forEach(([name, amt]) => { state.materials[name] = ((state.materials && state.materials[name]) || 0) - amt; });
         state.qp -= cost;
         own.skillLevels[idx] = slv + 1;
         SoundEngine.levelUp();
         saveState();
         renderMyRoomTab();
         const extra = (slv + 1 === 6 || slv + 1 === 10) ? ' (배틀 쿨타임 -1턴 감소!)' : '';
-        toast(`⚡ ${sv.name} [${svSkills[idx]}] Lv.${slv + 1} 달성!${extra}`);
+        const matMsg = reqItems.length ? ` · 재료 소비 완료` : '';
+        toast(`⚡ ${sv.name} [${svSkills[idx]}] Lv.${slv + 1} 달성!${extra}${matMsg}`);
       });
     });
 
@@ -1797,7 +1808,7 @@
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:6px;max-height:260px;overflow-y:auto;padding-right:4px">
         ${allMats.map(m => {
-          const owned = (state.materials && state.materials[m.id]) || 0;
+          const owned = (state.materials && state.materials[m.name]) || 0;
           const border = m.tier === 'gold' ? '#ffd86b' : (m.tier === 'silver' ? '#b8d4ff' : '#cd8c52');
           return `
             <div style="padding:7px 9px;border-radius:8px;background:rgba(15,24,46,0.75);border:1px solid ${border}55;display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:12px">
@@ -1805,7 +1816,7 @@
                 <div>${m.icon} <strong>${m.name}</strong></div>
                 <div style="font-size:10px;color:#9bb6df">보유 ${owned} · 퓨프 ${m.pureCost}</div>
               </div>
-              <button class="small-outline-btn v24-buy-mat" data-id="${m.id}" data-cost="${m.pureCost}" style="padding:3px 7px;font-size:11px">+1</button>
+              <button class="small-outline-btn v24-buy-mat" data-name="${m.name}" data-cost="${m.pureCost}" style="padding:3px 7px;font-size:11px">+1</button>
             </div>
           `;
         }).join('')}
@@ -1848,15 +1859,25 @@
 
     box.querySelector('#btn-v24-pure-gift')?.addEventListener('click', () => {
       state.purePrisms = (state.purePrisms || 0) + 50;
+      // v29: 피스·모뉴먼트·휘석·마석·비석·전승결정 및 64종 소재 각 +10 보급!
+      const clsKo = ['세이버', '아처', '랜서', '라이더', '캐스터', '어새신', '버서커'];
+      clsKo.forEach(c => {
+        ['피스', '모뉴먼트'].forEach(t => { state.materials[`${c} ${t}`] = (state.materials[`${c} ${t}`] || 0) + 10; });
+      });
+      ['검', '궁', '창', '기', '술', '살', '광'].forEach(c => {
+        ['휘석', '마석', '비석'].forEach(t => { state.materials[`${c}의 ${t}`] = (state.materials[`${c}의 ${t}`] || 0) + 10; });
+      });
+      state.materials['전승결정'] = (state.materials['전승결정'] || 0) + 3;
+      allMats.forEach(m => { state.materials[m.name] = (state.materials[m.name] || 0) + 10; });
       SoundEngine.shopBuy();
       saveState();
       renderShopV24Section();
-      toast('✨ 퓨어 프리즘 +50개 보급 완료!');
+      toast('✨ 퓨어프리즘 +50 & 피스·모뉴·스킬석·64종 소재 각 +10, 전승결정 +3 보급 완료!');
     });
 
     box.querySelectorAll('.v24-buy-mat').forEach(btn => {
       btn.addEventListener('click', () => {
-        const id = btn.dataset.id;
+        const name = btn.dataset.name;
         const cost = Number(btn.dataset.cost);
         if ((state.purePrisms || 0) < cost) {
           SoundEngine.error();
@@ -1864,7 +1885,7 @@
           return;
         }
         state.purePrisms -= cost;
-        state.materials[id] = (state.materials[id] || 0) + 1;
+        state.materials[name] = (state.materials[name] || 0) + 1;
         SoundEngine.shopBuy();
         saveState();
         renderShopV24Section();
@@ -2551,6 +2572,17 @@
         toast(`QP가 부족합니다! 필요: ${ascQp.toLocaleString()} QP (배틀 보물고에서 파밍하세요!)`);
         return;
       }
+      // v29: 공식 영기재림 재료 실제 체크 및 소비!
+      const matData = window.SERVANT_MATERIALS && window.SERVANT_MATERIALS[sv.collectionNo];
+      const ascIdx = own.ascension - 1; // 1차→2차는 index 0, 2→3은 1, 3→4는 2
+      const reqItems = matData && matData.asc && matData.asc[ascIdx] && matData.asc[ascIdx].items ? matData.asc[ascIdx].items : [];
+      const missing = reqItems.filter(([name, amt]) => ((state.materials && state.materials[name]) || 0) < amt);
+      if (missing.length) {
+        SoundEngine.error();
+        toast(`재림 재료가 부족합니다! 필요: ${missing.map(([n, a]) => `${n} ${a}개(보유 ${(state.materials && state.materials[n]) || 0})`).join(', ')} — 다 빈치 공방에서 교환하세요!`);
+        return;
+      }
+      reqItems.forEach(([name, amt]) => { state.materials[name] = ((state.materials && state.materials[name]) || 0) - amt; });
       const prevR = getEffectiveRarity(sv, own);
       state.qp -= ascQp;
       own.ascension++;
