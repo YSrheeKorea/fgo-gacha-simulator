@@ -185,11 +185,17 @@ window.FgoBattle = (() => {
   const SUPPORT_NPS = new Set(['sv_castoria', 'sv_waver', 'sv_jeanne', 'sv_tamamo', 'sv_xu_fu', 'sv_stheno']);
   const SINGLE_NPS = new Set(['sv_melusine', 'sv_enkidu', 'sv_ozymandias', 'sv_jack', 'sv_cu_alter', 'sv_heracles', 'sv_baobhan', 'sv_tristan', 'sv_cu', 'sv_ushiwaka', 'sv_robin', 'sv_bedivere', 'sv_euryale', 'sv_izok', 'sv_mandricardo']);
 
-  function getNpCategory(sv) {
+  function getNpCategory(sv, member = null) {
+    if (member && member.buffs && member.buffs.npCatOverride) return member.buffs.npCatOverride;
     if (sv.npCat) return sv.npCat;
     if (SUPPORT_NPS.has(sv.id)) return 'support';
     if (SINGLE_NPS.has(sv.id)) return 'single';
     return 'aoe';
+  }
+
+  function getEffectiveNpType(sv, member = null) {
+    if (member && member.buffs && member.buffs.npTypeOverride) return member.buffs.npTypeOverride;
+    return sv.npType || 'Buster';
   }
 
   // 서번트 3스킬 생성 (원작 고증 target: 'ally' 개인 지정 / 'all' 단체 지정 / 'self' 본인 지정 / 'enemy' 적 지정)
@@ -242,6 +248,34 @@ window.FgoBattle = (() => {
         { key: 'xufu_1', name: names[0], cd: 5, icon: '💚', target: 'self', desc: '[본인] 자신 HP +3000 & 약화 해제' },
         { key: 'xufu_2', name: names[1], cd: 5, icon: '🔵', target: 'all',  desc: '[단체] 아군 전체 Arts +20%(3T) & 크리티컬 위력 +20%(3T)' },
         { key: 'xufu_3', name: names[2], cd: 5, icon: '💎', target: 'ally', desc: '[개인] 선택 아군 1명 NP +30% & NP 획득량 +30%(3T)' }
+      ];
+    }
+    if (sv.id === 'sv_emiya') {
+      return [
+        { key: 'emiya_1', name: names[0], cd: 6, icon: '💨', target: 'self', desc: '[본인] 자신 회피(1T) & 방어력 +18%(3T)' },
+        { key: 'emiya_2', name: names[1], cd: 6, icon: '⭐', target: 'self', desc: '[본인] 자신 스타 발생률 +100%(3T) & 크리 위력 +100%(3T)' },
+        { key: 'emiya_3', name: names[2], cd: 5, icon: '🔵', target: 'self', desc: '[본인] 자신 3색 성능 +50%(1T) & 보구 속성 Arts 변환(1T)!' }
+      ];
+    }
+    if (sv.id === 'sv_no_016') { // ★1 아라쉬
+      return [
+        { key: 'arash_1', name: names[0], cd: 5, icon: '🛡️', target: 'self', desc: '[본인] 자신 방어력 +20%(3T) & 약체내성 UP' },
+        { key: 'arash_2', name: names[1], cd: 5, icon: '⚔️', target: 'self', desc: '[본인] 자신 공격력 +20%(3T) & 보구 위력 +20%(1T)' },
+        { key: 'arash_3', name: names[2], cd: 6, icon: '💎', target: 'self', desc: '[본인] 자신 NP +30% & HP +2000 (보구 스텔라: 초고배율 후 퇴장!)' }
+      ];
+    }
+    if (sv.id === 'sv_no_394') { // ★5 프톨레마이오스 (대군↔대인 전환)
+      return [
+        { key: 'ptol_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & 크리 위력 +30%(3T)' },
+        { key: 'ptol_2', name: names[1], cd: 5, icon: '💎', target: 'self', desc: '[본인] 자신 NP +50% & Buster/Arts +30%(3T)' },
+        { key: 'ptol_3', name: names[2], cd: 5, icon: '🔄', target: 'self', desc: '[본인] 보구 형태 전환 (대군 Buster ⇄ 단일 Arts) & 스타 +20!' }
+      ];
+    }
+    if (sv.id === 'sv_no_391') { // ★4 UDK-바게스트 (대군↔대인 전환)
+      return [
+        { key: 'udk_1', name: names[0], cd: 5, icon: '⚔️', target: 'all',  desc: '[단체] 아군 전체 공격력 +20%(3T) & HP +1500' },
+        { key: 'udk_2', name: names[1], cd: 5, icon: '💎', target: 'self', desc: '[본인] 자신 NP +30% & Arts +30%(3T)' },
+        { key: 'udk_3', name: names[2], cd: 5, icon: '🔄', target: 'self', desc: '[본인] 보구 대상 전환 (대군 ⇄ 단일) & 보구 위력 +30%(1T)!' }
       ];
     }
     const cardIcon = sv.npType === 'Buster' ? '🔴' : (sv.npType === 'Arts' ? '🔵' : '🟢');
@@ -338,6 +372,52 @@ window.FgoBattle = (() => {
       case 'xufu_3':
         addNp(target, 30); target.buffs.npGain += 0.3; target.buffs.npGainT = 3;
         return `${sv.name} [${name}] → ${tgtName}! ${tgtName} NP +30% & NP 획득량 +30%!`;
+      case 'emiya_1':
+        caster.buffs.evade = Math.max(caster.buffs.evade, 1); caster.buffs.def += 0.18; caster.buffs.defT = 3;
+        return `${sv.name} [${name}]! 본인 회피(1T) & 방어력 +18%(3T)!`;
+      case 'emiya_2':
+        caster.buffs.starGen += 1.0; caster.buffs.crit += 1.0; caster.buffs.critT = 3;
+        return `${sv.name} [${name}]! 본인 스타발생 +100% & 크리 위력 +100%(3T)!`;
+      case 'emiya_3':
+        caster.buffs.buster += 0.5; caster.buffs.arts += 0.5; caster.buffs.quick += 0.5; caster.buffs.cardT = Math.max(caster.buffs.cardT, 1);
+        caster.buffs.npTypeOverride = 'Arts';
+        return `${sv.name} [${name}]! 3색 +50% & 1턴 한정 보구 속성 [Arts] 변환!!`;
+      case 'arash_1':
+        caster.buffs.def += 0.2; caster.buffs.defT = 3;
+        return `${sv.name} [${name}]! 본인 방어력 +20%(3T)!`;
+      case 'arash_2':
+        caster.buffs.atk += 0.2; caster.buffs.atkT = 3; caster.buffs.npDmg += 0.2; caster.buffs.npDmgT = Math.max(caster.buffs.npDmgT, 1);
+        return `${sv.name} [${name}]! 본인 공격력 +20% & 보구 위력 +20%!`;
+      case 'arash_3':
+        addNp(caster, 30); caster.hp = Math.min(caster.maxHp, caster.hp + 2000);
+        return `${sv.name} [${name}]! 본인 NP +30% & HP +2000!`;
+      case 'ptol_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.2; m.buffs.atkT = 3; m.buffs.crit += 0.3; m.buffs.critT = 3; });
+        return `${sv.name} [${name}]! 아군 전체 공업 +20% & 크리 +30%!`;
+      case 'ptol_2':
+        addNp(caster, 50); caster.buffs.buster += 0.3; caster.buffs.arts += 0.3; caster.buffs.cardT = 3;
+        return `${sv.name} [${name}]! 본인 NP +50% & B/A +30%!`;
+      case 'ptol_3': {
+        const curCat = getNpCategory(sv, caster);
+        const nextCat = curCat === 'aoe' ? 'single' : 'aoe';
+        caster.buffs.npCatOverride = nextCat;
+        caster.buffs.npTypeOverride = nextCat === 'single' ? 'Arts' : 'Buster';
+        b.stars = Math.min(99, b.stars + 20);
+        return `${sv.name} [${name}]! 보구 형태 [${nextCat === 'single' ? '단일 Arts' : '대군 Buster'}] 전환 & 스타 +20!`;
+      }
+      case 'udk_1':
+        alive.forEach(m => { ensureMemberBuffs(m); m.buffs.atk += 0.2; m.buffs.atkT = 3; m.hp = Math.min(m.maxHp, m.hp + 1500); });
+        return `${sv.name} [${name}]! 아군 전체 공업 +20% & HP +1500!`;
+      case 'udk_2':
+        addNp(caster, 30); caster.buffs.arts += 0.3; caster.buffs.cardT = 3;
+        return `${sv.name} [${name}]! 본인 NP +30% & Arts +30%!`;
+      case 'udk_3': {
+        const curCat = getNpCategory(sv, caster);
+        const nextCat = curCat === 'aoe' ? 'single' : 'aoe';
+        caster.buffs.npCatOverride = nextCat;
+        caster.buffs.npDmg += 0.3; caster.buffs.npDmgT = Math.max(caster.buffs.npDmgT, 1);
+        return `${sv.name} [${name}]! 보구 대상 [${nextCat === 'single' ? '단일' : '대군'}] 전환 & 보구 위력 +30%!`;
+      }
       case 'sup_2':
         addNp(target, 30);
         b.stars = Math.min(99, b.stars + 15);
@@ -1925,26 +2005,27 @@ window.FgoBattle = (() => {
       const ready = m.hp > 0 && m.np >= 100;
       const selIdx = battle.selectedCards.findIndex(c => c.kind === 'np' && c.rosterIdx === rIdx);
       const faceUrl = ArtRenderer.getFaceUrl(m.id);
-      const catLabel = getNpCategory(sv) === 'support' ? '보조' : (getNpCategory(sv) === 'single' ? '단일' : '대군');
+      const catLabel = getNpCategory(sv, m) === 'support' ? '보조' : (getNpCategory(sv, m) === 'single' ? '단일' : '대군');
+      const effNpType = getEffectiveNpType(sv, m);
       const npUpTag = (typeof isNpUpgraded === 'function' && isNpUpgraded(sv)) ? ' 🗡️강화' : '';
       const ocNow = Math.max(1, Math.floor(m.np / 100)) * 100;
 
       const btn = document.createElement('button');
-      btn.className = `np-cmd-card ${sv.npType} ${ready ? 'ready' : 'locked'} ${selIdx !== -1 ? 'selected' : ''}`;
+      btn.className = `np-cmd-card ${effNpType} ${ready ? 'ready' : 'locked'} ${selIdx !== -1 ? 'selected' : ''}`;
       btn.disabled = !ready;
       btn.innerHTML = `
         ${selIdx !== -1 ? `<span class="cmd-order-badge">${selIdx + 1}st</span>` : ''}
         <div class="np-cmd-top">
           ${faceUrl ? `<img src="${faceUrl}" class="np-cmd-face" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
           <div>
-            <div class="np-cmd-type">${sv.npType.toUpperCase()} 보구 · ${catLabel}${npUpTag}</div>
+            <div class="np-cmd-type">${effNpType.toUpperCase()} 보구 · ${catLabel}${npUpTag}</div>
             <div class="np-cmd-name">${sv.npName}</div>
           </div>
         </div>
         <div class="np-cmd-sub">${ready ? `NP ${Math.floor(m.np)}% (OC ${ocNow}% 발동!)` : `NP ${Math.floor(m.np)}% / 100%`}</div>
       `;
       if (ready) {
-        btn.addEventListener('click', () => toggleSelectCard({ kind: 'np', rosterIdx: rIdx, type: sv.npType, critPct: 0 }));
+        btn.addEventListener('click', () => toggleSelectCard({ kind: 'np', rosterIdx: rIdx, type: effNpType, critPct: 0 }));
       }
       npRow.appendChild(btn);
     });
@@ -2157,19 +2238,41 @@ window.FgoBattle = (() => {
 
         await playNpCutin(m, ocStage);
         // 원작 고증: 보구 자체는 커맨드 순서/퍼스트/색상 체인 보너스를 받지 않음!
-        const cat = getNpCategory(sv);
+        const cat = getNpCategory(sv, m);
         const npLvMult = [0, 1.0, 1.25, 1.4, 1.5, 1.65][m.npLevel] || 1.0;
         const cardBuff = (c.type === 'Buster' ? m.buffs.buster + ce.buster + (ps.b || 0) : (c.type === 'Arts' ? m.buffs.arts + ce.arts + (ps.a || 0) : m.buffs.quick + ce.quick + (ps.q || 0)));
-        const npDmgMult = (1 + m.buffs.npDmg + ce.npDmg) * m.buffs.npBoost * npUpMult;
+        const arashMult = (m.id === 'sv_no_016') ? 1.6 : 1.0; // ★1 아라쉬 스텔라 초고배율!
+        const npDmgMult = (1 + m.buffs.npDmg + ce.npDmg) * m.buffs.npBoost * npUpMult * arashMult;
 
         if (cat === 'support') {
-          getActiveMembers(battle).forEach(ally => {
-            ally.buffs.atk += 0.25 * ocMult; ally.buffs.atkT = 3;
-            ally.buffs.invul = Math.max(ally.buffs.invul, 1);
-            ally.hp = Math.min(ally.maxHp, ally.hp + Math.round(2500 * ocMult));
-            if (m.id === 'sv_tamamo') ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 25 * ocStage);
-          });
-          addLog(`✨ ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 전열 대숙정방어/무적 + 공업 + 회복!`);
+          if (m.id === 'sv_no_272') {
+            // ★5 초인 오리온 [아르테미스 아그노스]: 공격력+30% · 크리위력+100% · 약화무효 · 스타 +20!
+            m.buffs.atk += 0.3 * ocMult; m.buffs.atkT = 3;
+            m.buffs.crit += 1.0; m.buffs.critT = 3;
+            m.buffs.debuffImmune = 1;
+            battle.stars = Math.min(99, battle.stars + 20);
+            addLog(`🏹 ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 본인 공업 & 크리 위력 +100% & 스타 +20!!`);
+          } else if (m.id === 'sv_no_294') {
+            // ★1 오다 노부카츠: 아군 전체 버스터+40% · 크리+50% · 스타+20 후 자신 즉사 → 후열 증원!
+            getActiveMembers(battle).forEach(ally => {
+              ensureMemberBuffs(ally);
+              ally.buffs.buster += 0.4; ally.buffs.cardT = 3;
+              ally.buffs.crit += 0.5; ally.buffs.critT = 3;
+              ally.hp = Math.min(ally.maxHp, ally.hp + 2000);
+            });
+            battle.stars = Math.min(99, battle.stars + 20);
+            m.hp = 0;
+            addLog(`🌸 ${sv.name} 보구 [${sv.npName}]! 아군 전체 B+40%·크리+50%·스타+20 부여 후 퇴장!`);
+            reinforceFromBackline();
+          } else {
+            getActiveMembers(battle).forEach(ally => {
+              ally.buffs.atk += 0.25 * ocMult; ally.buffs.atkT = 3;
+              ally.buffs.invul = Math.max(ally.buffs.invul, 1);
+              ally.hp = Math.min(ally.maxHp, ally.hp + Math.round(2500 * ocMult));
+              if (m.id === 'sv_tamamo') ally.np = Math.min(getMaxNp(ally.npLevel), ally.np + 25 * ocStage);
+            });
+            addLog(`✨ ${sv.name} 보구 [${sv.npName}] (OC ${ocStage * 100}%)! 전열 대숙정방어/무적 + 공업 + 회복!`);
+          }
         } else if (cat === 'aoe') {
           const baseMult = c.type === 'Buster' ? 3.8 : (c.type === 'Arts' ? 3.3 : 3.5);
           const spHits = [];
@@ -2194,6 +2297,18 @@ window.FgoBattle = (() => {
             }
           });
           addLog(`💥 ${sv.name} 대군 보구 [${sv.npName}]${npUpMult > 1 ? ' 🗡️강화' : ''} (OC ${ocStage * 100}%) 작렬!${spHits.length ? ` [💥특공 1.5×: ${spHits.join(', ')}]` : ''}`);
+          if (m.id === 'sv_no_016') {
+            // ★1 아라쉬 [스텔라]: 보구 후 즉사 (근성 있으면 부활, 없으면 후열 서번트 자동 증원!)
+            if (m.buffs.guts > 0) {
+              m.hp = Math.min(m.maxHp, m.buffs.guts);
+              m.buffs.guts = 0; m.buffs.gutsT = 0;
+              addLog(`❤️‍🔥 아라쉬 근성 발동! 스텔라 후 HP ${m.hp.toLocaleString()} 생환!`);
+            } else {
+              m.hp = 0;
+              addLog(`💫 스텔라!! 아라쉬 산화 → 후열 서번트 자동 증원!`);
+              reinforceFromBackline();
+            }
+          }
         } else if (currentTarget) {
           const baseMult = c.type === 'Buster' ? 6.2 : (c.type === 'Arts' ? 5.6 : 5.9);
           const clsMult = getClassMultiplier(sv.cls, currentTarget.cls);
@@ -2440,6 +2555,7 @@ window.FgoBattle = (() => {
       m.buffs.artsStarWeight = 0;
       m.buffs.buffProtect = 0;
       m.buffs.npBoost = 1;
+      if (m.id === 'sv_emiya') m.buffs.npTypeOverride = null; // 에미야 1턴 아츠 보구 종료 후 버스터 복귀
       if (m.buffs.atkT > 0 && --m.buffs.atkT === 0) m.buffs.atk = 0;
       if (m.buffs.defT > 0 && --m.buffs.defT === 0) m.buffs.def = 0;
       if (m.buffs.cardT > 0 && --m.buffs.cardT === 0) { m.buffs.buster = 0; m.buffs.arts = 0; m.buffs.quick = 0; }
