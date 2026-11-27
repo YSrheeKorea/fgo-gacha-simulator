@@ -2226,7 +2226,7 @@
         });
       }
     } else {
-      const colNo = (typeof ATLAS_IMAGES !== 'undefined' && ATLAS_IMAGES.ces[id]?.collectionNo) || (item.npcOnly ? 'NPC' : '-');
+      const colNo = item.collectionNo || (typeof ATLAS_IMAGES !== 'undefined' && ATLAS_IMAGES.ces[id]?.collectionNo) || (item.npcOnly ? 'NPC' : '-');
       const ceCost = getCeCost(item);
       const lb = owned ? getCeLimitBreak(owned) : 0;
       const mlb = isCeMlb(owned);
@@ -2250,7 +2250,7 @@
           <div style="margin-top:6px;font-size:13px"><strong>기본 효과:</strong> ${item.effect}</div>
           ${item.effectMax ? `<div style="margin-top:4px;font-size:13px;color:${mlb ? '#6effa8' : '#ffe680'}"><strong>${mlb ? '✅ 최대 해방(풀돌 적용 중!):' : '최대 해방(4돌/5장):'}</strong> ${item.effectMax}</div>` : ''}
           ${!item.npcOnly ? `<div style="margin-top:6px;font-size:11.5px;color:#9cb2d9">한계돌파 상한: 초기 Lv.${caps[0]} → 1돌 ${caps[1]} → 2돌 ${caps[2]} → 3돌 ${caps[3]} → 4돌(풀돌) Lv.${caps[4]} (만렙 누적 EXP ${maxExp.toLocaleString()})</div>` : ''}
-          <div class="detail-lore-box"><div class="detail-lore-title">📖 개념예장 해설</div>${item.flavor}</div>
+          <div class="detail-lore-box"><div class="detail-lore-title">📖 개념예장 해설</div>${(item.flavor || item.desc || '공식 개념예장').replace(/\n/g, '<br>')}</div>
           <div style="font-size:13px;color:#dbe7ff;margin-top:10px">
             ${owned ? `✅ 보유 수량: ${owned.copies}장 ${mlb ? '(✛ 최대 해방 풀돌 완료! 배틀 풀돌 수치 자동 적용)' : `(풀돌까지 ${5 - owned.copies}장 더 필요)`}` : (item.npcOnly ? '🛡️ 메인 퀘스트 대여 서포트 NPC 전용 개념예장입니다.' : '🔒 미보유 개념예장입니다.')}
           </div>

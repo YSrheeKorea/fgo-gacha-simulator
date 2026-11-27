@@ -1729,7 +1729,7 @@ const SERVANT_MAP = Object.fromEntries(SERVANTS.map(s => [s.id, s]));
 // v41: 공식 개념예장 전체 카탈로그 (★1~★5 · 2,720종) 자동 병합
 if (typeof window !== 'undefined' && Array.isArray(window.CE_CATALOG_COMPACT)) {
   const existingNames = new Set(CRAFT_ESSENCES.map(c => c.name));
-  window.CE_CATALOG_COMPACT.forEach(([no, aid, r, name, atk, hp, desc, reg]) => {
+  window.CE_CATALOG_COMPACT.forEach(([no, aid, r, name, atk, hp, desc, reg, lore]) => {
     if (existingNames.has(name)) return;
     CRAFT_ESSENCES.push({
       id: `ce_no_${String(no).padStart(4, '0')}`,
@@ -1740,7 +1740,11 @@ if (typeof window !== 'undefined' && Array.isArray(window.CE_CATALOG_COMPACT)) {
       rarity: r,
       atk: atk || 0,
       hp: hp || 0,
+      atkMax: atk || 0,
+      hpMax: hp || 0,
       effect: desc || '공식 개념예장',
+      flavor: lore || desc || '공식 개념예장',
+      desc: lore || desc || '',
       pool: 'catalog',
       accent: r === 5 ? '#f59e0b' : (r === 4 ? '#a855f7' : (r === 3 ? '#38bdf8' : '#94a3b8'))
     });
