@@ -211,9 +211,9 @@
     const poolSv5 = SERVANTS.filter(s => s.rarity === 5 && inSqPool(s));
     const poolSv4 = SERVANTS.filter(s => s.rarity === 4 && inSqPool(s));
     const poolSv3 = SERVANTS.filter(s => s.rarity === 3 && inSqPool(s));
-    const allCe5  = CRAFT_ESSENCES.filter(c => c.rarity === 5 && !c.npcOnly && !c.fpOnly);
-    const allCe4  = CRAFT_ESSENCES.filter(c => c.rarity === 4 && !c.npcOnly && !c.fpOnly);
-    const allCe3  = CRAFT_ESSENCES.filter(c => c.rarity === 3 && !c.npcOnly && !c.fpOnly);
+    const allCe5  = CRAFT_ESSENCES.filter(c => c.rarity === 5 && !c.npcOnly && !c.fpOnly && !c.shopOnly);
+    const allCe4  = CRAFT_ESSENCES.filter(c => c.rarity === 4 && !c.npcOnly && !c.fpOnly && !c.shopOnly);
+    const allCe3  = CRAFT_ESSENCES.filter(c => c.rarity === 3 && !c.npcOnly && !c.fpOnly && !c.shopOnly);
 
     const hasPickup5 = !banner.isStory && banner.pickup5.length > 0;
     const hasPickup4 = !banner.isStory && banner.pickup4.length > 0;
@@ -2619,10 +2619,21 @@
         });
         // 장착 마술예장 경험치 지급
         const mcRes = rewards.mcExp ? window.ChaldeaBridge.grantMysticCodeExp(rewards.mcExp) : null;
+        if (rewards.questId) {
+          if (!state.clearedQuests) state.clearedQuests = {};
+          state.clearedQuests[rewards.questId] = (state.clearedQuests[rewards.questId] || 0) + 1;
+        }
+        if (rewards.unlockMcId) {
+          const uRes = window.ChaldeaBridge.unlockMysticCode(rewards.unlockMcId, true);
+          if (uRes && uRes.ok && !uRes.already && typeof MYSTIC_CODE_MAP !== 'undefined' && MYSTIC_CODE_MAP[rewards.unlockMcId]) {
+            toast(`🧤 마술예장 퀘스트 클리어! [${MYSTIC_CODE_MAP[rewards.unlockMcId].name}] 해금 완료!!`);
+          }
+        }
         saveState();
         renderResources();
         return mcRes;
       },
+      getClearedQuestCount: (qid) => (state.clearedQuests && state.clearedQuests[qid]) || 0,
       toast
     };
 

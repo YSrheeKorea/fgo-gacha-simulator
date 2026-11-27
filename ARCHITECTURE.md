@@ -12,7 +12,8 @@ fgo-gacha/
 ├── servant_catalog.js      # FGO 전체 마테리얼 카탈로그 (No.001~487: 플레이어블 475기 + 미실장 프로필 12기, 217KB)
 ├── mystic_codes.js         # 원작 FGO 마술예장 28종 전체 데이터(스킬 84종 · Lv.1~10 보간 · 4종 EXP 테이블 · Atlas 공식 아이콘)
 ├── class_passives.js       # 19개 클래스 표준 히든 스탯 · 전체 475기 공식 클래스 패시브(대마력·기승 등) · 보구 강화 퀘스트(187기)
-├── data.js                 # 19개 클래스 메타(Beast/UnBeast 포함), 475기 서번트 하이드레이션, 39종 개념예장, 12개 배너(커스텀·프렌드 포함)
+├── chaldea_gate.js         # 칼데아 게이트 6대 카테고리(요일 퀘스트 종화·7수련장·보물창고·막간/영기해방·강화퀘·어드밴스드·마술예장 3종·과거 이벤트)
+├── data.js                 # 19개 클래스 메타(Beast/UnBeast 포함), 475기 서번트 하이드레이션, 41종 개념예장(모나리자·벨라리자 포함), 12개 배너
 ├── atlas_images.js         # 핵심 45기 서번트 & 28종 예장 Atlas Academy KR CDN URL 맵 (나머지 430기는 art.js에서 KR/JP CDN 자동 해석)
 ├── kr_lore.js              # 핵심 45기 한그오 공식 원문 대사·프로필 (신규 430기는 상세/마이룸 진입 시 Atlas API 온디맨드 자동 로드)
 ├── audio.js                # Web Audio API 프로시저럴 사운드 엔진 (볼륨 제어 · 음소거 · FGO 효과음)
@@ -21,7 +22,7 @@ fgo-gacha/
 ├── game.js                 # 성정석/커스텀/프렌드 가챠 엔진, 487 마테리얼 도감, 마이룸 육성(★0~★5), 순례의 축제, 통계, 설정, ChaldeaBridge
 ├── battle.js               # 6인 FGO 커맨드 카드 배틀 엔진 (상성·히든속성·Beast/UnBeast·영주·FP 보상·자동저장 이어하기)
 ├── pwa.js                  # PWA 원클릭 설치(beforeinstallprompt) & iOS 홈 화면 안내 컨트롤러
-├── sw.js                   # 오프라인 지원 Service Worker (v21 · 앱 파일 Network-First + 일러스트 Cache-First)
+├── sw.js                   # 오프라인 지원 Service Worker (v22 · 앱 파일 Network-First + 일러스트 Cache-First)
 ├── manifest.webmanifest    # PWA 스탠드얼론 앱 매니페스트
 ├── icons/                  # 전용 PNG 앱 아이콘 (192×192, 512×512, 180×180 Apple Touch)
 ├── .nojekyll               # GitHub Pages 정적 파일 직서빙 설정
@@ -38,6 +39,7 @@ fgo-gacha/
 ├── ASSASSIN_CLASS.md       # 어새신 클래스 48기 완전 명세서 · 커맨드 6타입 · 테스카틀리포카/카마/산의 노인/잭/지킬/오사카베히메 기믹 · 보구 강화(🗡️)
 ├── BERSERKER_CLASS.md      # 버서커 클래스 49기 완전 명세서 · 커맨드 5타입 · 신준/모르간/수부키/수캐밥/헤라클레스/소쥬로 기믹 · 보구 강화(🗡️)
 ├── EXTRA_CLASSES.md        # 엑스트라 클래스 8종 106기 완전 명세서 · 실더~비스트/언비스트 상성·히든스탯·전설 기믹 · 보구 강화(🗡️)
+├── CHALDEA_GATE.md         # 칼데아 게이트 6대 카테고리 · 공식 요일 스케줄 · 종화/수련장/보물창고 극급 · 마술예장 퀘스트 3종 명세서
 ├── HIDDEN_STATUS.md        # 전체 487기 히든 스테이터스(성별·속성·성향·특성) & 보구 특공 명세표
 ├── GAME_SPEC.md            # 가챠·프렌드 소환·배틀·상성·특공·QP 강화 상세 명세서
 ├── ARCHITECTURE.md         # 본 아키텍처 문서

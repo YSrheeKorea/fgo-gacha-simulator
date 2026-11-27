@@ -1456,6 +1456,21 @@ const CRAFT_ESSENCES = [
     flavor: '끝없는 갈증. 아지랑이가 피어오르는 대지 위에, 목숨조차도 허공으로 사라진다.',
     art: { bg1: '#21151a', bg2: '#5e3545', primary: '#f28482', secondary: '#ffd166', icon: 'tofu' }
   },
+  // ================= 칼데아 게이트 보물창고 QP 특화 개념예장 (모나리자 · 벨라리자) =================
+  {
+    id: 'ce_mona_lisa', name: '모나리자', nickname: '모나리자', rarity: 5, shopOnly: true,
+    atkBase: 250, atkMax: 1000, hpBase: 400, hpMax: 1600,
+    effect: '퀘스트 클리어 시 드롭되는 QP 2% 증가', effectMax: '퀘스트 클리어 시 드롭되는 QP 10% 증가 [최대해방]',
+    flavor: '다 빈치 공방의 대표 걸작 예장. 보물창고 QP 주회의 절대 필수품!',
+    art: { bg1: '#261d10', bg2: '#7a5c28', primary: '#ffe066', secondary: '#e2e8f0', icon: 'gem' }
+  },
+  {
+    id: 'ce_bella_lisa', name: '벨라리자', nickname: '벨라리자', rarity: 5, shopOnly: true,
+    atkBase: 250, atkMax: 1000, hpBase: 400, hpMax: 1600,
+    effect: '퀘스트 클리어 시 QP 1% 증가 (서포트 시 3%)', effectMax: '퀘스트 클리어 시 QP 5% 증가 · 서포트 시 15% 증가 [최대해방]',
+    flavor: '라이더 서포트의 영원한 고정 예장! 프렌드 풀돌 벨라리자(+15%)로 QP 효율 극대화!',
+    art: { bg1: '#1d2236', bg2: '#4d6599', primary: '#fde047', secondary: '#93c5fd', icon: 'gem' }
+  },
   // ================= NPC 전용 개념예장 (1800만 DL · 코스트 0) =================
   {
     id: 'ce_npc_support', name: 'NPC 전용 개념예장', nickname: 'NPC 예장', rarity: 5, npcOnly: true,

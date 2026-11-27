@@ -1295,6 +1295,8 @@ window.FgoBattle = (() => {
       ce_knights_dignity: mlb ? { crit: 0.5, label: '✛ 크리 위력 +50%' } : { crit: 0.4, label: '크리 위력 +40%' },
       ce_magical_sapphire: mlb ? { crit: 0.25, startNp: 30, label: '✛ NP+30% · 크리+25%' } : { crit: 0.2, startNp: 20, label: 'NP+20% · 크리+20%' },
       ce_npc_support: { startNp: 50, npGain: 0.5, label: 'NPC: 개시 NP+50% · NP획득+50%' },
+      ce_mona_lisa: mlb ? { qpBonus: 0.10, label: '✛ QP 드랍 +10%' } : { qpBonus: 0.02, label: 'QP 드랍 +2%' },
+      ce_bella_lisa: mlb ? { qpBonus: 0.05, qpSupportBonus: 0.15, label: '✛ QP +5% (서포트 +15%!)' } : { qpBonus: 0.01, qpSupportBonus: 0.03, label: 'QP +1% (서포트 +3%)' },
       ce_fp1_tujaeng: mlb ? { atkUp: 0.04, label: '✛ 공격력 +4% (코스트1)' } : { atkUp: 0.02, label: '공격력 +2% (코스트1)' },
       ce_fp2_beonyeong: { label: mlb ? '✛ 매 턴 HP+50 (코스트3)' : '매 턴 HP+30 (코스트3)' }
     };
@@ -1333,60 +1335,10 @@ window.FgoBattle = (() => {
     getBridge().toast(`⚖️ 파티 코스트 자동 최적화 완료! (${calcPartyCost(st)} / ${MASTER_MAX_COST})`);
   }
 
-  // ================= 퀘스트 7종 (종화·QP·특이점·바빌로니아·비스트Ⅰ·비스트Ⅲ/R·EX 챌린지) =================
-  const QUESTS = [
+  // ================= 칼데아 게이트 + 메인 보스/EX 퀘스트 통합 카탈로그 =================
+  const BOSS_QUESTS = [
     {
-      id: 'q_embers',
-      name: '🔥 칼데아 게이트 — 종화 수집 (초급)',
-      desc: '3웨이브 주회 던전! 경험치 손은 모두 [하늘(天)] 속성 → 인간(人) 속성 서번트가 1.1배 유리!',
-      difficulty: '초급 · 추천 Lv.30',
-      rewardText: '💎 성정석 +3 · 🔥 종화 +15 · 🪙 QP +500,000',
-      rewards: { sq: 3, embers: 15, qp: 500000, mcExp: 180000 },
-      waves: [
-        [
-          { name: '불꽃의 팔', cls: 'Saber', attr: '천(天)', hp: 14500, atk: 1200, maxCharge: 4, emoji: '🔥' },
-          { name: '창의 팔', cls: 'Lancer', attr: '천(天)', hp: 15500, atk: 1250, maxCharge: 4, emoji: '⚡' },
-          { name: '활의 팔', cls: 'Archer', attr: '천(天)', hp: 14000, atk: 1200, maxCharge: 3, emoji: '🏹' }
-        ],
-        [
-          { name: '황금의 팔', cls: 'Rider', attr: '천(天)', hp: 22000, atk: 1500, maxCharge: 4, emoji: '✨' },
-          { name: '황금의 팔', cls: 'Caster', attr: '천(天)', hp: 23500, atk: 1500, maxCharge: 4, emoji: '🔮' },
-          { name: '황금의 팔', cls: 'Assassin', attr: '천(天)', hp: 21500, atk: 1500, maxCharge: 3, emoji: '🗡️' }
-        ],
-        [
-          { name: '초월의 팔', cls: 'Berserker', attr: '천(天)', hp: 36000, atk: 1900, maxCharge: 4, emoji: '💀' },
-          { name: '예지의 대팔', cls: 'Saber', attr: '천(天)', hp: 52000, atk: 2100, maxCharge: 4, emoji: '👑', isBoss: true },
-          { name: '초월의 팔', cls: 'Lancer', attr: '천(天)', hp: 34000, atk: 1900, maxCharge: 4, emoji: '💀' }
-        ]
-      ]
-    },
-    {
-      id: 'q_qp',
-      name: '💰 보물고의 문 — QP 대수집 (중급)',
-      desc: '캐스터 [하늘(天)] 문 대거 출현! 라이더(2.0x · 스타집중 200)와 얼터에고(1.5x)로 주회하세요.',
-      difficulty: '중급 · 추천 Lv.50',
-      rewardText: '💎 성정석 +5 · 🪙 QP +2,000,000 · 🟢 마프 +20',
-      rewards: { sq: 5, qp: 2000000, mp: 20, mcExp: 320000 },
-      waves: [
-        [
-          { name: '청동의 문', cls: 'Caster', attr: '천(天)', hp: 24000, atk: 1500, maxCharge: 5, emoji: '🚪' },
-          { name: '백은의 문', cls: 'Caster', attr: '천(天)', hp: 28000, atk: 1600, maxCharge: 5, emoji: '🏛️' },
-          { name: '청동의 문', cls: 'Caster', attr: '천(天)', hp: 24000, atk: 1500, maxCharge: 5, emoji: '🚪' }
-        ],
-        [
-          { name: '황금의 문', cls: 'Caster', attr: '천(天)', hp: 42000, atk: 1850, maxCharge: 5, emoji: '💰' },
-          { name: '황금의 문', cls: 'Caster', attr: '천(天)', hp: 45000, atk: 1850, maxCharge: 5, emoji: '💰' },
-          { name: '황금의 문', cls: 'Caster', attr: '천(天)', hp: 42000, atk: 1850, maxCharge: 5, emoji: '💰' }
-        ],
-        [
-          { name: '황금의 문', cls: 'Caster', attr: '천(天)', hp: 48000, atk: 2000, maxCharge: 5, emoji: '💰' },
-          { name: '여왕의 보물고', cls: 'Caster', attr: '천(天)', hp: 96000, atk: 2400, maxCharge: 4, emoji: '👑', isBoss: true },
-          { name: '황금의 문', cls: 'Caster', attr: '천(天)', hp: 48000, atk: 2000, maxCharge: 5, emoji: '💰' }
-        ]
-      ]
-    },
-    {
-      id: 'q_salter',
+      id: 'q_salter', category: 'boss',
       name: '⚔️ 특이점 F — 흑화 세이버 결전 (상급)',
       desc: '세이버 [인간(人)] 보스전! 아처(2.0x)·프리텐더(1.5x)와 땅(地) 속성 상성으로 제압하세요.',
       difficulty: '상급 · 추천 Lv.70',
@@ -1404,7 +1356,7 @@ window.FgoBattle = (() => {
       ]
     },
     {
-      id: 'q_babylonia',
+      id: 'q_babylonia', category: 'boss',
       name: '🐉 바빌로니아 — 티아마트 유체 격퇴전 (고난이도)',
       desc: '비스트Ⅱ [짐승(獸)] 완전 무상성 보스! 별(星) 속성·신성/인류의 위협/초거대 특공이 유리합니다.',
       difficulty: '고난이도 · 추천 Lv.85',
@@ -1423,7 +1375,7 @@ window.FgoBattle = (() => {
       ]
     },
     {
-      id: 'q_goetia',
+      id: 'q_goetia', category: 'boss',
       name: '🔥 관위시간신전 — 마신왕 게티아 (비스트Ⅰ)',
       desc: '3술사(라·캐·어)에게 2.0x 약점, 3기사에게 2.0x 반격, 어벤저에게 0.5x 반감! 별(星) 속성·왕/비스트 특공!',
       difficulty: '비스트Ⅰ · 추천 Lv.90',
@@ -1437,7 +1389,7 @@ window.FgoBattle = (() => {
       ]
     },
     {
-      id: 'q_kiara',
+      id: 'q_kiara', category: 'boss',
       name: '🌸 SE.RA.PH — 마성보살 키아라 (비스트Ⅲ/R)',
       desc: '얼터에고·문캔서에게 1.2x 약점! 여성·마성·초거대·비스트 특공 및 별(星) 속성이 빛납니다.',
       difficulty: '비스트Ⅲ/R · 추천 Lv.90',
@@ -1450,7 +1402,7 @@ window.FgoBattle = (() => {
       ]
     },
     {
-      id: 'q_challenge',
+      id: 'q_challenge', category: 'boss',
       name: '👑 이문대 챌린지 — 거신 케르눈노스 (EX)',
       desc: '6인 총력전! 버서커 [땅(地)] 신성·초거대·요정·인류의 위협 최종 보스. 특공 딜러와 영주를 총동원하세요!',
       difficulty: 'EX 챌린지 · 추천 Lv.90+',
@@ -1464,9 +1416,15 @@ window.FgoBattle = (() => {
     }
   ];
 
-  // 프렌드 서포트 목록 (6인 중 1명 프렌드 슬롯 전용)
+  const QUESTS = [
+    ...(typeof buildGateQuestCatalog === 'function' ? buildGateQuestCatalog() : []),
+    ...BOSS_QUESTS
+  ];
+
+  // 프렌드 서포트 목록 (6인 중 1명 프렌드 슬롯 전용 · 라이더 벨라리자 +15% QP 포함!)
   const SUPPORT_FRIENDS = [
     { id: 'sv_castoria', level: 90, npLevel: 2, ceId: 'ce_2030', isSupport: true },
+    { id: 'sv_ozymandias', level: 90, npLevel: 2, ceId: 'ce_bella_lisa', isSupport: true },
     { id: 'sv_oberon', level: 90, npLevel: 2, ceId: 'ce_kscope', isSupport: true },
     { id: 'sv_gilgamesh', level: 90, npLevel: 3, ceId: 'ce_black_grail', isSupport: true },
     { id: 'sv_koyanskaya', level: 90, npLevel: 2, ceId: 'ce_2030', isSupport: true },
@@ -1475,6 +1433,8 @@ window.FgoBattle = (() => {
   ];
 
   // ================= 배틀 상태 (6인 파티: 전열 0~2 / 후열 3~5, 5번은 프렌드) =================
+  let selectedGateTab = 'daily';
+  let gateAllOpenCampaign = true; // 기본 캠페인 전 개방 ON (오늘의 요일 필터 토글 가능!)
   let selectedQuestId = QUESTS[0].id;
   let partySlots = [null, null, null, null, null, null]; // 길이 6 (0~4 본인 5명, 5 프렌드 1명)
   let battle = null;
@@ -1729,16 +1689,70 @@ window.FgoBattle = (() => {
     document.getElementById('battle-arena').classList.add('hidden');
     renderLobbyMysticCodeBar();
 
-    // 퀘스트 목록
+    // 칼데아 게이트 카테고리 탭 + 오늘의 요일 배너 + 퀘스트 목록
     const qList = document.getElementById('battle-quest-list');
     qList.innerHTML = '';
-    QUESTS.forEach(q => {
+
+    if (typeof CHALDEA_GATE_TABS !== 'undefined') {
+      const tabBar = document.createElement('div');
+      tabBar.className = 'gate-tabs-bar';
+      CHALDEA_GATE_TABS.forEach(t => {
+        const cnt = QUESTS.filter(x => x.category === t.id).length;
+        const btn = document.createElement('button');
+        btn.className = 'gate-tab-btn' + (selectedGateTab === t.id ? ' active' : '');
+        btn.innerHTML = `${t.label} <span class="gate-tab-cnt">${cnt}</span>`;
+        btn.title = t.sub;
+        btn.addEventListener('click', () => {
+          SoundEngine.click();
+          selectedGateTab = t.id;
+          const firstInTab = QUESTS.find(x => x.category === t.id);
+          if (firstInTab) selectedQuestId = firstInTab.id;
+          renderLobby();
+        });
+        tabBar.appendChild(btn);
+      });
+      qList.appendChild(tabBar);
+
+      if (selectedGateTab === 'daily' && typeof getTodayGateSchedule === 'function') {
+        const sched = getTodayGateSchedule();
+        const banner = document.createElement('div');
+        banner.className = 'gate-day-banner';
+        banner.innerHTML = `
+          <div>
+            <strong>📅 오늘(${sched.dayKo}) 공식 요일 일정</strong>
+            <div style="font-size:11px;color:#b8d0f5;margin-top:2px">종화: ${sched.allOpen ? '전 7종 개방' : sched.embers.join(' · ')} | 수련장: ${sched.allOpen ? '전 7클래스 개방' : sched.trainings.map(c => CLASS_INFO[c]?.name || c).join(' · ')}</div>
+          </div>
+          <button class="small-outline-btn" id="btn-gate-all-toggle" style="padding:4px 9px;font-size:11px">${gateAllOpenCampaign ? '🎉 캠페인 전 개방 ON' : '📅 오늘 요일만 보기'}</button>
+        `;
+        qList.appendChild(banner);
+        banner.querySelector('#btn-gate-all-toggle')?.addEventListener('click', () => {
+          SoundEngine.click();
+          gateAllOpenCampaign = !gateAllOpenCampaign;
+          renderLobby();
+        });
+      }
+    }
+
+    const todayIdx = new Date().getDay();
+    const visibleQuests = QUESTS.filter(q => {
+      if (q.category !== selectedGateTab) return false;
+      if (selectedGateTab === 'daily' && !gateAllOpenCampaign && Array.isArray(q.openDays) && !q.openDays.includes(todayIdx)) return false;
+      return true;
+    });
+    if (visibleQuests.length && !visibleQuests.some(q => q.id === selectedQuestId)) {
+      selectedQuestId = visibleQuests[0].id;
+    }
+
+    const bridge = getBridge();
+    visibleQuests.forEach(q => {
+      const clearCnt = bridge.getClearedQuestCount ? bridge.getClearedQuestCount(q.id) : 0;
+      const isTodayOpen = !Array.isArray(q.openDays) || q.openDays.includes(todayIdx);
       const card = document.createElement('button');
       card.className = 'quest-card' + (q.id === selectedQuestId ? ' active' : '');
       card.innerHTML = `
         <div class="quest-card-head">
-          <strong>${q.name}</strong>
-          <span class="quest-diff">${q.difficulty}</span>
+          <strong>${q.name} ${clearCnt > 0 ? `<span class="gate-clear-badge">✅ CLEAR (${clearCnt})</span>` : ''}</strong>
+          <span class="quest-diff">${q.difficulty}${!isTodayOpen ? ' · 캠페인개방' : ''}</span>
         </div>
         <div class="quest-desc">${q.desc}</div>
         <div class="quest-reward">보상: ${q.rewardText}</div>
@@ -3506,7 +3520,21 @@ window.FgoBattle = (() => {
       SoundEngine.reveal(5, true);
       const ownedInParty = battle.roster.filter(m => !m.isSupport && !m.isRental).map(m => m.id);
       const fpBonus = q.rewards.fp || 2000;
-      const mcRes = getBridge().grantBattleRewards({ ...q.rewards, fp: fpBonus }, ownedInParty);
+      // 보물창고(QP던) 등 QP 보너스 예장 (모나리자 +10%, 프렌드 벨라리자 +15% 등) 합산!
+      let qpBonusRate = 0;
+      battle.roster.forEach(m => {
+        if (!m.ceId) return;
+        const cp = getCePassive(m.ceId, !!m.ceMlb);
+        if (m.isSupport && cp.qpSupportBonus) qpBonusRate += cp.qpSupportBonus;
+        else if (cp.qpBonus) qpBonusRate += cp.qpBonus;
+      });
+      const finalRewards = { ...q.rewards, fp: fpBonus, questId: q.id, unlockMcId: q.unlockMcId || null };
+      let qpExtra = 0;
+      if (finalRewards.qp && qpBonusRate > 0) {
+        qpExtra = Math.round(finalRewards.qp * qpBonusRate);
+        finalRewards.qp += qpExtra;
+      }
+      const mcRes = getBridge().grantBattleRewards(finalRewards, ownedInParty);
       titleEl.textContent = '🏆 QUEST CLEAR!!';
       bodyEl.innerHTML = `
         <div class="br-quest">${q.name}</div>
@@ -3514,6 +3542,7 @@ window.FgoBattle = (() => {
         <div class="br-rewards-box">
           <div class="br-rw-title">✨ 획득 보상 (자동 지급 완료)</div>
           <div>${q.rewardText} · 🤝 FP +${fpBonus.toLocaleString()}</div>
+          ${qpExtra > 0 ? `<div style="font-size:12.5px;color:#fde047;margin-top:4px">🖼️ QP 예장 보너스 (+${Math.round(qpBonusRate * 100)}%): <strong>+${qpExtra.toLocaleString()} QP</strong> 추가 획득! (총 ${finalRewards.qp.toLocaleString()} QP)</div>` : ''}
           ${mcRes ? `<div style="font-size:12.5px;color:#ffe680;margin-top:5px">🧤 마술예장 [${mcRes.mc.name}] EXP +${mcRes.gained.toLocaleString()} → Lv.${mcRes.newLv}${mcRes.newLv > mcRes.prevLv ? ' 🎉 LEVEL UP!!' : ''}</div>` : ''}
           <div style="font-size:12px;color:#9cb2d9;margin-top:4px">출격한 보유 서번트 전원(전열+후열)의 인연 포인트가 상승했습니다!</div>
         </div>

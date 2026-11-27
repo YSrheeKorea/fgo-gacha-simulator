@@ -4436,3 +4436,72 @@ body {
 .sk-tgt-tag.tgt-all   { background: rgba(56, 189, 248, 0.22); color: #7dd3fc; }
 .sk-tgt-tag.tgt-self  { background: rgba(74, 222, 128, 0.20); color: #86efac; }
 .sk-tgt-tag.tgt-enemy { background: rgba(248, 113, 113, 0.22); color: #fca5a5; }
+
+/* ================= 칼데아 게이트 (Chaldea Gate) 탭 & 요일 배너 ================= */
+.gate-tabs-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.gate-tab-btn {
+  padding: 6px 10px;
+  border-radius: 9px;
+  border: 1px solid rgba(102, 170, 255, 0.28);
+  background: rgba(14, 24, 52, 0.78);
+  color: #cfe0ff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.14s;
+}
+
+.gate-tab-btn:hover {
+  border-color: rgba(245, 200, 76, 0.65);
+  color: #fff;
+}
+
+.gate-tab-btn.active {
+  background: linear-gradient(135deg, rgba(245, 200, 76, 0.26), rgba(56, 130, 246, 0.34));
+  border-color: #f5c84c;
+  color: #ffe899;
+  box-shadow: 0 0 10px rgba(245, 200, 76, 0.22);
+}
+
+.gate-tab-cnt {
+  display: inline-block;
+  margin-left: 3px;
+  padding: 0 5px;
+  border-radius: 99px;
+  background: rgba(0, 0, 0, 0.35);
+  font-size: 10.5px;
+  color: #93c5fd;
+}
+
+.gate-day-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 9px 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  background: linear-gradient(90deg, rgba(22, 42, 86, 0.85), rgba(15, 23, 48, 0.85));
+  font-size: 12.5px;
+  color: #e6f0ff;
+}
+
+.gate-clear-badge {
+  display: inline-block;
+  margin-left: 5px;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: rgba(74, 222, 128, 0.18);
+  border: 1px solid rgba(74, 222, 128, 0.45);
+  color: #86efac;
+  font-size: 10.5px;
+  font-weight: 800;
+}
